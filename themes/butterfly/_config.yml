@@ -31,10 +31,11 @@ menu:
 code_blocks:
   # Code block theme: darker / pale night / light / ocean / false
   theme: light
-  macStyle: false
+  macStyle: true
   # Code block height limit (unit: px)
   height_limit: false
   word_wrap: false
+
 
   # Toolbar
   copy: true
@@ -151,7 +152,7 @@ index_top_img_height:
 
 # The subtitle on homepage
 subtitle:
-  enable: false
+  enable: true
   # Typewriter Effect
   effect: true
   # Customize typed.js
@@ -166,7 +167,8 @@ subtitle:
   # 3 - jinrishici.com
   source: false
   # If you close the typewriter effect, the subtitle will only show the first line of sub
-  sub:
+  sub: 
+    -  We choose go to the Moon, not because it is easy, but beacuse it is hard.
 
 # Article layout on the homepage
 # 1: Cover on the left, info on the right
@@ -354,7 +356,7 @@ aside:
     # Time difference between publish date and now
     # Formal: Month/Day/Year Time or Year/Month/Day Time
     # Leave it empty if you don't enable this feature
-    runtime_date:
+    runtime_date: 2/10/2026
 
 # --------------------------------------
 # Bottom right button
@@ -540,7 +542,7 @@ comments:
   text: true
   # Lazyload: The comment system will be load when comment element enters the browser's viewport.
   # If you set it to true, the comment count will be invalid
-  lazyload: false
+  lazyload: true
   # Display comment count in post's top_img
   count: false
   # Display comment count in Home Page
@@ -984,7 +986,7 @@ note:
 
 # https://github.com/MoOx/pjax
 pjax:
-  enable: false
+  enable: true
   # Exclude the specified pages from pjax, such as '/music/'
   exclude:
     # - /xxxxxx/
@@ -1061,6 +1063,8 @@ inject:
     # - <link rel="stylesheet" href="/xxx.css">
   bottom:
     # - <script src="xxxx"></script>
+    - <script src="//code.tidio.co/eqlko3dddqea7kkh6lniaigtezgcvtrf.js" async></script>
+  
 
 # CDN Settings
 # Don't modify the following settings unless you know how they work
