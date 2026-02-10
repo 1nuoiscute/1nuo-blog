@@ -296,7 +296,7 @@ aside:
       link: https://github.com/1nuoiscute
   card_announcement:
     enable: true
-    content: This is my Blog
+    content: 你好，我是1nuo
   card_recent_post:
     enable: true
     # If set 0 will show all
