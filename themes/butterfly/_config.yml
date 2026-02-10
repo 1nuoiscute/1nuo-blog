@@ -48,8 +48,13 @@ code_blocks:
 # Formal:
 #   icon: link || the description || color
 social:
-  # fab fa-github: https://github.com/xxxxx || Github || '#24292e'
-  # fas fa-envelope: mailto:xxxxxx@gmail.com || Email || '#4a7dbe'
+   fab fa-b: https://space.bilibili.com/1947002557?spm_id_from=333.1007.0.0 || Bilibili || '#007CB0'
+   fas fa-envelope: mailto:1nuoiscute@gmail.com || Email || '#4D6F39'
+   fab fa-qq: https://user.qzone.qq.com/3416297319  || QQ || '#4a7dbe'
+   fas fa-music: https://music.163.com/#/user/home?id=12859520442 || Cloudmusic || '#FF2D21'
+   fab fa-c: https://blog.csdn.net/Du_Guo_?spm=1011.2266.3001.5343 || CSDN || '#F99A1C'
+
+   
 
 # --------------------------------------
 # Image Settings
@@ -1064,7 +1069,9 @@ inject:
   bottom:
     # - <script src="xxxx"></script>
     - <script src="//code.tidio.co/eqlko3dddqea7kkh6lniaigtezgcvtrf.js" async></script>
-  
+ 
+
+ 
 
 # CDN Settings
 # Don't modify the following settings unless you know how they work
