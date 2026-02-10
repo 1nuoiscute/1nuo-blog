@@ -695,7 +695,7 @@ crisp:
 baidu_analytics:
 
 # https://analytics.google.com/analytics/web/
-google_analytics:
+google_analytics: G-RSNDNSJS4C
 
 # https://www.cloudflare.com/zh-tw/web-analytics/
 cloudflare_analytics:
@@ -1090,6 +1090,16 @@ CDN:
   # For example: https://cdn.staticfile.org/${cdnjs_name}/${version}/${min_cdnjs_file}
   custom_format:
 
+# Sitemap
+sitemap:
+  path: sitemap.xml
+
+# Robots.txt
+robotstxt:
+  user_agent: '*'
+  allow: /
+  disallow:
+  sitemap_path: /sitemap.xml
 
   option:
     # abcjs_basic_js:
