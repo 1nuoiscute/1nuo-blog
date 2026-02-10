@@ -18,10 +18,11 @@ nav:
   fixed: false
 
 menu:
-  # Home: / || fas fa-home
-  # List||fas fa-list:
-  #   Music: /music/ || fas fa-music
-  #   Movie: /movies/ || fas fa-video
+  主页: / || fas fa-home
+  分类: /categories/ || fas fa-folder-open
+  标签: /tags/ || fas fa-tags
+  友链: /link/ || fas fa-link 
+  关于: /about/ || fas fa-heart
 
 # --------------------------------------
 # Code Blocks Settings
@@ -68,8 +69,7 @@ disable_top_img: false
 default_top_img:
 
 # The banner image of index page
-index_img:
-
+index_img: /img/banner.jpg
 # The banner image of archive page
 archive_img:
 
@@ -431,7 +431,7 @@ copy:
 
 # Need to install the hexo-wordcount plugin
 wordcount:
-  enable: false
+  enable: true
   # Display the word count of the article in post meta
   post_wordcount: true
   # Display the time to read the article in post meta
@@ -476,7 +476,7 @@ math:
 search:
   # Choose: algolia_search / local_search / docsearch
   # leave it empty if you don't need search
-  use:
+  use: local_search
   placeholder:
 
   # Algolia Search
@@ -535,7 +535,7 @@ comments:
   # Leave it empty if you don't need comments
   # Choose: Disqus/Disqusjs/Livere/Gitalk/Valine/Waline/Utterances/Facebook Comments/Twikoo/Giscus/Remark42/Artalk
   # Format of two comments system : Disqus,Waline
-  use:
+  use: Giscus
   # Display the comment name next to the button
   text: true
   # Lazyload: The comment system will be load when comment element enters the browser's viewport.
@@ -545,6 +545,7 @@ comments:
   count: false
   # Display comment count in Home Page
   card_post_count: false
+ 
 
 # Disqus
 # https://disqus.com/
@@ -632,13 +633,10 @@ twikoo:
 # Giscus
 # https://giscus.app/
 giscus:
-  repo:
-  repo_id:
-  category_id:
-  light_theme: light
-  dark_theme: dark
-  js:
-  option:
+  repo: 1nuoiscute/1nuoiscute.github.io
+  repo_id: R_kgDORMrmMA 
+  category_id: DIC_kwDORMrmMM4C2IVD
+
 
 # Remark42
 # https://remark42.com/docs/configuration/frontend/

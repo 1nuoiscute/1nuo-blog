@@ -102,3 +102,11 @@ deploy:
   type: git
   repo: https://github.com/1nuoiscute/1nuoiscute.github.io.git
   branch: main
+
+# Search
+search:
+  path: search.json
+  field: post
+  content: true
+  format: html
+
