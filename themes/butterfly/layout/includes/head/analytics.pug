@@ -43,3 +43,8 @@ if (theme.google_tag_manager && theme.google_tag_manager.tag_id)
     btf.addGlobalFn('pjaxComplete', () => {
       dataLayer.push({'event': 'pjaxComplete', 'page_title': document.title, 'page_location': location.href, 'page_path': window.location.pathname})
     }, 'google_tag_manager')
+
+if theme.vercel_analytics && theme.vercel_analytics.enable
+  script.
+    window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+  script(defer src="/_vercel/insights/script.js")

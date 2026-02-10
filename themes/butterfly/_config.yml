@@ -717,6 +717,11 @@ google_tag_manager:
   # optional
   domain:
 
+# https://vercel.com/docs/analytics
+# Vercel Web Analytics
+vercel_analytics:
+  enable: false
+
 # --------------------------------------
 # Advertisement
 # --------------------------------------
