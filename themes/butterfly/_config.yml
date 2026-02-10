@@ -57,7 +57,7 @@ social:
 favicon: /img/favicon.png
 
 avatar:
-  img: /img/avatar.jpg
+  img: /img/avatar.jpg?v=2026021002
   rounded: true
   opacity: 1
   effect: false
@@ -1079,6 +1079,7 @@ CDN:
   # For example: https://cdn.staticfile.org/${cdnjs_name}/${version}/${min_cdnjs_file}
   custom_format:
 
+
   option:
     # abcjs_basic_js:
     # activate_power_mode:
@@ -1134,3 +1135,6 @@ CDN:
     # valine:
     # waline_css:
     # waline_js:
+
+    
+
