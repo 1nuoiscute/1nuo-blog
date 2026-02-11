@@ -1,0 +1,17 @@
+- class_name: 朋友
+  class_desc: 
+  link_list:
+    - name: MisakaE
+      link: https://misakae.live/
+      avatar: /img/miskaEavatar.jpeg
+      descr: ''  
+
+
+- class_name: 友情链接
+  class_desc:
+  link_list:
+    - name: 花猪           
+      link: https://cnhuazhu.top/ 
+      avatar: https://gcore.jsdelivr.net/gh/CNhuazhu/Image/avatar.jpg
+      descr: 佛系青年   
+      siteshot: https://gcore.jsdelivr.net/gh/CNhuazhu/TuChuang4/blog/top2.jpg

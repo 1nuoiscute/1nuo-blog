@@ -1070,7 +1070,7 @@ inject:
     # - <script src="xxxx"></script>
     - <script src="//code.tidio.co/eqlko3dddqea7kkh6lniaigtezgcvtrf.js" async></script>
     - <script src="/js/snowflake.js"></script>
- 
+    - <script src="/js/timing.js"></script>
 
  
 

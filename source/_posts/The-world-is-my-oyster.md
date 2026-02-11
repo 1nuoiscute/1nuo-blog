@@ -2,7 +2,6 @@
 title: The world is my oyster
 date: 2026-02-11 10:03:59
 categories:
-  - 技术分享
   - 建站经历
 tags:
   - Hexo
