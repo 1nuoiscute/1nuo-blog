@@ -124,7 +124,7 @@ def ask_deepseek_summary(news_list):
     ### ⚡️ 电气频道 | Signal-to-Noise: High
     > 聚焦本院最硬核的动态。
     * **[事件名称]**：简述。
-    * * **[深度拆解]**：该动态对保研、综测或技术积累的真实价值。
+    * **[深度拆解]**：该动态对保研、综测或技术积累的真实价值。
     * **💡 Action Tip**：[具体怎么做]。
 
     ### 🌐 跨界哨所 | Cross-domain Insights
@@ -165,7 +165,51 @@ def ask_deepseek_summary(news_list):
         return None
 
 
-# --- 5. 执行主流程 ---
+# --- [新增] PushPlus 微信推送服务 ---
+def push_to_wechat(summary_content, blog_url="https://1nuo.me"):
+    token = os.getenv("PUSHPLUS_TOKEN")
+
+    if not token:
+        print("⚠️ 未检测到 PUSHPLUS_TOKEN，跳过推送。")
+        return
+
+    print("📨 正在通过 PushPlus 发送微信情报...")
+    url = "http://www.pushplus.plus/send"
+
+    # 构造 Markdown 消息内容
+    markdown_text = f"""
+### ⚡ 西南交大电气情报局
+> 📅 日期：{datetime.datetime.now().strftime('%Y-%m-%d')}
+> 🤖 分析员：DeepSeek 
+
+---
+
+{summary_content}
+
+---
+[👉 点击查看博客完整排版]({blog_url})
+"""
+
+    payload = {
+        "token": token,
+        "title": f"⚡ 情报局更新提醒 ({datetime.date.today()})",
+        "content": markdown_text,
+        "template": "markdown"
+    }
+
+    try:
+        res = requests.post(url, json=payload, timeout=10)
+        resp_json = res.json()
+        if resp_json['code'] == 200:
+            print("✅ PushPlus 推送成功！")
+        else:
+            print(f"❌ 推送失败: {resp_json['msg']}")
+    except Exception as e:
+        print(f"❌ 推送网络错误: {e}")
+
+
+# --- [修改] 5. 执行主流程 ---
+# 注意：这里 def 必须顶格写，不能缩进！
 def run_satellite():
     # 1. 抓取
     titles = fetch_all_titles()
@@ -184,6 +228,7 @@ def run_satellite():
             today_str = datetime.datetime.now().strftime("%Y-%m-%d")
             file_name = f"{POSTS_DIR}{today_str}-ee-intelligence.md"
 
+            # 修正：Front Matter 必须顶格，不能有缩进
             front_matter = f"""---
 title: 西南交大电气简报 | {today_str}
 date: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
@@ -204,6 +249,9 @@ top_img: /img/categoriesbanner.jpg
 
             print(f"✨ 文章已生成：{file_name}")
 
+            # --- [关键修改] 调用微信推送 ---
+            push_to_wechat(ai_content, blog_url="https://1nuo.me")
+
             # 5. 清空蓄水池 & 更新时间
             data["news"] = []
             data["last_post_date"] = today_str
@@ -212,7 +260,7 @@ top_img: /img/categoriesbanner.jpg
         else:
             print("⚠️ AI 未返回内容，暂停发布，保留蓄水池。")
     else:
-        # 没触发，只保存蓄水池状态（主要是保存新抓到的新闻）
+        # 没触发，只保存蓄水池状态
         with open(RESERVOIR_FILE, "w", encoding="utf-8") as f:
             json.dump(data, f, ensure_ascii=False, indent=4)
         print(f"💧 蓄水未满，继续等待... (当前积压: {len(data['news'])} 条)")

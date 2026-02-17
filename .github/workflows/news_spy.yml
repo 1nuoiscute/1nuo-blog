@@ -30,6 +30,7 @@ jobs:
       env:
         # 这里引用你在 GitHub Settings 里填写的 Key
         DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+        PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
       run: python spy_v1.3.py
 
     - name: Commit and Push if Changed
