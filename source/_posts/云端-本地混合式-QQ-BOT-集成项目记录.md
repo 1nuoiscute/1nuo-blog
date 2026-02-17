@@ -1,5 +1,5 @@
 ---
-title: 云端 - 本地混合式 QQ BOT 集成记录
+title: 云端 - 本地混合式 QQ BOT 集成项目记录
 date: 2026-02-16 19:32:05
 categories:
   - 项目经历
