@@ -1,0 +1,43 @@
+name: EE Intelligence Satellite
+
+on:
+  schedule:
+    # ⏲️ 定时任务设置 (UTC时间)
+    # 北京时间比UTC早8小时
+    # 下面设定为：北京时间 每天 08:00 和 20:00 运行
+    - cron: '0 0,12 * * *'
+  
+  # 允许你在 GitHub 网页上点击 "Run workflow" 手动触发
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - name: Checkout Code
+      uses: actions/checkout@v4
+
+    - name: Set up Python
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.9'
+
+    - name: Install Dependencies
+      run: pip install requests beautifulsoup4
+
+    - name: Run Satellite Logic
+      env:
+        # 这里引用你在 GitHub Settings 里填写的 Key
+        DEEPSEEK_API_KEY: ${{ secrets.DEEPSEEK_API_KEY }}
+      run: python spy_v1.3.py
+
+    - name: Commit and Push if Changed
+      run: |
+        git config --global user.name "GitHub Action Bot"
+        git config --global user.email "action@github.com"
+        # 添加所有生成的文件（比如 .md 文章或更新后的 json）
+        git add .
+        # 如果有变化就提交，没变化就跳过 (防止报错)
+        git commit -m "chore(spy): update daily intelligence data [skip ci]" || exit 0
+        git push
