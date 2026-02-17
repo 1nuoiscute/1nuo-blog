@@ -124,7 +124,7 @@ def ask_deepseek_summary(news_list):
     ### ⚡️ 电气频道 | Signal-to-Noise: High
     > 聚焦本院最硬核的动态。
     * **[事件名称]**：简述。
-    * **[深度拆解]**：该动态对保研、综测或技术积累的真实价值。
+    * * **[深度拆解]**：该动态对保研、综测或技术积累的真实价值。
     * **💡 Action Tip**：[具体怎么做]。
 
     ### 🌐 跨界哨所 | Cross-domain Insights
@@ -185,10 +185,11 @@ def run_satellite():
             file_name = f"{POSTS_DIR}{today_str}-ee-intelligence.md"
 
             front_matter = f"""---
-title: 西南交大电气情报 | {today_str}
+title: 西南交大电气简报 | {today_str}
 date: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 tags: [AI, 电气工程, 西南交通大学]
 categories: [AI简报]
+top_img: /img/categoriesbanner.jpg 
 ---
 
 > 📡 **情报员注**：本简报由 GitHub Actions 云端自动生成。
