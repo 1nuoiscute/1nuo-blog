@@ -74,14 +74,17 @@ top_img: /img/academicbanner.jpg
 
   .nuo-card { position: relative; border: 1px solid #eee; border-radius: 14px; padding: 18px; width: 100%; max-width: 340px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); background: #fff; transition: 0.3s; }
   .nuo-rating-badge { position: absolute; top: 15px; right: 15px; font-size: 28px; font-weight: 900; color: #e74c3c; font-style: italic; opacity: 0.7; }
+  
+  /* --- 修复对齐的关键 CSS --- */
   .nuo-score-row { display: flex; align-items: center; margin-bottom: 8px; font-size: 12px; }
-  .nuo-score-label { width: 60px; color: #666; font-weight: bold; }
+  .nuo-score-label { width: 65px; color: #666; font-weight: bold; flex-shrink: 0; } /* 固定宽度 */
   .nuo-score-bar-bg { flex-grow: 1; height: 8px; background: #f0f0f0; border-radius: 4px; margin: 0 10px; overflow: hidden; }
   .nuo-score-bar-fill { height: 100%; border-radius: 4px; background: linear-gradient(90deg, #83bff6, #188df0); transition: width 0.8s; }
+  .nuo-score-value { width: 40px; font-weight: bold; color: #333; flex-shrink: 0; text-align: left; } /* 固定宽度 + 左对齐 */
+
   .nuo-detail-link { font-size: 11px; color: #3498db; text-decoration: none; margin-left: 8px; padding: 2px 6px; border-radius: 4px; border: 1px solid transparent; cursor: pointer; }
   .nuo-light-link { color: #2ecc71; border: 1px solid #dcfce7; background: #f0fdf4; }
 
-  /* PK 样式修复 */
   .pk-slot { flex: 1; min-height: 120px; border: 2px dashed #cbd5e1; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: #f8fafc; cursor: pointer; }
   .pk-plus { font-size: 40px; color: #cbd5e1; pointer-events: none; }
   .pk-vs-circle { background: #e74c3c; color: #fff; width: 36px; height: 36px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: 900; position: absolute; left: 50%; top: 40px; transform: translateX(-50%); z-index: 5; }
@@ -172,6 +175,8 @@ top_img: /img/academicbanner.jpg
     data.forEach(item => {
       const idx = globalData.attractions.findIndex(a => a.id === item.id);
       const tags = item.tags.map(t => `<span style="background:${colors[t.tier]||'#94a3b8'}; color:#fff; padding:2px 6px; border-radius:3px; font-size:10px;">${t.name}</span>`).join(' ');
+      
+      // 这里的 row 保持原来的变量名，但样式已在上面 CSS 中修复
       const row = (l, s) => `<div class="nuo-score-row"><div class="nuo-score-label">${l}</div><div class="nuo-score-bar-bg"><div class="nuo-score-bar-fill" style="width:${(s.val/10)*100}%;"></div></div><div class="nuo-score-value">${s.text}</div></div>`;
 
       container.innerHTML += `
@@ -182,7 +187,10 @@ top_img: /img/academicbanner.jpg
               ${item.link ? `<a href="${item.link}" target="_blank" class="nuo-detail-link">📝 深度评测 ➔</a>` : `<span class="nuo-detail-link nuo-light-link" onclick="openModal(${idx})">💬 简评 & 照片</span>`}</h3>
             ${item.slogan ? `<div style="font-size: 11px; color: #64748b; margin-top: 4px; font-style: italic; opacity: 0.8;">「 ${item.slogan} 」</div>` : ''}
           </div>
-          ${row('建筑视觉', item.scores.architecture)}${row('文化共鸣', item.scores.culture)}${row('游览体验', item.scores.experience)}${row('质价比', item.scores.value)}
+          ${row('建筑视觉', item.scores.architecture)}
+          ${row('文化共鸣', item.scores.culture)}
+          ${row('游览体验', item.scores.experience)}
+          ${row('质价比', item.scores.value)}
           <div style="margin-top: 10px; display: flex; gap: 4px; flex-wrap: wrap;">${tags}</div>
           <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center;">
             <div style="font-size: 10px; color: #94a3b8;">📍 ${item.location}<br>🗓️ ${item.visit_time}</div>
@@ -192,7 +200,6 @@ top_img: /img/academicbanner.jpg
     });
   }
 
-  // --- PK 修复版 ---
   function openPKModal() { pkSelected = [null, null]; document.getElementById('pk-comparison-area').style.display='none'; renderPKSlots(); document.getElementById('pk-modal').style.display='flex'; }
   function closePKModal() { document.getElementById('pk-modal').style.display='none'; }
   function renderPKSlots() {
@@ -210,7 +217,6 @@ top_img: /img/academicbanner.jpg
     const pop = document.getElementById('pk-list-popover');
     document.getElementById('pk-list-items').innerHTML = globalData.attractions.map(a => `<div class="pk-item" onclick="selectForPK(${idx},'${a.id}')">${a.name}</div>`).join('');
     const rect = e.currentTarget.getBoundingClientRect();
-    // 关键修复：直接使用视口坐标，不加 scrollY
     pop.style.top = (rect.bottom + 5) + 'px';
     pop.style.left = (rect.left) + 'px';
     pop.style.display = 'block';
