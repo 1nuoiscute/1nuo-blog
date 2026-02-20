@@ -1,6 +1,245 @@
 {
   "attractions": [
     {
+      "id": "changpingguanyujiamiao",
+      "name": "常平关羽家庙",
+      "slogan": "威震华夏",
+      "short_review": "✍️ 记录于: 2026/2/20\n\n　　我是看完关帝庙再来的家庙，说实话有点同质化，在家庙这里可以看到远处的超大80m关羽，点赞。\n\n　　内容不是很多，很快就看完了，多了一份“家”的烟火气和祖祠的肃穆感。\n\n　　门票25元，性价比还可以吧。",
+      "images": [
+        "/rate/rateimg/cpgyjm.jpg"
+      ],
+      "location": "山西省运城市盐湖区常平乡常平村",
+      "visit_time": "2026.2.19",
+      "scores": {
+        "architecture": {
+          "text": "7.5-",
+          "val": 7.3
+        },
+        "culture": {
+          "text": "8.5-",
+          "val": 8.3
+        },
+        "experience": {
+          "text": "7+",
+          "val": 7.2
+        },
+        "value": {
+          "text": "7",
+          "val": 7
+        }
+      },
+      "tags": [
+        {
+          "name": "关公故里",
+          "tier": "A"
+        }
+      ],
+      "final_score": 7.72,
+      "rating": "B"
+    },
+    {
+      "id": "haizhouguandimiao",
+      "name": "解州关帝庙",
+      "slogan": "酒且斟下，某去便来。",
+      "short_review": "✍️ 记录于: 2026/2/20\n\n　　建筑水平还行。关羽元素气息浓厚。\n\n　　关羽的文化共鸣无需多言，更何况我也算个三国爱好者。\n\n　　有关羽的演出，看了三个，一个是和曹操交流，一个是千里走单骑时，一个是现代人和关羽交流，关羽回忆桃园三结义，演出不错。\n\n　　门票45元，性价比还不错。停车场非常非常大，车很多，停车场10元，摆渡车单程3元来回5元，自动售货机贵1-2元，总体来说物价正常。中午在景区吃的羊肉泡馍，类似陕西的水盆羊肉，但是饼是酥的，25元。30元可以上一个楼二楼，我没有上。",
+      "images": [
+        "/rate/rateimg/hzgdm1.jpg",
+        "/rate/rateimg/hzgdm2.jpg",
+        "/rate/rateimg/hzgdm3.jpg"
+      ],
+      "location": "山西省运城市盐湖区解州镇解州村",
+      "visit_time": "2026.2.19",
+      "scores": {
+        "architecture": {
+          "text": "8",
+          "val": 8
+        },
+        "culture": {
+          "text": "8.5+",
+          "val": 8.7
+        },
+        "experience": {
+          "text": "7.5-",
+          "val": 7.3
+        },
+        "value": {
+          "text": "7.5+",
+          "val": 7.7
+        }
+      },
+      "tags": [
+        {
+          "name": "关羽之歌",
+          "tier": "S"
+        }
+      ],
+      "final_score": 8.28,
+      "rating": "A"
+    },
+    {
+      "id": "pujindu",
+      "name": "蒲津渡",
+      "slogan": "《捞铁牛》",
+      "short_review": "✍️ 记录于: 2026/2/20\n\n　　铁牛很震撼，有小展览馆介绍铁牛，听说是曾经小学课文《捞铁牛》中的铁牛，可惜我和我父母都没有学过。\n\n　　免费开放，门口的停车场要收10元，所以整体上说没有特别愉快，景区体量很小，铁牛是唯一的看点。",
+      "images": [
+        "/rate/rateimg/pjd.jpg"
+      ],
+      "location": "山西省运城市永济市蒲州镇",
+      "visit_time": "2026.2.19",
+      "scores": {
+        "architecture": {
+          "text": "7.5",
+          "val": 7.5
+        },
+        "culture": {
+          "text": "7-",
+          "val": 6.8
+        },
+        "experience": {
+          "text": "7",
+          "val": 7
+        },
+        "value": {
+          "text": "9",
+          "val": 9
+        }
+      },
+      "tags": [
+        {
+          "name": "免费",
+          "tier": "B"
+        },
+        {
+          "name": "黄河地锚",
+          "tier": "C"
+        }
+      ],
+      "final_score": 7.62,
+      "rating": "B"
+    },
+    {
+      "id": "fenglinggudu",
+      "name": "风陵古渡",
+      "slogan": "一见杨过误终身。",
+      "short_review": "✍️ 记录于: 2026/2/20\n\n　　更多是作为一种“地理与文学的双重符号”而存在，缺乏传统古建的精致感。\n\n　　我没有看过神雕侠侣，但我去过潼关古城，鸡鸣三省。路过打卡十分便捷。\n\n　　免费",
+      "images": [
+        "/rate/rateimg/flgd1.jpg",
+        "/rate/rateimg/flgd2.jpg"
+      ],
+      "location": "山西省运城市芮城县风陵渡",
+      "visit_time": "2026.2.18",
+      "scores": {
+        "architecture": {
+          "text": "7-",
+          "val": 6.8
+        },
+        "culture": {
+          "text": "7",
+          "val": 7
+        },
+        "experience": {
+          "text": "7.5-",
+          "val": 7.3
+        },
+        "value": {
+          "text": "9",
+          "val": 9
+        }
+      },
+      "tags": [
+        {
+          "name": "免费",
+          "tier": "B"
+        },
+        {
+          "name": "鸡鸣三省",
+          "tier": "C"
+        },
+        {
+          "name": "一见杨过误终身",
+          "tier": "C"
+        }
+      ],
+      "final_score": 7.63,
+      "rating": "B"
+    },
+    {
+      "id": "guangrenwangmiao",
+      "name": "广仁王庙",
+      "slogan": "唯四唐代木构建筑",
+      "short_review": "✍️ 记录于: 2026/2/20\n\n　　全国仅存的四座唐代木构之一。仔细看起来，虽然不懂专业的斗拱结构，但依然能感受到某种跨越千年的原始美感\n\n　　门票25，考虑到景区体量较小且我不是这方面受众，姑且调低一点性价比",
+      "images": [
+        "/rate/rateimg/grwm.jpg"
+      ],
+      "location": "山西省运城市芮城县龙泉村",
+      "visit_time": "2026.2.18",
+      "scores": {
+        "architecture": {
+          "text": "7+",
+          "val": 7.2
+        },
+        "culture": {
+          "text": "7",
+          "val": 7
+        },
+        "experience": {
+          "text": "7-",
+          "val": 6.8
+        },
+        "value": {
+          "text": "6+",
+          "val": 6.2
+        }
+      },
+      "tags": [
+        {
+          "name": "大唐余晖",
+          "tier": "A"
+        }
+      ],
+      "final_score": 7.04,
+      "rating": "B-"
+    },
+    {
+      "id": "yonglegong",
+      "name": "永乐宫",
+      "slogan": "东方艺术画廊",
+      "short_review": "✍️ 记录于: 2026/2/20\n\n　　壁画美轮美奂，十分精美，我去的时候是晴天，室内光线不错，但无法拍照，我偷偷拍了几张。\n\n　　对道教文化感兴趣的朋友一定不能错过这里。即使不深谙道教，吕洞宾，王重阳的故事也是耳熟能详。\n\n　　进殿要换鞋套，我去的那会可能是过年，有演出看，还不错，体验上说中规中矩。\n\n　　门票50元，性价比较高。",
+      "images": [
+        "/rate/rateimg/ylg1.jpg",
+        "/rate/rateimg/ylg2.jpg",
+        "/rate/rateimg/ylg3.jpg"
+      ],
+      "location": "山西省运城市芮城县龙泉村",
+      "visit_time": "2026.2.18",
+      "scores": {
+        "architecture": {
+          "text": "9-",
+          "val": 8.8
+        },
+        "culture": {
+          "text": "8",
+          "val": 8
+        },
+        "experience": {
+          "text": "7.5",
+          "val": 7.5
+        },
+        "value": {
+          "text": "8",
+          "val": 8
+        }
+      },
+      "tags": [
+        {
+          "name": "东方艺术画廊",
+          "tier": "A"
+        }
+      ],
+      "final_score": 8.27,
+      "rating": "A"
+    },
+    {
       "id": "pujiusi",
       "name": "普救寺",
       "slogan": "西厢记",
@@ -13,14 +252,32 @@
       "location": "山西省运城市永济市蒲州镇",
       "visit_time": "2026.2.18",
       "scores": {
-        "architecture": { "text": "7.5+", "val": 7.7 },
-        "culture": { "text": "8+", "val": 8.2 },
-        "experience": { "text": "7+", "val": 7.2 },
-        "value": { "text": "7.5+", "val": 7.7 }
+        "architecture": {
+          "text": "7.5+",
+          "val": 7.7
+        },
+        "culture": {
+          "text": "8+",
+          "val": 8.2
+        },
+        "experience": {
+          "text": "7+",
+          "val": 7.2
+        },
+        "value": {
+          "text": "7.5+",
+          "val": 7.7
+        }
       },
       "tags": [
-        { "name": "西厢记", "tier": "B" },
-        { "name": "爱情名刹", "tier": "C" }
+        {
+          "name": "西厢记",
+          "tier": "B"
+        },
+        {
+          "name": "爱情名刹",
+          "tier": "C"
+        }
       ],
       "final_score": 7.88,
       "rating": "B+"
@@ -38,13 +295,28 @@
       "location": "山西省运城市永济市蒲州镇",
       "visit_time": "2026.2.19",
       "scores": {
-        "architecture": { "text": "8", "val": 8 },
-        "culture": { "text": "8-", "val": 7.8 },
-        "experience": { "text": "6.5-", "val": 6.3 },
-        "value": { "text": "10", "val": 10 }
+        "architecture": {
+          "text": "8",
+          "val": 8
+        },
+        "culture": {
+          "text": "8-",
+          "val": 7.8
+        },
+        "experience": {
+          "text": "6.5-",
+          "val": 6.3
+        },
+        "value": {
+          "text": "10",
+          "val": 10
+        }
       },
       "tags": [
-        { "name": "免费", "tier": "B" }
+        {
+          "name": "免费",
+          "tier": "B"
+        }
       ],
       "final_score": 8.02,
       "rating": "A-"
@@ -61,13 +333,28 @@
       "location": "山西省运城市永济市蒲州镇",
       "visit_time": "2026.2.18",
       "scores": {
-        "architecture": { "text": "6.5-", "val": 6.3 },
-        "culture": { "text": "8.5", "val": 8.5 },
-        "experience": { "text": "7.5+", "val": 7.7 },
-        "value": { "text": "7", "val": 6.8 }
+        "architecture": {
+          "text": "6.5-",
+          "val": 6.3
+        },
+        "culture": {
+          "text": "8.5",
+          "val": 8.5
+        },
+        "experience": {
+          "text": "7.5+",
+          "val": 7.7
+        },
+        "value": {
+          "text": "7",
+          "val": 6.8
+        }
       },
       "tags": [
-        { "name": "欲穷千里目", "tier": "S" }
+        {
+          "name": "欲穷千里目",
+          "tier": "S"
+        }
       ],
       "final_score": 7.75,
       "rating": "B+"
