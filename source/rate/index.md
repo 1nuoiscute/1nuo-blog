@@ -6,7 +6,7 @@ top_img: /img/academicbanner.jpg
 
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 
-<div style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center;">
+<div style="margin-bottom: 20px; display: flex; gap: 10px; align-items: center; flex-wrap: wrap;">
   <button id="btn-attractions" class="nuo-tab-btn" onclick="switchTab('attractions')">🏛️ 景点评测</button>
   <button id="btn-digital" class="nuo-tab-btn" onclick="switchTab('digital')">🍹 饮品评测</button>
   
@@ -15,11 +15,23 @@ top_img: /img/academicbanner.jpg
   </a>
 </div>
 
+<div id="nuo-filter-bar" style="display: none; margin-bottom: 20px; padding: 15px; background: #fff; border-radius: 12px; border: 1px solid #eee; gap: 15px; align-items: center; flex-wrap: wrap; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
+  <div style="display: flex; align-items: center; gap: 8px;">
+    <span style="font-size: 13px; font-weight: bold; color: #64748b;">省份:</span>
+    <select id="filter-province" onchange="onProvinceChange()" class="nuo-select"></select>
+  </div>
+  <div style="display: flex; align-items: center; gap: 8px;">
+    <span style="font-size: 13px; font-weight: bold; color: #64748b;">城市:</span>
+    <select id="filter-city" onchange="onCityChange()" class="nuo-select"></select>
+  </div>
+  <div id="filter-count" style="margin-left: auto; font-size: 12px; color: #94a3b8;"></div>
+</div>
+
 <div id="section-attractions" class="nuo-section" style="display: none;">
   <div style="display: flex; justify-content: space-between; align-items: flex-end; margin-bottom: 15px; padding: 0 5px; border-bottom: 2px solid #eee; padding-bottom: 10px;">
-    <h2 style="margin: 0; font-size: 18px; color: #333;">🏛️ 所有景点均分</h2>
+    <h2 style="margin: 0; font-size: 18px; color: #333;" id="chart-title">🏛️ 景点均分统计</h2>
     <div style="text-align: right;">
-      <div style="font-size: 12px; color: #888;">平均综合得分</div>
+      <div style="font-size: 12px; color: #888;">区域综合得分</div>
       <strong id="global-avg-score" style="font-size: 24px; color: #2c3e50; line-height: 1;">0.00</strong>
     </div>
   </div>
@@ -52,6 +64,12 @@ top_img: /img/academicbanner.jpg
   }
   .nuo-tab-btn:hover { background: #e9ecef; border-color: #3498db; color: #3498db; }
   .nuo-tab-btn.active { background: #2c3e50; color: #fff; border-color: #2c3e50; }
+
+  .nuo-select {
+    padding: 4px 8px; border-radius: 6px; border: 1px solid #e2e8f0; 
+    font-size: 13px; outline: none; cursor: pointer; background: #fff;
+  }
+  .nuo-select:focus { border-color: #3498db; }
   
   .nuo-card {
     position: relative; 
@@ -102,37 +120,112 @@ top_img: /img/academicbanner.jpg
 
 <script>
   let globalData = {};
+  let currentFilteredData = [];
+
+  // --- 核心：解析 location 字符串 ---
+  function parseLocation(locStr) {
+    if (!locStr) return { province: '未知', city: '未知' };
+    // 匹配 XX省 或 XX自治区 或 XX市(直辖市)
+    const pMatch = locStr.match(/.*?(省|自治区|北京市|上海市|天津市|重庆市)/);
+    const province = pMatch ? pMatch[0] : '其他';
+    
+    // 在省份之后匹配 XX市 或 XX州
+    const rest = locStr.replace(province, '');
+    const cMatch = rest.match(/.*?(市|自治州|地区|盟)/);
+    const city = cMatch ? cMatch[0] : '全境';
+    
+    return { province, city };
+  }
 
   fetch('/rate/rate_data.json')
     .then(response => response.json())
     .then(data => { 
       globalData = data; 
-      // 默认加载景点
+      initFilterOptions();
       switchTab('attractions');
     })
     .catch(error => console.error('数据加载失败:', error));
 
+  // --- 筛选逻辑 ---
+  function initFilterOptions() {
+    const provinceSelect = document.getElementById('filter-province');
+    const provinces = new Set(['全部省份']);
+    
+    globalData.attractions.forEach(item => {
+      provinces.add(parseLocation(item.location).province);
+    });
+
+    provinceSelect.innerHTML = Array.from(provinces).map(p => `<option value="${p}">${p}</option>`).join('');
+    updateCityOptions();
+  }
+
+  function updateCityOptions() {
+    const province = document.getElementById('filter-province').value;
+    const citySelect = document.getElementById('filter-city');
+    const cities = new Set(['全部城市']);
+
+    globalData.attractions.forEach(item => {
+      const loc = parseLocation(item.location);
+      if (province === '全部省份' || loc.province === province) {
+        cities.add(loc.city);
+      }
+    });
+
+    citySelect.innerHTML = Array.from(cities).map(c => `<option value="${c}">${c}</option>`).join('');
+    applyFilters();
+  }
+
+  function onProvinceChange() {
+    updateCityOptions();
+  }
+
+  function onCityChange() {
+    applyFilters();
+  }
+
+  function applyFilters() {
+    const province = document.getElementById('filter-province').value;
+    const city = document.getElementById('filter-city').value;
+
+    currentFilteredData = globalData.attractions.filter(item => {
+      const loc = parseLocation(item.location);
+      const matchP = province === '全部省份' || loc.province === province;
+      const matchC = city === '全部城市' || loc.city === city;
+      return matchP && matchC;
+    });
+
+    document.getElementById('filter-count').innerText = `共找到 ${currentFilteredData.length} 个评测`;
+    
+    // 更新 UI
+    renderAverageBarChart(currentFilteredData);
+    renderCards(currentFilteredData);
+  }
+
   function switchTab(category) {
-    // 处理按钮激活状态
     document.querySelectorAll('.nuo-tab-btn').forEach(btn => btn.classList.remove('active'));
-    // 只有非链接按钮才会被激活（排除后台按钮）
     const activeBtn = document.getElementById(`btn-${category}`);
     if(activeBtn) activeBtn.classList.add('active');
 
-    // 处理板块显示
     document.querySelectorAll('.nuo-section').forEach(sec => sec.style.display = 'none');
     const section = document.getElementById(`section-${category}`);
+    
+    // 控制筛选条显示
+    document.getElementById('nuo-filter-bar').style.display = (category === 'attractions') ? 'flex' : 'none';
+
     if(section) section.style.display = 'block';
 
-    // 渲染逻辑
     if (category === 'attractions' && globalData.attractions) {
-      renderAverageBarChart(globalData.attractions);
-      renderCards(globalData.attractions);
+      applyFilters();
     }
   }
 
   function renderAverageBarChart(data) {
-    if (!data || data.length === 0) return;
+    const scoreDisplay = document.getElementById('global-avg-score');
+    if (!data || data.length === 0) {
+      scoreDisplay.innerText = "0.00";
+      return;
+    }
+
     let sumArch = 0, sumCult = 0, sumExp = 0, sumVal = 0, sumFinal = 0;
     data.forEach(item => {
       sumArch += item.scores.architecture.val; 
@@ -142,7 +235,7 @@ top_img: /img/academicbanner.jpg
       sumFinal += item.final_score; 
     });
     const len = data.length;
-    document.getElementById('global-avg-score').innerText = (sumFinal / len).toFixed(2);
+    scoreDisplay.innerText = (sumFinal / len).toFixed(2);
 
     var chartDom = document.getElementById('average-bar-chart');
     var myChart = echarts.getInstanceByDom(chartDom);
@@ -163,36 +256,15 @@ top_img: /img/academicbanner.jpg
     myChart.setOption(option);
   }
 
-  function openModal(index) {
-    const item = globalData.attractions[index];
-    document.getElementById('modal-title').innerText = item.name + " - 简评";
-    document.getElementById('modal-text').innerText = item.short_review || '暂无文字评价';
-    
-    const imgContainer = document.getElementById('modal-images');
-    imgContainer.innerHTML = '';
-    if(item.images && item.images.length > 0) {
-      item.images.forEach(url => {
-        imgContainer.innerHTML += `<img src="${url}" class="nuo-modal-img" alt="现场照片" />`;
-      });
-    }
-    document.getElementById('nuo-modal').style.display = 'flex';
-  }
-
-  function closeModal() {
-    document.getElementById('nuo-modal').style.display = 'none';
-  }
-
-  window.onclick = function(event) {
-    const modal = document.getElementById('nuo-modal');
-    if (event.target == modal) { modal.style.display = "none"; }
-  }
-
   function renderCards(data) {
     const container = document.getElementById('cards-container');
     container.innerHTML = ''; 
     const tierColors = { 'S': '#FACA30', 'A': '#e74c3c', 'B': '#3498db', 'C': '#2ecc71' };
     
-    data.forEach((item, index) => {
+    data.forEach((item) => {
+      // 在渲染时需要找到该 item 在 globalData.attractions 中的真实 index 用于弹窗
+      const realIndex = globalData.attractions.indexOf(item);
+      
       const tagsHtml = item.tags.map(tag => {
         const bgColor = tierColors[tag.tier] || '#95a5a6';
         return `<span title="Tier: ${tag.tier}" style="background:${bgColor}; color:#fff; padding:3px 10px; border-radius:4px; font-size:12px; cursor:help; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">${tag.name}</span>`;
@@ -211,7 +283,7 @@ top_img: /img/academicbanner.jpg
       if (item.link) {
         linkHtml = `<a href="${item.link}" target="_blank" class="nuo-detail-link">📝 深度评测 ➔</a>`;
       } else if (item.short_review || (item.images && item.images.length > 0)) {
-        linkHtml = `<span class="nuo-detail-link nuo-light-link" onclick="openModal(${index})">💬 简评 & 照片</span>`;
+        linkHtml = `<span class="nuo-detail-link nuo-light-link" onclick="openModal(${realIndex})">💬 简评 & 照片</span>`;
       }
 
       const cardHTML = `
@@ -245,6 +317,27 @@ top_img: /img/academicbanner.jpg
       container.innerHTML += cardHTML;
     });
   }
-</script>
 
----
+  function openModal(index) {
+    const item = globalData.attractions[index];
+    document.getElementById('modal-title').innerText = item.name + " - 简评";
+    document.getElementById('modal-text').innerText = item.short_review || '暂无文字评价';
+    const imgContainer = document.getElementById('modal-images');
+    imgContainer.innerHTML = '';
+    if(item.images && item.images.length > 0) {
+      item.images.forEach(url => {
+        imgContainer.innerHTML += `<img src="${url}" class="nuo-modal-img" alt="现场照片" />`;
+      });
+    }
+    document.getElementById('nuo-modal').style.display = 'flex';
+  }
+
+  function closeModal() {
+    document.getElementById('nuo-modal').style.display = 'none';
+  }
+
+  window.onclick = function(event) {
+    const modal = document.getElementById('nuo-modal');
+    if (event.target == modal) { modal.style.display = "none"; }
+  }
+</script>
