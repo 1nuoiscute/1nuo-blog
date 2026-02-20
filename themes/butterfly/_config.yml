@@ -20,10 +20,11 @@ nav:
 menu:
   主页: / || fas fa-home
   分类: /categories/ || fas fa-folder-open
-  标签: /tags/ || fas fa-tags
+  标签: /tags/ ||  fas fa-tags
+  评测: /rate/ || fas fa-rocket
   友链: /link/ || fas fa-link 
   关于: /about/ || fas fa-heart
-
+  
 # --------------------------------------
 # Code Blocks Settings
 # --------------------------------------
