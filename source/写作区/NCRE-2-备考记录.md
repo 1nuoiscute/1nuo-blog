@@ -7,7 +7,7 @@ tags:
   - 备考经历
   - NCRE
   - 计算机
-top_img: /img/pagebanner226211.jpg
+top_img: https://img.1nuo.me/img/pagebanner226211.webp
 password: shc20070305
 ---
 ## 外储存器中数据被读入内存储器（主储存器）后，才能被CPU读取

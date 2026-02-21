@@ -64,7 +64,7 @@ social:
 favicon: /img/favicon.png
 
 avatar:
-  img: /img/avatar.jpg?v=2026021002
+  img: https://img.1nuo.me/img/avatar.webp
   rounded: true
   opacity: 1
   effect: false
@@ -73,15 +73,15 @@ avatar:
 disable_top_img: false
 
 # If the banner of page not setting, it will show the default_top_img
-default_top_img:
+default_top_img: 
 
 # The banner image of index page
-index_img: /img/banner.jpg
+index_img: https://img.1nuo.me/img/banner.webp
 # The banner image of archive page
-archive_img:
+archive_img: https://img.1nuo.me/img/banner.webp
 
 # Note: tag page, not tags page
-tag_img:
+tag_img: https://img.1nuo.me/img/banner.webp
 
 # The banner image of tag page, you can set the banner image for each tag
 # Format:
@@ -89,7 +89,7 @@ tag_img:
 tag_per_img:
 
 # Note: category page, not categories page
-category_img:
+category_img: https://img.1nuo.me/img/banner.webp
 
 # The banner image of category page, you can set the banner image for each category
 # Format:

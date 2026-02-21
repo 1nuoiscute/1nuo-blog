@@ -8,7 +8,7 @@ tags:
   - GitHub Actions
   - AI
   - 自动化
-top_img: /img/pagebanner1 26211.jpg 
+top_img: https://img.1nuo.me/img/pagebanner1%2026211.webp
 ---
 ## Chapter 1: 起因
 这其实是 **Gemini** 的主意。

@@ -6,7 +6,7 @@ categories:
 tags:
   - 更新
   - 评测
-top_img: /img/academicbanner.jpg
+top_img: https://img.1nuo.me/img/academicbanner.webp
 ---
 
 博客的重磅新板块 —— **「1nuo 评测」** 现已正式上线！

@@ -10,23 +10,23 @@ tags:
   - Koishi
   - ChatLuna
   - NapCatQQ
-top_img: /img/pagebanner1 26211.jpg  
+top_img: https://img.1nuo.me/img/pagebanner1%2026211.webp
 ---
 ## Chapter 1: 项目初衷
 项目目标十分明确：将 DeepSeek 集成至常用的沟通场景 —— QQ 。网页端交互界面虽能实现基础功能，却缺少一站式聊天平台的即时性。过往自建平台的经验让我深知，交互界面的自主可控性与后端能力同等重要。我想要一套响应及时、可常驻运行的解决方案，既能承载 AI 模型的复杂推理计算，又无需在多个标签页间频繁切换，带来不必要的操作繁琐。
 我过去就非常羡慕类似的 QQ Bot ，感觉很**好玩**。刚好手上有 DeepSeek 的 API ，于是决定在 **Gemini** 的帮助下进行尝试。
-![alt](/img/page2165.png "DeepSeek")
+![alt](https://img.1nuo.me/img/page2165.webp "DeepSeek")
 ## Chapter 2: 技术栈
 本项目需要一套能在云端完成逻辑调度，同时与 QQ 协议保持稳定连接的架构。在对多款框架进行评估后，我最终选定以下技术组合：
 ### 逻辑调度：Koishi + ChatLuna
 **Koishi** 拥有完善的插件生态，**ChatLuna** 则负责处理大语言模型适配器管理与角色记忆持久化的各类细节问题
-![alt](/img/page2162.png "Koishi") ![alt](/img/page2163.png "ChatLuna")
+![alt](https://img.1nuo.me/img/page2162.webp "Koishi") ![alt](https://img.1nuo.me/img/page2163.webp "ChatLuna")
 ### 基础设施：Zeabur
 选择 **Zeabur** 部署 **Koishi** ，得益于其对容器化应用的无缝部署能力。
-![alt](/img/page2161.png "Zeabur")
+![alt](https://img.1nuo.me/img/page2161.webp "Zeabur")
 ### 协议桥接：NapCatQQ
 一款基于 **OneBot11** 协议的现代化无界面实现方案，运行在我的本地设备上。
-![alt](/img/page2166.png "NapCatQQ")
+![alt](https://img.1nuo.me/img/page2166.webp "NapCatQQ")
 ## Chapter 3: 项目难点
 最初，我尝试在 **Zeabur** 托管上使用官方的 adapter-qq 适配器，然而连接过程中频繁出现无效会话和无效意图的报错。云端服务器的 IP 段（如 Zeabur 所使用的谷歌云 IP）常被腾讯的安全防护体系标记或限制。
 ## Chapter 4: 架构设计
@@ -35,7 +35,7 @@ top_img: /img/pagebanner1 26211.jpg
 * 在该架构中，本地的 **NapCat** 作为客户端，主动向 **Zeabur** 上的 **Koishi** 发起连接。
   * 本地登录：QQ 的会话状态在本地家用 IP 上维持，该 IP 在协议层面更稳定、更受信任。
   * 云端处理：部署在云端的 **Koishi** 承担核心计算工作 —— 对接 **DeepSeek 的 API 接口**，并管理对话逻辑。连接桥接：通过安全的访问令牌和指定的 **WebSocket** 访问路径，实现两个实例的完美同步，无需为家用设备配置复杂的端口映射，也无需公网 IP。
-![alt](/img/page2164.png "www")
+![alt](https://img.1nuo.me/img/page2164.webp "www")
 ## Chapter 5: 项目总结
 * 这个项目的核心，并非 “打造” 一个全新的机器人，而是在受限制的生态体系中，搭建出一条可靠的实现路径。结合 **Zeabur** 云端的灵活扩展性与**NapCat** 本地端的稳定性，成功在 QQ 平台部署了基于 **Deepseek API** 的 BOT 运行。
 * 这种混合式方案虽然解决了协议稳定性问题，但也带来了一个无法回避的**缺点**：必须保持本地设备 24 小时开机。Bot 的在线率与家庭网络、电力供应以及 Windows 系统的稳定性强绑定。一旦本地设备关机或网络波动，部署在 Zeabur 上的“云端大脑”就会失去与 QQ 的唯一通信链路。这一局限性本质上是在“账号安全性”与“部署自动化”之间做出的权衡。它是对抗大厂风控限制的一种技术性妥协。

@@ -1,0 +1,54 @@
+[33m04eadd5[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmaster[m[33m, [m[1;31morigin/master[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge branch 'master' of github.com:1nuoiscute/1nuo-blog
+[33m93357f8[m fix: switch back to native deepseek api
+[33mf86bc0d[m chore: 📈 更新量化数据与 AI 点评 [skip ci]
+[33ma278e3f[m Merge branch 'master' of github.com:1nuoiscute/1nuo-blog
+[33m4c6b35d[m fix: force use Beijing Timezone for reporting
+[33mf4732b5[m chore: 📈 更新量化数据与 AI 点评 [skip ci]
+[33me47e4bf[m Merge branch 'master' of github.com:1nuoiscute/1nuo-blog
+[33m0f061ef[m chore: finalize quant dashboard v1.3 with R1 intelligence
+[33m8fac17e[m chore: 📈 更新量化数据与 AI 点评 [skip ci]
+[33md59f0c6[m feat: deploy automated quant hub v1.3 with GitHub Models R1
+[33m7ba99ba[m blog: publish ‘rate-system-launch’
+[33mfb3b7b6[m feat: add attraction PK mode & 7 new reviews, fix UI score bar alignment
+[33mdbcb173[m feat: add attraction PK mode, update 7 new reviews, and fix UI/chart occlusion
+[33m0b70d26[m feat: implement search/sort filters and refine rating UI aesthetics
+[33m918cbdf[m build: rename images to bypass vercel cache and fix 404
+[33m8dceaa2[m Merge branch 'master' of github.com:1nuoiscute/1nuo-blog
+[33m97ea557[m chore: update skip_render for images and admin
+[33ma9f8c0e[m Update _config.yml
+[33m0581731[m fix: manually merge cloud data for Pujiu Temple, resolve ID conflicts, and add missing images
+[33mb34e84f[m assets: upload pujiu temple images
+[33m2b7e4d4[m Update: 普救寺 via Work Station
+[33mbf1bb12[m fix: move admin.html to admin/index.html and skip render
+[33mcf50632[m Merge branch 'master' of github.com:1nuoiscute/1nuo-blog
+[33mcbc9df1[m feat: build rating page and workstation; update Wangu Temple and Guanque Tower data
+[33m3715e67[m chore(spy): update daily intelligence data [skip ci]
+[33m36666ae[m chore(spy): update daily intelligence data [skip ci]
+[33m79c85eb[m feat(spy): integrate pushplus
+[33m19652d5[m blog: publish '西南交大电气简报-自动化爬虫简报项目记录'
+[33m04702c3[m chore(spy): update daily intelligence data [skip ci]
+[33m276d5ce[m chore: exit spy.py ( article form )
+[33mbee181d[m chore spy debug
+[33m089eec5[m chore(spy): update daily intelligence data [skip ci]
+[33maece313[m chore: manual injection of full news list
+[33m24c2c05[m chore: rename script to spy_v1.3.py for ci compatibility
+[33m0ceea72[m Deploy Intelligence Satellite v3
+[33mf7385bf[m Blog Auto News Publish2026-02-17
+[33mb169cc0[m blog publih '云端 - 本地混合式 QQ BOT 集成项目记录'
+[33m42d3832[m feat(copyright): Enable automatic copyright info on copy
+[33m1101e11[m chore: Update friend links and adjust post categories
+[33m7d4dc92[m feat(effects): Add falling snow background effect for desktop
+[33m07843f4[m refactor(comments): Migrate Twikoo backend to Hugging Face
+[33m3ec73fb[m blog: Publish 'The world is my oyster'
+[33mac13a43[m feat: Add SEO sitemap/robots and Google Analytics
+[33m1951114[m feat(social): Expand social media links and add custom icons
+[33mc8f32be[m feat: Add academic achievements page
+[33m1a958a9[m style: Enhance page visuals and organize content
+[33m7200c6a[m fix(posts): Correct a logic error of post pinning
+[33m31dcbb2[m feat: Add Pjax, LazyLoad, Chatbot and advanced features
+[33m7ba050a[m feat: Integrate Twikoo and enable dual-comment system
+[33m2ac1074[m refactor: Update avatar version to force refresh
+[33maf47fd3[m feat: Add menus, search, wordcount & initial comments setup
+[33m6a9f51c[m feat: Updated site info and avatar
+[33m8e1ab56[m fix: Correctly add butterfly theme files
+[33md7d5118[m feat: Initial blog source

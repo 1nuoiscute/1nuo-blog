@@ -8,7 +8,7 @@ tags:
   - Butterfly
   - Vercel
   - 建站
-top_img: /img/pagebanner1 26211.jpg 
+top_img: https://img.1nuo.me/img/pagebanner1%2026211.webp
 ---
 ## Chapter 1: The Motive
 The motivation for this project came from a simple observation: a friend's personal website. It was a technically impressive build, but more importantly, it represented complete ownership over one's digital presence. This resonated with a long-held desire of my own: to create a centralized, self-owned platform for my writings. Writing has long been a consistent habit of mine, and I wanted a proper home for that content. While I've always been hesitant due to a perceived lack of skill, this time I decided to commit to the process.
@@ -26,17 +26,17 @@ As someone relatively new to web development, building a site from scratch wasn'
 To be honest, my choice was heavily influenced by the availability of high-quality tutorials and the maturity of the ecosystem, which is ideal for someone like me without any technical backgrounds.
 ## Chapter 3: The Showcase
 ### The Homepage & A Dynamic Welcome
-![alt](/img/mainpage126211.png "The Homepage")
+![alt](https://img.1nuo.me/img/mainpage126211.webp "The Homepage")
 The homepage greets every visitor with a full-screen banner image and a dynamic, typewriter-style subtitle. The main navigation menu provides clear, one-click access to all key sections of the site.
 ### The Owner Card 
-![alt](/img/ownercard126211.png "The Owner Card")
+![alt](https://img.1nuo.me/img/ownercard126211.webp "The Owner Card")
 The sidebar features a prominent author card, complete with a custom avatar and social media links. This section acts as my digital name card, connecting my blog to my other presences across the web, from GitHub to various Chinese platforms like Bilibili and CSDN.
 ### Comments & Live Chat
-![alt](/img/chatandcomment126211.png "Comments & Live Chat")
+![alt](https://img.1nuo.me/img/chatandcomment126211.webp "Comments & Live Chat")
 To foster discussion, I've implemented a dual-comment system (depended on butterfly theme). It defaults to [Giscus](https://giscus.app/zh-CN) (GitHub-based) option for easy, anonymous feedback, but also offers a [Twikoo](https://twikoo.js.org/intro.html) option for someone without Github alts. For real-time interaction, a Tidio chatbot is integrated, allowing visitors to connect with me directly (shout out to Gemini!).
 *~~非常好笑的是加Twikoo的目的是为了让不能科学上网的人也能评论但是做完了才发现不科学上网也用不了Twikoo...~~*
 ### The Navigation
-![alt](/img/na126211.png "The Navigation")
+![alt](https://img.1nuo.me/img/na126211.webp "The Navigation")
 To provide structure and easy access to different types of content, I configured a comprehensive navigation menu.
 * **Instant Search:** Integrated into the top navigation bar is a local search button. It allows for instant, client-side searching across all post titles and content without needing an external server. It's incredibly fast and makes finding specific information effortless.
 * **Categories & Tags:** These two pages are the backbone of my content organization. They allow visitors to explore posts based on broad topics (Categories) or specific keywords (Tags), making content discovery intuitive.
@@ -57,7 +57,7 @@ Thegit push sends my project's source code—not the final website—to a privat
 Vercel is constantly listening for changes in my GitHub repository. The moment it detects the new push, it springs into action: it pulls the source code, sets up a cloud environment, installs all dependencies, runshexo generate, and deploys the resulting static public folder to its global Edge Network.
 #### Cloudflare
 Finally, my custom domain,1nuo.me, is managed by Cloudflare. It points to the Vercel deployment and adds a critical layer of performance and security. It provides a global CDN to cache my assets close to the user and serves my site over a secure SSL connection.
-![alt](/img/lct126211.png)
+![alt](https://img.1nuo.me/img/lct126211.webp)
 ### Key Challenges & Solutions
 Here are some of the critical issues I encountered and how I solved them:
 * **git pushNetwork Errors in Mainland China:** The initialgit pushattempts via HTTPS consistently failed with Connection was reset errors. 

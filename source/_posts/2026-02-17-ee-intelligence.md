@@ -3,7 +3,7 @@ title: 西南交大电气简报 | 2026-02-17
 date: 2026-02-17 18:04:28
 tags: [AI, 电气工程, 西南交通大学]
 categories: [AI简报]
-top_img: /img/categoriesbanner.jpg 
+top_img: https://img.1nuo.me/img/categoriesbanner.webp 
 ---
 
 > 📡 **情报员注**：本简报由 GitHub Actions 云端自动生成。

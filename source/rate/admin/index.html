@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>1nuo 评测数据中心</title>
-    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="shortcut icon" href="https://img.1nuo.me/img/favicon.webp">
     <style>
         :root {
             --primary-color: #4f46e5; 
@@ -17,7 +17,7 @@
         
         .page-header {
             width: 100%; height: 220px;
-            background: url('/img/academicbanner.jpg') center/cover no-repeat;
+            background: url('https://img.1nuo.me/img/academicbanner.webp') center/cover no-repeat;
             display: flex; flex-direction: column; align-items: center; 
             justify-content: center; /* 居中显示 */
             padding-bottom: 40px; /* 关键：新增底部边距，把文字往上推，防止被遮挡 */
@@ -197,8 +197,8 @@
             <label>💬 简评心得</label>
             <textarea id="in-review" rows="4" placeholder="写下你的感受..."></textarea>
 
-            <label>🖼️ 现场照片 (路径 / 每行一个)</label>
-            <textarea id="in-imgs" rows="2" placeholder="/rate/rateimg/example.jpg"></textarea>
+            <label>🖼️ 现场照片 (直接粘贴 PicGo 图床链接，每行一个)</label>
+            <textarea id="in-imgs" rows="3" placeholder="https://img.1nuo.me/rate/rateimg/xxx.webp&#10;支持直接粘贴，代码会自动清洗格式" oninput="updateAll()"></textarea>
 
             <div class="result">
                 <div class="res-line"><span>加权基础分:</span><span id="v-base">0.00</span></div>
@@ -417,7 +417,20 @@
             name: document.getElementById('in-name').value,
             slogan: document.getElementById('in-slogan').value,
             short_review: fullReview,
-            images: document.getElementById('in-imgs').value.split('\n').filter(i => i.trim()),
+            images: document.getElementById('in-imgs').value.split('\n')
+                .filter(i => i.trim())
+                .map(img => {
+                    let cleanUrl = img.trim();
+                    // 魔法 1：如果粘贴的是 Markdown 格式 ![](https://...)，自动抠出里面的纯链接
+                    const mdMatch = cleanUrl.match(/!\[.*?\]\((.*?)\)/);
+                    if (mdMatch) cleanUrl = mdMatch[1];
+                    
+                    // 魔法 2：如果你习惯性只填了 /rate/... 相对路径，自动帮你加上云端域名
+                    if (cleanUrl.startsWith('/')) {
+                        cleanUrl = 'https://img.1nuo.me' + cleanUrl;
+                    }
+                    return cleanUrl;
+                }),
             location: document.getElementById('in-loc').value,
             visit_time: document.getElementById('in-vtime').value,
             scores: scoresObj,

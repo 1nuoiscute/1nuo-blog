@@ -1,7 +1,7 @@
 ---
 title: academic
 date: 2026-02-10 22:11:11
-top_img: /img/academicbanner.jpg   
+top_img: https://img.1nuo.me/img/academicbanner.webp   
 ---
 
 这里存放了我及我参与的部分学术成果，目前主要集中在数学建模领域。
