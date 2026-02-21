@@ -33,7 +33,11 @@
       "tags": [
         {
           "name": "版筑之间",
-          "tier": "A"
+          "tier": "B"
+        },
+        {
+          "name": "免费",
+          "tier": "B"
         }
       ],
       "final_score": 8.08,
