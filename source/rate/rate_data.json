@@ -1,6 +1,49 @@
 {
   "attractions": [
     {
+      "id": "zhoucangwenhuayuan",
+      "name": "周仓文化园",
+      "slogan": "关将军，接刀。",
+      "short_review": "✍️ 记录于: 2026/2/22\n\n　　在地图上随手找的，意料之外的还不错。庙那块经典的钟楼鼓楼周仓庙，刀楼印楼关羽庙，地藏庙，还有个周仓母庙\n\n　　门口有个剧场，去的时候看到有演出\n\n　　免费，有停车场，感觉当地很想发展周仓文化，一路都是周仓两个字\n\n　　旁边有“周仓大裂谷”",
+      "images": [
+        "https://img.1nuo.me/blog/2026/02/22/7ed3792b10358cd6f11ddb727e0bd5d6.webp",
+        "https://img.1nuo.me/blog/2026/02/22/d6e23955e7236a9b399b9740af977d1d.webp",
+        "https://img.1nuo.me/blog/2026/02/22/943ce61fcb589b163192155d384bd0ab.webp"
+      ],
+      "location": "山西省运城市平陆县部官镇",
+      "visit_time": "2026.2.21",
+      "scores": {
+        "architecture": {
+          "text": "7-",
+          "val": 6.8
+        },
+        "culture": {
+          "text": "8",
+          "val": 8
+        },
+        "experience": {
+          "text": "7-",
+          "val": 6.8
+        },
+        "value": {
+          "text": "9",
+          "val": 9
+        }
+      },
+      "tags": [
+        {
+          "name": "忠勇",
+          "tier": "B"
+        },
+        {
+          "name": "免费",
+          "tier": "C"
+        }
+      ],
+      "final_score": 7.75,
+      "rating": "B+"
+    },
+    {
       "id": "fuxiangci",
       "name": "傅相祠",
       "slogan": "傅说举于版筑之间。",
