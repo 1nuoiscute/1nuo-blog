@@ -2,6 +2,7 @@
 title: 1nuo 评测
 date: 2026-02-20 17:50
 top_img: https://img.1nuo.me/img/academicbanner.webp
+comments: false
 ---
 
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>

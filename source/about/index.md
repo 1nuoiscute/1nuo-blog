@@ -3,6 +3,7 @@ title: about
 date: 2026-02-10 14:49:13
 type: "about"
 top_img: https://img.1nuo.me/img/aboutbanner.webp 
+comments: false
 ---
 ##  你好，我是1nuo
 欢迎来到我的博客。
@@ -14,3 +15,4 @@ top_img: https://img.1nuo.me/img/aboutbanner.webp
 ---
 
 如果你想和我交个朋友，或者对我博客的任何内容感兴趣，随时可以通过右下角的聊天窗口或者本网站主页我留下的联系方式找到我！
+

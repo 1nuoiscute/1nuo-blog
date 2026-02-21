@@ -1,6 +1,45 @@
 {
   "attractions": [
     {
+      "id": "fuxiangci",
+      "name": "傅相祠",
+      "slogan": "傅说举于版筑之间。",
+      "short_review": "✍️ 记录于: 2026/2/22\n\n　　大年初五来的这里，看到了社火表演，很多当地人在看，很精彩。\n\n　　标准的现代修缮祠堂，傅说举于版筑之间，文化渊源很加分。\n\n　　免费的小众景点，值得一看。当然也可能是我刚好看到了表演所以加分。",
+      "images": [
+        "https://img.1nuo.me/blog/2026/02/22/4a4ce75af48c36f7a5c7de9c040b9bde.webp",
+        "https://img.1nuo.me/blog/2026/02/22/6bd79b059679050da1cc17d15721c5d3.webp",
+        "https://img.1nuo.me/blog/2026/02/22/3049ee758519cc7a518c95ab7b7d4341.webp"
+      ],
+      "location": "山西省运城市平陆县",
+      "visit_time": "2026.2.21",
+      "scores": {
+        "architecture": {
+          "text": "7-",
+          "val": 6.8
+        },
+        "culture": {
+          "text": "8+",
+          "val": 8.2
+        },
+        "experience": {
+          "text": "7.5+",
+          "val": 7.7
+        },
+        "value": {
+          "text": "9",
+          "val": 9
+        }
+      },
+      "tags": [
+        {
+          "name": "版筑之间",
+          "tier": "A"
+        }
+      ],
+      "final_score": 8.08,
+      "rating": "A-"
+    },
+    {
       "id": "changpingguanyujiamiao",
       "name": "常平关羽家庙",
       "slogan": "威震华夏",
@@ -334,8 +373,8 @@
       "visit_time": "2026.2.18",
       "scores": {
         "architecture": {
-          "text": "6.5-",
-          "val": 6.3
+          "text": "7.5-",
+          "val": 7.3
         },
         "culture": {
           "text": "8.5",
@@ -347,7 +386,7 @@
         },
         "value": {
           "text": "7",
-          "val": 6.8
+          "val": 7
         }
       },
       "tags": [
@@ -356,8 +395,8 @@
           "tier": "S"
         }
       ],
-      "final_score": 7.75,
-      "rating": "B+"
+      "final_score": 8,
+      "rating": "A-"
     }
   ]
 }
