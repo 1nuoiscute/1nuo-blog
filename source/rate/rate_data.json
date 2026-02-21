@@ -37,10 +37,10 @@
         },
         {
           "name": "免费",
-          "tier": "B"
+          "tier": "C"
         }
       ],
-      "final_score": 8.08,
+      "final_score": 8.03,
       "rating": "A-"
     },
     {
@@ -150,14 +150,14 @@
       "tags": [
         {
           "name": "免费",
-          "tier": "B"
+          "tier": "C"
         },
         {
           "name": "黄河地锚",
           "tier": "C"
         }
       ],
-      "final_score": 7.62,
+      "final_score": 7.57,
       "rating": "B"
     },
     {
@@ -192,7 +192,7 @@
       "tags": [
         {
           "name": "免费",
-          "tier": "B"
+          "tier": "C"
         },
         {
           "name": "鸡鸣三省",
@@ -203,7 +203,7 @@
           "tier": "C"
         }
       ],
-      "final_score": 7.63,
+      "final_score": 7.58,
       "rating": "B"
     },
     {
@@ -347,8 +347,8 @@
           "val": 7.8
         },
         "experience": {
-          "text": "6.5-",
-          "val": 6.3
+          "text": "6.5",
+          "val": 6.5
         },
         "value": {
           "text": "10",
@@ -358,7 +358,7 @@
       "tags": [
         {
           "name": "免费",
-          "tier": "B"
+          "tier": "C"
         }
       ],
       "final_score": 8.02,
