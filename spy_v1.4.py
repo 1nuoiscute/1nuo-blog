@@ -233,7 +233,7 @@ title: 西南交大电气简报 (Vol.{current_issue}) | {today_str}
 date: {datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 tags: [AI, 电气工程, 西南交通大学]
 categories: [AI简报]
-top_img: /img/categoriesbanner.jpg 
+top_img: https://img.1nuo.me/img/categoriesbanner.webp
 ---
 
 > 📡 **情报员注**：本简报由 GitHub Actions 云端自动生成。当前为第 **{current_issue}** 期。
