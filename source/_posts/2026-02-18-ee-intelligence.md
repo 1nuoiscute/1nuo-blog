@@ -4,6 +4,7 @@ date: 2026-02-18 00:30:51
 tags: [AI, 电气工程, 西南交通大学]
 categories: [AI简报]
 top_img: https://img.1nuo.me/img/categoriesbanner.webp 
+hide: true
 ---
 
 > 📡 **情报员注**：本简报由 GitHub Actions 云端自动生成。
