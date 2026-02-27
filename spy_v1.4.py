@@ -65,7 +65,7 @@ def handle_data(scraped_titles):
     else:
         # 初始化：默认上次发布是 5 天前，期数从 5 开始
         five_days_ago = (datetime.date.today() - datetime.timedelta(days=5)).strftime("%Y-%m-%d")
-        reservoir = {"news": [], "last_post_date": five_days_ago, "issue_number": 5}}
+        reservoir = {"news": [], "last_post_date": five_days_ago, "issue_number": 5}
 
     # C. 筛选出真正的新闻
     fresh_news = [t for t in scraped_titles if t not in history]
