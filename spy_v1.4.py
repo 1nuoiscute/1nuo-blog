@@ -86,7 +86,7 @@ def handle_data(scraped_titles):
 
     days_passed = (today - last_date).days
 
-    should_publish = (len(reservoir["news"]) >= 8) or (days_passed >= 5 and len(reservoir["news"]) > 3)
+    should_publish = (len(reservoir["news"]) >= 12) or (days_passed >= 5 and len(reservoir["news"]) > 6)
 
     return should_publish, reservoir
 
