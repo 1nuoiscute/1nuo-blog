@@ -39,22 +39,22 @@ top_img: https://img.1nuo.me/img/academicbanner.webp
            return `<img src="${url}" style="width: 100%; max-width: 500px; border-radius: 8px; margin-top: 10px; display: block;" />`;
          });
 
-         // 💡 新增 2：处理从 Memos 附件上传的图片 (resources 字段)
+        // 💡 针对 v0.22+ 版本的精准补全逻辑
          let imgHtml = "";
          let resList = memo.resources || memo.resourceList || [];
          resList.forEach(res => {
-           // 确保附件是图片类型
+           // 只要是图片类型就处理
            if (res.type && res.type.includes('image')) {
              let imgSrc = res.externalLink;
              if (!imgSrc) {
-               // 兼容 Memos 最新版 API (res.name) 和旧版 API (res.id)
+               // 核心修改：针对你提供的路径进行补全
+               // Memos 现在的逻辑是：域名 + /file/ + 资源名 (res.name)
                if (res.name) {
-                 imgSrc = `${memosDomain}/file/${res.name}`;
-               } else {
-                 imgSrc = `${memosDomain}/o/r/${res.id}`;
+                 imgSrc = `${memosDomain}/file/${res.name}`; 
                }
              }
-             imgHtml += `<img src="${imgSrc}" style="width: 100%; max-width: 500px; border-radius: 8px; margin-top: 10px; display: block;" />`;
+             // 渲染图片，增加点击查看原图的功能（可选）
+             imgHtml += `<a href="${imgSrc}" target="_blank"><img src="${imgSrc}" style="width: 100%; max-width: 400px; border-radius: 8px; margin-top: 10px; display: block; border: 1px solid var(--border-color);" /></a>`;
            }
          });
          
