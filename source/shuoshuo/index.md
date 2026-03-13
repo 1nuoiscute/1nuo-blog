@@ -10,14 +10,13 @@ top_img: https://img.1nuo.me/img/academicbanner.webp
 </div>
 
 <script>
-  // 你的 Memos API 地址与主域名
   const memosDomain = "https://memos.1nuo.me";
-  const memosUrl = `${memosDomain}/api/v1/memos?pageSize=20`;
+  // 增加时间戳后缀防止缓存导致裂图
+  const memosUrl = `${memosDomain}/api/v1/memos?pageSize=20&v=${new Date().getTime()}`;
 
   fetch(memosUrl)
     .then(res => res.json())
     .then(data => {
-      // 兼容 Memos 不同版本的数据结构
       let memos = data.memos || data || [];
       let html = "";
       
@@ -27,38 +26,38 @@ top_img: https://img.1nuo.me/img/academicbanner.webp
       }
 
       memos.forEach(memo => {
-         // 解析时间
          let date = new Date(memo.createTime || memo.createdTs * 1000).toLocaleString();
-         
-         // 简单的正则，把 #标签 变成蓝色
          let content = memo.content.replace(/(#[^\s#]+)/g, '<span style="color: #49b1f5;">$1</span>');
          
-         // 💡 新增 1：处理 Markdown 原生图片语法，并补全相对路径
+         // 1. 处理 Markdown 中的图片
          content = content.replace(/!\[.*?\]\((.*?)\)/g, (match, url) => {
-           if (url.startsWith('/')) url = memosDomain + url;
-           return `<img src="${url}" style="width: 100%; max-width: 500px; border-radius: 8px; margin-top: 10px; display: block;" />`;
+           let fullUrl = url.startsWith('/') ? memosDomain + url : url;
+           return `<img src="${fullUrl}" style="width: 100%; max-width: 400px; border-radius: 8px; margin: 10px 0; display: block;" />`;
          });
 
-        // 💡 针对 v0.22+ 版本的精准补全逻辑
+         // 2. 处理 Memos 附件图片 (关键修复点)
          let imgHtml = "";
          let resList = memo.resources || memo.resourceList || [];
          resList.forEach(res => {
-           // 只要是图片类型就处理
            if (res.type && res.type.includes('image')) {
              let imgSrc = res.externalLink;
              if (!imgSrc) {
-               // 核心修改：针对你提供的路径进行补全
-               // Memos 现在的逻辑是：域名 + /file/ + 资源名 (res.name)
-               if (res.name) {
-                 imgSrc = `${memosDomain}/file/${res.name}`; 
-               }
+               // 核心修复：Memos v1 API 的文件路径通常是 /file/{name}
+               // 如果 res.name 已经包含了 "resources/"，拼出来就是你给的那个地址
+               imgSrc = `${memosDomain}/file/${res.name}`;
              }
-             // 渲染图片，增加点击查看原图的功能（可选）
-             imgHtml += `<a href="${imgSrc}" target="_blank"><img src="${imgSrc}" style="width: 100%; max-width: 400px; border-radius: 8px; margin-top: 10px; display: block; border: 1px solid var(--border-color);" /></a>`;
+             // 💡 增加 ?thumbnail=true 提高加载成功率
+             const thumbSrc = imgSrc.includes('?') ? `${imgSrc}&thumbnail=true` : `${imgSrc}?thumbnail=true`;
+             
+             imgHtml += `
+               <a href="${imgSrc}" target="_blank" style="display: block; margin-top: 10px;">
+                 <img src="${thumbSrc}" 
+                      onerror="this.src='${imgSrc}';this.onerror=null;" 
+                      style="width: 100%; max-width: 400px; border-radius: 8px; border: 1px solid var(--border-color); display: block;" />
+               </a>`;
            }
          });
          
-         // 极简卡片 UI，支持 Butterfly 暗黑模式
          html += `
            <div style="background: var(--card-bg); padding: 20px; border-radius: 12px; box-shadow: 0 4px 8px rgba(0,0,0,0.05); margin-bottom: 20px; border: 1px solid var(--border-color);">
              <div style="font-size: 0.85em; color: #888; margin-bottom: 12px;">
@@ -66,7 +65,8 @@ top_img: https://img.1nuo.me/img/academicbanner.webp
              </div>
              <div style="font-size: 1rem; line-height: 1.6; color: var(--text-color);">
                ${content}
-               ${imgHtml} </div>
+               ${imgHtml}
+             </div>
            </div>
          `;
       });
