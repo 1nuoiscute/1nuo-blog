@@ -4,15 +4,15 @@
 
 # Site
 title: 1nuo
-subtitle: '一个电气大学生的技术折腾与生活随笔'
-keywords: [西南交通大学, 电气工程, 技术博客, AI, Hexo, 个人网站]
+subtitle: ''
+keywords:
 author: 1nuo
 language: zh-CN
 timezone: ''
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: https://1nuo.me
+url: http://example.com
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
