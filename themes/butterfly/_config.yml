@@ -1073,6 +1073,7 @@ css_prefix: true
 inject:
   head:
     # - <link rel="stylesheet" href="/xxx.css">
+    - <script defer src="https://cloud.umami.is/script.js" data-website-id="6bbc26e5-009c-4364-8b91-b12efdda7794"></script>
   bottom:
     # - <script src="xxxx"></script>
     - <script src="/js/snowflake.js"></script>
