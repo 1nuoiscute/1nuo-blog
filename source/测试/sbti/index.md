@@ -1,6 +1,7 @@
 ---
 title: SBTI 赛博人格测试
 date: 2026-05-09
+comments: false
 top_img: https://img.1nuo.me/img/categoriesbanner.webp
 ---
 
