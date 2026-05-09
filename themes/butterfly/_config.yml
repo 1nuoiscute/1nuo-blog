@@ -27,8 +27,8 @@ menu:
        笔记: /笔记/ || fas fa-book
        碎碎念: /shuoshuo/ || fas fa-comment-dots
        评测: /rate/ || fas fa-rocket
+       数据: /数据/ || fas fa-chart-bar
   探索: /测试/ || fas fa-compass
-  数据: /数据/ || fas fa-chart-bar
   友链: /link/ || fas fa-link
   关于: /about/ || fas fa-heart
   
@@ -1167,6 +1167,7 @@ robotstxt:
     # waline_js:
 
     
+
 
 
 
