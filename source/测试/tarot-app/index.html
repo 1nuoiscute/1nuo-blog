@@ -87,8 +87,8 @@ var singleResult = document.getElementById('singleResult');
 var multiResult = document.getElementById('multiResult');
 var spreadSelect = document.getElementById('spreadSelect');
 
-var cards = (typeof CARDS !== 'undefined') ? CARDS : null;
-if (!cards) cards = window.cards || [];
+var cardsData = (typeof CARDS !== 'undefined') ? CARDS : [];
+var cards = cardsData.cards || cardsData || [];
 
 var currentSpread = 'single';
 var drawn = [];
