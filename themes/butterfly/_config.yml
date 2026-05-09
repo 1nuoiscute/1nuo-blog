@@ -22,17 +22,16 @@ menu:
   分类||fas fa-folder-open:
        分类: /categories/ || fas fa-folder-open
        标签: /tags/ || fas fa-tags
+  探索: /测试/ || fas fa-compass
+  友链: /link/ || fas fa-link
+  关于: /about/ || fas fa-heart
   收纳||fas fa-boxes:
        简报: /categories/AI简报/ || fas fa-newspaper
        笔记: /笔记/ || fas fa-book
        碎碎念: /shuoshuo/ || fas fa-comment-dots
        评测: /rate/ || fas fa-rocket
        数据: https://cloud.umami.is/share/sKfrnf4MKWP3znei || fas fa-chart-bar
-  探索: /测试/ || fas fa-compass
-  友链: /link/ || fas fa-link
-  关于: /about/ || fas fa-heart
-  
-# --------------------------------------
+
 # Code Blocks Settings
 # --------------------------------------
 
@@ -1169,6 +1168,7 @@ robotstxt:
     # waline_js:
 
     
+
 
 
 
