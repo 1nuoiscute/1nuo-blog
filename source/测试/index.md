@@ -8,41 +8,139 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 <div class="test-tabs">
   <button class="tab-btn active" data-tab="tests">🧪 测试</button>
   <button class="tab-btn" data-tab="bingo">🎯 Bingo</button>
-</div>
+    <a class="note-card" href="/测试/bingo2/">
+      <div class="note-card-icon">🌧️</div>
+      <div class="note-card-info">
+        <h2>阴湿青春 BINGO</h2>
+        <p>连成一线，说明你活到现在真是辛苦了 🫂</p>
+      </div>
+      <div class="note-card-arrow">→</div>
+    </a></div>
 
 <div class="tab-content" id="tab-tests">
   <div class="note-collections">
     <a class="note-card" href="/测试/sbti/">
-      <div class="note-card-icon">🧪</div>
+      <div class="note-card-icon">🧪    <a class="note-card" href="/测试/bingo2/">
+      <div class="note-card-icon">🌧️</div>
+      <div class="note-card-info">
+        <h2>阴湿青春 BINGO</h2>
+        <p>连成一线，说明你活到现在真是辛苦了 🫂</p>
+      </div>
+      <div class="note-card-arrow">→</div>
+    </a></div>
       <div class="note-card-info">
         <h2>SBTI 赛博人格测试</h2>
         <p>MBTI 已经过时，SBTI 来了！测测你的赛博人格</p>
+          <a class="note-card" href="/测试/bingo2/">
+      <div class="note-card-icon">🌧️</div>
+      <div class="note-card-info">
+        <h2>阴湿青春 BINGO</h2>
+        <p>连成一线，说明你活到现在真是辛苦了 🫂</p>
       </div>
       <div class="note-card-arrow">→</div>
+    </a></div>
+      <div class="note-card-arrow">→    <a class="note-card" href="/测试/bingo2/">
+      <div class="note-card-icon">🌧️</div>
+      <div class="note-card-info">
+        <h2>阴湿青春 BINGO</h2>
+        <p>连成一线，说明你活到现在真是辛苦了 🫂</p>
+      </div>
+      <div class="note-card-arrow">→</div>
+    </a></div>
     </a>
     <a class="note-card" href="/测试/scl90/">
-      <div class="note-card-icon">📋</div>
+      <div class="note-card-icon">📋    <a class="note-card" href="/测试/bingo2/">
+      <div class="note-card-icon">🌧️</div>
+      <div class="note-card-info">
+        <h2>阴湿青春 BINGO</h2>
+        <p>连成一线，说明你活到现在真是辛苦了 🫂</p>
+      </div>
+      <div class="note-card-arrow">→</div>
+    </a></div>
       <div class="note-card-info">
         <h2>SCL-90 症状自评量表</h2>
         <p>90 道题 · 10 个维度 · 心理健康自评</p>
+          <a class="note-card" href="/测试/bingo2/">
+      <div class="note-card-icon">🌧️</div>
+      <div class="note-card-info">
+        <h2>阴湿青春 BINGO</h2>
+        <p>连成一线，说明你活到现在真是辛苦了 🫂</p>
       </div>
       <div class="note-card-arrow">→</div>
+    </a></div>
+      <div class="note-card-arrow">→    <a class="note-card" href="/测试/bingo2/">
+      <div class="note-card-icon">🌧️</div>
+      <div class="note-card-info">
+        <h2>阴湿青春 BINGO</h2>
+        <p>连成一线，说明你活到现在真是辛苦了 🫂</p>
+      </div>
+      <div class="note-card-arrow">→</div>
+    </a></div>
     </a>
-  </div>
-</div>
+      <a class="note-card" href="/测试/bingo2/">
+      <div class="note-card-icon">🌧️</div>
+      <div class="note-card-info">
+        <h2>阴湿青春 BINGO</h2>
+        <p>连成一线，说明你活到现在真是辛苦了 🫂</p>
+      </div>
+      <div class="note-card-arrow">→</div>
+    </a></div>
+    <a class="note-card" href="/测试/bingo2/">
+      <div class="note-card-icon">🌧️</div>
+      <div class="note-card-info">
+        <h2>阴湿青春 BINGO</h2>
+        <p>连成一线，说明你活到现在真是辛苦了 🫂</p>
+      </div>
+      <div class="note-card-arrow">→</div>
+    </a></div>
 
 <div class="tab-content" id="tab-bingo" style="display:none">
   <div class="note-collections">
     <a class="note-card" href="/测试/bingo/">
-      <div class="note-card-icon">🎯</div>
+      <div class="note-card-icon">🎯    <a class="note-card" href="/测试/bingo2/">
+      <div class="note-card-icon">🌧️</div>
+      <div class="note-card-info">
+        <h2>阴湿青春 BINGO</h2>
+        <p>连成一线，说明你活到现在真是辛苦了 🫂</p>
+      </div>
+      <div class="note-card-arrow">→</div>
+    </a></div>
       <div class="note-card-info">
         <h2>社会指数宾果游戏</h2>
         <p>连成一条线你就是完犊子的死宅社恐了 🤣</p>
+          <a class="note-card" href="/测试/bingo2/">
+      <div class="note-card-icon">🌧️</div>
+      <div class="note-card-info">
+        <h2>阴湿青春 BINGO</h2>
+        <p>连成一线，说明你活到现在真是辛苦了 🫂</p>
       </div>
       <div class="note-card-arrow">→</div>
+    </a></div>
+      <div class="note-card-arrow">→    <a class="note-card" href="/测试/bingo2/">
+      <div class="note-card-icon">🌧️</div>
+      <div class="note-card-info">
+        <h2>阴湿青春 BINGO</h2>
+        <p>连成一线，说明你活到现在真是辛苦了 🫂</p>
+      </div>
+      <div class="note-card-arrow">→</div>
+    </a></div>
     </a>
-  </div>
-</div>
+      <a class="note-card" href="/测试/bingo2/">
+      <div class="note-card-icon">🌧️</div>
+      <div class="note-card-info">
+        <h2>阴湿青春 BINGO</h2>
+        <p>连成一线，说明你活到现在真是辛苦了 🫂</p>
+      </div>
+      <div class="note-card-arrow">→</div>
+    </a></div>
+    <a class="note-card" href="/测试/bingo2/">
+      <div class="note-card-icon">🌧️</div>
+      <div class="note-card-info">
+        <h2>阴湿青春 BINGO</h2>
+        <p>连成一线，说明你活到现在真是辛苦了 🫂</p>
+      </div>
+      <div class="note-card-arrow">→</div>
+    </a></div>
 
 <link rel="stylesheet" href="/css/notes.css">
 <style>
@@ -71,4 +169,5 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
   });
 })();
 </script>
+
 

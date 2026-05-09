@@ -30,7 +30,7 @@ i18n_dir: :lang
 skip_render:
   - "测试/app/**"
   - "测试/scl90-app/**"
-  - "测试/bingo-app/**"
+  - "测试/bingo-app/**"`r`n  - "测试/bingo2-app/**"
   - "rate/admin/**"
   - "rate/rateimg/**"
 
@@ -124,6 +124,7 @@ hide_posts:
   allowlist_generators: ['category', 'archive', 'tag'] 
   blocklist_generators: ['index']
   
+
 
 
 
