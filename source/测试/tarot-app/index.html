@@ -71,6 +71,24 @@ body{font-family:"DM Sans","Noto Serif SC",serif;background:#f8f6f2;color:#1c191
   var cardList = (typeof CARDS !== 'undefined' && CARDS.cards) ? CARDS.cards : [];
   var currentSpread = 'single';
 
+  // 中文牌名
+  var zhNames = {
+    "The Fool":"愚者","The Magician":"魔术师","The High Priestess":"女祭司","The Empress":"女皇","The Emperor":"皇帝","The Hierophant":"教皇","The Lovers":"恋人","The Chariot":"战车","Strength":"力量","The Hermit":"隐士","Wheel of Fortune":"命运之轮","Justice":"正义","The Hanged Man":"倒吊人","Death":"死神","Temperance":"节制","The Devil":"恶魔","The Tower":"高塔","The Star":"星星","The Moon":"月亮","The Sun":"太阳","Judgement":"审判","The World":"世界","Page":"侍从","Knight":"骑士","Queen":"皇后","King":"国王","Ace":"首牌","Two":"二","Three":"三","Four":"四","Five":"五","Six":"六","Seven":"七","Eight":"八","Nine":"九","Ten":"十","Wands":"权杖","Cups":"圣杯","Swords":"宝剑","Pentacles":"星币","Trump":"大阿尔卡纳","Major Arcana":"大阿尔卡纳","Minor Arcana":"小阿尔卡纳"
+  };
+
+  function zhName(card){
+    var n = card.name;
+    if(zhNames[n]) return zhNames[n];
+    // 尝试拆解 "Two of Wands" 类型
+    var parts = n.split(' of ');
+    if(parts.length===2){
+      var a = zhNames[parts[0]] || parts[0];
+      var b = zhNames[parts[1]] || parts[1];
+      return a + '·' + b;
+    }
+    return n;
+  }
+
   var spreads = [
     {id:'single',label:'单张'},
     {id:'three',label:'三张'},
@@ -114,8 +132,8 @@ body{font-family:"DM Sans","Noto Serif SC",serif;background:#f8f6f2;color:#1c191
       '<img class="card-img" src="cards/' + card.img + '" alt="' + card.name + '">' +
       '<div class="result">' +
       (rev ? '<div class="result-reverse">⚡ 逆位</div>' : '') +
-      '<div class="result-name">' + card.name + '</div>' +
-      '<div class="result-arcana">' + (card.arcana||'') + ' · ' + (card.suit||'') + '</div>' +
+      '<div class="result-name">' + zhName(card) + '</div>' +
+      '<div class="result-arcana">' + (zhNames[card.arcana]||card.arcana||'') + ' · ' + (zhNames[card.suit]||card.suit||'') + '</div>' +
       '<div class="result-keywords">' +
       (card.keywords||[]).slice(0,4).map(function(k){return '<span class="keyword">'+k+'</span>'}).join('') + '</div>' +
       '<div class="result-meaning">' + m.map(function(x){return '✦ '+x}).join('<br>') + '</div></div>';
@@ -129,14 +147,14 @@ body{font-family:"DM Sans","Noto Serif SC",serif;background:#f8f6f2;color:#1c191
       var r = Math.random()<0.3;
       h += '<div class="position-card"><img class="position-img" src="cards/'+c.img+'" alt="'+c.name+'">' +
         '<div class="position-label">'+(labels[i]||'')+'</div>' +
-        '<div class="position-name">'+c.name+(r?'(逆)':'')+'</div></div>';
+        '<div class="position-name">'+zhName(c)+(r?'(逆)':'')+'</div></div>';
     });
     h += '</div><div class="result">';
     arr.forEach(function(c,i){
       var r = Math.random()<0.3;
       var z = getMeanings(c,r).slice(0,2);
       h += '<div style="margin-bottom:8px">';
-      h += '<strong>'+(labels[i]||'')+'：</strong> '+c.name+(r?'（逆位）':'')+'<br>';
+      h += '<strong>'+(labels[i]||'')+'：</strong> '+zhName(c)+(r?'（逆位）':'')+'<br>';
       h += '<span style="font-size:.85em;color:#57534e">'+z.join(' · ')+'</span></div>';
     });
     h += '</div>';

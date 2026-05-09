@@ -8,7 +8,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 <div class="test-tabs">
   <button class="tab-btn active" data-tab="tests">🧪 测试</button>
   <button class="tab-btn" data-tab="bingo">🎯 Bingo</button>
-  <button class="tab-btn" data-tab="draw">🎋 抽签</button>
+  <button class="tab-btn" data-tab="draw">🎋 好运</button>
 </div>
 
 <div class="tab-content" id="tab-tests">
@@ -148,4 +148,5 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
   });
 })();
 </script>
+
 
