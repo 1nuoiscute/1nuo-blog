@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>高中违纪 BINGO</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:#f5f7fa;color:#2c3e50;min-height:100vh;
+}
+.container{max-width:600px;margin:0 auto;padding:16px 12px 40px}
+.header{
+  display:flex;margin-bottom:16px;background:#fff;
+  border-radius:14px;box-shadow:0 2px 12px rgba(0,0,0,.06);overflow:hidden;
+}
+.header-title{
+  flex:3;display:flex;align-items:center;justify-content:center;
+  padding:16px;font-size:1.3em;font-weight:700;text-align:center;
+}
+.header-desc{
+  flex:2;display:flex;align-items:center;justify-content:center;
+  padding:12px;font-size:0.78em;color:#7f8c9b;line-height:1.6;
+  border-left:1px solid #e8ecf1;text-align:center;
+}
+.board{
+  display:grid;grid-template-columns:repeat(5,1fr);gap:6px;
+  background:#fff;border-radius:14px;padding:10px;box-shadow:0 2px 12px rgba(0,0,0,.06);
+}
+.cell{
+  aspect-ratio:1;display:flex;align-items:center;justify-content:center;
+  text-align:center;font-size:0.7em;line-height:1.3;padding:5px 3px;
+  border:2px solid #e8ecf1;border-radius:10px;cursor:pointer;
+  transition:all .2s;user-select:none;word-break:break-word;overflow:hidden;
+}
+.cell:hover{border-color:#e67e22}
+.cell.marked{background:#e67e22;color:#fff;border-color:#e67e22}
+.cell.bingo-line{background:#e74c3c;color:#fff;border-color:#e74c3c;animation:pulse .6s ease-in-out infinite alternate}
+@keyframes pulse{from{transform:scale(1)}to{transform:scale(1.04)}}
+.status{text-align:center;margin:14px 0;padding:12px;background:#fff;border-radius:14px;box-shadow:0 2px 12px rgba(0,0,0,.06);font-size:0.9em;min-height:44px;display:flex;align-items:center;justify-content:center}
+.btn-group{display:flex;gap:8px;justify-content:center;margin-top:12px}
+.btn{padding:8px 20px;border:none;border-radius:999px;cursor:pointer;font-size:0.85em;transition:all .2s}
+.btn-primary{background:#e67e22;color:#fff}
+.btn-primary:hover{filter:brightness(0.9)}
+.btn-secondary{background:#fff;border:1px solid #ddd;color:#555}
+.btn-secondary:hover{border-color:#e67e22;color:#e67e22}
+.btn-share{background:#1da1f2;color:#fff}
+.btn-share:hover{background:#1a91da}
+.modal-overlay{display:none;position:fixed;top:0;left:0;width:100%;height:100%;background:rgba(0,0,0,.5);z-index:999;align-items:center;justify-content:center;padding:20px}
+.modal-overlay.active{display:flex}
+.modal-box{background:#fff;border-radius:16px;padding:24px;max-width:460px;width:100%;text-align:center;box-shadow:0 8px 32px rgba(0,0,0,.15)}
+.modal-box img{width:100%;border-radius:8px;margin:12px 0}
+.modal-box h3{margin-bottom:8px}
+.modal-box .modal-btns{display:flex;gap:8px;justify-content:center;margin-top:12px}
+@media(max-width:480px){.header{flex-direction:column}.header-desc{border-left:none;border-top:1px solid #e8ecf1}.cell{font-size:0.62em;padding:3px 2px}}
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="header-title">高中违纪 BINGO</div>
+    <div class="header-desc">五个连成一线的话很有故事了</div>
+  </div>
+  <div class="board" id="board"></div>
+  <div class="status" id="status">点击格子标记，连成线即 Bingo！</div>
+  <div class="btn-group">
+    <button class="btn btn-secondary" id="resetBtn">🔄 重新开局</button>
+    <button class="btn btn-share" id="shareBtn">📤 分享结果</button>
+  </div>
+</div>
+<div class="modal-overlay" id="shareModal">
+  <div class="modal-box">
+    <h3>📤 分享你的宾果</h3>
+    <div id="shareImageArea"></div>
+    <p id="shareText" style="font-size:0.85em;color:#7f8c9b;"></p>
+    <div class="modal-btns">
+      <button class="btn btn-secondary" id="closeModalBtn">关闭</button>
+      <a id="downloadBtn" class="btn btn-primary" download="bingo.png">💾 保存图片</a>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  var C=["偷玩电子设备",
+    "考试作弊",
+    "旷课",
+    "校内抽烟",
+    "发型不合格(染/烫/不符合学校的长度要求)",
+    "抄作业",
+    "携带违规电子设备",
+    "点外卖",
+    "旷自习",
+    "不按要求穿校服",
+    "自习/上课时玩棋牌游戏(麻将/打牌/下棋等)",
+    "谈恋爱",
+    "上课睡觉",
+    "逃学",
+    "美甲",
+    "辱骂老师",
+    "进入校内不允许进入的区域",
+    "戴首饰",
+    "打架",
+    "扰乱课堂/自习/晚休秩序",
+    "校内饮酒",
+    "携带管制刀具",
+    "旷操",
+    "破坏公物",
+    "违规充电/使用电器"];
+  var M={},B=false;
+  function R(){
+    var h='';
+    for(var i=0;i<25;i++){
+      var c='cell';
+      if(M[i])c+=' marked';
+      if(B&&L(i))c+=' bingo-line';
+      h+='<div class="'+c+'" data-i="'+i+'">'+C[i]+'</div>';
+    }
+    document.getElementById('board').innerHTML=h;
+    document.querySelectorAll('.cell').forEach(function(e){
+      e.addEventListener('click',function(){
+        var i=parseInt(this.dataset.i);
+        M[i]=!M[i];Ck();R();
+      });
+    });
+    var n=0;for(var k in M)if(M[k])n++;
+    var s=document.getElementById('status');
+    if(B)s.innerHTML='🎉 <strong>BINGO！</strong>';
+    else s.innerHTML='已标记 <strong>'+n+'</strong> 项';
+  }
+  function Ck(){
+    B=false;
+    for(var r=0;r<5;r++){var w=true;for(var c=0;c<5;c++){if(!M[r*5+c]){w=false;break;}}if(w){B=true;return;}}
+    for(var c=0;c<5;c++){var w=true;for(var r=0;r<5;r++){if(!M[r*5+c]){w=false;break;}}if(w){B=true;return;}}
+    var w=true;for(var i=0;i<5;i++){if(!M[i*5+i]){w=false;break;}}if(w){B=true;return;}
+    w=true;for(var i=0;i<5;i++){if(!M[i*5+(4-i)]){w=false;break;}}if(w){B=true;return;}
+  }
+  function L(i){
+    if(!B)return false;
+    var r=Math.floor(i/5),c=i%5;
+    var rw=true;for(var cc=0;cc<5;cc++){if(!M[r*5+cc]){rw=false;break;}}if(rw)return true;
+    var cw=true;for(var rr=0;rr<5;rr++){if(!M[rr*5+c]){cw=false;break;}}if(cw)return true;
+    if(r===c){var dw=true;for(var ii=0;ii<5;ii++){if(!M[ii*5+ii]){dw=false;break;}}if(dw)return true;}
+    if(r+c===4){var dw=true;for(var ii=0;ii<5;ii++){if(!M[ii*5+(4-ii)]){dw=false;break;}}if(dw)return true;}
+    return false;
+  }
+  function G(){
+    var s=800,cl=130,pa=50,hh=100,g=6,bs=cl*5+g*4,tw=s,th=pa+hh+20+bs+pa+40;
+    var ca=document.createElement('canvas');ca.width=tw;ca.height=th;
+    var ct=ca.getContext('2d');
+    ct.fillStyle='#f5f7fa';ct.fillRect(0,0,tw,th);
+    ct.fillStyle='#2c3e50';ct.font='bold 28px -apple-system,PingFang SC,Microsoft YaHei,sans-serif';
+    ct.textAlign='center';ct.textBaseline='top';
+    ct.fillText('高中违纪 BINGO',tw/2,pa);
+    ct.fillStyle='#7f8c9b';ct.font='16px -apple-system,PingFang SC,Microsoft YaHei,sans-serif';
+    ct.fillText('五个连成一线的话很有故事了',tw/2,pa+40);
+    var bx=(tw-bs)/2,by=pa+hh;
+    for(var i=0;i<25;i++){
+      var row=Math.floor(i/5),col=i%5;
+      var x=bx+col*(cl+g),y=by+22+row*(cl+g);
+      var mk=M[i],wn=B&&L(i);
+      ct.fillStyle=wn?'#e74c3c':(mk?'#e67e22':'#fff');
+      ct.beginPath();ct.roundRect(x,y,cl,cl,8);ct.fill();
+      ct.strokeStyle=wn||mk?'transparent':'#e8ecf1';ct.lineWidth=2;
+      ct.beginPath();ct.roundRect(x,y,cl,cl,8);ct.stroke();
+      ct.fillStyle=wn||mk?'#fff':'#2c3e50';
+      ct.font='12px sans-serif';ct.textAlign='center';ct.textBaseline='middle';
+      var t=C[i],mw=cl-14,ln=[],cur='';
+      for(var ci=0;ci<t.length;ci++){
+        var te=cur+t[ci];
+        if(ct.measureText(te).width>mw&&cur.length>0){ln.push(cur);cur=t[ci];}else{cur=te;}
+      }
+      if(cur)ln.push(cur);
+      var lh=16,sy=y+cl/2-(ln.length-1)*lh/2;
+      for(var l=0;l<ln.length;l++)ct.fillText(ln[l],x+cl/2,sy+l*lh);
+    }
+    ct.fillStyle='#aaa';ct.font='12px sans-serif';ct.textAlign='center';
+    ct.fillText('1nuo.me',tw/2,th-16);
+    return ca.toDataURL('image/png');
+  }
+  document.getElementById('shareBtn').addEventListener('click',function(){
+    var d=G(),n=0;for(var k in M)if(M[k])n++;
+    document.getElementById('shareImageArea').innerHTML='<img src="'+d+'" alt="宾果结果">';
+    document.getElementById('shareText').textContent='已标记 '+n+'/25 项';
+    document.getElementById('downloadBtn').href=d;
+    document.getElementById('shareModal').classList.add('active');
+  });
+  document.getElementById('closeModalBtn').addEventListener('click',function(){document.getElementById('shareModal').classList.remove('active')});
+  document.getElementById('shareModal').addEventListener('click',function(e){if(e.target===this)this.classList.remove('active')});
+  document.getElementById('resetBtn').addEventListener('click',function(){M={};B=false;R()});
+  R();
+})();
+</script>
+</body>
+</html>

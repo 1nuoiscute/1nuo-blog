@@ -1,4 +1,4 @@
----
+﻿---
 title: 娱乐
 date: 2026-05-09
 comments: false
@@ -44,7 +44,30 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
     <a class="note-card" href="/测试/bingo2/">
       <div class="note-card-icon">🌧️</div>
       <div class="note-card-info">
-        <h2>阴湿青春 BINGO</h2>
+        <h2>阴湿青春 BINGO</h2>    <a class="note-card" href="/测试/bingo3/">
+      <div class="note-card-icon">📵</div>
+      <div class="note-card-info">
+        <h2>高中违纪 BINGO</h2>
+        <p>五个连成一线的话很有故事了</p>
+      </div>
+      <div class="note-card-arrow">→</div>
+    </a>
+    <a class="note-card" href="/测试/bingo4/">
+      <div class="note-card-icon">🌑</div>
+      <div class="note-card-info">
+        <h2>这辈子有了 BINGO</h2>
+        <p>五个连成一线，这辈子就彻彻底底完完全全地有了</p>
+      </div>
+      <div class="note-card-arrow">→</div>
+    </a>
+    <a class="note-card" href="/测试/bingo5/">
+      <div class="note-card-icon">✨</div>
+      <div class="note-card-info">
+        <h2>Shiny 青春 BINGO</h2>
+        <p>五个连成一线，说明你度过了一个闪耀的青春</p>
+      </div>
+      <div class="note-card-arrow">→</div>
+    </a>
         <p>连成一线，说明你活到现在真是辛苦了 🫂</p>
       </div>
       <div class="note-card-arrow">→</div>
@@ -79,3 +102,4 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
   });
 })();
 </script>
+

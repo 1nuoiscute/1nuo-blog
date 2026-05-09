@@ -30,6 +30,9 @@ skip_render:
   - "测试/scl90-app/**"
   - "测试/bingo-app/**"
   - "测试/bingo2-app/**"
+  - "测试/bingo3-app/**"
+  - "测试/bingo4-app/**"
+  - "测试/bingo5-app/**"
   - "rate/admin/**"
   - "rate/rateimg/**"
 # Writing
@@ -110,3 +113,5 @@ hide_posts:
   allowlist_generators: ['category', 'archive', 'tag'] 
   blocklist_generators: ['index']
   
+
+
