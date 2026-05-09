@@ -36,8 +36,6 @@ date: 2026-05-09
         <div class="note-card-arrow">→</div>
       </a>
     </div>
-
-    <!-- 将来更多笔记可以加在这里 -->
   </div>
 
   <!-- 空状态 -->
@@ -47,83 +45,4 @@ date: 2026-05-09
 </div>
 
 <link rel="stylesheet" href="/css/notes.css">
-<script>
-(function() {
-  const tagBtns = document.querySelectorAll('.tag-btn');
-  const sortBtns = document.querySelectorAll('.sort-btn');
-  const searchInput = document.getElementById('search-input');
-  const list = document.getElementById('note-list');
-  const cards = list.querySelectorAll('.note-card');
-  const empty = document.querySelector('.notes-empty');
-  let currentTag = 'all';
-  let currentSort = 'newest';
-  let searchText = '';
-
-  function filterAndSort() {
-    let visible = [];
-
-    cards.forEach(card => {
-      // 标签筛选
-      const tags = (card.dataset.tags || '').split(',');
-      const tagMatch = currentTag === 'all' || tags.includes(currentTag);
-
-      // 搜索筛选
-      const title = (card.dataset.title || '').toLowerCase();
-      const desc = (card.dataset.desc || '').toLowerCase();
-      const searchMatch = !searchText || title.includes(searchText) || desc.includes(searchText);
-
-      const match = tagMatch && searchMatch;
-      if (match) {
-        visible.push({
-          el: card,
-          date: card.dataset.date || '0000-00-00'
-        });
-      }
-      card.style.display = match ? '' : 'none';
-    });
-
-    // 排序
-    visible.sort((a, b) => {
-      if (currentSort === 'newest') return b.date.localeCompare(a.date);
-      else return a.date.localeCompare(b.date);
-    });
-
-    // 重排 DOM
-    visible.forEach(item => list.appendChild(item.el));
-
-    empty.style.display = visible.length === 0 ? '' : 'none';
-  }
-
-  // 分类按钮
-  tagBtns.forEach(btn => {
-    btn.addEventListener('click', function() {
-      tagBtns.forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-      currentTag = this.dataset.tag;
-      filterAndSort();
-    });
-  });
-
-  // 排序按钮
-  sortBtns.forEach(btn => {
-    btn.addEventListener('click', function() {
-      sortBtns.forEach(b => b.classList.remove('active'));
-      this.classList.add('active');
-      currentSort = this.dataset.sort;
-      filterAndSort();
-    });
-  });
-
-  // 搜索输入（实时搜索）
-  if (searchInput) {
-    let timer;
-    searchInput.addEventListener('input', function() {
-      clearTimeout(timer);
-      timer = setTimeout(() => {
-        searchText = this.value.trim().toLowerCase();
-        filterAndSort();
-      }, 200);
-    });
-  }
-})();
-</script>
+<script src="/js/notes.js"></script>
