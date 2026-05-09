@@ -780,7 +780,7 @@ const i18n = {
     }
 };
 
-let currentLang = 'en';
+let currentLang = 'zh';
 
 // English translations for TYPE_LIBRARY
 const TYPE_LIBRARY_EN = {
