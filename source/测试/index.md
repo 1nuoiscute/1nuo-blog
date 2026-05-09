@@ -1,4 +1,4 @@
-﻿---
+---
 title: 娱乐
 date: 2026-05-09
 comments: false
@@ -11,104 +11,89 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 </div>
 
 <div class="tab-content" id="tab-tests">
-  <div class="note-collections">
-    <a class="note-card" href="/测试/sbti/">
-      <div class="note-card-icon">🧪</div>
-      <div class="note-card-info">
-        <div class="note-card-title">SBTI 赛博人格测试</div>
-        <div class="note-card-desc">MBTI 已经过时，SBTI 来了！测测你的赛博人格</div>
+  <div class="card-list">
+    <a class="card-item" href="/测试/sbti/">
+      <div class="card-icon">🧪</div>
+      <div class="card-body">
+        <div class="card-title">SBTI 赛博人格测试</div>
+        <div class="card-desc">MBTI 已经过时，SBTI 来了！测测你的赛博人格</div>
       </div>
-      <div class="note-card-arrow">→</div>
+      <div class="card-arrow">→</div>
     </a>
-    <a class="note-card" href="/测试/scl90/">
-      <div class="note-card-icon">📋</div>
-      <div class="note-card-info">
-        <div class="note-card-title">SCL-90 症状自评量表</div>
-        <div class="note-card-desc">90 道题 · 10 个维度 · 心理健康自评</div>
+    <a class="card-item" href="/测试/scl90/">
+      <div class="card-icon">📋</div>
+      <div class="card-body">
+        <div class="card-title">SCL-90 症状自评量表</div>
+        <div class="card-desc">90 道题 · 10 个维度 · 心理健康自评</div>
       </div>
-      <div class="note-card-arrow">→</div>
+      <div class="card-arrow">→</div>
     </a>
   </div>
 </div>
 
 <div class="tab-content" id="tab-bingo" style="display:none">
-  <div class="note-collections">
-    <a class="note-card" href="/测试/bingo/">
-      <div class="note-card-icon">🎯</div>
-      <div class="note-card-info">
-        <div class="note-card-title">社会指数宾果游戏</div>
-        <div class="note-card-desc">连成一条线你就是完犊子的死宅社恐了 🤣</div>
+  <div class="card-list">
+    <a class="card-item" href="/测试/bingo/">
+      <div class="card-icon">🎯</div>
+      <div class="card-body">
+        <div class="card-title">社会指数宾果游戏</div>
+        <div class="card-desc">连成一条线你就是完犊子的死宅社恐了 🤣</div>
       </div>
-      <div class="note-card-arrow">→</div>
+      <div class="card-arrow">→</div>
     </a>
-    <a class="note-card" href="/测试/bingo2/">
-      <div class="note-card-icon">🌧️</div>
-      <div class="note-card-info">
-        <div class="note-card-title">阴湿青春 BINGO</div>
-        <div class="note-card-desc">连成一线，说明你活到现在真是辛苦了 🫂</div>
+    <a class="card-item" href="/测试/bingo2/">
+      <div class="card-icon">🌧️</div>
+      <div class="card-body">
+        <div class="card-title">阴湿青春 BINGO</div>
+        <div class="card-desc">连成一线，说明你活到现在真是辛苦了 🫂</div>
       </div>
-      <div class="note-card-arrow">→</div>
+      <div class="card-arrow">→</div>
     </a>
-    <a class="note-card" href="/测试/bingo3/">
-      <div class="note-card-icon">📵</div>
-      <div class="note-card-info">
-        <div class="note-card-title">高中违纪 BINGO</div>
-        <div class="note-card-desc">五个连成一线的话很有故事了</div>
+    <a class="card-item" href="/测试/bingo3/">
+      <div class="card-icon">📵</div>
+      <div class="card-body">
+        <div class="card-title">高中违纪 BINGO</div>
+        <div class="card-desc">五个连成一线的话很有故事了</div>
       </div>
-      <div class="note-card-arrow">→</div>
+      <div class="card-arrow">→</div>
     </a>
-    <a class="note-card" href="/测试/bingo4/">
-      <div class="note-card-icon">🌑</div>
-      <div class="note-card-info">
-        <div class="note-card-title">这辈子有了 BINGO</div>
-        <div class="note-card-desc">五个连成一线，这辈子就彻彻底底完完全全地有了</div>
+    <a class="card-item" href="/测试/bingo4/">
+      <div class="card-icon">🌑</div>
+      <div class="card-body">
+        <div class="card-title">这辈子有了 BINGO</div>
+        <div class="card-desc">五个连成一线，这辈子就彻彻底底完完全全地有了</div>
       </div>
-      <div class="note-card-arrow">→</div>
+      <div class="card-arrow">→</div>
     </a>
-    <a class="note-card" href="/测试/bingo5/">
-      <div class="note-card-icon">✨</div>
-      <div class="note-card-info">
-        <div class="note-card-title">Shiny 青春 BINGO</div>
-        <div class="note-card-desc">五个连成一线，说明你度过了一个闪耀的青春</div>
+    <a class="card-item" href="/测试/bingo5/">
+      <div class="card-icon">✨</div>
+      <div class="card-body">
+        <div class="card-title">Shiny 青春 BINGO</div>
+        <div class="card-desc">五个连成一线，说明你度过了一个闪耀的青春</div>
       </div>
-      <div class="note-card-arrow">→</div>
+      <div class="card-arrow">→</div>
     </a>
   </div>
 </div>
 
-<link rel="stylesheet" href="/css/notes.css">
 <style>
-.test-tabs {
-  display:flex; gap:8px; margin-bottom:20px;
-  padding-bottom:12px; border-bottom:1px solid var(--border-color,#e8e8e8);
-}
-.tab-btn {
-  padding:8px 24px; border:1px solid var(--border-color,#ddd); border-radius:999px;
-  background:transparent; color:var(--font-color,#555); cursor:pointer;
-  font-size:0.95em; transition:all .2s;
-}
-.tab-btn:hover{ border-color:var(--theme-color,#49b1f5); color:var(--theme-color,#49b1f5); }
-.tab-btn.active{ background:var(--theme-color,#49b1f5); color:#fff; border-color:var(--theme-color,#49b1f5); }
+.test-tabs{display:flex;gap:10px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid #eee}
+.tab-btn{display:inline-flex;align-items:center;height:36px;padding:0 20px;border:1px solid #ddd;border-radius:8px;background:#f8f9fa;cursor:pointer;font-weight:bold;font-size:13px;transition:.3s;color:#555}
+.tab-btn.active{background:#2c3e50;color:#fff;border-color:#2c3e50}
+.tab-btn:hover{border-color:#49b1f5;color:#49b1f5}
+.tab-btn.active:hover{color:#fff;border-color:#2c3e50}
 
-/* 卡片美化 */
-.note-card{
-  display:flex; align-items:center; padding:20px 24px; margin-bottom:14px;
-  background:var(--card-bg,#fff); border:1px solid var(--border-color,#e8ecf1);
-  border-radius:14px; text-decoration:none; color:var(--font-color,#363636);
-  transition:all .25s cubic-bezier(.4,0,.2,1);
-  box-shadow:0 1px 3px rgba(0,0,0,.04);
-}
-.note-card:hover{
-  transform:translateY(-3px); box-shadow:0 6px 20px rgba(0,0,0,.08);
-  border-color:var(--theme-color,#49b1f5);
-}
-.note-card-icon{ font-size:2em; margin-right:18px; flex-shrink:0; }
-.note-card-info{ flex:1; display:flex; flex-direction:column; gap:4px; }
-.note-card-title{ font-size:1.1em; font-weight:600; }
-.note-card-desc{ font-size:0.85em; color:var(--second-color,#858585); }
-.note-card-arrow{ font-size:1.3em; color:var(--second-color,#bbb); margin-left:12px; transition:transform .2s; }
-.note-card:hover .note-card-arrow{ transform:translateX(4px); color:var(--theme-color,#49b1f5); }
+.card-list{display:flex;flex-direction:column;gap:12px}
+.card-item{display:flex;align-items:center;padding:18px 20px;background:#fff;border:1px solid #eee;border-radius:12px;text-decoration:none;color:#363636;transition:all .25s;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.card-item:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.08);border-color:#49b1f5}
+.card-icon{font-size:28px;margin-right:16px;flex-shrink:0;width:36px;text-align:center}
+.card-body{flex:1;min-width:0}
+.card-title{font-size:15px;font-weight:600;margin-bottom:3px}
+.card-desc{font-size:12px;color:#999}
+.card-arrow{font-size:18px;color:#ccc;margin-left:10px;transition:transform .2s}
+.card-item:hover .card-arrow{transform:translateX(4px);color:#49b1f5}
 </style>
+
 <script>
 (function(){
   var btns = document.querySelectorAll('.tab-btn');
@@ -122,4 +107,3 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
   });
 })();
 </script>
-
