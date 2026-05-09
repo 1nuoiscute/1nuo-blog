@@ -7,8 +7,8 @@
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
 body{
-  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
-  background:#f5f7fa;color:#2c3e50;min-height:100vh;
+  font-family:"DM Sans","PingFang SC",-apple-system,sans-serif;
+  background:#f8f6f2;color:#1c1917;min-height:100vh;
 }
 .container{max-width:600px;margin:0 auto;padding:16px 12px 40px}
 .header{
@@ -21,8 +21,8 @@ body{
 }
 .header-desc{
   flex:2;display:flex;align-items:center;justify-content:center;
-  padding:12px;font-size:0.78em;color:#7f8c9b;line-height:1.6;
-  border-left:1px solid #e8ecf1;text-align:center;
+  padding:12px;font-size:0.78em;color:#a8a29e;line-height:1.6;
+  border-left:1px solid #e7e5e4;text-align:center;
 }
 .board{
   display:grid;grid-template-columns:repeat(5,1fr);gap:6px;
@@ -31,12 +31,12 @@ body{
 .cell{
   aspect-ratio:1;display:flex;align-items:center;justify-content:center;
   text-align:center;font-size:0.7em;line-height:1.3;padding:5px 3px;
-  border:2px solid #e8ecf1;border-radius:10px;cursor:pointer;
+  border:2px solid #e7e5e4;border-radius:10px;cursor:pointer;
   transition:all .2s;user-select:none;word-break:break-word;overflow:hidden;
 }
 .cell:hover{border-color:#2ecc71}
 .cell.marked{background:#2ecc71;color:#fff;border-color:#2ecc71}
-.cell.bingo-line{background:#e74c3c;color:#fff;border-color:#e74c3c;animation:pulse .6s ease-in-out infinite alternate}
+.cell.bingo-line{background:#e74c3c;color:#fff;border-color:#e74c3c;animation:pulse .5s cubic-bezier(0.16,1,0.3,1) infinite alternate}
 @keyframes pulse{from{transform:scale(1)}to{transform:scale(1.04)}}
 .status{text-align:center;margin:14px 0;padding:12px;background:#fff;border-radius:14px;box-shadow:0 2px 12px rgba(0,0,0,.06);font-size:0.9em;min-height:44px;display:flex;align-items:center;justify-content:center}
 .btn-group{display:flex;gap:8px;justify-content:center;margin-top:12px}
@@ -53,7 +53,7 @@ body{
 .modal-box img{width:100%;border-radius:8px;margin:12px 0}
 .modal-box h3{margin-bottom:8px}
 .modal-box .modal-btns{display:flex;gap:8px;justify-content:center;margin-top:12px}
-@media(max-width:480px){.header{flex-direction:column}.header-desc{border-left:none;border-top:1px solid #e8ecf1}.cell{font-size:0.62em;padding:3px 2px}}
+@media(max-width:480px){.header{flex-direction:column}.header-desc{border-left:none;border-top:1px solid #e7e5e4}.cell{font-size:0.62em;padding:3px 2px}}
 </style>
 </head>
 <body>
@@ -73,7 +73,7 @@ body{
   <div class="modal-box">
     <h3>📤 分享你的宾果</h3>
     <div id="shareImageArea"></div>
-    <p id="shareText" style="font-size:0.85em;color:#7f8c9b;"></p>
+    <p id="shareText" style="font-size:0.85em;color:#a8a29e;"></p>
     <div class="modal-btns">
       <button class="btn btn-secondary" id="closeModalBtn">关闭</button>
       <a id="downloadBtn" class="btn btn-primary" download="bingo.png">💾 保存图片</a>
@@ -161,7 +161,7 @@ body{
       var mk=M[i],wn=B&&L(i);
       ct.fillStyle=wn?'#e74c3c':(mk?'#2ecc71':'#fff');
       ct.beginPath();ct.roundRect(x,y,cl,cl,8);ct.fill();
-      ct.strokeStyle=wn||mk?'transparent':'#e8ecf1';ct.lineWidth=2;
+      ct.strokeStyle=wn||mk?'transparent':'#e7e5e4';ct.lineWidth=2;
       ct.beginPath();ct.roundRect(x,y,cl,cl,8);ct.stroke();
       ct.fillStyle=wn||mk?'#fff':'#2c3e50';
       ct.font='12px sans-serif';ct.textAlign='center';ct.textBaseline='middle';
@@ -191,6 +191,6 @@ body{
   R();
 })();
 </script>
-<div style="text-align:center;margin-top:20px;padding:8px;font-size:0.75em;color:#aaa;border-top:1px solid #e8ecf1;">📝 制表人：诺诺</div></body>
+<div style="text-align:center;margin-top:20px;padding:8px;font-size:0.75em;color:#aaa;border-top:1px solid #e7e5e4;">📝 制表人：诺诺</div></body>
 </html>
 

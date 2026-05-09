@@ -7,8 +7,8 @@
 <style>
 * { box-sizing:border-box; margin:0; padding:0; }
 body {
-  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
-  background:#f5f7fa; color:#2c3e50; min-height:100vh;
+  font-family:"DM Sans","PingFang SC",-apple-system,sans-serif;
+  background:#f8f6f2; color:#1c1917; min-height:100vh;
 }
 .container { max-width:600px; margin:0 auto; padding:16px 12px 40px; }
 
@@ -23,8 +23,8 @@ body {
 }
 .header-desc {
   flex:2; display:flex; align-items:center; justify-content:center;
-  padding:12px; font-size:0.78em; color:#7f8c9b; line-height:1.6;
-  border-left:1px solid #e8ecf1; text-align:center;
+  padding:12px; font-size:0.78em; color:#a8a29e; line-height:1.6;
+  border-left:1px solid #e7e5e4; text-align:center;
 }
 
 /* 棋盘 */
@@ -35,14 +35,14 @@ body {
 .cell {
   aspect-ratio:1; display:flex; align-items:center; justify-content:center;
   text-align:center; font-size:0.72em; line-height:1.35; padding:6px 4px;
-  border:2px solid #e8ecf1; border-radius:10px; cursor:pointer;
+  border:2px solid #e7e5e4; border-radius:10px; cursor:pointer;
   transition:all .2s; user-select:none; word-break:break-word; overflow:hidden;
 }
-.cell:hover { border-color:#49b1f5; }
-.cell.marked { background:#49b1f5; color:#fff; border-color:#49b1f5; }
+.cell:hover { border-color:#b45309; }
+.cell.marked { background:#b45309; color:#fff; border-color:#b45309; }
 .cell.bingo-line {
   background:#e74c3c; color:#fff; border-color:#e74c3c;
-  animation:pulse .6s ease-in-out infinite alternate;
+  animation:pulse .5s cubic-bezier(0.16,1,0.3,1) infinite alternate;
 }
 @keyframes pulse { from{transform:scale(1)} to{transform:scale(1.04)} }
 
@@ -58,10 +58,10 @@ body {
 .btn {
   padding:8px 20px; border:none; border-radius:999px; cursor:pointer; font-size:0.85em; transition:all .2s;
 }
-.btn-primary { background:#49b1f5; color:#fff; }
-.btn-primary:hover { background:#3498db; }
+.btn-primary { background:#b45309; color:#fff; }
+.btn-primary:hover { background:#92400e; }
 .btn-secondary { background:#fff; border:1px solid #ddd; color:#555; }
-.btn-secondary:hover { border-color:#49b1f5; color:#49b1f5; }
+.btn-secondary:hover { border-color:#b45309; color:#b45309; }
 .btn-share { background:#1da1f2; color:#fff; }
 .btn-share:hover { background:#1a91da; }
 
@@ -82,7 +82,7 @@ body {
 
 @media (max-width:480px) {
   .header { flex-direction:column; }
-  .header-desc { border-left:none; border-top:1px solid #e8ecf1; }
+  .header-desc { border-left:none; border-top:1px solid #e7e5e4; }
   .cell { font-size:0.65em; padding:4px 2px; }
 }
 </style>
@@ -111,7 +111,7 @@ body {
   <div class="modal-box">
     <h3>📤 分享你的宾果</h3>
     <div id="shareImageArea"></div>
-    <p id="shareText" style="font-size:0.85em;color:#7f8c9b;"></p>
+    <p id="shareText" style="font-size:0.85em;color:#a8a29e;"></p>
     <div class="modal-btns">
       <button class="btn btn-secondary" id="closeModalBtn">关闭</button>
       <a id="downloadBtn" class="btn btn-primary" download="bingo.png">💾 保存图片</a>
@@ -251,12 +251,12 @@ body {
       var isWin = bingo && isBingoCell(i);
 
       // 格子背景
-      ctx.fillStyle = isWin ? '#e74c3c' : (isMarked ? '#49b1f5' : '#fff');
+      ctx.fillStyle = isWin ? '#e74c3c' : (isMarked ? '#b45309' : '#fff');
       roundRect(ctx, x, y, cellSize, cellSize, 8);
       ctx.fill();
 
       // 边框
-      ctx.strokeStyle = isWin || isMarked ? 'transparent' : '#e8ecf1';
+      ctx.strokeStyle = isWin || isMarked ? 'transparent' : '#e7e5e4';
       ctx.lineWidth = 2;
       roundRect(ctx, x, y, cellSize, cellSize, 8);
       ctx.stroke();
@@ -337,7 +337,7 @@ body {
   render();
 })();
 </script>
-<div style="text-align:center;margin-top:20px;padding:8px;font-size:0.75em;color:#aaa;border-top:1px solid #e8ecf1;">📝 制表人：诺诺</div></body>
+<div style="text-align:center;margin-top:20px;padding:8px;font-size:0.75em;color:#aaa;border-top:1px solid #e7e5e4;">📝 制表人：诺诺</div></body>
 </html>
 
 

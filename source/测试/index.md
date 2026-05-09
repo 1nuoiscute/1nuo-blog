@@ -91,21 +91,40 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 </div>
 
 <style>
-.test-tabs{display:flex;gap:10px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid #eee}
-.tab-btn{display:inline-flex;align-items:center;height:36px;padding:0 20px;border:1px solid #ddd;border-radius:8px;background:#f8f9fa;cursor:pointer;font-weight:bold;font-size:13px;transition:.3s;color:#555}
-.tab-btn.active{background:#2c3e50;color:#fff;border-color:#2c3e50}
-.tab-btn:hover{border-color:#49b1f5;color:#49b1f5}
-.tab-btn.active:hover{color:#fff;border-color:#2c3e50}
+/* 应用 frontend-design-pro 规范 */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 
-.card-list{display:flex;flex-direction:column;gap:12px}
-.card-item{display:flex;align-items:center;padding:18px 20px;background:#fff;border:1px solid #eee;border-radius:12px;text-decoration:none;color:#363636;transition:all .25s;box-shadow:0 1px 3px rgba(0,0,0,.04)}
-.card-item:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(0,0,0,.08);border-color:#49b1f5}
-.card-icon{font-size:28px;margin-right:16px;flex-shrink:0;width:36px;text-align:center}
+:root{--ease:cubic-bezier(0.16,1,0.3,1);--accent:#b45309;--accent-soft:#fef3c7;--border:#e7e5e4;--card-bg:#ffffff;--text:#1c1917;--muted:#a8a29e}
+
+.test-tabs{display:flex;gap:8px;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)}
+.tab-btn{
+  display:inline-flex;align-items:center;height:40px;padding:0 24px;
+  border:1px solid var(--border);border-radius:999px;
+  background:transparent;cursor:pointer;
+  font-family:"DM Sans",-apple-system,sans-serif;font-weight:500;font-size:14px;
+  color:var(--muted);transition:all .2s var(--ease);
+}
+.tab-btn:hover{border-color:var(--accent);color:var(--accent);background:var(--accent-soft)}
+.tab-btn.active{background:var(--text);color:#fff;border-color:var(--text)}
+.tab-btn.active:hover{background:var(--text);color:#fff}
+
+.card-list{display:flex;flex-direction:column;gap:8px}
+.card-item{
+  display:flex;align-items:center;padding:16px 20px;
+  background:var(--card-bg);border:1px solid var(--border);border-radius:12px;
+  text-decoration:none;color:var(--text);
+  transition:all .2s var(--ease);box-shadow:0 1px 2px rgba(0,0,0,.04);
+}
+.card-item:hover{
+  transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.08);
+  border-color:var(--accent);
+}
+.card-icon{font-size:24px;margin-right:16px;flex-shrink:0;width:32px;text-align:center;opacity:.8}
 .card-body{flex:1;min-width:0}
-.card-title{font-size:15px;font-weight:600;margin-bottom:3px}
-.card-desc{font-size:12px;color:#999}
-.card-arrow{font-size:18px;color:#ccc;margin-left:10px;transition:transform .2s}
-.card-item:hover .card-arrow{transform:translateX(4px);color:#49b1f5}
+.card-title{font-size:15px;font-weight:600;margin-bottom:2px;letter-spacing:-.01em}
+.card-desc{font-size:13px;color:var(--muted)}
+.card-arrow{font-size:16px;color:#d6d3d1;margin-left:8px;transition:transform .2s var(--ease)}
+.card-item:hover .card-arrow{transform:translateX(4px);color:var(--accent)}
 </style>
 
 <script>
