@@ -5,35 +5,34 @@ comments: false
 top_img: https://img.1nuo.me/img/categoriesbanner.webp
 ---
 
-<div id="data-container" style="min-height:70vh;position:relative;">
-  <iframe id="data-frame" src="https://cloud.umami.is/share/sKfrnf4MKWP3znei" frameborder="0" style="width:100%;height:100%;min-height:70vh;border:none;border-radius:0;background:transparent;" allow="cross-origin-isolated" sandbox="allow-scripts allow-same-origin allow-popups"></iframe>
+<script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+<div class="stats-grid">
+  <div class="stat-card">
+    <div class="stat-icon">👀</div>
+    <div class="stat-number"><span id="busuanzi_value_site_pv"></span></div>
+    <div class="stat-label">总访问量</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">🧑</div>
+    <div class="stat-number"><span id="busuanzi_value_site_uv"></span></div>
+    <div class="stat-label">访客数</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-icon">📄</div>
+    <div class="stat-number"><span id="busuanzi_value_page_pv"></span></div>
+    <div class="stat-label">本页浏览</div>
+  </div>
 </div>
 
-<div id="data-fallback" style="display:none;text-align:center;padding:60px 20px;background:#fff;border-radius:14px;box-shadow:0 2px 12px rgba(0,0,0,.06);">
-  <div style="font-size:3em;margin-bottom:16px;">📊</div>
-  <h2 style="margin-bottom:12px;">无法内嵌显示</h2>
-  <p style="color:#7f8c9b;margin-bottom:8px;">Umami 仪表盘不支持在当前页面内展示</p>
-  <a href="https://cloud.umami.is/share/sKfrnf4MKWP3znei" target="_blank" rel="noopener" style="display:inline-block;padding:12px 32px;background:#49b1f5;color:#fff;border-radius:999px;text-decoration:none;font-weight:600;">在新标签页打开</a>
+<div style="text-align:center;margin-top:24px;">
+  <p style="color:#aaa;font-size:0.85em;">数据由 不蒜子 统计 · 实时更新</p>
 </div>
 
-<script>
-(function(){
-  var frame = document.getElementById('data-frame');
-  function resize(){frame.style.height=Math.max(window.innerHeight-250,600)+'px';}
-  window.addEventListener('resize',resize); resize();
-
-  // 检测 iframe 是否加载成功
-  var loaded = false;
-  frame.onload = function(){
-    loaded = true;
-  };
-
-  // 5秒后如果没加载成功，显示 fallback
-  setTimeout(function(){
-    if(!loaded){
-      frame.style.display='none';
-      document.getElementById('data-fallback').style.display='';
-    }
-  }, 5000);
-})();
-</script>
+<style>
+.stats-grid{display:flex;gap:16px;flex-wrap:wrap;justify-content:center;margin-top:20px}
+.stat-card{flex:1;min-width:150px;max-width:220px;text-align:center;padding:32px 20px;background:#fff;border:1px solid #eee;border-radius:14px;box-shadow:0 2px 12px rgba(0,0,0,.04)}
+.stat-icon{font-size:2em;margin-bottom:8px}
+.stat-number{font-size:2em;font-weight:700;color:#2c3e50;line-height:1.2}
+.stat-label{font-size:0.85em;color:#999;margin-top:4px}
+</style>
