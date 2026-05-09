@@ -1,6 +1,6 @@
-﻿---
+---
 title: 探索
-date: 2026-05-09
+date: 2026-05-10
 comments: false
 top_img: https://img.1nuo.me/img/categoriesbanner.webp
 ---
@@ -8,6 +8,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 <div class="test-tabs">
   <button class="tab-btn active" data-tab="tests">🧪 测试</button>
   <button class="tab-btn" data-tab="bingo">🎯 Bingo</button>
+  <button class="tab-btn" data-tab="draw">🎋 抽签</button>
 </div>
 
 <div class="tab-content" id="tab-tests">
@@ -23,14 +24,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
     <a class="card-item" href="/测试/scl90/">
       <div class="card-icon">📋</div>
       <div class="card-body">
-        <div class="card-title">SCL-90 症状自评量表    <a class="card-item" href="/测试/draw/">
-      <div class="card-icon">🎋</div>
-      <div class="card-body">
-        <div class="card-title">幸运签</div>
-        <div class="card-desc">摇一签，看看今日运势如何</div>
-      </div>
-      <div class="card-arrow">→</div>
-    </a></div>
+        <div class="card-title">SCL-90 症状自评量表</div>
         <div class="card-desc">90 道题 · 10 个维度 · 心理健康自评</div>
       </div>
       <div class="card-arrow">→</div>
@@ -83,6 +77,19 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
   </div>
 </div>
 
+<div class="tab-content" id="tab-draw" style="display:none">
+  <div class="card-list">
+    <a class="card-item" href="/测试/draw/">
+      <div class="card-icon">🎋</div>
+      <div class="card-body">
+        <div class="card-title">幸运签</div>
+        <div class="card-desc">摇一签，看看今日运势如何</div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+  </div>
+</div>
+
 <style>
 .test-tabs{display:flex;gap:10px;margin-bottom:20px;padding-bottom:14px;border-bottom:1px solid #eee}
 .tab-btn{display:inline-flex;align-items:center;height:36px;padding:0 20px;border:1px solid #ddd;border-radius:8px;background:#f8f9fa;cursor:pointer;font-weight:bold;font-size:13px;transition:.3s;color:#555}
@@ -114,5 +121,3 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
   });
 })();
 </script>
-
-

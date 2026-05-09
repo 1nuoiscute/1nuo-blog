@@ -5,96 +5,199 @@
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
 <title>幸运签</title>
 <style>
+/* === 设计规范：Geist 字体族，8px 间距体系 === */
+@import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&family=Noto+Serif+SC:wght@400;600;700&display=swap');
+
+:root {
+  --bg: #f8f6f2;
+  --card: #ffffff;
+  --text: #1c1917;
+  --muted: #a8a29e;
+  --line: #e7e5e4;
+  --accent: #b45309;
+  --accent-soft: #fef3c7;
+  --shadow: 0 1px 3px rgba(0,0,0,.06), 0 4px 12px rgba(0,0,0,.04);
+  --radius: 16px;
+  --ease: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 *{box-sizing:border-box;margin:0;padding:0}
-body{
-  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
-  background:linear-gradient(135deg,#fdf6f0 0,#f5e6d3 100%);
-  color:#4a3728;min-height:100vh;display:flex;align-items:center;justify-content:center;
-}
-.container{max-width:480px;width:100%;padding:20px;text-align:center;}
 
-/* 签筒 */
-.jar{
-  width:120px;height:160px;margin:0 auto 24px;position:relative;cursor:pointer;
-  transition:transform .3s;
-}
-.jar:hover{transform:scale(1.05)}
-.jar-body{
-  width:100%;height:130px;background:linear-gradient(180deg,#c0392b,#922b21);
-  border-radius:0 0 60px 60px / 0 0 30px 30px;position:relative;
-  box-shadow:0 8px 24px rgba(0,0,0,.15);
-}
-.jar-rim{
-  width:80%;height:16px;background:#a93226;border-radius:8px;
-  position:absolute;top:-8px;left:10%;box-shadow:0 2px 6px rgba(0,0,0,.1);
-}
-.jar-stick{
-  position:absolute;top:-20px;left:50%;margin-left:-3px;
-  width:6px;height:40px;background:#f5deb3;border-radius:3px;
-  transform-origin:bottom center;
-  animation:shake 2s ease-in-out infinite;
-}
-.jar-stick:nth-child(2){left:30%;animation-delay:.3s;height:32px}
-.jar-stick:nth-child(3){left:70%;animation-delay:.6s;height:36px}
-@keyframes shake{
-  0%,100%{transform:rotate(0deg)}
-  25%{transform:rotate(3deg)}
-  75%{transform:rotate(-3deg)}
+body {
+  font-family: "DM Sans", "Noto Serif SC", -apple-system, serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
-/* 结果 */
-.result-card{
-  display:none;background:#fff;border-radius:20px;padding:32px 24px;
-  box-shadow:0 4px 24px rgba(0,0,0,.08);margin-top:20px;position:relative;
-  animation:fadeIn .5s ease-out;
+.container {
+  max-width: 440px;
+  width: 100%;
+  padding: 24px;
+  text-align: center;
 }
-.result-card.show{display:block}
-@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
-.result-level{
-  display:inline-block;padding:4px 20px;border-radius:999px;
-  font-size:0.85em;font-weight:700;margin-bottom:12px;
-}
-.level-大吉{background:linear-gradient(135deg,#ffd700,#ffa500);color:#fff}
-.level-吉{background:linear-gradient(135deg,#2ecc71,#27ae60);color:#fff}
-.level-中吉{background:linear-gradient(135deg,#3498db,#2980b9);color:#fff}
-.level-小吉{background:linear-gradient(135deg,#7f8c9b,#6c7a89);color:#fff}
-.level-凶{background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff}
 
-.result-text{font-size:1.6em;font-weight:700;margin-bottom:8px;color:#4a3728}
-.result-poem{font-size:0.95em;color:#7f8c9b;line-height:1.7;margin-bottom:4px;font-style:italic}
-.result-desc{font-size:0.85em;color:#aaa;margin-top:8px;line-height:1.6}
-
-/* 按钮 */
-.btn{
-  display:inline-block;padding:14px 40px;border:none;border-radius:999px;
-  background:linear-gradient(135deg,#c0392b,#e74c3c);color:#fff;
-  font-size:1.05em;cursor:pointer;transition:all .3s;font-weight:600;
-  box-shadow:0 4px 12px rgba(192,57,43,.3);margin-top:20px;
+/* === 签筒 === */
+.jar-wrap {
+  position: relative;
+  width: 128px;
+  height: 176px;
+  margin: 0 auto 32px;
+  cursor: pointer;
+  transition: transform .2s var(--ease);
 }
-.btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(192,57,43,.4)}
-.btn:active{transform:scale(.97)}
-.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+.jar-wrap:hover { transform: scale(1.04) }
+
+.jar-body {
+  width: 100%;
+  height: 140px;
+  background: linear-gradient(180deg, #a8a29e, #78716c);
+  border-radius: 0 0 64px 64px / 0 0 32px 32px;
+  position: relative;
+  box-shadow: inset 0 -2px 8px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.1);
+}
+.jar-rim {
+  width: 84%;
+  height: 12px;
+  background: #d6d3d1;
+  border-radius: 6px;
+  position: absolute;
+  top: -6px;
+  left: 8%;
+  box-shadow: 0 1px 4px rgba(0,0,0,.06);
+}
+
+/* 签枝 */
+.stick {
+  position: absolute;
+  bottom: 110px;
+  width: 5px;
+  background: linear-gradient(180deg, #fef3c7, #fde68a);
+  border-radius: 3px;
+  transform-origin: bottom center;
+}
+.stick:nth-child(1) { left: 38%; height: 42px; animation: sway 2.4s var(--ease) infinite; }
+.stick:nth-child(2) { left: 48%; height: 36px; animation: sway 2.4s var(--ease) infinite .3s; }
+.stick:nth-child(3) { left: 58%; height: 48px; animation: sway 2.4s var(--ease) infinite .6s; }
+
+@keyframes sway {
+  0%, 100% { transform: rotate(-1deg); }
+  50% { transform: rotate(2deg); }
+}
 
 /* 摇签动画 */
-.shaking .jar{animation:jarShake .5s ease-in-out 3}
-@keyframes jarShake{
-  0%,100%{transform:rotate(0deg)}
-  20%{transform:rotate(-8deg)}
-  40%{transform:rotate(8deg)}
-  60%{transform:rotate(-5deg)}
-  80%{transform:rotate(5deg)}
+.shaking .jar-wrap { animation: jarShake .45s var(--ease) 4; }
+@keyframes jarShake {
+  0%, 100% { transform: rotate(0deg); }
+  25% { transform: rotate(-6deg); }
+  75% { transform: rotate(6deg); }
 }
-.shaking .btn{pointer-events:none;opacity:.6}
+
+/* === 结果卡片 === */
+.result-card {
+  display: none;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--radius);
+  padding: 32px 24px 24px;
+  margin-top: 16px;
+  box-shadow: var(--shadow);
+}
+.result-card.show {
+  display: block;
+  animation: cardIn .4s var(--ease);
+}
+@keyframes cardIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.result-level {
+  display: inline-block;
+  padding: 4px 20px;
+  border-radius: 999px;
+  font-size: .8em;
+  font-weight: 600;
+  letter-spacing: .04em;
+  margin-bottom: 16px;
+}
+
+.level-大吉 { background: linear-gradient(135deg, #fbbf24, #f59e0b); color: #fff; }
+.level-吉 { background: linear-gradient(135deg, #34d399, #10b981); color: #fff; }
+.level-中吉 { background: linear-gradient(135deg, #60a5fa, #3b82f6); color: #fff; }
+.level-小吉 { background: linear-gradient(135deg, #a8a29e, #78716c); color: #fff; }
+.level-凶 { background: linear-gradient(135deg, #f87171, #ef4444); color: #fff; }
+
+.result-text {
+  font-size: 1.5em;
+  font-weight: 700;
+  font-family: "Noto Serif SC", serif;
+  margin-bottom: 12px;
+  color: var(--text);
+}
+
+.result-poem {
+  font-size: .95em;
+  color: var(--muted);
+  line-height: 1.7;
+  font-style: italic;
+  font-family: "Noto Serif SC", serif;
+  margin-bottom: 8px;
+}
+
+.result-desc {
+  font-size: .85em;
+  color: #78716c;
+  line-height: 1.6;
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+
+/* === 按钮 === */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 32px;
+  margin-top: 24px;
+  border: none;
+  border-radius: 999px;
+  background: var(--text);
+  color: #fff;
+  font-size: .95em;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all .2s var(--ease);
+  box-shadow: 0 2px 8px rgba(0,0,0,.08);
+}
+.btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0,0,0,.12);
+}
+.btn:active { transform: scale(.97); }
+.btn:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+
+/* 总数 */
+.footer-note {
+  margin-top: 16px;
+  font-size: .75em;
+  color: #d6d3d1;
+}
 </style>
 </head>
 <body>
 <div class="container" id="app">
-  <div class="jar" id="jar" onclick="draw()">
+
+  <div class="jar-wrap" id="jar" onclick="draw()">
     <div class="jar-rim"></div>
     <div class="jar-body">
-      <div class="jar-stick"></div>
-      <div class="jar-stick"></div>
-      <div class="jar-stick"></div>
+      <div class="stick"></div>
+      <div class="stick"></div>
+      <div class="stick"></div>
     </div>
   </div>
 
@@ -105,7 +208,11 @@ body{
     <div class="result-desc" id="desc"></div>
   </div>
 
-  <button class="btn" id="drawBtn" onclick="draw()">🎋 摇一签</button>
+  <button class="btn" id="drawBtn" onclick="draw()">
+    <span>🎋</span> 摇一签
+  </button>
+
+  <div class="footer-note" id="remainText"></div>
 </div>
 
 <script>
@@ -129,7 +236,7 @@ var FORTUNES = [
   { level:"小吉", text:"量力", poem:"知之为知之，不知为不知", desc:"诚实地面对自己的局限，量力而行。" },
   { level:"凶", text:"末吉", poem:"人生如逆旅，我亦是行人", desc:"诸事不宜，宜静不宜动，小心行事。" },
   { level:"凶", text:"下签", poem:"举杯消愁愁更愁", desc:"不宜冲动做决定，建议等运势好转再行动。" },
-  { level:"凶", text:"避让", poem:"小楼昨夜又东风", desc:"今日可能有小的波折或意外，保持警惕。" },
+  { level:"凶", text:"避让", poem:"昨夜西风凋碧树", desc:"今日可能有小的波折或意外，保持警惕。" },
   { level:"凶", text:"蛰伏", poem:"雄关漫道真如铁，而今迈步从头越", desc:"暂时的低谷是为了更好的起飞，蓄力等待。" },
   { level:"凶", text:"警示", poem:"纸上得来终觉浅，绝知此事要躬行", desc:"不要轻信他人的建议，亲身实践才是真理。" },
   { level:"中吉", text:"机遇", poem:"忽如一夜春风来，千树万树梨花开", desc:"意想不到的好事可能突然降临，保持期待。" },
@@ -151,12 +258,11 @@ function draw(){
   btn.disabled = true;
 
   setTimeout(function(){
-    // 选一个没用过的签
     var available = [];
     for(var i=0;i<FORTUNES.length;i++){
       if(!usedIndices.includes(i)) available.push(i);
     }
-    if(available.length === 0) usedIndices = []; // 抽完了重置
+    if(available.length === 0) usedIndices = [];
     if(available.length === 0) for(var i=0;i<FORTUNES.length;i++) available.push(i);
     var idx = available[Math.floor(Math.random() * available.length)];
     usedIndices.push(idx);
@@ -170,13 +276,16 @@ function draw(){
 
     var card = document.getElementById('result');
     card.classList.remove('show');
-    void card.offsetWidth; // 触发重排
+    void card.offsetWidth;
     card.classList.add('show');
 
     app.classList.remove('shaking');
     btn.disabled = false;
-    btn.textContent = '🎋 再摇一签';
-  }, 1500);
+    btn.innerHTML = '<span>🎋</span> 再摇一签';
+
+    var remain = FORTUNES.length - usedIndices.length;
+    document.getElementById('remainText').textContent = '剩余 ' + remain + ' 签';
+  }, 800);  // 300-500ms 页面过渡规范
 }
 </script>
 </body>
