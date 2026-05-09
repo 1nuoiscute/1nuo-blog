@@ -34,6 +34,7 @@ skip_render:
   - "测试/bingo4-app/**"
   - "测试/bingo5-app/**"
   - "测试/draw-app/**"
+  - "测试/tarot-app/**"
   - "rate/admin/**"
   - "rate/rateimg/**"
 # Writing

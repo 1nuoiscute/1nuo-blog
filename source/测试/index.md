@@ -87,6 +87,14 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
       </div>
       <div class="card-arrow">→</div>
     </a>
+    <a class="card-item" href="/测试/tarot/">
+      <div class="card-icon">🔮</div>
+      <div class="card-body">
+        <div class="card-title">塔罗牌</div>
+        <div class="card-desc">78 张牌 · 多牌阵 · 占卜你的命运</div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
   </div>
 </div>
 
