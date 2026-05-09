@@ -38,8 +38,8 @@ body {
   border:2px solid #e7e5e4; border-radius:10px; cursor:pointer;
   transition:all .2s; user-select:none; word-break:break-word; overflow:hidden;
 }
-.cell:hover { border-color:#b45309; }
-.cell.marked { background:#b45309; color:#fff; border-color:#b45309; }
+.cell:hover { border-color:#5A82B8; }
+.cell.marked { background:#5A82B8; color:#fff; border-color:#5A82B8; }
 .cell.bingo-line {
   background:#e74c3c; color:#fff; border-color:#e74c3c;
   animation:pulse .5s cubic-bezier(0.16,1,0.3,1) infinite alternate;
@@ -58,10 +58,10 @@ body {
 .btn {
   padding:8px 20px; border:none; border-radius:999px; cursor:pointer; font-size:0.85em; transition:all .2s;
 }
-.btn-primary { background:#b45309; color:#fff; }
-.btn-primary:hover { background:#92400e; }
+.btn-primary { background:#5A82B8; color:#fff; }
+.btn-primary:hover { background:#4a6d99; }
 .btn-secondary { background:#fff; border:1px solid #ddd; color:#555; }
-.btn-secondary:hover { border-color:#b45309; color:#b45309; }
+.btn-secondary:hover { border-color:#5A82B8; color:#5A82B8; }
 .btn-share { background:#1da1f2; color:#fff; }
 .btn-share:hover { background:#1a91da; }
 
@@ -251,7 +251,7 @@ body {
       var isWin = bingo && isBingoCell(i);
 
       // 格子背景
-      ctx.fillStyle = isWin ? '#e74c3c' : (isMarked ? '#b45309' : '#fff');
+      ctx.fillStyle = isWin ? '#e74c3c' : (isMarked ? '#5A82B8' : '#fff');
       roundRect(ctx, x, y, cellSize, cellSize, 8);
       ctx.fill();
 
@@ -339,5 +339,6 @@ body {
 </script>
 <div style="text-align:center;margin-top:20px;padding:8px;font-size:0.75em;color:#aaa;border-top:1px solid #e7e5e4;">📝 制表人：诺诺</div></body>
 </html>
+
 
 

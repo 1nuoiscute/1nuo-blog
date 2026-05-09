@@ -1,4 +1,4 @@
----
+﻿---
 title: 探索
 date: 2026-05-10
 comments: false
@@ -94,7 +94,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 /* 应用 frontend-design-pro 规范 */
 @import url('https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,400;9..40,500;9..40,600;9..40,700&display=swap');
 
-:root{--ease:cubic-bezier(0.16,1,0.3,1);--accent:#b45309;--accent-soft:#fef3c7;--border:#e7e5e4;--card-bg:#ffffff;--text:#1c1917;--muted:#a8a29e}
+:root{--ease:cubic-bezier(0.16,1,0.3,1);--accent:#5A82B8;--accent-soft:#dce8f5;--border:#e7e5e4;--card-bg:#ffffff;--text:#1c1917;--muted:#a8a29e}
 
 .test-tabs{display:flex;gap:8px;margin-bottom:24px;padding-bottom:16px;border-bottom:1px solid var(--border)}
 .tab-btn{
@@ -140,3 +140,4 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
   });
 })();
 </script>
+
