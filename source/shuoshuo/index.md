@@ -28,21 +28,20 @@ top_img: https://img.1nuo.me/img/academicbanner.webp
          let date = new Date(memo.createTime || memo.createdTs * 1000).toLocaleString();
          let content = memo.content.replace(/(#[^\s#]+)/g, '<span style="color: #49b1f5;">$1</span>');
          
-         // 1. 处理正文 Markdown 图片
+         // 处理正文 Markdown 图片
          content = content.replace(/!\[.*?\]\((.*?)\)/g, (match, url) => {
            let fullUrl = url.startsWith('/') ? memosDomain + url : url;
            return `<img src="${fullUrl}" style="width: 100%; max-width: 400px; border-radius: 8px; margin: 10px 0; display: block;" />`;
          });
 
-         // 2. 核心修复：只采用“域名 + /file/ + 资源名 + / + 文件名”的最稳逻辑
+         // 域名 + /file/ + 资源名 + / + 文件名
          let imgHtml = "";
          let resList = memo.resources || memo.resourceList || [];
          resList.forEach(res => {
            if (res.type && res.type.includes('image')) {
              let imgSrc = res.externalLink;
              
-             if (!imgSrc) {
-               // 💡 重点：这里根据你刚才发我的成功链接，强行拼出完整路径
+             if (!imgSrc){
                const rName = res.name || "";
                const fName = res.filename || res.fileName || "";
                if (rName && fName) {
@@ -53,7 +52,6 @@ top_img: https://img.1nuo.me/img/academicbanner.webp
              }
              
              if (imgSrc) {
-               // 优先缩略图，备选原图
                const thumbSrc = imgSrc + (imgSrc.includes('?') ? '&' : '?') + 'thumbnail=true';
                imgHtml += `
                  <a href="${imgSrc}" target="_blank" style="display: block; margin-top: 10px;">
