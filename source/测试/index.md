@@ -1,4 +1,4 @@
----
+﻿---
 title: 娱乐
 date: 2026-05-09
 comments: false
@@ -13,20 +13,20 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 <div class="tab-content" id="tab-tests">
   <div class="note-collections">
     <a class="note-card" href="/测试/sbti/">
-      <span class="note-card-icon">🧪</span>
-      <span class="note-card-info">
-        <span class="note-card-title">SBTI 赛博人格测试</span>
-        <span class="note-card-desc">MBTI 已经过时，SBTI 来了！测测你的赛博人格</span>
-      </span>
-      <span class="note-card-arrow">→</span>
+      <div class="note-card-icon">🧪</div>
+      <div class="note-card-info">
+        <div class="note-card-title">SBTI 赛博人格测试</div>
+        <div class="note-card-desc">MBTI 已经过时，SBTI 来了！测测你的赛博人格</div>
+      </div>
+      <div class="note-card-arrow">→</div>
     </a>
     <a class="note-card" href="/测试/scl90/">
-      <span class="note-card-icon">📋</span>
-      <span class="note-card-info">
-        <span class="note-card-title">SCL-90 症状自评量表</span>
-        <span class="note-card-desc">90 道题 · 10 个维度 · 心理健康自评</span>
-      </span>
-      <span class="note-card-arrow">→</span>
+      <div class="note-card-icon">📋</div>
+      <div class="note-card-info">
+        <div class="note-card-title">SCL-90 症状自评量表</div>
+        <div class="note-card-desc">90 道题 · 10 个维度 · 心理健康自评</div>
+      </div>
+      <div class="note-card-arrow">→</div>
     </a>
   </div>
 </div>
@@ -34,44 +34,44 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 <div class="tab-content" id="tab-bingo" style="display:none">
   <div class="note-collections">
     <a class="note-card" href="/测试/bingo/">
-      <span class="note-card-icon">🎯</span>
-      <span class="note-card-info">
-        <span class="note-card-title">社会指数宾果游戏</span>
-        <span class="note-card-desc">连成一条线你就是完犊子的死宅社恐了 🤣</span>
-      </span>
-      <span class="note-card-arrow">→</span>
+      <div class="note-card-icon">🎯</div>
+      <div class="note-card-info">
+        <div class="note-card-title">社会指数宾果游戏</div>
+        <div class="note-card-desc">连成一条线你就是完犊子的死宅社恐了 🤣</div>
+      </div>
+      <div class="note-card-arrow">→</div>
     </a>
     <a class="note-card" href="/测试/bingo2/">
-      <span class="note-card-icon">🌧️</span>
-      <span class="note-card-info">
-        <span class="note-card-title">阴湿青春 BINGO</span>
-        <span class="note-card-desc">连成一线，说明你活到现在真是辛苦了 🫂</span>
-      </span>
-      <span class="note-card-arrow">→</span>
+      <div class="note-card-icon">🌧️</div>
+      <div class="note-card-info">
+        <div class="note-card-title">阴湿青春 BINGO</div>
+        <div class="note-card-desc">连成一线，说明你活到现在真是辛苦了 🫂</div>
+      </div>
+      <div class="note-card-arrow">→</div>
     </a>
     <a class="note-card" href="/测试/bingo3/">
-      <span class="note-card-icon">📵</span>
-      <span class="note-card-info">
-        <span class="note-card-title">高中违纪 BINGO</span>
-        <span class="note-card-desc">五个连成一线的话很有故事了</span>
-      </span>
-      <span class="note-card-arrow">→</span>
+      <div class="note-card-icon">📵</div>
+      <div class="note-card-info">
+        <div class="note-card-title">高中违纪 BINGO</div>
+        <div class="note-card-desc">五个连成一线的话很有故事了</div>
+      </div>
+      <div class="note-card-arrow">→</div>
     </a>
     <a class="note-card" href="/测试/bingo4/">
-      <span class="note-card-icon">🌑</span>
-      <span class="note-card-info">
-        <span class="note-card-title">这辈子有了 BINGO</span>
-        <span class="note-card-desc">五个连成一线，这辈子就彻彻底底完完全全地有了</span>
-      </span>
-      <span class="note-card-arrow">→</span>
+      <div class="note-card-icon">🌑</div>
+      <div class="note-card-info">
+        <div class="note-card-title">这辈子有了 BINGO</div>
+        <div class="note-card-desc">五个连成一线，这辈子就彻彻底底完完全全地有了</div>
+      </div>
+      <div class="note-card-arrow">→</div>
     </a>
     <a class="note-card" href="/测试/bingo5/">
-      <span class="note-card-icon">✨</span>
-      <span class="note-card-info">
-        <span class="note-card-title">Shiny 青春 BINGO</span>
-        <span class="note-card-desc">五个连成一线，说明你度过了一个闪耀的青春</span>
-      </span>
-      <span class="note-card-arrow">→</span>
+      <div class="note-card-icon">✨</div>
+      <div class="note-card-info">
+        <div class="note-card-title">Shiny 青春 BINGO</div>
+        <div class="note-card-desc">五个连成一线，说明你度过了一个闪耀的青春</div>
+      </div>
+      <div class="note-card-arrow">→</div>
     </a>
   </div>
 </div>
@@ -122,3 +122,4 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
   });
 })();
 </script>
+
