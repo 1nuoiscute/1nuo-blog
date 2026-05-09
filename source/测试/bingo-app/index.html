@@ -36,13 +36,10 @@ body {
   aspect-ratio:1; display:flex; align-items:center; justify-content:center;
   text-align:center; font-size:0.72em; line-height:1.35; padding:6px 4px;
   border:2px solid #e8ecf1; border-radius:10px; cursor:pointer;
-  transition:all .2s; user-select:none; word-break:break-word;
-  overflow:hidden;
+  transition:all .2s; user-select:none; word-break:break-word; overflow:hidden;
 }
 .cell:hover { border-color:#49b1f5; }
-.cell.marked {
-  background:#49b1f5; color:#fff; border-color:#49b1f5;
-}
+.cell.marked { background:#49b1f5; color:#fff; border-color:#49b1f5; }
 .cell.bingo-line {
   background:#e74c3c; color:#fff; border-color:#e74c3c;
   animation:pulse .6s ease-in-out infinite alternate;
@@ -55,11 +52,33 @@ body {
   background:#fff; border-radius:14px; box-shadow:0 2px 12px rgba(0,0,0,.06);
   font-size:0.9em; min-height:44px; display:flex; align-items:center; justify-content:center;
 }
+
+/* 按钮组 */
+.btn-group { display:flex; gap:8px; justify-content:center; margin-top:12px; }
 .btn {
-  display:block; margin:0 auto; padding:8px 28px; border:none; border-radius:999px;
-  background:#49b1f5; color:#fff; cursor:pointer; font-size:0.85em;
+  padding:8px 20px; border:none; border-radius:999px; cursor:pointer; font-size:0.85em; transition:all .2s;
 }
-.btn:hover { background:#3498db; }
+.btn-primary { background:#49b1f5; color:#fff; }
+.btn-primary:hover { background:#3498db; }
+.btn-secondary { background:#fff; border:1px solid #ddd; color:#555; }
+.btn-secondary:hover { border-color:#49b1f5; color:#49b1f5; }
+.btn-share { background:#1da1f2; color:#fff; }
+.btn-share:hover { background:#1a91da; }
+
+/* 分享弹窗 */
+.modal-overlay {
+  display:none; position:fixed; top:0; left:0; width:100%; height:100%;
+  background:rgba(0,0,0,.5); z-index:999; align-items:center; justify-content:center;
+  padding:20px;
+}
+.modal-overlay.active { display:flex; }
+.modal-box {
+  background:#fff; border-radius:16px; padding:24px; max-width:460px; width:100%;
+  text-align:center; box-shadow:0 8px 32px rgba(0,0,0,.15);
+}
+.modal-box img { width:100%; border-radius:8px; margin:12px 0; }
+.modal-box h3 { margin-bottom:8px; }
+.modal-box .modal-btns { display:flex; gap:8px; justify-content:center; margin-top:12px; }
 
 @media (max-width:480px) {
   .header { flex-direction:column; }
@@ -70,19 +89,34 @@ body {
 </head>
 <body>
 <div class="container">
-  <!-- 标题栏 -->
+
   <div class="header">
     <div class="header-title">社会指数宾果游戏</div>
     <div class="header-desc">如果有其中一条线连起来，<br>你就不仅不社会，<br>还是完犊子的死宅社恐了</div>
   </div>
 
-  <!-- 棋盘 -->
   <div class="board" id="board"></div>
 
-  <!-- 状态 -->
   <div class="status" id="status">点击格子标记，连成线即 Bingo！</div>
 
-  <button class="btn" id="resetBtn">🔄 重新开局</button>
+  <div class="btn-group">
+    <button class="btn btn-secondary" id="resetBtn">🔄 重新开局</button>
+    <button class="btn btn-share" id="shareBtn">📤 分享结果</button>
+  </div>
+
+</div>
+
+<!-- 分享弹窗 -->
+<div class="modal-overlay" id="shareModal">
+  <div class="modal-box">
+    <h3>📤 分享你的宾果</h3>
+    <div id="shareImageArea"></div>
+    <p id="shareText" style="font-size:0.85em;color:#7f8c9b;"></p>
+    <div class="modal-btns">
+      <button class="btn btn-secondary" id="closeModalBtn">关闭</button>
+      <a id="downloadBtn" class="btn btn-primary" download="bingo.png">💾 保存图片</a>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -117,51 +151,184 @@ body {
       });
     });
 
+    updateStatus();
+  }
+
+  function updateStatus() {
     var count = 0;
     for (var k in marked) { if (marked[k]) count++; }
-    var status = document.getElementById('status');
+    var el = document.getElementById('status');
     if (bingo) {
-      status.innerHTML = '🎉 <strong>BINGO！</strong> 连成一条线了！你是不折不扣的死宅社恐 🤣';
+      el.innerHTML = '🎉 <strong>BINGO！</strong> 连成一条线了！你是不折不扣的死宅社恐 🤣';
     } else {
-      status.innerHTML = '已标记 <strong>' + count + '</strong> 项 — 点击格子标记，连成线即 Bingo！';
+      el.innerHTML = '已标记 <strong>' + count + '</strong> 项 — 点击格子标记，连成线即 Bingo！';
     }
   }
 
   function checkBingo() {
     bingo = false;
-    // 行
     for (var r = 0; r < 5; r++) {
-      var win = true;
-      for (var c = 0; c < 5; c++) { if (!marked[r*5+c]) { win = false; break; } }
+      var win = true; for (var c = 0; c < 5; c++) { if (!marked[r*5+c]) { win = false; break; } }
       if (win) { bingo = true; return; }
     }
-    // 列
     for (var c = 0; c < 5; c++) {
-      var win = true;
-      for (var r = 0; r < 5; r++) { if (!marked[r*5+c]) { win = false; break; } }
+      var win = true; for (var r = 0; r < 5; r++) { if (!marked[r*5+c]) { win = false; break; } }
       if (win) { bingo = true; return; }
     }
-    // 对角线
-    var win = true;
-    for (var i = 0; i < 5; i++) { if (!marked[i*5+i]) { win = false; break; } }
+    var win = true; for (var i = 0; i < 5; i++) { if (!marked[i*5+i]) { win = false; break; } }
     if (win) { bingo = true; return; }
-    win = true;
-    for (var i = 0; i < 5; i++) { if (!marked[i*5+(4-i)]) { win = false; break; } }
+    win = true; for (var i = 0; i < 5; i++) { if (!marked[i*5+(4-i)]) { win = false; break; } }
     if (win) { bingo = true; return; }
   }
 
   function isBingoCell(idx) {
     if (!bingo) return false;
     var r = Math.floor(idx/5), c = idx%5;
-    // 行
     var rw = true; for (var cc=0;cc<5;cc++) { if (!marked[r*5+cc]) { rw=false; break; } } if (rw) return true;
-    // 列
     var cw = true; for (var rr=0;rr<5;rr++) { if (!marked[rr*5+c]) { cw=false; break; } } if (cw) return true;
-    // 对角线
     if (r===c) { var dw=true; for(var i=0;i<5;i++){if(!marked[i*5+i]){dw=false;break;}} if(dw) return true; }
     if (r+c===4) { var dw=true; for(var i=0;i<5;i++){if(!marked[i*5+(4-i)]){dw=false;break;}} if(dw) return true; }
     return false;
   }
+
+  // 生成分享图片
+  function generateShareImage() {
+    var size = 800;
+    var cellSize = 130;
+    var padding = 50;
+    var headerH = 100;
+    var gap = 6;
+    var boardSize = cellSize * 5 + gap * 4;
+    var totalW = size;
+    var totalH = padding + headerH + 20 + boardSize + padding;
+
+    var canvas = document.createElement('canvas');
+    canvas.width = totalW;
+    canvas.height = totalH;
+    var ctx = canvas.getContext('2d');
+
+    // 背景
+    ctx.fillStyle = '#f5f7fa';
+    ctx.fillRect(0, 0, totalW, totalH);
+
+    // 标题
+    ctx.fillStyle = '#2c3e50';
+    ctx.font = 'bold 28px -apple-system,PingFang SC,Microsoft YaHei,sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'top';
+    ctx.fillText('社会指数宾果游戏', totalW/2, padding);
+
+    // 副标题
+    ctx.fillStyle = '#7f8c9b';
+    ctx.font = '16px -apple-system,PingFang SC,Microsoft YaHei,sans-serif';
+    ctx.fillText('如果有其中一条线连起来，你就不仅不社会，还是完犊子的死宅社恐了', totalW/2, padding + 40);
+
+    // 棋盘背景
+    var bx = (totalW - boardSize) / 2;
+    var by = padding + headerH;
+    ctx.fillStyle = '#fff';
+    roundRect(ctx, bx - 10, by - 10, boardSize + 20, boardSize + 20, 14);
+    ctx.fill();
+
+    // BINGO 标记行
+    var bingoLabels = ['B','I','N','G','O'];
+    ctx.fillStyle = '#e74c3c';
+    ctx.font = 'bold 22px -apple-system,sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    for (var i = 0; i < 5; i++) {
+      ctx.fillText(bingoLabels[i], bx + cellSize/2 + i*(cellSize+gap), by - 2);
+    }
+
+    // 格子
+    for (var i = 0; i < 25; i++) {
+      var row = Math.floor(i / 5);
+      var col = i % 5;
+      var x = bx + col * (cellSize + gap);
+      var y = by + 22 + row * (cellSize + gap);
+
+      var isMarked = marked[i];
+      var isWin = bingo && isBingoCell(i);
+
+      // 格子背景
+      ctx.fillStyle = isWin ? '#e74c3c' : (isMarked ? '#49b1f5' : '#fff');
+      roundRect(ctx, x, y, cellSize, cellSize, 8);
+      ctx.fill();
+
+      // 边框
+      ctx.strokeStyle = isWin || isMarked ? 'transparent' : '#e8ecf1';
+      ctx.lineWidth = 2;
+      roundRect(ctx, x, y, cellSize, cellSize, 8);
+      ctx.stroke();
+
+      // 文字
+      ctx.fillStyle = isWin || isMarked ? '#fff' : '#2c3e50';
+      ctx.font = '13px -apple-system,PingFang SC,Microsoft YaHei,sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+
+      var text = CELLS[i];
+      // 自动换行
+      var maxW = cellSize - 16;
+      var lines = [];
+      var current = '';
+      for (var c = 0; c < text.length; c++) {
+        var test = current + text[c];
+        if (ctx.measureText(test).width > maxW && current.length > 0) {
+          lines.push(current);
+          current = text[c];
+        } else {
+          current = test;
+        }
+      }
+      if (current) lines.push(current);
+      var lineH = 18;
+      var startY = y + cellSize/2 - (lines.length-1) * lineH/2;
+      for (var l = 0; l < lines.length; l++) {
+        ctx.fillText(lines[l], x + cellSize/2, startY + l * lineH);
+      }
+    }
+
+    // 页脚
+    ctx.fillStyle = '#aaa';
+    ctx.font = '12px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('1nuo.me', totalW/2, totalH - 16);
+
+    return canvas.toDataURL('image/png');
+  }
+
+  function roundRect(ctx, x, y, w, h, r) {
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.lineTo(x + w - r, y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+    ctx.lineTo(x + w, y + h - r);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+    ctx.lineTo(x + r, y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+    ctx.lineTo(x, y + r);
+    ctx.quadraticCurveTo(x, y, x + r, y);
+    ctx.closePath();
+  }
+
+  // 分享功能
+  document.getElementById('shareBtn').addEventListener('click', function(){
+    var dataUrl = generateShareImage();
+    var count = 0;
+    for (var k in marked) { if (marked[k]) count++; }
+    document.getElementById('shareImageArea').innerHTML = '<img src="' + dataUrl + '" alt="宾果结果">';
+    document.getElementById('shareText').textContent = '已标记 ' + count + '/25 项';
+    document.getElementById('downloadBtn').href = dataUrl;
+    document.getElementById('shareModal').classList.add('active');
+  });
+
+  document.getElementById('closeModalBtn').addEventListener('click', function(){
+    document.getElementById('shareModal').classList.remove('active');
+  });
+  document.getElementById('shareModal').addEventListener('click', function(e){
+    if (e.target === this) this.classList.remove('active');
+  });
 
   document.getElementById('resetBtn').addEventListener('click', function(){
     marked = {}; bingo = false; render();
