@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
 <meta charset="UTF-8">
@@ -147,11 +147,16 @@ function draw(){
 
 function getRandomInt(n){return Math.floor(Math.random()*n)}
 
+function getMeanings(card, reversed){
+  if(!card.meanings) return ['探索未知'];
+  var m = card.meanings.old || card.meanings.new || card.meanings;
+  var arr = reversed ? (m.reversed || m.upright) : (m.upright || m.reversed);
+  return arr || ['探索未知'];
+}
+
 function showSingle(card){
   var reversed = Math.random() < 0.3;
-  var meanings = card.meanings ?
-    (reversed ? (card.meanings.reversed||card.meanings.upright) : card.meanings.upright) :
-    ['探索未知'];
+  var meanings = getMeanings(card, reversed).slice(0,4);
 
   singleResult.className = 'card-display show';
   singleResult.innerHTML =
@@ -161,10 +166,10 @@ function showSingle(card){
     '<div class="result-name">' + card.name + '</div>' +
     '<div class="result-arcana">' + (card.arcana||'') + ' · ' + (card.suit||'') + '</div>' +
     '<div class="result-keywords">' +
-    (card.keywords||[]).map(function(k){return '<span class="keyword">'+k+'</span>'}).join('') +
+    (card.keywords||[]).slice(0,4).map(function(k){return '<span class="keyword">'+k+'</span>'}).join('') +
     '</div>' +
     '<div class="result-meaning">' +
-    meanings.slice(0,4).map(function(m){ return '✦ ' + m }).join('<br>') +
+    meanings.map(function(m){ return '✦ ' + m }).join('<br>') +
     '</div>' +
     '</div>';
 }
@@ -172,9 +177,9 @@ function showSingle(card){
 function showMulti(cardsArr){
   multiResult.className = 'card-display show';
   var html = '<div class="positions">';
+  var labels = ['过去','现在','未来','辅助','阻碍'];
   cardsArr.forEach(function(card,i){
     var reversed = Math.random() < 0.3;
-    var labels = ['过去','现在','未来','辅助','阻碍'];
     html += '<div class="position-card">' +
       '<img class="position-img" src="cards/' + card.img + '" alt="' + card.name + '">' +
       '<div class="position-label">' + (labels[i]||'位置'+(i+1)) + '</div>' +
@@ -182,19 +187,17 @@ function showMulti(cardsArr){
       '</div>';
   });
   html += '</div>';
-  html += '<div style="text-align:left;background:#fff;border:1px solid #e7e5e4;border-radius:16px;padding:20px;box-shadow:0 2px 12px rgba(0,0,0,.04)">';
+  html += '<div style="text-align:left;background:#fff;border:1px solid #e7e5e4;border-radius:16px;padding:20px;margin-top:16px;box-shadow:0 2px 12px rgba(0,0,0,.04)">';
   cardsArr.forEach(function(card,i){
-    var labels = ['过去','现在','未来','辅助','阻碍'];
     var reversed = Math.random() < 0.3;
-    html += '<div style="margin-bottom:'+(i<cardsArr.length-1?'12px':'0')+';padding-bottom:'+(i<cardsArr.length-1?'12px':'0')+';border-bottom:'+(i<cardsArr.length-1?'1px solid #e7e5e4':'')+'">';
-    html += '<strong>' + labels[i] + '：</strong> ' + card.name + (reversed?'（逆位）':'');
+    var meanings = getMeanings(card, reversed).slice(0,2);
+    html += '<div style="margin-bottom:'+(i<cardsArr.length-1?'12px':'0')+';padding-bottom:'+(i<cardsArr.length-1?'12px':'0')+';border-bottom:'+(i<cardsArr.length-1?'1px solid #e7e5e4':'')+'"';
+    html += '<strong>' + (labels[i]||'') + '：</strong> ' + card.name + (reversed?'（逆位）':'') + '<br>';
+    html += '<span style="font-size:.85em;color:#57534e">' + meanings.join(' · ') + '</span>';
     html += '</div>';
   });
   html += '</div>';
-  multiResult.innerHTML = html;
-}
-
-function clearResult(){
+  multiResult.innerHTML = html;\n}\n\nfunction clearResult(){
   singleResult.className = 'card-display';
   singleResult.innerHTML = '';
   multiResult.className = 'card-display';
@@ -206,3 +209,4 @@ deck.addEventListener('click', draw);
 </script>
 </body>
 </html>
+
