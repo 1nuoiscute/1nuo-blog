@@ -12,12 +12,12 @@ tags: [数据结构, 算法, 二叉树, 排序, 栈, 队列]
 </div>
 
 <div class="ncre-content">
-{% raw %}
-<tr>
-    <td width="35%" valign="top">
+
+<table><tbody><tr>
+    <td markdown="1" width="35%" valign="top">
       <img src="https://img.1nuo.me/blog/2026/03/02/93a1036378f5ef6fd44c90d521a1ee88.webp" width="100%">
     </td>
-    <td width="65%" valign="top">
+    <td markdown="1" width="65%" valign="top">
 
 ## 错题 1：算法复杂度的基本概念
 
@@ -42,15 +42,15 @@ tags: [数据结构, 算法, 二叉树, 排序, 栈, 队列]
 3. **算法 vs 程序**：算法是解决问题的**方法/逻辑**，程序是算法在计算机上的**具体实现**。**算法不等于程序。**
 
    </td>
-  </tr>
+  </tr></tbody></table>
 </table>
 
 <table>
-  <tr>
-    <td width="35%" valign="top">
+  <table><tbody><tr>
+    <td markdown="1" width="35%" valign="top">
       <img src="https://img.1nuo.me/blog/2026/03/02/c9acdf44069d10377c462b8f1f348841.webp" width="100%">
     </td>
-    <td width="65%" valign="top">
+    <td markdown="1" width="65%" valign="top">
 
 ## 知识点：树的度与节点数计算
 
@@ -86,15 +86,15 @@ tags: [数据结构, 算法, 二叉树, 排序, 栈, 队列]
 * **后序**：左 → 右 → 根（左右走完最后记根）。
 
    </td>
-  </tr>
+  </tr></tbody></table>
 </table>
 
 <table>
-  <tr>
-    <td width="35%" valign="top">
+  <table><tbody><tr>
+    <td markdown="1" width="35%" valign="top">
       <img src="https://img.1nuo.me/blog/2026/03/04/46b67382986d4dc4f43f9e12aebb154e.webp" width="100%">
     </td>
-    <td width="65%" valign="top">
+    <td markdown="1" width="65%" valign="top">
 
 ## 错题：算法复杂度与数据结构
 
@@ -107,15 +107,15 @@ tags: [数据结构, 算法, 二叉树, 排序, 栈, 队列]
 * **D (❌ 错误)**：时间（耗时）和空间（吃内存）没有必然联系。你可以写一个既慢又占内存的烂代码。
 
    </td>
-  </tr>
+  </tr></tbody></table>
 </table>
 
   <table>
-  <tr>
-    <td width="35%" valign="top">
+  <table><tbody><tr>
+    <td markdown="1" width="35%" valign="top">
       <img src="https://img.1nuo.me/blog/2026/03/04/56129fa8985b34aaf121a50fc58cac00.webp" width="100%">
     </td>
-    <td width="65%" valign="top">
+    <td markdown="1" width="65%" valign="top">
 
 ## 错题：倒序栈的元素个数计算
 
@@ -129,15 +129,15 @@ tags: [数据结构, 算法, 二叉树, 排序, 栈, 队列]
    * 化简这个公式： $(m+1) - top = m - top + 1$ 。
 
    </td>
-  </tr>
+  </tr></tbody></table>
 </table>
 
  <table>
-  <tr>
-    <td width="35%" valign="top">
+  <table><tbody><tr>
+    <td markdown="1" width="35%" valign="top">
       <img src="https://img.1nuo.me/blog/2026/03/04/d25f3765aac62d372992818f41dc8413.webp" width="100%">
     </td> 
-    <td width="65%" valign="top">
+    <td markdown="1" width="65%" valign="top">
 
 ## 错题：先序与中序相同的“畸形”二叉树
 
@@ -151,16 +151,16 @@ tags: [数据结构, 算法, 二叉树, 排序, 栈, 队列]
 * 直线树有 $n$ 个节点，它的深度自然就是 $n$ 。
 
    </td>
-  </tr>
+  </tr></tbody></table>
 </table>
 
 <table>
-  <tr>
-    <td width="35%" valign="top">
+  <table><tbody><tr>
+    <td markdown="1" width="35%" valign="top">
       <img src="https://img.1nuo.me/blog/2026/03/04/a0e1ed9365be4740f9d179a5d8f60a86.webp" width="100%">
       <img src="https://img.1nuo.me/blog/2026/03/04/f9105284505dae50d8b5ae3af27b40f6.webp" width="100%">
     </td>
-    <td width="65%" valign="top">
+    <td markdown="1" width="65%" valign="top">
 
 ## 第 33 题：递归调用与“后进先出”栈
 
@@ -172,6 +172,6 @@ tags: [数据结构, 算法, 二叉树, 排序, 栈, 队列]
 4. **结论**：输入 ABC，输出结果为 **CBA**。
 
    </td>
-  </tr>
-{% endraw %}
+  </tr></tbody></table>
+
 </div>
