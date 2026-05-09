@@ -23,7 +23,14 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
     <a class="card-item" href="/测试/scl90/">
       <div class="card-icon">📋</div>
       <div class="card-body">
-        <div class="card-title">SCL-90 症状自评量表</div>
+        <div class="card-title">SCL-90 症状自评量表    <a class="card-item" href="/测试/draw/">
+      <div class="card-icon">🎋</div>
+      <div class="card-body">
+        <div class="card-title">幸运签</div>
+        <div class="card-desc">摇一签，看看今日运势如何</div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a></div>
         <div class="card-desc">90 道题 · 10 个维度 · 心理健康自评</div>
       </div>
       <div class="card-arrow">→</div>
@@ -107,4 +114,5 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
   });
 })();
 </script>
+
 

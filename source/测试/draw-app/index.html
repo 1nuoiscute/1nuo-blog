@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>幸运签</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+  background:linear-gradient(135deg,#fdf6f0 0,#f5e6d3 100%);
+  color:#4a3728;min-height:100vh;display:flex;align-items:center;justify-content:center;
+}
+.container{max-width:480px;width:100%;padding:20px;text-align:center;}
+
+/* 签筒 */
+.jar{
+  width:120px;height:160px;margin:0 auto 24px;position:relative;cursor:pointer;
+  transition:transform .3s;
+}
+.jar:hover{transform:scale(1.05)}
+.jar-body{
+  width:100%;height:130px;background:linear-gradient(180deg,#c0392b,#922b21);
+  border-radius:0 0 60px 60px / 0 0 30px 30px;position:relative;
+  box-shadow:0 8px 24px rgba(0,0,0,.15);
+}
+.jar-rim{
+  width:80%;height:16px;background:#a93226;border-radius:8px;
+  position:absolute;top:-8px;left:10%;box-shadow:0 2px 6px rgba(0,0,0,.1);
+}
+.jar-stick{
+  position:absolute;top:-20px;left:50%;margin-left:-3px;
+  width:6px;height:40px;background:#f5deb3;border-radius:3px;
+  transform-origin:bottom center;
+  animation:shake 2s ease-in-out infinite;
+}
+.jar-stick:nth-child(2){left:30%;animation-delay:.3s;height:32px}
+.jar-stick:nth-child(3){left:70%;animation-delay:.6s;height:36px}
+@keyframes shake{
+  0%,100%{transform:rotate(0deg)}
+  25%{transform:rotate(3deg)}
+  75%{transform:rotate(-3deg)}
+}
+
+/* 结果 */
+.result-card{
+  display:none;background:#fff;border-radius:20px;padding:32px 24px;
+  box-shadow:0 4px 24px rgba(0,0,0,.08);margin-top:20px;position:relative;
+  animation:fadeIn .5s ease-out;
+}
+.result-card.show{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+.result-level{
+  display:inline-block;padding:4px 20px;border-radius:999px;
+  font-size:0.85em;font-weight:700;margin-bottom:12px;
+}
+.level-大吉{background:linear-gradient(135deg,#ffd700,#ffa500);color:#fff}
+.level-吉{background:linear-gradient(135deg,#2ecc71,#27ae60);color:#fff}
+.level-中吉{background:linear-gradient(135deg,#3498db,#2980b9);color:#fff}
+.level-小吉{background:linear-gradient(135deg,#7f8c9b,#6c7a89);color:#fff}
+.level-凶{background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff}
+
+.result-text{font-size:1.6em;font-weight:700;margin-bottom:8px;color:#4a3728}
+.result-poem{font-size:0.95em;color:#7f8c9b;line-height:1.7;margin-bottom:4px;font-style:italic}
+.result-desc{font-size:0.85em;color:#aaa;margin-top:8px;line-height:1.6}
+
+/* 按钮 */
+.btn{
+  display:inline-block;padding:14px 40px;border:none;border-radius:999px;
+  background:linear-gradient(135deg,#c0392b,#e74c3c);color:#fff;
+  font-size:1.05em;cursor:pointer;transition:all .3s;font-weight:600;
+  box-shadow:0 4px 12px rgba(192,57,43,.3);margin-top:20px;
+}
+.btn:hover{transform:translateY(-2px);box-shadow:0 6px 20px rgba(192,57,43,.4)}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+/* 摇签动画 */
+.shaking .jar{animation:jarShake .5s ease-in-out 3}
+@keyframes jarShake{
+  0%,100%{transform:rotate(0deg)}
+  20%{transform:rotate(-8deg)}
+  40%{transform:rotate(8deg)}
+  60%{transform:rotate(-5deg)}
+  80%{transform:rotate(5deg)}
+}
+.shaking .btn{pointer-events:none;opacity:.6}
+</style>
+</head>
+<body>
+<div class="container" id="app">
+  <div class="jar" id="jar" onclick="draw()">
+    <div class="jar-rim"></div>
+    <div class="jar-body">
+      <div class="jar-stick"></div>
+      <div class="jar-stick"></div>
+      <div class="jar-stick"></div>
+    </div>
+  </div>
+
+  <div class="result-card" id="result">
+    <div class="result-level" id="level"></div>
+    <div class="result-text" id="text"></div>
+    <div class="result-poem" id="poem"></div>
+    <div class="result-desc" id="desc"></div>
+  </div>
+
+  <button class="btn" id="drawBtn" onclick="draw()">🎋 摇一签</button>
+</div>
+
+<script>
+var FORTUNES = [
+  { level:"大吉", text:"上上签", poem:"春风得意马蹄疾，一日看尽长安花", desc:"万事顺遂，心想事成。今日诸事皆宜，放手去做吧。" },
+  { level:"大吉", text:"天官赐福", poem:"山重水复疑无路，柳暗花明又一村", desc:"之前困扰你的事情即将迎来转机，坚持下去。" },
+  { level:"大吉", text:"紫气东来", poem:"大鹏一日同风起，扶摇直上九万里", desc:"运势如虹，正是大展宏图之时，不可错过良机。" },
+  { level:"大吉", text:"龙凤呈祥", poem:"在天愿作比翼鸟，在地愿为连理枝", desc:"人际关系和感情运势极佳，适合表达心意。" },
+  { level:"吉", text:"上签", poem:"海内存知己，天涯若比邻", desc:"虽有远虑，但朋友会是你最大的助力。" },
+  { level:"吉", text:"中平", poem:"乘风破浪会有时，直挂云帆济沧海", desc:"眼下或许有些波折，但前途是光明的。" },
+  { level:"吉", text:"小顺", poem:"花开堪折直须折，莫待无花空折枝", desc:"机会就在眼前，主动一点，不要错过。" },
+  { level:"吉", text:"如意的", poem:"但愿人长久，千里共婵娟", desc:"平淡是真，知足常乐，今日宜静不宜动。" },
+  { level:"吉", text:"安宁", poem:"采菊东篱下，悠然见南山", desc:"适合独处和思考，把时间留给自己。" },
+  { level:"中吉", text:"半吉", poem:"不识庐山真面目，只缘身在此山中", desc:"当局者迷，不妨换个角度看待问题。" },
+  { level:"中吉", text:"待时", poem:"长风破浪会有时", desc:"现在不是最好的时机，再等等，耐心是美德。" },
+  { level:"中吉", text:"守成", poem:"千淘万漉虽辛苦，吹尽狂沙始到金", desc:"坚持你正在做的事，付出会有回报。" },
+  { level:"中吉", text:"渐佳", poem:"好雨知时节，当春乃发生", desc:"一切都在往好的方向发展，虽然慢但稳。" },
+  { level:"小吉", text:"微吉", poem:"此情可待成追忆，只是当时已惘然", desc:"有些事情过去了就让它过去，别回头。" },
+  { level:"小吉", text:"平淡", poem:"人间有味是清欢", desc:"平平淡淡才是真，今天适合安安静静过。" },
+  { level:"小吉", text:"慎行", poem:"欲穷千里目，更上一层楼", desc:"想要看到更远的风景，需要先提升自己。" },
+  { level:"小吉", text:"量力", poem:"知之为知之，不知为不知", desc:"诚实地面对自己的局限，量力而行。" },
+  { level:"凶", text:"末吉", poem:"人生如逆旅，我亦是行人", desc:"诸事不宜，宜静不宜动，小心行事。" },
+  { level:"凶", text:"下签", poem:"举杯消愁愁更愁", desc:"不宜冲动做决定，建议等运势好转再行动。" },
+  { level:"凶", text:"避让", poem:"小楼昨夜又东风", desc:"今日可能有小的波折或意外，保持警惕。" },
+  { level:"凶", text:"蛰伏", poem:"雄关漫道真如铁，而今迈步从头越", desc:"暂时的低谷是为了更好的起飞，蓄力等待。" },
+  { level:"凶", text:"警示", poem:"纸上得来终觉浅，绝知此事要躬行", desc:"不要轻信他人的建议，亲身实践才是真理。" },
+  { level:"中吉", text:"机遇", poem:"忽如一夜春风来，千树万树梨花开", desc:"意想不到的好事可能突然降临，保持期待。" },
+  { level:"吉", text:"明朗", poem:"晴空一鹤排云上，便引诗情到碧霄", desc:"心情和运势都在放晴，今天是好日子。" },
+  { level:"凶", text:"低潮", poem:"自在飞花轻似梦，无边丝雨细如愁", desc:"情绪可能有些低落，给自己一点时间恢复。" },
+  { level:"大吉", text:"圆满", poem:"但愿长圆如此夜，人情未必看承别", desc:"所有的事情都在往圆满的方向发展。" },
+  { level:"大吉", text:"鼎盛", poem:"会当凌绝顶，一览众山小", desc:"运势处于顶峰期，适合挑战高难度目标。" },
+  { level:"吉", text:"喜乐", poem:"春风十里不如你", desc:"今天会遇到让你开心的人或事，面带微笑。" },
+  { level:"中吉", text:"转机", poem:"沉舟侧畔千帆过，病树前头万木春", desc:"旧的结束意味着新的开始，别怕变化。" },
+  { level:"小吉", text:"随缘", poem:"相逢一醉是前缘", desc:"有些事情强求不来，随缘就好。" }
+];
+
+var usedIndices = [];
+
+function draw(){
+  var app = document.getElementById('app');
+  var btn = document.getElementById('drawBtn');
+  app.classList.add('shaking');
+  btn.disabled = true;
+
+  setTimeout(function(){
+    // 选一个没用过的签
+    var available = [];
+    for(var i=0;i<FORTUNES.length;i++){
+      if(!usedIndices.includes(i)) available.push(i);
+    }
+    if(available.length === 0) usedIndices = []; // 抽完了重置
+    if(available.length === 0) for(var i=0;i<FORTUNES.length;i++) available.push(i);
+    var idx = available[Math.floor(Math.random() * available.length)];
+    usedIndices.push(idx);
+    var f = FORTUNES[idx];
+
+    document.getElementById('level').textContent = f.level;
+    document.getElementById('level').className = 'result-level level-' + f.level;
+    document.getElementById('text').textContent = f.text;
+    document.getElementById('poem').textContent = f.poem;
+    document.getElementById('desc').textContent = f.desc;
+
+    var card = document.getElementById('result');
+    card.classList.remove('show');
+    void card.offsetWidth; // 触发重排
+    card.classList.add('show');
+
+    app.classList.remove('shaking');
+    btn.disabled = false;
+    btn.textContent = '🎋 再摇一签';
+  }, 1500);
+}
+</script>
+</body>
+</html>
