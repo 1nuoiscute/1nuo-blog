@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <title>SCL-90 测试</title>
+  <style>
+    :root {
+      --bg: #f5f7fa; --card: #fff; --text: #2c3e50; --muted: #7f8c9b;
+      --primary: #49b1f5; --primary-dark: #3498db; --line: #e8ecf1;
+      --radius: 14px; --shadow: 0 2px 12px rgba(0,0,0,0.06);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: -apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
+      background: var(--bg); color: var(--text); min-height: 100vh;
+    }
+    .container { max-width: 720px; margin: 0 auto; padding: 20px 16px 40px; }
+
+    /* 首页 */
+    .screen { display: none; }
+    .screen.active { display: block; }
+    .hero {
+      text-align: center; padding: 60px 20px 40px;
+      background: var(--card); border-radius: var(--radius);
+      box-shadow: var(--shadow); margin-top: 20px;
+    }
+    .hero h1 { font-size: 1.5em; margin-bottom: 12px; }
+    .hero p { color: var(--muted); font-size: 0.95em; line-height: 1.7; margin-bottom: 8px; }
+    .hero .note { font-size: 0.8em; color: #e74c3c; margin-top: 12px; }
+
+    /* 按钮 */
+    .btn {
+      display: inline-block; padding: 12px 36px; border: none; border-radius: 999px;
+      background: var(--primary); color: #fff; font-size: 1em; cursor: pointer;
+      transition: background 0.2s; margin-top: 20px;
+    }
+    .btn:hover { background: var(--primary-dark); }
+    .btn-secondary {
+      background: transparent; border: 1px solid var(--line); color: var(--text); padding: 8px 20px;
+      border-radius: 999px; cursor: pointer; font-size: 0.9em; transition: all 0.2s;
+    }
+    .btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
+
+    /* 进度 */
+    .progress-bar {
+      display: flex; align-items: center; gap: 12px; margin-bottom: 20px;
+      padding: 12px 0; border-bottom: 1px solid var(--line);
+    }
+    .progress-track {
+      flex: 1; height: 6px; background: var(--line); border-radius: 3px; overflow: hidden;
+    }
+    .progress-fill {
+      height: 100%; background: var(--primary); border-radius: 3px; transition: width 0.3s;
+    }
+    .progress-text { font-size: 0.85em; color: var(--muted); white-space: nowrap; }
+
+    /* 题目 */
+    .question-card {
+      background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 28px 24px; margin-bottom: 16px;
+    }
+    .question-number {
+      display: inline-block; background: var(--primary); color: #fff;
+      border-radius: 50%; width: 28px; height: 28px; text-align: center;
+      line-height: 28px; font-size: 0.85em; margin-bottom: 12px;
+    }
+    .question-text { font-size: 1.1em; margin-bottom: 20px; line-height: 1.6; }
+
+    .options { display: flex; gap: 8px; flex-wrap: wrap; }
+    .option-btn {
+      flex: 1; min-width: 60px; padding: 10px 8px; border: 1px solid var(--line);
+      border-radius: 10px; background: var(--card); cursor: pointer; text-align: center;
+      transition: all 0.2s; font-size: 0.85em;
+    }
+    .option-btn:hover { border-color: var(--primary); }
+    .option-btn.selected {
+      border-color: var(--primary); background: rgba(73,177,245,0.1); color: var(--primary); font-weight: 600;
+    }
+    .option-label { font-weight: 600; display: block; font-size: 0.95em; }
+    .option-desc { font-size: 0.75em; color: var(--muted); display: block; margin-top: 2px; }
+
+    /* 导航按钮 */
+    .nav-btns { display: flex; justify-content: space-between; margin-top: 4px; }
+    .nav-btns .btn { padding: 10px 28px; font-size: 0.9em; }
+    .nav-btns .btn:disabled { opacity: 0.4; cursor: not-allowed; }
+
+    /* 结果 */
+    .result-card {
+      background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 28px 24px; margin-bottom: 16px;
+    }
+    .result-card h2 { font-size: 1.2em; margin-bottom: 16px; text-align: center; }
+    .result-card h2 span { color: var(--muted); font-weight: 400; }
+    .dimension-row {
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 10px 0; border-bottom: 1px solid var(--line); font-size: 0.9em;
+    }
+    .dimension-row:last-child { border-bottom: none; }
+    .dim-name { flex: 0 0 120px; font-weight: 500; }
+    .dim-bar-wrap { flex: 1; height: 8px; background: var(--line); border-radius: 4px; margin: 0 12px; }
+    .dim-bar {
+      height: 100%; border-radius: 4px; transition: width 0.5s;
+      background: linear-gradient(90deg, #2ecc71, #f1c40f, #e74c3c);
+    }
+    .dim-score { flex: 0 0 60px; text-align: right; font-weight: 600; }
+    .dim-normal { color: #2ecc71; } .dim-warn { color: #f39c12; } .dim-high { color: #e74c3c; }
+
+    .result-summary {
+      background: var(--card); border-radius: var(--radius); box-shadow: var(--shadow);
+      padding: 24px; margin-bottom: 16px; text-align: center;
+    }
+    .result-summary .total { font-size: 2em; font-weight: 700; }
+    .result-summary .label { color: var(--muted); font-size: 0.85em; }
+    .result-summary .disclaimer {
+      margin-top: 16px; font-size: 0.8em; color: #e74c3c; padding: 12px;
+      background: #fff5f5; border-radius: 8px;
+    }
+
+    @media (max-width: 600px) {
+      .container { padding: 12px 10px 32px; }
+      .options { gap: 4px; }
+      .option-btn { min-width: 48px; padding: 8px 4px; font-size: 0.8em; }
+      .dim-name { flex-basis: 80px; font-size: 0.8em; }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+
+<!-- 首页 -->
+<div id="intro" class="screen active">
+  <div class="hero">
+    <h1>SCL-90 症状自评量表</h1>
+    <p>SCL-90 是国际通用的心理健康自评量表，包含 90 道题目，</p>
+    <p>涵盖躯体化、强迫、抑郁、焦虑等 10 个维度。</p>
+    <p>请根据最近一周的实际情况，选择最符合的选项。</p>
+    <p class="note">⚠️ 本测试仅供参考，不构成诊断依据。如有需要请咨询专业人士。</p>
+    <button class="btn" id="startBtn">开始测试（90 题）</button>
+  </div>
+</div>
+
+<!-- 答题页 -->
+<div id="test" class="screen">
+  <div class="progress-bar">
+    <span class="progress-text" id="progressText">1 / 90</span>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:0%"></div></div>
+  </div>
+  <div id="questionArea"></div>
+  <div class="nav-btns">
+    <button class="btn btn-secondary" id="prevBtn">← 上一题</button>
+    <button class="btn" id="nextBtn">下一题 →</button>
+  </div>
+</div>
+
+<!-- 结果页 -->
+<div id="result" class="screen">
+  <div class="result-summary" id="resultSummary"></div>
+  <div class="result-card" id="resultDetails"></div>
+  <div style="text-align:center;margin-top:16px;">
+    <button class="btn btn-secondary" id="restartBtn">重新测试</button>
+  </div>
+</div>
+
+</div>
+
+<script>
+(function(){
+  // SCL-90 题目 (90题)
+  const QUESTIONS = [
+    "头痛","神经过敏，心中不踏实","头脑中有不必要的想法或字句盘旋","头昏或昏倒","对异性的兴趣减退",
+    "对旁人责备求全","感到别人能控制您的思想","责怪别人制造麻烦","忘性大","担心自己的衣饰整齐及仪态的端正",
+    "容易烦恼和激动","胸痛","害怕空旷的场所或街道","感到自己的精力下降，活动减慢","想结束自己的生命",
+    "听到旁人听不到的声音","发抖","感到大多数人都不可信任","胃口不好","容易哭泣",
+    "同异性相处时感到害羞不自在","感到受骗，中了圈套或有人想抓住您","无缘无故地突然感到害怕","自己不能控制地大发脾气","怕单独出门",
+    "经常责怪自己","腰痛","感到难以完成任务","感到孤独","感到苦闷",
+    "过分担忧","对事物不感兴趣","感到害怕","您的感情容易受到伤害","旁人能知道您的私下想法",
+    "感到别人不理解您、不同情您","感到人们对您不太友好","做事必须做得很慢以保证做得正确","心跳得很厉害","恶心或胃部不舒服",
+    "感到比不上他人","肌肉酸痛","感到有人在监视您、谈论您","难以入睡","做事必须反复检查",
+    "难以做出决定","怕乘电车、公共汽车、地铁或火车","呼吸有困难","一阵阵发冷或发热","因为感到害怕而避开某些东西、场合或活动",
+    "脑子变空了","身体发麻或发刺","喉咙有梗塞感","感到没有前途、没有希望","不能集中注意力",
+    "感到身体的某一部分软弱无力","感到紧张或容易紧张","感到手或脚发重","想到有关死亡的事","吃得太多",
+    "当别人看着您或谈论您时感到不自在","有一些不属于您自己的想法","有想打人或伤害他人的冲动","醒得太早","必须反复洗手、点数目或触摸某些东西",
+    "睡得不稳不深","有想摔坏或破坏东西的冲动","有一些别人没有的想法或念头","感到对别人神经过敏","在商店或电影院等人多的地方感到不自在",
+    "感到任何事情都很困难","一阵阵恐惧或惊恐","感到在公共场合吃东西很不舒服","经常与人争论","单独一人时神经很紧张",
+    "别人对您的成绩没有做出恰当的评价","即使和别人在一起也感到孤单","感到坐立不安心神不定","感到自己没有什么价值",
+    "感到熟悉的东西变得陌生或不像是真的","大叫或摔东西","害怕会在公共场合昏倒","感到别人想占您的便宜","为一些有关性的想法而苦恼",
+    "您认为应该因为自己的过错而受到惩罚","感到要很快把事情做完","感到自己的身体有严重问题","从未感到和其他人很亲近",
+    "感到自己有罪","感到自己的脑子有毛病"
+  ];
+
+  // 维度定义: [名称, 问题索引(0-based)]
+  const DIMS = [
+    ["躯体化", [0,3,11,26,39,41,47,48,51,52,55,57]],
+    ["强迫症状", [2,8,9,27,37,44,45,50,54,64]],
+    ["人际关系敏感", [5,20,33,35,36,40,60,68,72]],
+    ["抑郁", [4,13,14,19,21,25,28,29,30,31,53,70,78]],
+    ["焦虑", [1,16,22,32,38,56,71,77,79,85]],
+    ["敌对", [10,23,62,66,73,80]],
+    ["恐怖", [12,24,46,49,69,74,81]],
+    ["偏执", [7,17,42,67,75,82]],
+    ["精神病性", [6,15,34,61,76,83,84,86,87,89]],
+    ["其他", [18,43,58,59,63,65,88]]
+  ];
+
+  var app = {
+    answers: {},
+    current: 0
+  };
+
+  var intro = document.getElementById('intro');
+  var test = document.getElementById('test');
+  var result = document.getElementById('result');
+  var questionArea = document.getElementById('questionArea');
+  var progressText = document.getElementById('progressText');
+  var progressFill = document.getElementById('progressFill');
+
+  function showScreen(id) {
+    [intro, test, result].forEach(function(s){ s.classList.toggle('active', s.id === id); });
+  }
+
+  document.getElementById('startBtn').addEventListener('click', function(){
+    app.answers = {};
+    app.current = 0;
+    showScreen('test');
+    renderQuestion();
+  });
+
+  function renderQuestion() {
+    var i = app.current;
+    var q = QUESTIONS[i];
+    var answered = app.answers[i] !== undefined;
+    var val = app.answers[i] || 0;
+
+    var html = '<div class="question-card">';
+    html += '<div class="question-number">' + (i+1) + '</div>';
+    html += '<div class="question-text">' + q + '</div>';
+    html += '<div class="options" data-q="' + i + '">';
+    var labels = ['无','很轻','中等','偏重','严重'];
+    var descs  = ['从无','很轻','中度','偏重','严重'];
+    for (var o = 1; o <= 5; o++) {
+      html += '<div class="option-btn' + (val === o ? ' selected' : '') + '" data-value="' + o + '">';
+      html += '<span class="option-label">' + o + '</span>';
+      html += '<span class="option-desc">' + labels[o-1] + '</span>';
+      html += '</div>';
+    }
+    html += '</div></div>';
+    questionArea.innerHTML = html;
+
+    // 选项点击
+    questionArea.querySelectorAll('.option-btn').forEach(function(btn){
+      btn.addEventListener('click', function(){
+        var val = parseInt(this.dataset.value);
+        app.answers[i] = val;
+        questionArea.querySelectorAll('.option-btn').forEach(function(b){ b.classList.remove('selected'); });
+        this.classList.add('selected');
+      });
+    });
+
+    progressText.textContent = (i+1) + ' / 90';
+    progressFill.style.width = ((i+1)/90*100) + '%';
+    document.getElementById('prevBtn').disabled = (i === 0);
+    document.getElementById('nextBtn').textContent = (i === 89) ? '提交' : '下一题 →';
+  }
+
+  document.getElementById('prevBtn').addEventListener('click', function(){
+    if (app.current > 0) { app.current--; renderQuestion(); }
+  });
+
+  document.getElementById('nextBtn').addEventListener('click', function(){
+    if (app.answers[app.current] === undefined) { alert('请先选择一项'); return; }
+    if (app.current === 89) { calcResult(); return; }
+    app.current++;
+    renderQuestion();
+  });
+
+  function calcResult() {
+    // 计算各维度均分
+    var results = [];
+    var totalScore = 0;
+    DIMS.forEach(function(dim){
+      var items = dim[1];
+      var sum = 0;
+      items.forEach(function(idx){ sum += (app.answers[idx] || 1); });
+      var avg = Math.round(sum / items.length * 100) / 100;
+      totalScore += sum;
+      results.push({ name: dim[0], avg: avg, items: items.length });
+    });
+
+    // 总均分
+    var totalAvg = Math.round(totalScore / 90 * 100) / 100;
+
+    showScreen('result');
+
+    // 摘要
+    var sumHtml = '<div class="total">' + totalScore + '</div>';
+    sumHtml += '<div class="label">总分（90-450）</div>';
+    sumHtml += '<div style="margin-top:8px;"><span class="label">总均分: ' + totalAvg + '</span></div>';
+    sumHtml += '<div class="disclaimer">⚠️ 本测试仅供参考，不构成诊断依据。<br>如有需要请咨询专业心理医生或学校心理咨询中心。</div>';
+    document.getElementById('resultSummary').innerHTML = sumHtml;
+
+    // 各维度
+    var detailHtml = '<h2>各维度结果</h2>';
+    results.forEach(function(r){
+      var pct = Math.min(r.avg / 5 * 100, 100);
+      var cls = r.avg < 2 ? 'dim-normal' : (r.avg < 3 ? 'dim-warn' : 'dim-high');
+      detailHtml += '<div class="dimension-row">';
+      detailHtml += '<span class="dim-name">' + r.name + '</span>';
+      detailHtml += '<div class="dim-bar-wrap"><div class="dim-bar" style="width:' + pct + '%"></div></div>';
+      detailHtml += '<span class="dim-score ' + cls + '">' + r.avg.toFixed(2) + '</span>';
+      detailHtml += '</div>';
+    });
+    document.getElementById('resultDetails').innerHTML = detailHtml;
+  }
+
+  document.getElementById('restartBtn').addEventListener('click', function(){
+    showScreen('intro');
+  });
+
+})();
+</script>
+</body>
+</html>
