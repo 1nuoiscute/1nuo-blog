@@ -1,4 +1,4 @@
----
+﻿---
 title: 测试
 date: 2026-05-09
 comments: false
@@ -14,7 +14,14 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
     </div>
     <div class="note-card-arrow">→</div>
   </a>
-  <a class="note-card" href="/测试/scl90/">
+  <a class="note-card" href="/测试/bingo/">
+    <div class="note-card-icon">🎯</div>
+    <div class="note-card-info">
+      <h2>Bingo 宾果</h2>
+      <p>5×5 格子 · 多种主题 · 连成线即赢</p>
+    </div>
+    <div class="note-card-arrow">→</div>
+  </a>  <a class="note-card" href="/测试/scl90/">
     <div class="note-card-icon">📋</div>
     <div class="note-card-info">
       <h2>SCL-90 症状自评量表</h2>
@@ -25,3 +32,4 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 </div>
 
 <link rel="stylesheet" href="/css/notes.css">
+
