@@ -1,6 +1,7 @@
----
+﻿---
 title: 计算机二级 NCRE 备考
 date: 2026-05-09
+comments: false
 top_img: https://img.1nuo.me/img/categoriesbanner.webp
 ---
 
@@ -43,3 +44,4 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 </div>
 
 <link rel="stylesheet" href="/css/notes.css">
+

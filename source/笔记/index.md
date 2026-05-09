@@ -1,6 +1,7 @@
----
+﻿---
 title: 笔记
 date: 2026-05-09
+comments: false
 top_img: https://img.1nuo.me/img/categoriesbanner.webp
 ---
 
@@ -47,3 +48,4 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 
 <link rel="stylesheet" href="/css/notes.css">
 <script src="/js/notes.js"></script>
+
