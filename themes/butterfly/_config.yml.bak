@@ -1,4 +1,4 @@
-﻿# --------------------------------------
+# --------------------------------------
 # Hexo Butterfly Theme Configuration
 # If you have any questions, please refer to the documentation
 # Chinese: https://butterfly.js.org/
@@ -21,9 +21,7 @@ menu:
   主页: / || fas fa-home
   分类: /categories/ || fas fa-folder-open
   标签: /tags/ ||  fas fa-tags
-  简报/笔记||fas fa-newspaper:
-       简报: /categories/AI简报/ || fas fa-newspaper
-       笔记: /笔记/ || fas fa-book
+  简报: /categories/AI简报/ || fas fa-newspaper
   评测: /rate/ || fas fa-rocket
   碎碎念: /shuoshuo/ || fas fa-comment-dots
   友链: /link/ || fas fa-link 
@@ -1163,5 +1161,4 @@ robotstxt:
     # waline_js:
 
     
-
 
