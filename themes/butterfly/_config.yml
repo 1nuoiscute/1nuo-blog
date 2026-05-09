@@ -21,7 +21,7 @@ menu:
   主页: / || fas fa-home
   分类: /categories/ || fas fa-folder-open
   标签: /tags/ ||  fas fa-tags
-  简报/笔记||fas fa-newspaper:
+  收纳||fas fa-boxes:
        简报: /categories/AI简报/ || fas fa-newspaper
        笔记: /笔记/ || fas fa-book
   评测: /rate/ || fas fa-rocket
@@ -1163,5 +1163,6 @@ robotstxt:
     # waline_js:
 
     
+
 
 
