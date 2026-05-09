@@ -3,39 +3,41 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1.0">
-<title>Bingo 宾果</title>
+<title>社会指数宾果游戏</title>
 <style>
 * { box-sizing:border-box; margin:0; padding:0; }
 body {
   font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;
   background:#f5f7fa; color:#2c3e50; min-height:100vh;
 }
-.container { max-width:520px; margin:0 auto; padding:16px 12px 40px; }
+.container { max-width:600px; margin:0 auto; padding:16px 12px 40px; }
 
-/* 顶部 */
-.header { text-align:center; margin-bottom:16px; }
-.header h1 { font-size:1.4em; margin-bottom:4px; }
-.header p { font-size:0.85em; color:#7f8c9b; }
-
-/* 主题切换 */
-.theme-bar { display:flex; gap:6px; flex-wrap:wrap; justify-content:center; margin-bottom:16px; }
-.theme-btn {
-  padding:6px 14px; border:1px solid #ddd; border-radius:999px; background:#fff;
-  cursor:pointer; font-size:0.8em; transition:all .2s;
+/* 标题区 */
+.header {
+  display:flex; margin-bottom:16px; background:#fff;
+  border-radius:14px; box-shadow:0 2px 12px rgba(0,0,0,.06); overflow:hidden;
 }
-.theme-btn.active { background:#49b1f5; color:#fff; border-color:#49b1f5; }
-.theme-btn:hover { border-color:#49b1f5; }
+.header-title {
+  flex:3; display:flex; align-items:center; justify-content:center;
+  padding:16px; font-size:1.3em; font-weight:700; text-align:center;
+}
+.header-desc {
+  flex:2; display:flex; align-items:center; justify-content:center;
+  padding:12px; font-size:0.78em; color:#7f8c9b; line-height:1.6;
+  border-left:1px solid #e8ecf1; text-align:center;
+}
 
 /* 棋盘 */
 .board {
   display:grid; grid-template-columns:repeat(5,1fr); gap:6px;
-  background:#fff; border-radius:14px; padding:12px; box-shadow:0 2px 12px rgba(0,0,0,.06);
+  background:#fff; border-radius:14px; padding:10px; box-shadow:0 2px 12px rgba(0,0,0,.06);
 }
 .cell {
   aspect-ratio:1; display:flex; align-items:center; justify-content:center;
-  text-align:center; font-size:0.75em; line-height:1.3; padding:4px;
+  text-align:center; font-size:0.72em; line-height:1.35; padding:6px 4px;
   border:2px solid #e8ecf1; border-radius:10px; cursor:pointer;
-  transition:all .2s; user-select:none; word-break:break-all;
+  transition:all .2s; user-select:none; word-break:break-word;
+  overflow:hidden;
 }
 .cell:hover { border-color:#49b1f5; }
 .cell.marked {
@@ -43,260 +45,129 @@ body {
 }
 .cell.bingo-line {
   background:#e74c3c; color:#fff; border-color:#e74c3c;
-  animation:pulse 0.6s ease-in-out infinite alternate;
+  animation:pulse .6s ease-in-out infinite alternate;
 }
-@keyframes pulse { from { transform:scale(1); } to { transform:scale(1.05); } }
-.cell.center { font-weight:700; font-size:0.9em; }
+@keyframes pulse { from{transform:scale(1)} to{transform:scale(1.04)} }
 
 /* 状态 */
 .status {
-  text-align:center; margin:16px 0; padding:12px;
+  text-align:center; margin:14px 0; padding:12px;
   background:#fff; border-radius:14px; box-shadow:0 2px 12px rgba(0,0,0,.06);
   font-size:0.9em; min-height:44px; display:flex; align-items:center; justify-content:center;
 }
-.status .count { font-weight:700; color:#49b1f5; font-size:1.2em; }
-
-/* 按钮 */
-.actions { display:flex; gap:8px; justify-content:center; margin-top:12px; }
 .btn {
-  padding:8px 24px; border:none; border-radius:999px; cursor:pointer;
-  font-size:0.85em; transition:all .2s;
+  display:block; margin:0 auto; padding:8px 28px; border:none; border-radius:999px;
+  background:#49b1f5; color:#fff; cursor:pointer; font-size:0.85em;
 }
-.btn-primary { background:#49b1f5; color:#fff; }
-.btn-primary:hover { background:#3498db; }
-.btn-secondary { background:#fff; border:1px solid #ddd; color:#555; }
-.btn-secondary:hover { border-color:#49b1f5; color:#49b1f5; }
+.btn:hover { background:#3498db; }
 
-/* 主菜单 */
-.screen { display:none; }
-.screen.active { display:block; }
-.menu {
-  text-align:center; padding:60px 20px; background:#fff;
-  border-radius:14px; box-shadow:0 2px 12px rgba(0,0,0,.06);
+@media (max-width:480px) {
+  .header { flex-direction:column; }
+  .header-desc { border-left:none; border-top:1px solid #e8ecf1; }
+  .cell { font-size:0.65em; padding:4px 2px; }
 }
-.menu h1 { font-size:1.6em; margin-bottom:8px; }
-.menu p { color:#7f8c9b; font-size:0.9em; margin-bottom:4px; }
 </style>
 </head>
 <body>
 <div class="container">
-
-<!-- 主菜单 -->
-<div id="menuScreen" class="screen active">
-  <div class="menu">
-    <h1>🎯 Bingo</h1>
-    <p>选择一个主题，开始你的宾果挑战！</p>
-    <p style="font-size:0.8em;color:#aaa;margin-top:12px;">点击格子标记，连成一条线即为胜利</p>
-    <div class="theme-bar" style="margin-top:24px;" id="menuThemes"></div>
-  </div>
-</div>
-
-<!-- 游戏页 -->
-<div id="gameScreen" class="screen">
+  <!-- 标题栏 -->
   <div class="header">
-    <h1 id="gameTitle">🎯 Bingo</h1>
-    <p id="gameSubtitle">点击格子标记，连成线即赢！</p>
+    <div class="header-title">社会指数宾果游戏</div>
+    <div class="header-desc">如果有其中一条线连起来，<br>你就不仅不社会，<br>还是完犊子的死宅社恐了</div>
   </div>
+
+  <!-- 棋盘 -->
   <div class="board" id="board"></div>
-  <div class="status" id="status">已标记：<span class="count" id="markCount">0</span> / 25</div>
-  <div class="actions">
-    <button class="btn btn-secondary" id="backBtn">← 返回</button>
-    <button class="btn btn-secondary" id="resetBtn">🔄 重置</button>
-  </div>
+
+  <!-- 状态 -->
+  <div class="status" id="status">点击格子标记，连成线即 Bingo！</div>
+
+  <button class="btn" id="resetBtn">🔄 重新开局</button>
 </div>
 
-</div>
 <script>
 (function(){
-  // 主题
-  const THEMES = {
-    "喜欢的作家": [
-      "村上春树","余华","王小波","东野圭吾","加缪",
-      "三毛","海子","张爱玲","博尔赫斯","鲁迅",
-      "🧩 小易","太宰治","金庸","JK罗琳","马尔克斯",
-      "毛姆","史铁生","刘慈欣","伍尔夫","卡夫卡",
-      "老舍","川端康成","莫言","顾城","钱钟书"
-    ],
-    "大学必做25事": [
-      "通宵复习","翘课一次","社团演出","食堂吐槽","拿一次奖学金",
-      "交到好朋友","参加竞赛","图书馆泡一天","和室友吵架又和好","谈一场恋爱",
-      "听一场讲座","做志愿者","蹭别的课","操场夜跑","喝酒喝到吐",
-      "加学生会","拍毕业照","选到热门课","挂科","跟老师顶嘴",
-      "实习","通宵打游戏","宿舍吃火锅","写入党申请","🎯 毕业"
-    ],
-    "番剧/动漫": [
-      "钢之炼金术师","进击的巨人","命运石之门","Clannad","EVA",
-      "Fate/Zero","魔法少女小圆","死亡笔记","反叛的鲁路修","银魂",
-      "虫师","夏目友人帐","星际牛仔","攻壳机动队","混沌武士",
-      "凉宫春日","物语系列","寒蝉鸣泣","未闻花名","Angel Beats",
-      "紫罗兰永恒花园","你的名字。","千与千寻","天空之城","🧩 入宅作"
-    ],
-    "年度Flag": [
-      "早睡早起","每天运动","读完20本书","学一门新语言","每周记账",
-      "不点外卖一个月","存钱","写日记","戒短视频","学会做饭",
-      "过四级/六级","拿驾照","减重5kg","每周给家人打电话","不买非必需品",
-      "坚持背单词100天","写12篇博客","学会游泳","断舍离","🎯 全通关"
-    ]
-  };
+  var CELLS = [
+    "不玩王者·吃鸡手游","不喜欢轰趴·KTV等娱乐场所","不玩抖音西瓜火山微信视频号等短视频","休息日很少出门","天天玩QQ",
+    "不玩微信朋友圈","没纹身过","没去过酒吧","不嚼槟榔","没追过星",
+    "异性朋友没有超过2个","没染过发","没去过按摩·大保健·洗脚等其中一个","一次也没赌博过","不喜欢追电视剧·综艺",
+    "觉得自己一个人出去吃饭完全没啥","没谈过恋爱","不抽烟","不喝酒","不自拍",
+    "很少运动","不喜欢聚会·团建","喜欢ACG","不会花时间化妆·打扮","疫情期间宅在家不会觉得无聊"
+  ];
 
-  var app = {
-    themeIdx: 0,
-    marked: {},
-    bingo: false
-  };
+  var marked = {};
+  var bingo = false;
 
-  var board = document.getElementById('board');
-  var status = document.getElementById('status');
-  var markCount = document.getElementById('markCount');
-  var gameTitle = document.getElementById('gameTitle');
-  var gameSubtitle = document.getElementById('gameSubtitle');
-
-  // 主题名数组
-  var themeNames = Object.keys(THEMES);
-
-  // 主菜单主题按钮
-  var menuThemes = document.getElementById('menuThemes');
-  themeNames.forEach(function(name, idx){
-    var btn = document.createElement('button');
-    btn.className = 'theme-btn';
-    btn.textContent = name;
-    btn.addEventListener('click', function(){
-      app.themeIdx = idx;
-      startGame();
-    });
-    menuThemes.appendChild(btn);
-  });
-
-  // 显示页面
-  function showScreen(id) {
-    document.querySelectorAll('.screen').forEach(function(s){
-      s.classList.toggle('active', s.id === id);
-    });
-  }
-
-  // 洗牌
-  function shuffle(arr) {
-    var a = arr.slice();
-    for (var i = a.length - 1; i > 0; i--) {
-      var j = Math.floor(Math.random() * (i + 1));
-      var tmp = a[i]; a[i] = a[j]; a[j] = tmp;
-    }
-    return a;
-  }
-
-  // 开始游戏
-  function startGame() {
-    var name = themeNames[app.themeIdx];
-    var items = shuffle(THEMES[name]);
-    // 中间放主题
-    items[12] = '🎯 ' + name;
-    app.items = items;
-    app.marked = {};
-    app.bingo = false;
-    gameTitle.textContent = '🎯 ' + name + ' Bingo';
-    gameSubtitle.textContent = '点击格子标记，连成一条线！';
-    showScreen('gameScreen');
-    renderBoard();
-  }
-
-  // 渲染
-  function renderBoard() {
+  function render() {
     var html = '';
     for (var i = 0; i < 25; i++) {
-      var isCenter = (i === 12);
-      var isMarked = app.marked[i];
       var cls = 'cell';
-      if (isCenter) cls += ' center';
-      if (isMarked) cls += ' marked';
-      if (isBingoCell(i)) cls += ' bingo-line';
-      html += '<div class="' + cls + '" data-i="' + i + '">' + app.items[i] + '</div>';
+      if (marked[i]) cls += ' marked';
+      if (bingo && isBingoCell(i)) cls += ' bingo-line';
+      html += '<div class="' + cls + '" data-i="' + i + '">' + CELLS[i] + '</div>';
     }
-    board.innerHTML = html;
+    document.getElementById('board').innerHTML = html;
 
-    // 点击
-    board.querySelectorAll('.cell').forEach(function(cell){
-      cell.addEventListener('click', function(){
+    document.querySelectorAll('.cell').forEach(function(el){
+      el.addEventListener('click', function(){
         var i = parseInt(this.dataset.i);
-        if (i === 12) return; // 中间固定
-        app.marked[i] = !app.marked[i];
+        marked[i] = !marked[i];
         checkBingo();
-        renderBoard();
+        render();
       });
     });
 
-    updateStatus();
+    var count = 0;
+    for (var k in marked) { if (marked[k]) count++; }
+    var status = document.getElementById('status');
+    if (bingo) {
+      status.innerHTML = '🎉 <strong>BINGO！</strong> 连成一条线了！你是不折不扣的死宅社恐 🤣';
+    } else {
+      status.innerHTML = '已标记 <strong>' + count + '</strong> 项 — 点击格子标记，连成线即 Bingo！';
+    }
   }
 
-  // 检查连线
   function checkBingo() {
-    app.bingo = false;
+    bingo = false;
     // 行
     for (var r = 0; r < 5; r++) {
       var win = true;
-      for (var c = 0; c < 5; c++) { if (!app.marked[r*5+c] && r*5+c !== 12) { win = false; break; } }
-      if (win) { app.bingo = true; return; }
+      for (var c = 0; c < 5; c++) { if (!marked[r*5+c]) { win = false; break; } }
+      if (win) { bingo = true; return; }
     }
     // 列
     for (var c = 0; c < 5; c++) {
       var win = true;
-      for (var r = 0; r < 5; r++) { if (!app.marked[r*5+c] && r*5+c !== 12) { win = false; break; } }
-      if (win) { app.bingo = true; return; }
+      for (var r = 0; r < 5; r++) { if (!marked[r*5+c]) { win = false; break; } }
+      if (win) { bingo = true; return; }
     }
     // 对角线
     var win = true;
-    for (var i = 0; i < 5; i++) { if (!app.marked[i*5+i] && i*5+i !== 12) { win = false; break; } }
-    if (win) { app.bingo = true; return; }
+    for (var i = 0; i < 5; i++) { if (!marked[i*5+i]) { win = false; break; } }
+    if (win) { bingo = true; return; }
     win = true;
-    for (var i = 0; i < 5; i++) { if (!app.marked[i*5+(4-i)] && i*5+(4-i) !== 12) { win = false; break; } }
-    if (win) { app.bingo = true; return; }
+    for (var i = 0; i < 5; i++) { if (!marked[i*5+(4-i)]) { win = false; break; } }
+    if (win) { bingo = true; return; }
   }
 
-  // 是否连线格
   function isBingoCell(idx) {
-    if (!app.bingo) return false;
-    if (idx === 12) return true;
-    var r = Math.floor(idx / 5), c = idx % 5;
+    if (!bingo) return false;
+    var r = Math.floor(idx/5), c = idx%5;
     // 行
-    var rowWin = true;
-    for (var cc = 0; cc < 5; cc++) { if (!app.marked[r*5+cc] && r*5+cc !== 12) { rowWin = false; break; } }
-    if (rowWin) return true;
+    var rw = true; for (var cc=0;cc<5;cc++) { if (!marked[r*5+cc]) { rw=false; break; } } if (rw) return true;
     // 列
-    var colWin = true;
-    for (var rr = 0; rr < 5; rr++) { if (!app.marked[rr*5+c] && rr*5+c !== 12) { colWin = false; break; } }
-    if (colWin) return true;
+    var cw = true; for (var rr=0;rr<5;rr++) { if (!marked[rr*5+c]) { cw=false; break; } } if (cw) return true;
     // 对角线
-    if (r === c) {
-      var diagWin = true;
-      for (var i = 0; i < 5; i++) { if (!app.marked[i*5+i] && i*5+i !== 12) { diagWin = false; break; } }
-      if (diagWin) return true;
-    }
-    if (r + c === 4) {
-      var diagWin = true;
-      for (var i = 0; i < 5; i++) { if (!app.marked[i*5+(4-i)] && i*5+(4-i) !== 12) { diagWin = false; break; } }
-      if (diagWin) return true;
-    }
+    if (r===c) { var dw=true; for(var i=0;i<5;i++){if(!marked[i*5+i]){dw=false;break;}} if(dw) return true; }
+    if (r+c===4) { var dw=true; for(var i=0;i<5;i++){if(!marked[i*5+(4-i)]){dw=false;break;}} if(dw) return true; }
     return false;
   }
 
-  function updateStatus() {
-    var count = 0;
-    for (var k in app.marked) { if (app.marked[k]) count++; }
-    markCount.textContent = count;
-    if (app.bingo) {
-      status.innerHTML = '🎉 <strong>BINGO！</strong> 你连成了一条线！';
-    } else {
-      status.innerHTML = '已标记：<span class="count">' + count + '</span> / 25';
-    }
-  }
-
-  document.getElementById('backBtn').addEventListener('click', function(){
-    showScreen('menuScreen');
-  });
-
   document.getElementById('resetBtn').addEventListener('click', function(){
-    startGame();
+    marked = {}; bingo = false; render();
   });
 
+  render();
 })();
 </script>
 </body>
