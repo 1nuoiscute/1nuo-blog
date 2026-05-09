@@ -28,7 +28,7 @@ category_dir: categories
 code_dir: downloads/code
 i18n_dir: :lang
 skip_render:
-  - "sbti/**"
+  - "测试/sbti/**"
   - "rate/admin/**"
   - "rate/rateimg/**"
 
@@ -122,6 +122,7 @@ hide_posts:
   allowlist_generators: ['category', 'archive', 'tag'] 
   blocklist_generators: ['index']
   
+
 
 
 
