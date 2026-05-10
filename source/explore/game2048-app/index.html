@@ -192,5 +192,71 @@ function start(){g=new G();}
 if(document.readyState==='complete'||document.readyState==='interactive'){start()}else{document.addEventListener('DOMContentLoaded',start)}
 window.addEventListener('resize',function(){if(g&&!g.o){g.r()}});
 </script>
+
+<!-- 排行榜 -->
+<div class="lb" id="lb">
+  <div class="lb-h" onclick="var n=document.getElementById('lb-body');n.style.display=n.style.display==='none'?'block':'none'">🏆 排行榜 <span id="lb-toggle">展开</span></div>
+  <div id="lb-body" style="display:none">
+    <div id="lb-list">加载中...</div>
+  </div>
+</div>
+
+<style>
+.lb{margin-top:20px;text-align:left;width:100%;max-width:400px}
+.lb-h{font-size:15px;font-weight:600;cursor:pointer;padding:10px 0;color:#1c1917;display:flex;justify-content:space-between;align-items:center;-webkit-user-select:none;user-select:none}
+.lb-h span{font-weight:400;font-size:12px;color:#a8a29e}
+.lb-item{display:flex;align-items:center;padding:6px 8px;border-radius:6px;margin:2px 0;font-size:13px;gap:6px}
+.lb-item:nth-child(1){background:#fff8e1;font-weight:600}
+.lb-item:nth-child(2){background:#f5f5f5}
+.lb-item:nth-child(3){background:#faf0e6}
+.lb-rank{font-size:11px;min-width:18px;color:#a8a29e;font-weight:500}
+.lb-name{flex:1;font-weight:500;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-score{font-weight:600;color:#5A82B8}
+.lb-date{font-size:11px;color:#a8a29e;min-width:55px;text-align:right}
+</style>
+
+<script>
+// 加载排行榜
+fetch('https://status.1nuo.me/leaderboard')
+  .then(r=>r.json())
+  .then(data=>{
+    if(!data||!data.length){document.getElementById('lb-list').innerHTML='<div style="padding:12px;color:#a8a29e;font-size:13px">暂无记录，来玩一局吧 🎮</div>';return;}
+    var html='';data.forEach(function(item,i){
+      html+='<div class="lb-item"><span class="lb-rank">#'+(i+1)+'</span><span class="lb-name">'+item.name+'</span><span class="lb-score">'+item.score+'</span><span class="lb-date">'+item.date.slice(5)+'</span></div>';
+    });
+    document.getElementById('lb-list').innerHTML=html;
+  })
+  .catch(function(){document.getElementById('lb-list').innerHTML='<div style="padding:12px;color:#a8a29e;font-size:13px">加载失败</div>';});
+
+// 提交分数
+var origOver=g.over;
+g.over=function(t,m){
+  origOver.call(this,t,m);
+  if(this.s>0){
+    setTimeout(function(){
+      var overlay=document.getElementById('go');
+      var input=document.createElement('div');
+      input.style.cssText='margin-top:12px;display:flex;gap:6px;align-items:center;justify-content:center;width:100%';
+      input.innerHTML='<input id="lb-input" placeholder="输入昵称" maxlength="8" style="width:100px;padding:6px 10px;border:1px solid #e7e5e4;border-radius:6px;font-size:13px;outline:none"><button onclick="submitScore()" style="padding:6px 14px;background:#1c1917;color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer">提交</button>';
+      overlay.appendChild(input);
+    },300);
+  }
+};
+
+function submitScore(){
+  var name=document.getElementById('lb-input').value.trim()||'匿名';
+  fetch('https://status.1nuo.me/leaderboard',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({name:name,score:g.s,maxTile:g.s})
+  }).then(function(){
+    document.getElementById('lb-list').innerHTML='<div style="padding:12px;color:#166534;font-size:13px">✅ 已提交！刷新页面查看排名</div>';
+    location.reload();
+  }).catch(function(){
+    document.getElementById('lb-list').innerHTML='<div style="padding:12px;color:#ef4444;font-size:13px">❌ 提交失败</div>';
+  });
+}
+</script>
+
 </body>
 </html>
