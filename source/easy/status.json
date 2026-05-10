@@ -1,6 +1,6 @@
 {
   "online": true,
-  "lastUpdated": "2026-05-10T06:47:34.220Z",
+  "lastUpdated": "2026-05-10T06:50:25.103Z",
   "model": "DeepSeek V4 Flash",
   "tokenUsed": 175000,
   "tokenLimit": 1000000,
@@ -24,6 +24,10 @@
     "openclaw-auto-updater"
   ],
   "recentLogs": [
+    {
+      "time": "05-10 14:47",
+      "msg": "chore: update status data [skip ci]"
+    },
     {
       "time": "05-10 14:44",
       "msg": "fix: remove BOM from status.json"
@@ -51,10 +55,6 @@
     {
       "time": "05-10 10:35",
       "msg": "fix: show only active token session, list all 66 skills on dashboard"
-    },
-    {
-      "time": "05-10 10:33",
-      "msg": "hide: remove dashboard from public menu, keep at /easy/ (private URL only)"
     }
   ]
 }
