@@ -70,7 +70,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;color:var(--text);line-heigh
 
   <!-- Token 用量 -->
   <div class="section">
-    <div class="section-title">🔋 Token 用量 <small>当前会话</small></div>
+    <div class="section-title">🔋 Token 用量 <small>当前对话</small></div>
     <div class="grid-2" id="token-grid">
       <div class="loading">加载中...</div>
     </div>
@@ -78,23 +78,9 @@ body{font-family:'DM Sans',-apple-system,sans-serif;color:var(--text);line-heigh
 
   <!-- 技能 -->
   <div class="section">
-    <div class="section-title">🧰 技能 <small>13 个 · 全部自写</small></div>
+    <div class="section-title">🧰 技能 <small>66 个 · 13 自写 + 53 内置</small></div>
     <div class="card">
-      <div class="skill-list" id="skill-list">
-        <span class="skill-tag self">feishu</span>
-        <span class="skill-tag self">frontend-design-pro</span>
-        <span class="skill-tag self">gi-summarize</span>
-        <span class="skill-tag self">humanize</span>
-        <span class="skill-tag self">lossless-claw</span>
-        <span class="skill-tag self">my-find-skills</span>
-        <span class="skill-tag self">openclaw-auto-updater</span>
-        <span class="skill-tag self">openclaw-cli</span>
-        <span class="skill-tag self">openclaw-tavily-search</span>
-        <span class="skill-tag self">self-improving-agent</span>
-        <span class="skill-tag self">skill-vetter</span>
-        <span class="skill-tag self">todo-tracker-safe</span>
-        <span class="skill-tag self">yaml-safe-edit</span>
-      </div>
+      <div class="skill-list" id="skill-list"></div>
     </div>
   </div>
 
@@ -148,31 +134,39 @@ function escapeHtml(text) {
   return d.innerHTML;
 }
 
-// Token 用量（从 OpenClaw session 数据）
-var tokenData = [
-  {name:'当前对话',used:'175k',total:'1000k',pct:17,cache:95},
-  {name:'主会话',used:'22k',total:'1000k',pct:2,cache:0},
-  {name:'定时任务',used:'27k',total:'1000k',pct:3,cache:63},
-  {name:'讨论组',used:'411k',total:'1000k',pct:41,cache:98}
-];
+// Token 用量（当前活跃会话）
 var tokenGrid = document.getElementById('token-grid');
-tokenGrid.innerHTML = '';
-tokenData.forEach(function(t){
-  var barW = Math.min(t.pct, 100);
-  tokenGrid.innerHTML +=
-    '<div class="card">'+
-      '<div class="card-label">'+t.name+'</div>'+
-      '<div style="display:flex;align-items:baseline;gap:8px">'+
-        '<span class="card-value">'+t.used+'</span>'+
-        '<span style="font-size:13px;color:var(--muted)">/ '+t.total+'</span>'+
-      '</div>'+
-      '<div style="margin-top:8px;height:4px;background:#f0f0f0;border-radius:2px;overflow:hidden">'+
-        '<div style="height:100%;width:'+barW+'%;background:'+(t.pct>80?'var(--err)':t.pct>50?'var(--warn)':'var(--accent)')+';border-radius:2px;transition:width .5s ease"></div>'+
-      '</div>'+
-      '<div style="display:flex;justify-content:space-between;margin-top:4px">'+
-        '<span style="font-size:11px;color:var(--muted)">'+t.pct+'%</span>'+
-        (t.cache?'<span style="font-size:11px;color:var(--muted)">🗄️ '+t.cache+'% 缓存命中</span>':'')+
-      '</div>'+
-    '</div>';
+tokenGrid.innerHTML = 
+  '<div class="card">'+
+    '<div class="card-label">飞书私聊 · 小易</div>'+
+    '<div style="display:flex;align-items:baseline;gap:8px">'+
+      '<span class="card-value">175k</span>'+
+      '<span style="font-size:13px;color:var(--muted)">/ 1000k</span>'+
+    '</div>'+
+    '<div style="margin-top:8px;height:4px;background:#f0f0f0;border-radius:2px;overflow:hidden">'+
+      '<div style="height:100%;width:17%;background:var(--accent);border-radius:2px"></div>'+
+    '</div>'+
+    '<div style="display:flex;justify-content:space-between;margin-top:4px">'+
+      '<span style="font-size:11px;color:var(--muted)">17%</span>'+
+      '<span style="font-size:11px;color:var(--muted)">🗄️ 95% 缓存</span>'+
+    '</div>'+
+  '</div>'+
+  '<div class="card">'+
+    '<div class="card-label">模型</div>'+
+    '<div class="card-value" style="font-size:18px">DeepSeek V4 Flash</div>'+
+    '<div class="card-sub">当前对话用满自动切换</div>'+
+  '</div>';
+
+// 技能列表
+var selfSkills = ['feishu','frontend-design-pro','gi-summarize','humanize','lossless-claw','my-find-skills','openclaw-auto-updater','openclaw-cli','openclaw-tavily-search-0-1-0','self-improving-agent','skill-vetter','todo-tracker-safe','yaml-safe-edit'];
+var allSkills = ['1password','apple-notes','apple-reminders','bear-notes','blogwatcher','blucli','bluebubbles','camsnap','canvas','clawhub','coding-agent','discord','eightctl','feishu','frontend-design-pro','gemini','gh-issues','gifgrep','gi-summarize','github','gog','goplaces','healthcheck','himalaya','humanize','imsg','lossless-claw','mcporter','model-usage','my-find-skills','nano-pdf','node-connect','notion','obsidian','openai-whisper','openai-whisper-api','openclaw-auto-updater','openclaw-cli','openclaw-tavily-search-0-1-0','openhue','oracle','ordercli','peekaboo','sag','self-improving-agent','session-logs','sherpa-onnx-tts','skill-creator','skill-vetter','slack','songsee','sonoscli','spotify-player','summarize','taskflow','taskflow-inbox-triage','things-mac','tmux','todo-tracker-safe','trello','video-frames','voice-call','wacli','weather','xurl','yaml-safe-edit'];
+var skillList = document.getElementById('skill-list');
+skillList.innerHTML = '';
+allSkills.forEach(function(s){
+  var isSelf = selfSkills.indexOf(s) !== -1;
+  var el = document.createElement('span');
+  el.className = 'skill-tag' + (isSelf ? ' self' : '');
+  el.textContent = s;
+  skillList.appendChild(el);
 });
 </script>
