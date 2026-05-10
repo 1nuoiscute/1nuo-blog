@@ -78,7 +78,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;color:var(--text);line-heigh
 
   <!-- 技能 -->
   <div class="section">
-    <div class="section-title">🧰 技能 <small>安装列表</small></div>
+    <div class="section-title">🧰 常用技能 <small>实际启用的</small></div>
     <div class="card">
       <div class="skill-list" id="skill-list"></div>
     </div>
@@ -157,16 +157,29 @@ tokenGrid.innerHTML =
     '<div class="card-sub">当前对话用满自动切换</div>'+
   '</div>';
 
-// 技能列表
-var selfSkills = ['feishu','frontend-design-pro','gi-summarize','humanize','lossless-claw','my-find-skills','openclaw-auto-updater','openclaw-cli','openclaw-tavily-search-0-1-0','self-improving-agent','skill-vetter','todo-tracker-safe','yaml-safe-edit'];
-var allSkills = ['1password','apple-notes','apple-reminders','bear-notes','blogwatcher','blucli','bluebubbles','camsnap','canvas','clawhub','coding-agent','discord','eightctl','feishu','frontend-design-pro','gemini','gh-issues','gifgrep','gi-summarize','github','gog','goplaces','healthcheck','himalaya','humanize','imsg','lossless-claw','mcporter','model-usage','my-find-skills','nano-pdf','node-connect','notion','obsidian','openai-whisper','openai-whisper-api','openclaw-auto-updater','openclaw-cli','openclaw-tavily-search-0-1-0','openhue','oracle','ordercli','peekaboo','sag','self-improving-agent','session-logs','sherpa-onnx-tts','skill-creator','skill-vetter','slack','songsee','sonoscli','spotify-player','summarize','taskflow','taskflow-inbox-triage','things-mac','tmux','todo-tracker-safe','trello','video-frames','voice-call','wacli','weather','xurl','yaml-safe-edit'];
+// 技能列表（实际在用的，不是所有已安装的）
+var activeSkills = [
+  {name:'feishu',desc:'飞书消息通道 · 日常对话'},
+  {name:'github',desc:'Git 操作 · 推送代码/PR'},
+  {name:'frontend-design-pro',desc:'前端设计审查 · 美化优化'},
+  {name:'gi-summarize',desc:'文本摘要 · 提炼要点'},
+  {name:'humanize',desc:'去 AI 味 · 改写得更自然'},
+  {name:'lossless-claw',desc:'对话记忆 · 信息蒸馏'},
+  {name:'openclaw-cli',desc:'OpenClaw 命令行操作'},
+  {name:'self-improving-agent',desc:'错误学习 · 自我改进'},
+  {name:'yaml-safe-edit',desc:'YAML 安全编辑 · 防踩坑'},
+  {name:'skill-creator',desc:'创建/编辑技能文件'},
+  {name:'my-find-skills',desc:'搜索安装新技能'},
+  {name:'weather',desc:'天气查询'},
+  {name:'taskflow',desc:'后台任务编排'},
+  {name:'openclaw-auto-updater',desc:'自动更新管理'}
+];
 var skillList = document.getElementById('skill-list');
 skillList.innerHTML = '';
-allSkills.forEach(function(s){
-  var isSelf = selfSkills.indexOf(s) !== -1;
-  var el = document.createElement('span');
-  el.className = 'skill-tag' + (isSelf ? ' self' : '');
-  el.textContent = s;
+activeSkills.forEach(function(s){
+  var el = document.createElement('div');
+  el.style.cssText = 'display:flex;flex-direction:column;gap:2px;padding:8px 12px;border-radius:8px;background:var(--accent-soft);min-width:140px;flex:1';
+  el.innerHTML = '<div style="font-weight:600;font-size:13px;color:var(--accent)">'+s.name+'</div><div style="font-size:12px;color:var(--muted)">'+s.desc+'</div>';
   skillList.appendChild(el);
 });
 </script>
