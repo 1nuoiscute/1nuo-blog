@@ -8,6 +8,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 <div class="test-tabs">
   <button class="tab-btn active" data-tab="tests">🧪 测试</button>
   <button class="tab-btn" data-tab="bingo">🎯 Bingo</button>
+  <button class="tab-btn" data-tab="games">🎮 小游戏</button>
   <button class="tab-btn" data-tab="draw">🎋 好运</button>
 </div>
 
@@ -71,6 +72,19 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
       <div class="card-body">
         <div class="card-title">Shiny 青春 BINGO</div>
         <div class="card-desc">五个连成一线，说明你度过了一个闪耀的青春</div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
+  </div>
+</div>
+
+<div class="tab-content" id="tab-games" style="display:none">
+  <div class="card-list">
+    <a class="card-item" href="/explore/game2048/">
+      <div class="card-icon">🔢</div>
+      <div class="card-body">
+        <div class="card-title">2048</div>
+        <div class="card-desc">经典数字合成游戏，拼出 2048 吧！</div>
       </div>
       <div class="card-arrow">→</div>
     </a>

@@ -35,6 +35,7 @@ skip_render:
   - "explore/bingo5-app/**"
   - "explore/draw-app/**"
   - "explore/tarot-app/**"
+  - "explore/game2048-app/**"
   - "rate/admin/**"
   - "rate/rateimg/**"
 # Writing
