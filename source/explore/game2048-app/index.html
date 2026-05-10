@@ -20,10 +20,10 @@ body{font-family:'DM Sans',-apple-system,system-ui,sans-serif;background:transpa
 .btn-primary{background:#1c1917;color:#fff;border-color:#1c1917}
 .btn-primary:hover{opacity:.85;background:#1c1917;border-color:#1c1917}
 .game-container{position:relative;width:100%;aspect-ratio:1;background:#bbada0;border-radius:12px;padding:8px;touch-action:none;overflow:hidden}
-.grid-bg{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);gap:8px;width:100%;height:100%;position:absolute;inset:0;padding:8px;pointer-events:none}
-.grid-bg .cell{background:rgba(238,228,218,.35);border-radius:6px}
-.tile-layer{position:absolute;inset:0;padding:8px;pointer-events:none}
-.tile{position:absolute;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:32px;z-index:2;transition:left .1s ease,top .1s ease;will-change:left,top}
+.grid-layer{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);gap:8px;width:100%;height:100%;position:absolute;inset:0;padding:8px}
+.grid-cell{background:rgba(238,228,218,.35);border-radius:6px;position:relative}
+.tile-cell{position:relative;display:flex;align-items:center;justify-content:center}
+.tile{width:100%;height:100%;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:32px}
 .tile-2{background:#eee4da;color:#776e65}
 .tile-4{background:#ede0c8;color:#776e65}
 .tile-8{background:#f2b179;color:#f9f6f2}
@@ -37,7 +37,7 @@ body{font-family:'DM Sans',-apple-system,system-ui,sans-serif;background:transpa
 .tile-2048{background:#edc22e;color:#f9f6f2;font-size:22px}
 .tile-super{background:#3c3a32;color:#f9f6f2;font-size:22px}
 @keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
-.tile-pop{animation:pop .2s ease}
+.tile-pop{z-index:3;animation:pop .2s ease}
 @keyframes appear{0%{transform:scale(0);opacity:0}50%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
 .tile-new{animation:appear .18s ease-out}
 .game-over-overlay{position:absolute;inset:0;background:rgba(238,228,218,.73);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;opacity:0;pointer-events:none;transition:opacity .3s ease}
@@ -62,8 +62,7 @@ body{font-family:'DM Sans',-apple-system,system-ui,sans-serif;background:transpa
     <button class="btn" onclick="g.undo()">↩ 撤销</button>
   </div>
   <div class="game-container" id="gc">
-    <div class="grid-bg"></div>
-    <div class="tile-layer" id="tl"></div>
+    <div class="grid-layer" id="gl"></div>
     <div class="game-over-overlay" id="go">
       <h2 id="rt">游戏结束</h2>
       <p id="rm">再试一次吧</p>
@@ -105,7 +104,6 @@ class G{
     const {r,c}=e[Math.floor(Math.random()*e.length)];
     this.g[r][c]={i:this.n++,v:Math.random()<.9?2:4,n:true};
   }
-  // Slide and merge a line of 4 tiles (as array, leftwards)
   slide(line){
     const tiles=line.filter(t=>t!==0);
     const out=[];const merged=new Set();let gained=0;
@@ -115,31 +113,23 @@ class G{
         out.push({i:this.n++,v:nv,m:[tiles[i].i,tiles[i+1].i]});
         merged.add(tiles[i].i);merged.add(tiles[i+1].i);
         gained+=nv;i++;
-      }else{
-        out.push(tiles[i]);
-      }
+      }else{out.push(tiles[i]);}
     }
     while(out.length<S)out.push(0);
     return {out,merged,gained};
   }
   m(dir){
     if(this.o)return;
-    // Save
     this.u.push({g:this.g.map(r=>r.map(t=>t?{...t}:0)),s:this.s,w:this.w});
     let moved=false;let totalGained=0;
-    const getRow=(g,r)=>g[r];
-    const setRow=(g,r,row)=>g[r]=row;
-    const getCol=(g,c)=>g.map(row=>row[c]);
-    const setCol=(g,c,col)=>{for(let r=0;r<S;r++)g[r][c]=col[r];};
     const rev=(a)=>[...a].reverse();
     for(let i=0;i<S;i++){
       let line;
-      if(dir===0||dir===2){line=getRow(this.g,i);if(dir===2)line=rev(line);}
-      else{line=getCol(this.g,i);if(dir===3)line=rev(line);}
-      const {out,merged,gained}=this.slide(line);
+      if(dir===0||dir===2){line=this.g[i];if(dir===2)line=rev(line);}
+      else{line=this.g.map(r=>r[i]);if(dir===3)line=rev(line);}
+      const {out,gained}=this.slide(line);
       let result=out;
       if(dir===2||dir===3)result=rev(result);
-      // Check if row actually changed
       let changed=false;
       for(let j=0;j<S;j++){
         const ov=line[j]?line[j].v:0;
@@ -149,8 +139,8 @@ class G{
       }
       if(changed){
         moved=true;
-        if(dir===0||dir===2)setRow(this.g,i,result);
-        else setCol(this.g,i,result);
+        if(dir===0||dir===2)this.g[i]=result;
+        else for(let r=0;r<S;r++)this.g[r][i]=result[r];
         totalGained+=gained;
       }
     }
@@ -175,30 +165,23 @@ class G{
     document.getElementById('go').classList.remove('show');this.r();
   }
   restart(){this.init();this.r();document.getElementById('go').classList.remove('show');}
-  pos(r,c){
-    const sz=document.getElementById('gc').offsetWidth;
-    const avail=sz-PAD*2-GAP*3,ts=avail/4;
-    return{x:PAD+c*(ts+GAP),y:PAD+r*(ts+GAP),s:ts};
-  }
   r(){
-    const tl=document.getElementById('tl');const gc=document.getElementById('gc');
-    const sz=Math.max(gc.offsetWidth||400,200);
-    const avail=Math.max(sz-PAD*2-GAP*3,100);const ts=avail/4;
-    tl.innerHTML='';
-    // First pass: render all non-new tiles (for position animation via CSS transition)
+    const gl=document.getElementById('gl');
+    // Build grid cells
+    gl.innerHTML='';
     for(let r=0;r<S;r++)for(let c=0;c<S;c++){
+      const cell=document.createElement('div');cell.className='grid-cell';
       const t=this.g[r][c];
-      if(!t)continue;
-      const el=document.createElement('div');
-      let cls='tile';
-      if(t.v<=2048)cls+=' tile-'+t.v;else cls+=' tile-super';
-      el.className=cls;el.textContent=t.v;
-      const px=PAD+c*(ts+GAP),py=PAD+r*(ts+GAP);
-      el.style.width=ts+'px';el.style.height=ts+'px';
-      el.style.left=px+'px';el.style.top=py+'px';
-      tl.appendChild(el);
-      if(t.n){el.classList.add('tile-new');t.n=false;}
-      if(t.m){setTimeout(()=>{el.classList.add('tile-pop');},120);delete t.m;}
+      if(t){
+        const tile=document.createElement('div');
+        let cls='tile';
+        if(t.v<=2048)cls+=' tile-'+t.v;else cls+=' tile-super';
+        tile.className=cls;tile.textContent=t.v;
+        cell.appendChild(tile);
+        if(t.n){tile.classList.add('tile-new');t.n=false;}
+        if(t.m){setTimeout(()=>{tile.classList.add('tile-pop');},50);delete t.m;}
+      }
+      gl.appendChild(cell);
     }
     document.getElementById('score').textContent=this.s;
     document.getElementById('best').textContent=this.b;
