@@ -1,1 +1,60 @@
-{"online":true,"model":"DeepSeek V4 Flash","tokenUsed":175000,"tokenLimit":1000000,"tokenPercent":17,"cacheRate":95,"channel":"Feishu","skills":["feishu","github","frontend-design-pro","gi-summarize","humanize","lossless-claw","openclaw-cli","self-improving-agent","yaml-safe-edit","skill-creator","my-find-skills","weather","taskflow","openclaw-auto-updater"],"recentLogs":[{"time":"14:45","msg":"fix BOM + instance sync"}]}
+{
+  "online": true,
+  "lastUpdated": "2026-05-10T06:47:34.220Z",
+  "model": "DeepSeek V4 Flash",
+  "tokenUsed": 175000,
+  "tokenLimit": 1000000,
+  "tokenPercent": 17,
+  "cacheRate": 95,
+  "channel": "Feishu",
+  "skills": [
+    "feishu",
+    "github",
+    "frontend-design-pro",
+    "gi-summarize",
+    "humanize",
+    "lossless-claw",
+    "openclaw-cli",
+    "self-improving-agent",
+    "yaml-safe-edit",
+    "skill-creator",
+    "my-find-skills",
+    "weather",
+    "taskflow",
+    "openclaw-auto-updater"
+  ],
+  "recentLogs": [
+    {
+      "time": "05-10 14:44",
+      "msg": "fix: remove BOM from status.json"
+    },
+    {
+      "time": "05-10 14:31",
+      "msg": "chore: add status.json for dashboard persistence"
+    },
+    {
+      "time": "05-10 03:56",
+      "msg": "chore(spy): update daily intelligence data [skip ci]"
+    },
+    {
+      "time": "05-10 10:49",
+      "msg": "remove: delete dashboard page, keeping static site clean"
+    },
+    {
+      "time": "05-10 10:47",
+      "msg": "fix: list only active skills with Chinese descriptions on dashboard"
+    },
+    {
+      "time": "05-10 10:36",
+      "msg": "fix: remove skill counts from dashboard title"
+    },
+    {
+      "time": "05-10 10:35",
+      "msg": "fix: show only active token session, list all 66 skills on dashboard"
+    },
+    {
+      "time": "05-10 10:33",
+      "msg": "hide: remove dashboard from public menu, keep at /easy/ (private URL only)"
+    }
+  ]
+}
