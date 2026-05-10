@@ -1,0 +1,32 @@
+﻿{
+    "online":  true,
+    "skills":  [
+                   "feishu",
+                   "github",
+                   "frontend-design-pro",
+                   "gi-summarize",
+                   "humanize",
+                   "lossless-claw",
+                   "openclaw-cli",
+                   "self-improving-agent",
+                   "yaml-safe-edit",
+                   "skill-creator",
+                   "my-find-skills",
+                   "weather",
+                   "taskflow",
+                   "openclaw-auto-updater"
+               ],
+    "lastUpdated":  "2026-05-10T14:30:32Z",
+    "tokenUsed":  175000,
+    "tokenLimit":  1000000,
+    "cacheRate":  95,
+    "channel":  "Feishu",
+    "model":  "DeepSeek V4 Flash",
+    "tokenPercent":  17,
+    "recentLogs":  [
+                       {
+                           "time":  "14:30",
+                           "msg":  "fix: persistent storage via git"
+                       }
+                   ]
+}
