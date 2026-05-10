@@ -181,8 +181,8 @@ class G{
     return{x:PAD+c*(ts+GAP),y:PAD+r*(ts+GAP),s:ts};
   }
   r(){
-    const tl=document.getElementById('tl');const rect=document.getElementById('gc').getBoundingClientRect();
-    const sz=Math.min(rect.width,rect.height);
+    const tl=document.getElementById('tl');const gc=document.getElementById('gc');
+    const sz=gc.offsetWidth||Math.min(gc.getBoundingClientRect().width,400)||400;
     const avail=sz-PAD*2-GAP*3,ts=avail/4;
     tl.innerHTML='';
     // First pass: render all non-new tiles (for position animation via CSS transition)
@@ -204,7 +204,10 @@ class G{
     document.getElementById('best').textContent=this.b;
   }
 }
-const g=new G();
+let g;
+function start(){g=new G();}
+if(document.readyState==='complete'||document.readyState==='interactive'){start()}else{document.addEventListener('DOMContentLoaded',start)}
+window.addEventListener('resize',function(){if(g&&!g.o){g.r()}});
 </script>
 </body>
 </html>
