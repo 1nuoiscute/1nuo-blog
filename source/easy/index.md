@@ -78,7 +78,7 @@ body{font-family:'DM Sans',-apple-system,sans-serif;color:var(--text);line-heigh
 
   <!-- 技能 -->
   <div class="section">
-    <div class="section-title">🧰 技能 <small>66 个 · 13 自写 + 53 内置</small></div>
+    <div class="section-title">🧰 技能 <small>安装列表</small></div>
     <div class="card">
       <div class="skill-list" id="skill-list"></div>
     </div>
