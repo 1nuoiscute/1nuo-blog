@@ -124,18 +124,18 @@ class G{
     let moved=false;let totalGained=0;
     const rev=(a)=>[...a].reverse();
     for(let i=0;i<S;i++){
-      let line;
-      if(dir===0||dir===2){line=this.g[i];if(dir===2)line=rev(line);}
-      else{line=this.g.map(r=>r[i]);if(dir===3)line=rev(line);}
+      let line,orig;
+      if(dir===0||dir===2){orig=[...this.g[i]];line=orig;if(dir===2)line=rev(line);}
+      else{orig=this.g.map(r=>r[i]);line=orig;if(dir===3)line=rev(line);}
       const {out,gained}=this.slide(line);
       let result=out;
       if(dir===2||dir===3)result=rev(result);
       let changed=false;
       for(let j=0;j<S;j++){
-        const ov=line[j]?line[j].v:0;
+        const ov=orig[j]?orig[j].v:0;
         const nv=result[j]?result[j].v:0;
         if(ov!==nv){changed=true;break;}
-        if(line[j]&&result[j]&&line[j].i!==result[j].i){changed=true;break;}
+        if(orig[j]&&result[j]&&orig[j].i!==result[j].i){changed=true;break;}
       }
       if(changed){
         moved=true;
