@@ -228,20 +228,24 @@ fetch('https://status.1nuo.me/leaderboard')
   })
   .catch(function(){document.getElementById('lb-list').innerHTML='<div style="padding:12px;color:#a8a29e;font-size:13px">加载失败</div>';});
 
-// 提交分数
-var origOver=g.over;
-g.over=function(t,m){
-  origOver.call(this,t,m);
-  if(this.s>0){
-    setTimeout(function(){
-      var overlay=document.getElementById('go');
-      var input=document.createElement('div');
-      input.style.cssText='margin-top:12px;display:flex;gap:6px;align-items:center;justify-content:center;width:100%';
-      input.innerHTML='<input id="lb-input" placeholder="输入昵称" maxlength="8" style="width:100px;padding:6px 10px;border:1px solid #e7e5e4;border-radius:6px;font-size:13px;outline:none"><button onclick="submitScore()" style="padding:6px 14px;background:#1c1917;color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer">提交</button>';
-      overlay.appendChild(input);
-    },300);
-  }
-};
+// 提交分数（等游戏初始化完再覆写）
+function setupLeaderboard(){
+  if(!g||!g.over){setTimeout(setupLeaderboard,100);return;}
+  var origOver=g.over;
+  g.over=function(t,m){
+    origOver.call(this,t,m);
+    if(this.s>0){
+      setTimeout(function(){
+        var overlay=document.getElementById('go');
+        var input=document.createElement('div');
+        input.style.cssText='margin-top:12px;display:flex;gap:6px;align-items:center;justify-content:center;width:100%';
+        input.innerHTML='<input id="lb-input" placeholder="输入昵称" maxlength="8" style="width:100px;padding:6px 10px;border:1px solid #e7e5e4;border-radius:6px;font-size:13px;outline:none"><button onclick="submitScore()" style="padding:6px 14px;background:#1c1917;color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer">提交</button>';
+        overlay.appendChild(input);
+      },300);
+    }
+  };
+}
+setupLeaderboard();
 
 function submitScore(){
   var name=document.getElementById('lb-input').value.trim()||'匿名';
