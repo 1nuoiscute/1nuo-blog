@@ -6,7 +6,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 ---
 
 <div class="note-collections">
-  <a class="note-card" href="/笔记/计算机二级/C-SPECIAL/">
+  <a class="note-card" href="/notes/NCRE2/C-SPECIAL/">
     <div class="note-card-icon">💻</div>
     <div class="note-card-info">
       <h2>C 语言专项</h2>
@@ -15,7 +15,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
     <div class="note-card-arrow">→</div>
   </a>
 
-  <a class="note-card" href="/笔记/计算机二级/数据结构与算法/">
+  <a class="note-card" href="/notes/NCRE2/ds-algo/">
     <div class="note-card-icon">📊</div>
     <div class="note-card-info">
       <h2>数据结构与算法</h2>
@@ -24,7 +24,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
     <div class="note-card-arrow">→</div>
   </a>
 
-  <a class="note-card" href="/笔记/计算机二级/实操/">
+  <a class="note-card" href="/notes/NCRE2/practice/">
     <div class="note-card-icon">🔧</div>
     <div class="note-card-info">
       <h2>实操</h2>
@@ -33,7 +33,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
     <div class="note-card-arrow">→</div>
   </a>
 
-  <a class="note-card" href="/笔记/计算机二级/纯背/">
+  <a class="note-card" href="/notes/NCRE2/theory/">
     <div class="note-card-icon">📝</div>
     <div class="note-card-info">
       <h2>纯背</h2>

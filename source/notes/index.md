@@ -29,7 +29,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
   <div class="note-collections" id="note-list">
     <!-- NCRE 备考 -->
     <div class="note-card" data-tags="备考经历" data-date="2026-05-09" data-title="计算机二级 NCRE 备考" data-desc="C 语言程序设计 · 数据结构与算法 · 上机实操 · 理论背诵">
-      <a href="/笔记/计算机二级/" class="note-card-inner">
+      <a href="/notes/NCRE2/" class="note-card-inner">
         <div class="note-card-icon">🏅</div>
         <div class="note-card-info">
           <h2>计算机二级 NCRE 备考</h2>

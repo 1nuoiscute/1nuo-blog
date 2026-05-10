@@ -13,7 +13,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 
 <div class="tab-content" id="tab-tests">
   <div class="card-list">
-    <a class="card-item" href="/测试/sbti/">
+    <a class="card-item" href="/explore/sbti/">
       <div class="card-icon">🧪</div>
       <div class="card-body">
         <div class="card-title">SBTI 赛博人格测试</div>
@@ -21,7 +21,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
       </div>
       <div class="card-arrow">→</div>
     </a>
-    <a class="card-item" href="/测试/scl90/">
+    <a class="card-item" href="/explore/scl90/">
       <div class="card-icon">📋</div>
       <div class="card-body">
         <div class="card-title">SCL-90 症状自评量表</div>
@@ -34,7 +34,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 
 <div class="tab-content" id="tab-bingo" style="display:none">
   <div class="card-list">
-    <a class="card-item" href="/测试/bingo/">
+    <a class="card-item" href="/explore/bingo/">
       <div class="card-icon">🎯</div>
       <div class="card-body">
         <div class="card-title">社会指数宾果游戏</div>
@@ -42,7 +42,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
       </div>
       <div class="card-arrow">→</div>
     </a>
-    <a class="card-item" href="/测试/bingo2/">
+    <a class="card-item" href="/explore/bingo2/">
       <div class="card-icon">🌧️</div>
       <div class="card-body">
         <div class="card-title">阴湿青春 BINGO</div>
@@ -50,7 +50,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
       </div>
       <div class="card-arrow">→</div>
     </a>
-    <a class="card-item" href="/测试/bingo3/">
+    <a class="card-item" href="/explore/bingo3/">
       <div class="card-icon">📵</div>
       <div class="card-body">
         <div class="card-title">高中违纪 BINGO</div>
@@ -58,7 +58,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
       </div>
       <div class="card-arrow">→</div>
     </a>
-    <a class="card-item" href="/测试/bingo4/">
+    <a class="card-item" href="/explore/bingo4/">
       <div class="card-icon">🌑</div>
       <div class="card-body">
         <div class="card-title">这辈子有了 BINGO</div>
@@ -66,7 +66,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
       </div>
       <div class="card-arrow">→</div>
     </a>
-    <a class="card-item" href="/测试/bingo5/">
+    <a class="card-item" href="/explore/bingo5/">
       <div class="card-icon">✨</div>
       <div class="card-body">
         <div class="card-title">Shiny 青春 BINGO</div>
@@ -79,7 +79,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 
 <div class="tab-content" id="tab-draw" style="display:none">
   <div class="card-list">
-    <a class="card-item" href="/测试/draw/">
+    <a class="card-item" href="/explore/draw/">
       <div class="card-icon">🎋</div>
       <div class="card-body">
         <div class="card-title">幸运签</div>
@@ -87,7 +87,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
       </div>
       <div class="card-arrow">→</div>
     </a>
-    <a class="card-item" href="/测试/tarot/">
+    <a class="card-item" href="/explore/tarot/">
       <div class="card-icon">🔮</div>
       <div class="card-body">
         <div class="card-title">塔罗牌</div>

@@ -26,15 +26,15 @@ category_dir: categories
 code_dir: downloads/code
 i18n_dir: :lang
 skip_render:
-  - "测试/app/**"
-  - "测试/scl90-app/**"
-  - "测试/bingo-app/**"
-  - "测试/bingo2-app/**"
-  - "测试/bingo3-app/**"
-  - "测试/bingo4-app/**"
-  - "测试/bingo5-app/**"
-  - "测试/draw-app/**"
-  - "测试/tarot-app/**"
+  - "explore/app/**"
+  - "explore/scl90-app/**"
+  - "explore/bingo-app/**"
+  - "explore/bingo2-app/**"
+  - "explore/bingo3-app/**"
+  - "explore/bingo4-app/**"
+  - "explore/bingo5-app/**"
+  - "explore/draw-app/**"
+  - "explore/tarot-app/**"
   - "rate/admin/**"
   - "rate/rateimg/**"
 # Writing
