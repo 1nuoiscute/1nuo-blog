@@ -23,7 +23,7 @@ body{font-family:'DM Sans',-apple-system,system-ui,sans-serif;background:transpa
 .grid-bg{display:grid;grid-template-columns:repeat(4,1fr);grid-template-rows:repeat(4,1fr);gap:8px;width:100%;height:100%;position:absolute;inset:0;padding:8px;pointer-events:none}
 .grid-bg .cell{background:rgba(238,228,218,.35);border-radius:6px}
 .tile-layer{position:absolute;inset:0;padding:8px;pointer-events:none}
-.tile{position:absolute;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:32px;z-index:2;will-change:transform;transition:transform .1s ease}
+.tile{position:absolute;border-radius:6px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:32px;z-index:2;transition:left .1s ease,top .1s ease;will-change:left,top}
 .tile-2{background:#eee4da;color:#776e65}
 .tile-4{background:#ede0c8;color:#776e65}
 .tile-8{background:#f2b179;color:#f9f6f2}
@@ -36,12 +36,10 @@ body{font-family:'DM Sans',-apple-system,system-ui,sans-serif;background:transpa
 .tile-1024{background:#edc53f;color:#f9f6f2;font-size:22px}
 .tile-2048{background:#edc22e;color:#f9f6f2;font-size:22px}
 .tile-super{background:#3c3a32;color:#f9f6f2;font-size:22px}
-
-@keyframes tile-pop{0%{transform:var(--tpos) scale(1)}50%{transform:var(--tpos) scale(1.2)}100%{transform:var(--tpos) scale(1)}}
-.tile-pop{animation:tile-pop .2s ease}
-@keyframes tile-appear{0%{transform:var(--tpos) scale(0);opacity:0}50%{transform:var(--tpos) scale(1.1)}100%{transform:var(--tpos) scale(1);opacity:1}}
-.tile-appear{animation:tile-appear .18s ease-out}
-
+@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.2)}100%{transform:scale(1)}}
+.tile-pop{animation:pop .2s ease}
+@keyframes appear{0%{transform:scale(0);opacity:0}50%{transform:scale(1.1)}100%{transform:scale(1);opacity:1}}
+.tile-new{animation:appear .18s ease-out}
 .game-over-overlay{position:absolute;inset:0;background:rgba(238,228,218,.73);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;z-index:10;opacity:0;pointer-events:none;transition:opacity .3s ease}
 .game-over-overlay.show{opacity:1;pointer-events:auto}
 .game-over-overlay h2{font-size:36px;font-weight:700;color:#776e65;margin-bottom:8px}
@@ -60,166 +58,153 @@ body{font-family:'DM Sans',-apple-system,system-ui,sans-serif;background:transpa
     </div>
   </div>
   <div class="controls">
-    <button class="btn btn-primary" onclick="game.restart()">↻ 新一局</button>
-    <button class="btn" onclick="game.undo()">↩ 撤销</button>
+    <button class="btn btn-primary" onclick="g.restart()">↻ 新一局</button>
+    <button class="btn" onclick="g.undo()">↩ 撤销</button>
   </div>
-  <div class="game-container" id="game-container">
-    <div class="grid-bg" id="grid-bg"></div>
-    <div class="tile-layer" id="tile-layer"></div>
-    <div class="game-over-overlay" id="game-over">
-      <h2 id="result-title">游戏结束</h2>
-      <p id="result-msg">再试一次吧</p>
-      <button class="btn btn-primary" onclick="game.restart()">再来一局</button>
+  <div class="game-container" id="gc">
+    <div class="grid-bg"></div>
+    <div class="tile-layer" id="tl"></div>
+    <div class="game-over-overlay" id="go">
+      <h2 id="rt">游戏结束</h2>
+      <p id="rm">再试一次吧</p>
+      <button class="btn btn-primary" onclick="g.restart()">再来一局</button>
     </div>
   </div>
   <div class="hint">← ↑ → ↓ 方向键 / 滑动操作</div>
 </div>
 <script>
-class Game2048{
+const S=4;
+class G{
   constructor(){
-    this.size=4;this.tileId=0;this.tiles=[];this.score=0;this.best=0;this.won=false;this.over=false;this.undoStack=[];
-    this.loadBest();this.init();this.render();
+    this.n=1;this.g=[];this.s=0;this.b=0;this.w=false;this.o=false;this.u=[];
+    try{this.b=parseInt(localStorage.getItem('gb'))||0}catch(e){}
+    this.init();this.r();
     document.addEventListener('keydown',e=>{
-      if(this.over)return;
-      const map={ArrowLeft:0,ArrowUp:1,ArrowRight:2,ArrowDown:3};
-      if(e.key in map){e.preventDefault();this.move(map[e.key])}
+      if(this.o)return;
+      const m={ArrowLeft:0,ArrowUp:1,ArrowRight:2,ArrowDown:3};
+      if(e.key in m){e.preventDefault();this.m(m[e.key])}
     });
-    let sx,sy;const c=document.getElementById('game-container');
+    let sx,sy;const c=document.getElementById('gc');
     c.addEventListener('touchstart',e=>{sx=e.touches[0].clientX;sy=e.touches[0].clientY;},{passive:true});
     c.addEventListener('touchend',e=>{
       if(!sx||!sy)return;
       const dx=e.changedTouches[0].clientX-sx,dy=e.changedTouches[0].clientY-sy,ax=Math.abs(dx),ay=Math.abs(dy);
       if(Math.max(ax,ay)<30)return;
-      this.move(ax>ay?(dx>0?2:0):(dy>0?3:1));
+      this.m(ax>ay?(dx>0?2:0):(dy>0?3:1));
       sx=sy=null;
     },{passive:true});
   }
   init(){
-    this.tileId=0;this.score=0;this.won=false;this.over=false;this.undoStack=[];
-    this.tiles=Array.from({length:this.size},()=>Array(this.size).fill(null));
-    this.addRandom();this.addRandom();
+    this.n=1;this.s=0;this.w=false;this.o=false;this.u=[];
+    this.g=Array.from({length:S},()=>Array(S).fill(0));
+    this.a();this.a();
   }
-  loadBest(){try{this.best=parseInt(localStorage.getItem('game2048_best'))||0}catch(e){}}
-  saveBest(){if(this.score>this.best){this.best=this.score;try{localStorage.setItem('game2048_best',this.best.toString())}catch(e){}}}
-  addRandom(){
-    const empty=[];for(let r=0;r<this.size;r++)for(let c=0;c<this.size;c++)if(!this.tiles[r][c])empty.push({r,c});
-    if(!empty.length)return;
-    const {r,c}=empty[Math.floor(Math.random()*empty.length)];
-    this.tiles[r][c]={value:Math.random()<.9?2:4,id:++this.tileId,isNew:true};
+  a(){
+    const e=[];for(let r=0;r<S;r++)for(let c=0;c<S;c++)if(!this.g[r][c])e.push({r,c});
+    if(!e.length)return;
+    const {r,c}=e[Math.floor(Math.random()*e.length)];
+    this.g[r][c]={i:this.n++,v:Math.random()<.9?2:4,n:true};
   }
-  cloneGrid(){return this.tiles.map(row=>row.map(t=>t?{...t}:null));}
-  move(dir){
-    if(this.over)return;
-    this.undoStack.push({tiles:this.cloneGrid(),score:this.score,won:this.won});
-    const n=this.size;
-    let moved=false;const merged=new Set();
-    // iterate in order depending on direction
-    const rowOrder=[],colOrder=[];
-    for(let i=0;i<n;i++){rowOrder.push(i);colOrder.push(i);}
-    if(dir===1||dir===3)rowOrder.reverse();
-    if(dir===2||dir===3)colOrder.reverse();
-
-    for(const ri of rowOrder)for(const ci of colOrder){
-      const cell=this.tiles[ri][ci];
-      if(!cell)continue;
-      // find farthest position
-      let dr=ri,dc=ci;
-      while(true){
-        let nr=dr,nc=dc;
-        if(dir===0)nc--;else if(dir===1)nr--;else if(dir===2)nc++;else nr++;
-        if(nr<0||nr>=n||nc<0||nc>=n)break;
-        const t=this.tiles[nr][nc];
-        if(!t){dr=nr;dc=nc;continue;}
-        if(t.value===cell.value&&!merged.has(t.id)&&!merged.has(cell.id)){
-          // merge
-          cell.value*=2;this.score+=cell.value;
-          this.tiles[nr][nc]=cell;this.tiles[ri][ci]=null;
-          cell.fromR=ri;cell.fromC=ci;cell.toR=nr;cell.toC=nc;
-          merged.add(cell.id);cell.isMerge=true;
-          dr=nr;dc=nc;moved=true;break;
-        }break;
+  // Slide and merge a line of 4 tiles (as array, leftwards)
+  slide(line){
+    const tiles=line.filter(t=>t!==0);
+    const out=[];const merged=new Set();let gained=0;
+    for(let i=0;i<tiles.length;i++){
+      if(i+1<tiles.length&&tiles[i].v===tiles[i+1].v){
+        const nv=tiles[i].v*2;
+        out.push({i:this.n++,v:nv,m:[tiles[i].i,tiles[i+1].i]});
+        merged.add(tiles[i].i);merged.add(tiles[i+1].i);
+        gained+=nv;i++;
+      }else{
+        out.push(tiles[i]);
       }
-      if(dr!==ri||dc!==ci){
-        this.tiles[dr][dc]=cell;this.tiles[ri][ci]=null;
-        cell.fromR=ri;cell.fromC=ci;cell.toR=dr;cell.toC=dc;
+    }
+    while(out.length<S)out.push(0);
+    return {out,merged,gained};
+  }
+  m(dir){
+    if(this.o)return;
+    // Save
+    this.u.push({g:this.g.map(r=>r.map(t=>t?{...t}:0)),s:this.s,w:this.w});
+    let moved=false;let totalGained=0;
+    const getRow=(g,r)=>g[r];
+    const setRow=(g,r,row)=>g[r]=row;
+    const getCol=(g,c)=>g.map(row=>row[c]);
+    const setCol=(g,c,col)=>{for(let r=0;r<S;r++)g[r][c]=col[r];};
+    const rev=(a)=>[...a].reverse();
+    for(let i=0;i<S;i++){
+      let line;
+      if(dir===0||dir===2){line=getRow(this.g,i);if(dir===2)line=rev(line);}
+      else{line=getCol(this.g,i);if(dir===3)line=rev(line);}
+      const {out,merged,gained}=this.slide(line);
+      let result=out;
+      if(dir===2||dir===3)result=rev(result);
+      // Check if row actually changed
+      let changed=false;
+      for(let j=0;j<S;j++){
+        const ov=line[j]?line[j].v:0;
+        const nv=result[j]?result[j].v:0;
+        if(ov!==nv){changed=true;break;}
+        if(line[j]&&result[j]&&line[j].i!==result[j].i){changed=true;break;}
+      }
+      if(changed){
         moved=true;
+        if(dir===0||dir===2)setRow(this.g,i,result);
+        else setCol(this.g,i,result);
+        totalGained+=gained;
       }
     }
-    if(moved){this.addRandom();this.render();this.checkState();}
+    if(!moved){this.u.pop();return;}
+    this.s+=totalGained;
+    this.a();this.r();this.c();
   }
-  checkState(){
-    if(this.tiles.some(row=>row.some(t=>t&&t.value===2048))){this.won=true;this.saveBest();this.showOver('🎉 你赢了！','继续挑战更高分数吧');return;}
-    for(let r=0;r<this.size;r++)for(let c=0;c<this.size;c++){
-      if(!this.tiles[r][c])return;
-      if(c+1<this.size&&this.tiles[r][c+1]&&this.tiles[r][c].value===this.tiles[r][c+1].value)return;
-      if(r+1<this.size&&this.tiles[r+1][c]&&this.tiles[r][c].value===this.tiles[r+1][c].value)return;
+  c(){
+    if(this.g.some(r=>r.some(t=>t&&t.v===2048))){this.w=true;this.save();this.over('🎉 你赢了！','继续挑战更高分数吧');return;}
+    for(let r=0;r<S;r++)for(let c=0;c<S;c++){
+      if(!this.g[r][c])return;
+      if(c+1<S&&this.g[r][c+1]&&this.g[r][c].v===this.g[r][c+1].v)return;
+      if(r+1<S&&this.g[r+1][c]&&this.g[r][c].v===this.g[r+1][c].v)return;
     }
-    this.over=true;this.saveBest();this.showOver('😵 游戏结束',`得分：${this.score}`);
+    this.o=true;this.save();this.over('😵 游戏结束','得分：'+this.s);
   }
-  showOver(t,m){document.getElementById('result-title').textContent=t;document.getElementById('result-msg').textContent=m;document.getElementById('game-over').classList.add('show');}
+  over(t,m){document.getElementById('rt').textContent=t;document.getElementById('rm').textContent=m;document.getElementById('go').classList.add('show');}
+  save(){if(this.s>this.b){this.b=this.s;try{localStorage.setItem('gb',this.b.toString())}catch(e){}}}
   undo(){
-    if(!this.undoStack.length)return;
-    const s=this.undoStack.pop();this.tiles=s.tiles;this.score=s.score;this.won=s.won;this.over=false;
-    document.getElementById('game-over').classList.remove('show');this.render();
+    if(!this.u.length)return;
+    const s=this.u.pop();this.g=s.g;this.s=s.s;this.w=s.w;this.o=false;
+    document.getElementById('go').classList.remove('show');this.r();
   }
-  restart(){this.init();this.render();document.getElementById('game-over').classList.remove('show');}
-  tilePos(r,c){
-    const gap=8,pad=8;
-    const totalGap=gap*3,avail=gameSize-totalGap-pad*2;
-    return{left:pad+c*(avail/4+gap),top:pad+r*(avail/4+gap),size:avail/4};
+  restart(){this.init();this.r();document.getElementById('go').classList.remove('show');}
+  pos(r,c){
+    const sz=document.getElementById('gc').offsetWidth;
+    const avail=sz-PAD*2-GAP*3,ts=avail/4;
+    return{x:PAD+c*(ts+GAP),y:PAD+r*(ts+GAP),s:ts};
   }
-  render(){
-    const layer=document.getElementById('tile-layer');
-    const rect=document.getElementById('game-container').getBoundingClientRect();
-    gameSize=Math.min(rect.width,rect.height);
-    const gap=8,pad=8;
-    const totalGap=gap*3,avail=gameSize-totalGap-pad*2,tSize=avail/4;
-    layer.innerHTML='';
-    const animTiles=[];
-    for(let r=0;r<this.size;r++)for(let c=0;c<this.size;c++){
-      const t=this.tiles[r][c];
+  r(){
+    const tl=document.getElementById('tl');const rect=document.getElementById('gc').getBoundingClientRect();
+    const sz=Math.min(rect.width,rect.height);
+    const avail=sz-PAD*2-GAP*3,ts=avail/4;
+    tl.innerHTML='';
+    // First pass: render all non-new tiles (for position animation via CSS transition)
+    for(let r=0;r<S;r++)for(let c=0;c<S;c++){
+      const t=this.g[r][c];
       if(!t)continue;
       const el=document.createElement('div');
       let cls='tile';
-      if(t.value<=2048)cls+=' tile-'+t.value;else cls+=' tile-super';
-      el.className=cls;el.textContent=t.value;
-      el.style.width=tSize+'px';el.style.height=tSize+'px';
-      el.style.borderRadius='6px';
-      if(t.fromR!==undefined){
-        // Animate: start at old position
-        const fp=this.tilePos(t.fromR,t.fromC);
-        el.style.left=fp.left+'px';el.style.top=fp.top+'px';
-        layer.appendChild(el);
-        // After layout, transition to new position
-        const tp=this.tilePos(t.toR,t.toC);
-        requestAnimationFrame(()=>{
-          el.style.transition='transform .1s ease';
-          el.style.transform=`translate(${tp.left-fp.left}px,${tp.top-fp.top}px)`;
-        });
-        if(t.isMerge){
-          setTimeout(()=>{
-            const pp=this.tilePos(t.toR,t.toC);
-            el.style.transition='none';
-            el.style.left=pp.left+'px';el.style.top=pp.top+'px';
-            el.style.transform='';
-            // pop animation
-            el.style.animation='tile-pop .2s ease';
-          },115);
-        }
-        delete t.fromR;delete t.fromC;delete t.toR;delete t.toC;delete t.isMerge;
-      }else{
-        const pp=this.tilePos(r,c);
-        el.style.left=pp.left+'px';el.style.top=pp.top+'px';
-        layer.appendChild(el);
-        if(t.isNew){el.style.animation='tile-appear .18s ease-out';t.isNew=false;}
-      }
+      if(t.v<=2048)cls+=' tile-'+t.v;else cls+=' tile-super';
+      el.className=cls;el.textContent=t.v;
+      const px=PAD+c*(ts+GAP),py=PAD+r*(ts+GAP);
+      el.style.width=ts+'px';el.style.height=ts+'px';
+      el.style.left=px+'px';el.style.top=py+'px';
+      tl.appendChild(el);
+      if(t.n){el.classList.add('tile-new');t.n=false;}
+      if(t.m){setTimeout(()=>{el.classList.add('tile-pop');},120);delete t.m;}
     }
-    document.getElementById('score').textContent=this.score;
-    document.getElementById('best').textContent=this.best;
+    document.getElementById('score').textContent=this.s;
+    document.getElementById('best').textContent=this.b;
   }
 }
-let gameSize=0;
-const game=new Game2048();
+const g=new G();
 </script>
 </body>
 </html>
