@@ -179,7 +179,6 @@ body{
     return ca.toDataURL('image/png');
   }
   document.getElementById('shareBtn').addEventListener('click',function(){
-    track('bingo5');
     var d=G(),n=0;for(var k in M)if(M[k])n++;
     document.getElementById('shareImageArea').innerHTML='<img src="'+d+'" alt="宾果结果">';
     document.getElementById('shareText').textContent='已标记 '+n+'/25 项';
@@ -191,7 +190,6 @@ body{
   document.getElementById('resetBtn').addEventListener('click',function(){M={};B=false;R()});
   R();
 })();
-function track(a){fetch('/api/stats',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:a})}).catch(function(){})}
 </script>
 <div style="text-align:center;margin-top:20px;padding:8px;font-size:0.75em;color:#aaa;border-top:1px solid #e7e5e4;">📝 制表人：诺诺</div></body>
 </html>

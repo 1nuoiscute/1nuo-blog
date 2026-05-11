@@ -162,7 +162,6 @@ body{font-family:"DM Sans","Noto Serif SC",serif;background:#f8f6f2;color:#1c191
   }
 
   function draw(){
-    track('tarot');
     app.classList.add('shuffling');
     drawBtn.disabled = true;
     clearResult();
@@ -179,7 +178,6 @@ body{font-family:"DM Sans","Noto Serif SC",serif;background:#f8f6f2;color:#1c191
   drawBtn.addEventListener('click', draw);
   deck.addEventListener('click', draw);
 })();
-function track(a){fetch("/api/stats",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:a})}).catch(function(){})}
 </script>
 </body>
 </html>
