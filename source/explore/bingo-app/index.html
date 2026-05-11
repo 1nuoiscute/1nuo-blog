@@ -314,6 +314,7 @@ body {
 
   // 分享功能
   document.getElementById('shareBtn').addEventListener('click', function(){
+    track('bingo1');
     var dataUrl = generateShareImage();
     var count = 0;
     for (var k in marked) { if (marked[k]) count++; }
@@ -336,6 +337,7 @@ body {
 
   render();
 })();
+function track(a){fetch('/api/stats',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({action:a})}).catch(function(){})}
 </script>
 <div style="text-align:center;margin-top:20px;padding:8px;font-size:0.75em;color:#aaa;border-top:1px solid #e7e5e4;">📝 制表人：诺诺</div></body>
 </html>

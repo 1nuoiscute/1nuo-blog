@@ -287,6 +287,7 @@ function draw(){
     document.getElementById('remainText').textContent = '剩余 ' + remain + ' 签';
   }, 800);  // 300-500ms 页面过渡规范
 }
+function track(a){fetch("/api/stats",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({action:a})}).catch(function(){})}
 </script>
 </body>
 </html>
