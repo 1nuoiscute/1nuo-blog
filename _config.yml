@@ -118,3 +118,13 @@ hide_posts:
   
 
 
+
+# Math rendering
+math:
+  use: mathjax
+  per_page: true
+  hide_scrollbar: false
+  mathjax:
+    enableMenu: true
+    tags: none
+  katex:

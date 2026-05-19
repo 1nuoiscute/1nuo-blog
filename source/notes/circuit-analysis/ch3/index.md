@@ -21,8 +21,8 @@ tags: [电路分析]
 <a href="l9-mesh.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
-<h2>L9 网孔电流法与回路电流法</h2>
-<p>§3-3 网孔法 · §3-4 图论 · §3-5 回路法</p>
+<h2>L9 网孔法与回路法基础</h2>
+<p>§3-3 网孔法 · §3-4 图论基础（树/连枝概念引入）· §3-5 回路法</p>
 </div>
 <div class="note-card-arrow">→</div>
 </a>
@@ -30,8 +30,8 @@ tags: [电路分析]
 <a href="l10-loop.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
-<h2>L10 回路电流法应用实例</h2>
-<p>§3-4/§3-5 选树策略 · 树枝与连枝 · 基本回路方程</p>
+<h2>L10 回路电流法与图论选树</h2>
+<p>§3-4 图论基础（树/连枝/基本回路）· §3-5 回路法应用 · 选树思路也适用于§3-6割集分析</p>
 </div>
 <div class="note-card-arrow">→</div>
 </a>
