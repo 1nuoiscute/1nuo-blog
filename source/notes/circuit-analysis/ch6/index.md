@@ -30,8 +30,8 @@ tags: [电路分析]
 <div class="note-card-inner" style="cursor:default;pointer-events:none">
 <div class="note-card-icon">📝</div>
 <div class="note-card-info">
-<h2>L19 习题课</h2>
-<p>§6-1~§6-4 习题练习与讲解</p>
+<h2>L19 元件相量形式与阻抗导纳</h2>
+<p>§6-3 基本定律与元件相量形式 · §6-4 阻抗与导纳 · 笔记待补充</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>
@@ -48,8 +48,8 @@ tags: [电路分析]
 <div class="note-card-inner" style="cursor:default;pointer-events:none">
 <div class="note-card-icon">📖</div>
 <div class="note-card-info">
-<h2>正弦交流电路的功率 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-<p>§6-5 功率 · 暂缺，待补充</p>
+<h2>正弦交流电路的功率 <span style="color:var(--second-color,#999);font-size:0.8em">（尚未学习）</span></h2>
+<p>§6-5 功率 · 课程尚未讲授</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>
@@ -57,8 +57,8 @@ tags: [电路分析]
 <div class="note-card-inner" style="cursor:default;pointer-events:none">
 <div class="note-card-icon">📖</div>
 <div class="note-card-info">
-<h2>功率因数的提高 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-<p>§6-6 功率因数 · 暂缺，待补充</p>
+<h2>功率因数的提高 <span style="color:var(--second-color,#999);font-size:0.8em">（尚未学习）</span></h2>
+<p>§6-6 功率因数 · 课程尚未讲授</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>
