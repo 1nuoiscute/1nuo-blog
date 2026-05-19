@@ -40,7 +40,7 @@ tags: [电路分析]
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L20 向量欧姆定律</h2>
-<p>§6-1~§6-10 正弦量/相量法/元件相量/阻抗导纳/功率/谐振（综合覆盖全章）</p>
+<p>§6-7 正弦交流电路的稳态分析（节点电压法/回路电流法在交流中的应用）</p>
 </div>
 <div class="note-card-arrow">→</div>
 </a>
@@ -59,15 +59,6 @@ tags: [电路分析]
 <div class="note-card-info">
 <h2>功率因数的提高 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
 <p>§6-6 功率因数 · 暂缺，待补充</p>
-</div>
-<div class="note-card-arrow" style="visibility:hidden">→</div>
-</div>
-</div><div class="note-card" style="opacity:0.5">
-<div class="note-card-inner" style="cursor:default;pointer-events:none">
-<div class="note-card-icon">📖</div>
-<div class="note-card-info">
-<h2>稳态分析 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-<p>§6-7 稳态分析 · 暂缺，待补充</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>
