@@ -77,16 +77,6 @@ tags: [电路分析]
 <div class="note-card-arrow">→</div>
 </a>
 </div>
-<div class="note-card" style="opacity:0.4">
-<div class="note-card-inner" style="cursor:default;pointer-events:none">
-<div class="note-card-icon">⏳</div>
-<div class="note-card-info">
-<h2>L7 等效变换 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-<p>§2-1→§2-4（见第二章）</p>
-</div>
-<div class="note-card-arrow" style="visibility:hidden">→</div>
-</div>
-</div>
 <div class="note-card">
 <a href="l8-controlled.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
