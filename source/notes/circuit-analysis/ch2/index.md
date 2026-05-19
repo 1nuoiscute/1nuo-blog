@@ -12,11 +12,13 @@ tags: [电路分析]
 </div>
 
 <div class="ncre-content">
-<blockquote>电阻串并联、△-Y变换、电源串并联与等效变换。</blockquote>
+<blockquote>电阻串并联、△-Y变换、电源等效变换</blockquote>
 </div>
 
 <div class="note-collections">
-<a class="note-card-inner" href="Lesson 7 电阻与电源的等效变换.md">
+
+<div class="note-card">
+<a href="l7-equivalent/" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L7 电阻与电源的等效变换</h2>
@@ -24,4 +26,5 @@ tags: [电路分析]
 </div>
 <div class="note-card-arrow">→</div>
 </a>
+</div>
 </div>

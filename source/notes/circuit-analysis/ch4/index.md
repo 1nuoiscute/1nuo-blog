@@ -12,11 +12,13 @@ tags: [电路分析]
 </div>
 
 <div class="ncre-content">
-<blockquote>叠加定理、替代定理、戴维宁定理、特勒根定理、互易定理、对偶原理。</blockquote>
+<blockquote>叠加定理、替代定理、戴维宁定理、特勒根定理、互易定理、对偶原理</blockquote>
 </div>
 
 <div class="note-collections">
-<a class="note-card-inner" href="Lesson 11 叠加定理与替代定理.md">
+
+<div class="note-card">
+<a href="l11-superposition/" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L11 叠加定理与替代定理</h2>
@@ -24,7 +26,9 @@ tags: [电路分析]
 </div>
 <div class="note-card-arrow">→</div>
 </a>
-<a class="note-card-inner" href="Lesson 13 替代定理与戴维宁定理.md">
+</div>
+<div class="note-card">
+<a href="l13-thevenin/" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L13 替代定理与戴维宁定理</h2>
@@ -32,28 +36,35 @@ tags: [电路分析]
 </div>
 <div class="note-card-arrow">→</div>
 </a>
-<div class="note-card-inner" style="opacity:0.4;cursor:default;pointer-events:none">
+</div>
+<div class="note-card" style="opacity:0.4">
+<div class="note-card-inner" style="cursor:default;pointer-events:none">
 <div class="note-card-icon">⏳</div>
 <div class="note-card-info">
-<h2>L— 特勒根定理 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-<p>§4-4 特勒根定理</p>
+<h2>特勒根定理 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
+<p>§4-4 特勒根定理 · 待补充</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>
-<div class="note-card-inner" style="opacity:0.4;cursor:default;pointer-events:none">
+</div>
+<div class="note-card" style="opacity:0.4">
+<div class="note-card-inner" style="cursor:default;pointer-events:none">
 <div class="note-card-icon">⏳</div>
 <div class="note-card-info">
-<h2>L— 互易定理 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-<p>§4-5 互易定理</p>
+<h2>互易定理 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
+<p>§4-5 互易定理 · 待补充</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>
-<div class="note-card-inner" style="opacity:0.4;cursor:default;pointer-events:none">
+</div>
+<div class="note-card" style="opacity:0.4">
+<div class="note-card-inner" style="cursor:default;pointer-events:none">
 <div class="note-card-icon">⏳</div>
 <div class="note-card-info">
-<h2>L— 对偶原理 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-<p>§4-6 对偶原理</p>
+<h2>对偶原理 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
+<p>§4-6 对偶原理 · 待补充</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
+</div>
 </div>
 </div>
