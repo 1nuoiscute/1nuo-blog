@@ -18,7 +18,7 @@ tags: [电路分析]
 <div class="note-collections">
 
 <div class="note-card">
-<a href="l1-intro/" class="note-card-inner">
+<a href="l1-intro.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L1 导论</h2>
@@ -28,7 +28,7 @@ tags: [电路分析]
 </a>
 </div>
 <div class="note-card">
-<a href="l2-basics/" class="note-card-inner">
+<a href="l2-basics.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L2 电路的基本概念</h2>
@@ -38,7 +38,7 @@ tags: [电路分析]
 </a>
 </div>
 <div class="note-card">
-<a href="l3-direction/" class="note-card-inner">
+<a href="l3-direction.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L3 参考方向与功率</h2>
@@ -48,7 +48,7 @@ tags: [电路分析]
 </a>
 </div>
 <div class="note-card">
-<a href="l4-elements/" class="note-card-inner">
+<a href="l4-elements.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L4 无源元件与理想电源</h2>
@@ -58,7 +58,7 @@ tags: [电路分析]
 </a>
 </div>
 <div class="note-card">
-<a href="l5-kcl/" class="note-card-inner">
+<a href="l5-kcl.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L5 电流源与KCL</h2>
@@ -68,7 +68,7 @@ tags: [电路分析]
 </a>
 </div>
 <div class="note-card">
-<a href="l6-kvl/" class="note-card-inner">
+<a href="l6-kvl.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L6 KVL与电路应用</h2>
@@ -88,7 +88,7 @@ tags: [电路分析]
 </div>
 </div>
 <div class="note-card">
-<a href="l8-controlled/" class="note-card-inner">
+<a href="l8-controlled.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L8 受控电源的等效变换</h2>

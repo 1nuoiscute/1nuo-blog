@@ -18,7 +18,7 @@ tags: [电路分析]
 <div class="note-collections">
 
 <div class="note-card">
-<a href="l7-equivalent/" class="note-card-inner">
+<a href="l7-equivalent.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L7 电阻与电源的等效变换</h2>

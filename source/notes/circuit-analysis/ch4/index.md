@@ -18,7 +18,7 @@ tags: [电路分析]
 <div class="note-collections">
 
 <div class="note-card">
-<a href="l11-superposition/" class="note-card-inner">
+<a href="l11-superposition.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L11 叠加定理与替代定理</h2>
@@ -28,7 +28,7 @@ tags: [电路分析]
 </a>
 </div>
 <div class="note-card">
-<a href="l13-thevenin/" class="note-card-inner">
+<a href="l13-thevenin.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L13 替代定理与戴维宁定理</h2>

@@ -18,7 +18,7 @@ tags: [电路分析]
 <div class="note-collections">
 
 <div class="note-card">
-<a href="l18-phasor/" class="note-card-inner">
+<a href="l18-phasor.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L18 相位差与初相位</h2>
@@ -28,7 +28,7 @@ tags: [电路分析]
 </a>
 </div>
 <div class="note-card">
-<a href="l20-ohm-ac/" class="note-card-inner">
+<a href="l20-ohm-ac.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L20 向量欧姆定律</h2>

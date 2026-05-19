@@ -18,7 +18,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 
 <div class="note-collections">
 
-<a class="note-card-inner" href="ch1/">
+<a class="note-card-inner" href="ch1.html">
 <div class="note-card-icon">📘</div>
 <div class="note-card-info">
 <h2>第一章 电路的基本概念及基本定律</h2>
@@ -27,7 +27,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 <div class="note-card-arrow">→</div>
 </a>
 
-<a class="note-card-inner" href="ch2/">
+<a class="note-card-inner" href="ch2.html">
 <div class="note-card-icon">📗</div>
 <div class="note-card-info">
 <h2>第二章 电阻电路的等效变换</h2>
@@ -36,7 +36,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 <div class="note-card-arrow">→</div>
 </a>
 
-<a class="note-card-inner" href="ch3/">
+<a class="note-card-inner" href="ch3.html">
 <div class="note-card-icon">📙</div>
 <div class="note-card-info">
 <h2>第三章 线性电路的基本分析方法</h2>
@@ -45,7 +45,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 <div class="note-card-arrow">→</div>
 </a>
 
-<a class="note-card-inner" href="ch4/">
+<a class="note-card-inner" href="ch4.html">
 <div class="note-card-icon">📕</div>
 <div class="note-card-info">
 <h2>第四章 电路定理</h2>
@@ -54,7 +54,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 <div class="note-card-arrow">→</div>
 </a>
 
-<a class="note-card-inner" href="ch5/">
+<a class="note-card-inner" href="ch5.html">
 <div class="note-card-icon">📓</div>
 <div class="note-card-info">
 <h2>第五章 含运算放大器的电路</h2>
@@ -63,7 +63,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 <div class="note-card-arrow">→</div>
 </a>
 
-<a class="note-card-inner" href="ch6/">
+<a class="note-card-inner" href="ch6.html">
 <div class="note-card-icon">📒</div>
 <div class="note-card-info">
 <h2>第六章 正弦交流电路的稳态分析</h2>
@@ -72,7 +72,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 <div class="note-card-arrow">→</div>
 </a>
 
-<a class="note-card-inner" href="ch7/">
+<a class="note-card-inner" href="ch7.html">
 <div class="note-card-icon">📔</div>
 <div class="note-card-info">
 <h2>第七章 含有互感的电路</h2>
