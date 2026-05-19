@@ -16,7 +16,7 @@ tags: [电路分析]
 </div>
 
 <div class="note-collections">
-<a class="note-card-inner" href="L9-网孔电流法与回路电流法.md">
+<a class="note-card-inner" href="Lesson 9 网孔电流法与回路电流法.md">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L9 网孔电流法与回路电流法</h2>
@@ -24,7 +24,7 @@ tags: [电路分析]
 </div>
 <div class="note-card-arrow">→</div>
 </a>
-<a class="note-card-inner" href="L10-回路电流法应用实例.md">
+<a class="note-card-inner" href="Lesson 10 回路电流法应用实例.md">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L10 回路电流法应用实例</h2>

@@ -16,7 +16,7 @@ tags: [电路分析]
 </div>
 
 <div class="note-collections">
-<a class="note-card-inner" href="L1-导论.md">
+<a class="note-card-inner" href="Lesson 1 导论.md">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L1 导论</h2>
@@ -24,7 +24,7 @@ tags: [电路分析]
 </div>
 <div class="note-card-arrow">→</div>
 </a>
-<a class="note-card-inner" href="L2-电路的基本概念.md">
+<a class="note-card-inner" href="Lesson 2 电路的基本概念.md">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L2 电路的基本概念</h2>
@@ -32,7 +32,7 @@ tags: [电路分析]
 </div>
 <div class="note-card-arrow">→</div>
 </a>
-<a class="note-card-inner" href="L3-参考方向与功率判别.md">
+<a class="note-card-inner" href="Lesson 3 参考方向与功率判别.md">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L3 参考方向与功率判别</h2>
@@ -40,7 +40,7 @@ tags: [电路分析]
 </div>
 <div class="note-card-arrow">→</div>
 </a>
-<a class="note-card-inner" href="L4-无源元件与理想电源特性.md">
+<a class="note-card-inner" href="Lesson 4 无源元件与理想电源特性.md">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L4 无源元件与理想电源</h2>
@@ -48,7 +48,7 @@ tags: [电路分析]
 </div>
 <div class="note-card-arrow">→</div>
 </a>
-<a class="note-card-inner" href="L5-电流源与基尔霍夫电流定律.md">
+<a class="note-card-inner" href="Lesson 5 电流源与基尔霍夫电流定律.md">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L5 电流源与KCL</h2>
@@ -56,7 +56,7 @@ tags: [电路分析]
 </div>
 <div class="note-card-arrow">→</div>
 </a>
-<a class="note-card-inner" href="L6-基尔霍夫电压定律及其电路应用.md">
+<a class="note-card-inner" href="Lesson 6 基尔霍夫电压定律及其电路应用.md">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L6 KVL与电路应用</h2>
@@ -64,7 +64,7 @@ tags: [电路分析]
 </div>
 <div class="note-card-arrow">→</div>
 </a>
-<a class="note-card-inner" href="../第2章-电阻电路的等效变换/L7-电阻与电源的等效变换.md">
+<a class="note-card-inner" href="../第2章-电阻电路的等效变换/Lesson 7 电阻与电源的等效变换.md">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L7 电阻与电源等效变换</h2>
@@ -72,7 +72,7 @@ tags: [电路分析]
 </div>
 <div class="note-card-arrow">→</div>
 </a>
-<a class="note-card-inner" href="L8-受控电源的等效变换.md">
+<a class="note-card-inner" href="Lesson 8 受控电源的等效变换.md">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L8 受控电源的等效变换</h2>

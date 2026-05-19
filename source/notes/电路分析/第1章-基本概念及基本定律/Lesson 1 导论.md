@@ -1,3 +1,9 @@
+---
+title: 第一章 §1-1 实际电路与电路模型
+date: 2026-05-20
+tags: [电路分析]
+---
+
 # 电路分析 A1 课程教学要求与考核说明
 
 <a href="https://media.1nuo.me/audio/CA%20Lesson%201.m4a" target="_blank" style="display: inline-block; background-color: #2b3137; color: #ffffff; padding: 8px 16px; text-decoration: none; border-radius: 6px; font-size: 14px; font-weight: bold; box-shadow: 0 2px 4px rgba(0,0,0,0.15);">

@@ -16,7 +16,7 @@ tags: [电路分析]
 </div>
 
 <div class="note-collections">
-<a class="note-card-inner" href="L18-相位差与初相位的概念解析.md">
+<a class="note-card-inner" href="Lesson 18 相位差与初相位的概念解析.md">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L18 相位差与初相位</h2>
@@ -24,7 +24,7 @@ tags: [电路分析]
 </div>
 <div class="note-card-arrow">→</div>
 </a>
-<a class="note-card-inner" href="L20-交流电路中的向量欧姆定律.md">
+<a class="note-card-inner" href="Lesson 20 交流电路中的向量欧姆定律.md">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L20 交流电路的向量欧姆定律</h2>

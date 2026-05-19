@@ -16,7 +16,7 @@ tags: [电路分析]
 </div>
 
 <div class="note-collections">
-<a class="note-card-inner" href="L11-叠加定理与替代定理.md">
+<a class="note-card-inner" href="Lesson 11 叠加定理与替代定理.md">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L11 叠加定理与替代定理</h2>
@@ -24,7 +24,7 @@ tags: [电路分析]
 </div>
 <div class="note-card-arrow">→</div>
 </a>
-<a class="note-card-inner" href="L13-替代定理与戴维宁定理.md">
+<a class="note-card-inner" href="Lesson 13 替代定理与戴维宁定理.md">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L13 替代定理与戴维宁定理</h2>
