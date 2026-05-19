@@ -1,6 +1,7 @@
 ---
 title: 第七章 含有互感的电路
 date: 2026-05-20
+comments: false
 tags: [电路分析]
 ---
 

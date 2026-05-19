@@ -1,6 +1,7 @@
 ---
 title: 第一章 电路的基本概念及基本定律
 date: 2026-05-20
+comments: false
 tags: [电路分析]
 ---
 
