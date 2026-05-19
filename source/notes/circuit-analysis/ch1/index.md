@@ -77,8 +77,7 @@ tags: [电路分析]
 <div class="note-card-arrow">→</div>
 </a>
 </div>
-<div class="note-card">
-<a href="l8-controlled.html" class="note-card-inner">
+
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L8 受控电源的等效变换</h2>
