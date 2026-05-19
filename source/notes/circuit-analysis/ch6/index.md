@@ -16,7 +16,6 @@ tags: [电路分析]
 </div>
 
 <div class="note-collections">
-
 <div class="note-card">
 <a href="l18-phasor.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
@@ -26,8 +25,16 @@ tags: [电路分析]
 </div>
 <div class="note-card-arrow">→</div>
 </a>
+</div><div class="note-card" style="opacity:0.6">
+<div class="note-card-inner" style="cursor:default;pointer-events:none">
+<div class="note-card-icon">📝</div>
+<div class="note-card-info">
+<h2>L19 习题课</h2>
+<p>§6-1~§6-4 习题练习与讲解</p>
 </div>
-<div class="note-card">
+<div class="note-card-arrow" style="visibility:hidden">→</div>
+</div>
+</div><div class="note-card">
 <a href="l20-ohm-ac.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
@@ -36,65 +43,61 @@ tags: [电路分析]
 </div>
 <div class="note-card-arrow">→</div>
 </a>
-</div>
-<div class="note-card" style="opacity:0.4">
+</div><div class="note-card" style="opacity:0.5">
 <div class="note-card-inner" style="cursor:default;pointer-events:none">
-<div class="note-card-icon">⏳</div>
+<div class="note-card-icon">📖</div>
 <div class="note-card-info">
-<h2>正弦交流电路的功率 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-<p>§6-5 功率 · 待补充</p>
+<h2>正弦交流电路的功率 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
+<p>§6-5 功率 · 已讲授，笔记未收录</p>
+</div>
+<div class="note-card-arrow" style="visibility:hidden">→</div>
+</div>
+</div><div class="note-card" style="opacity:0.5">
+<div class="note-card-inner" style="cursor:default;pointer-events:none">
+<div class="note-card-icon">📖</div>
+<div class="note-card-info">
+<h2>功率因数的提高 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
+<p>§6-6 功率因数 · 已讲授，笔记未收录</p>
+</div>
+<div class="note-card-arrow" style="visibility:hidden">→</div>
+</div>
+</div><div class="note-card" style="opacity:0.5">
+<div class="note-card-inner" style="cursor:default;pointer-events:none">
+<div class="note-card-icon">📖</div>
+<div class="note-card-info">
+<h2>稳态分析 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
+<p>§6-7 稳态分析 · 已讲授，笔记未收录</p>
+</div>
+<div class="note-card-arrow" style="visibility:hidden">→</div>
+</div>
+</div><div class="note-card" style="opacity:0.5">
+<div class="note-card-inner" style="cursor:default;pointer-events:none">
+<div class="note-card-icon">📖</div>
+<div class="note-card-info">
+<h2>最大功率传输 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
+<p>§6-8 最大功率传输 · 已讲授，笔记未收录</p>
+</div>
+<div class="note-card-arrow" style="visibility:hidden">→</div>
+</div>
+</div><div class="note-card" style="opacity:0.5">
+<div class="note-card-inner" style="cursor:default;pointer-events:none">
+<div class="note-card-icon">📖</div>
+<div class="note-card-info">
+<h2>串联谐振 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
+<p>§6-9 串联谐振 · 已讲授，笔记未收录</p>
+</div>
+<div class="note-card-arrow" style="visibility:hidden">→</div>
+</div>
+</div><div class="note-card" style="opacity:0.5">
+<div class="note-card-inner" style="cursor:default;pointer-events:none">
+<div class="note-card-icon">📖</div>
+<div class="note-card-info">
+<h2>并联谐振 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
+<p>§6-10 并联谐振 · 已讲授，笔记未收录</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>
 </div>
-<div class="note-card" style="opacity:0.4">
-<div class="note-card-inner" style="cursor:default;pointer-events:none">
-<div class="note-card-icon">⏳</div>
-<div class="note-card-info">
-<h2>功率因数的提高 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-<p>§6-6 功率因数 · 待补充</p>
 </div>
-<div class="note-card-arrow" style="visibility:hidden">→</div>
-</div>
-</div>
-<div class="note-card" style="opacity:0.4">
-<div class="note-card-inner" style="cursor:default;pointer-events:none">
-<div class="note-card-icon">⏳</div>
-<div class="note-card-info">
-<h2>稳态分析 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-<p>§6-7 稳态分析 · 待补充</p>
-</div>
-<div class="note-card-arrow" style="visibility:hidden">→</div>
-</div>
-</div>
-<div class="note-card" style="opacity:0.4">
-<div class="note-card-inner" style="cursor:default;pointer-events:none">
-<div class="note-card-icon">⏳</div>
-<div class="note-card-info">
-<h2>最大功率传输 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-<p>§6-8 最大功率传输 · 待补充</p>
-</div>
-<div class="note-card-arrow" style="visibility:hidden">→</div>
-</div>
-</div>
-<div class="note-card" style="opacity:0.4">
-<div class="note-card-inner" style="cursor:default;pointer-events:none">
-<div class="note-card-icon">⏳</div>
-<div class="note-card-info">
-<h2>串联谐振 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-<p>§6-9 串联谐振 · 待补充</p>
-</div>
-<div class="note-card-arrow" style="visibility:hidden">→</div>
-</div>
-</div>
-<div class="note-card" style="opacity:0.4">
-<div class="note-card-inner" style="cursor:default;pointer-events:none">
-<div class="note-card-icon">⏳</div>
-<div class="note-card-info">
-<h2>并联谐振 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-<p>§6-10 并联谐振 · 待补充</p>
-</div>
-<div class="note-card-arrow" style="visibility:hidden">→</div>
-</div>
-</div>
+
 </div>

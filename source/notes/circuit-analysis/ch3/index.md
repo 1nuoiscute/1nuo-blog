@@ -16,7 +16,6 @@ tags: [电路分析]
 </div>
 
 <div class="note-collections">
-
 <div class="note-card">
 <a href="l9-mesh.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
@@ -26,8 +25,7 @@ tags: [电路分析]
 </div>
 <div class="note-card-arrow">→</div>
 </a>
-</div>
-<div class="note-card">
+</div><div class="note-card">
 <a href="l10-loop.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
@@ -36,35 +34,34 @@ tags: [电路分析]
 </div>
 <div class="note-card-arrow">→</div>
 </a>
-</div>
-<div class="note-card" style="opacity:0.4">
+</div><div class="note-card" style="opacity:0.5">
 <div class="note-card-inner" style="cursor:default;pointer-events:none">
-<div class="note-card-icon">⏳</div>
+<div class="note-card-icon">📖</div>
 <div class="note-card-info">
-<h2>支路电流法 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-<p>§3-1 支路电流法 · 待补充</p>
+<h2>支路电流法 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
+<p>§3-1 支路电流法 · 已讲授，笔记未收录</p>
+</div>
+<div class="note-card-arrow" style="visibility:hidden">→</div>
+</div>
+</div><div class="note-card" style="opacity:0.5">
+<div class="note-card-inner" style="cursor:default;pointer-events:none">
+<div class="note-card-icon">📖</div>
+<div class="note-card-info">
+<h2>结点电压法 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
+<p>§3-2 结点电压法 · 已讲授，笔记未收录</p>
+</div>
+<div class="note-card-arrow" style="visibility:hidden">→</div>
+</div>
+</div><div class="note-card" style="opacity:0.5">
+<div class="note-card-inner" style="cursor:default;pointer-events:none">
+<div class="note-card-icon">📖</div>
+<div class="note-card-info">
+<h2>割集分析法 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
+<p>§3-6 割集分析法 · 已讲授，笔记未收录</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>
 </div>
-<div class="note-card" style="opacity:0.4">
-<div class="note-card-inner" style="cursor:default;pointer-events:none">
-<div class="note-card-icon">⏳</div>
-<div class="note-card-info">
-<h2>结点电压法 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-<p>§3-2 结点电压法 · 待补充</p>
 </div>
-<div class="note-card-arrow" style="visibility:hidden">→</div>
-</div>
-</div>
-<div class="note-card" style="opacity:0.4">
-<div class="note-card-inner" style="cursor:default;pointer-events:none">
-<div class="note-card-icon">⏳</div>
-<div class="note-card-info">
-<h2>割集分析法 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-<p>§3-6 割集分析法 · 待补充</p>
-</div>
-<div class="note-card-arrow" style="visibility:hidden">→</div>
-</div>
-</div>
+
 </div>

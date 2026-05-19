@@ -16,35 +16,40 @@ tags: [电路分析]
 </div>
 
 <div class="note-collections">
+<div class="note-card" style="opacity:0.5">
+<div class="note-card-inner" style="cursor:default;pointer-events:none">
+<div class="note-card-icon">📖</div>
+<div class="note-card-info">
+<h2>运算放大器简介 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
+<p>§5-1 运放简介 · 已讲授，笔记未收录</p>
+</div>
+<div class="note-card-arrow" style="visibility:hidden">→</div>
+</div>
+</div><div class="note-card" style="opacity:0.5">
+<div class="note-card-inner" style="cursor:default;pointer-events:none">
+<div class="note-card-icon">📖</div>
+<div class="note-card-info">
+<h2>运放外部特性 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
+<p>§5-2 运放外部特性 · 已讲授，笔记未收录</p>
+</div>
+<div class="note-card-arrow" style="visibility:hidden">→</div>
+</div>
+</div><div class="note-card" style="opacity:0.5">
+<div class="note-card-inner" style="cursor:default;pointer-events:none">
+<div class="note-card-icon">📖</div>
+<div class="note-card-info">
+<h2>比例放大电路 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
+<p>§5-3 比例放大电路 · 已讲授，笔记未收录</p>
+</div>
+<div class="note-card-arrow" style="visibility:hidden">→</div>
+</div>
+</div>
+</div>
 
-<div class="note-card" style="opacity:0.4">
-<div class="note-card-inner" style="cursor:default;pointer-events:none">
-<div class="note-card-icon">⏳</div>
-<div class="note-card-info">
-<h2>运算放大器简介 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-<p>§5-1 运放简介 · 待补充</p>
-</div>
-<div class="note-card-arrow" style="visibility:hidden">→</div>
-</div>
-</div>
-<div class="note-card" style="opacity:0.4">
-<div class="note-card-inner" style="cursor:default;pointer-events:none">
-<div class="note-card-icon">⏳</div>
-<div class="note-card-info">
-<h2>运放外部特性 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-<p>§5-2 运放外部特性 · 待补充</p>
-</div>
-<div class="note-card-arrow" style="visibility:hidden">→</div>
-</div>
-</div>
-<div class="note-card" style="opacity:0.4">
-<div class="note-card-inner" style="cursor:default;pointer-events:none">
-<div class="note-card-icon">⏳</div>
-<div class="note-card-info">
-<h2>比例放大电路 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-<p>§5-3 比例放大电路 · 待补充</p>
-</div>
-<div class="note-card-arrow" style="visibility:hidden">→</div>
-</div>
+<div class="ncre-content" style="margin-top:12px">
+<details>
+<summary style="cursor:pointer;color:var(--second-color,#858585);font-size:0.9em">📌 课内已讲授但笔记未收录的内容</summary>
+<ul style="margin-top:8px;padding-left:20px;color:var(--second-color,#858585)"><li>L14~L17 可能为习题课或第五章内容</li></ul>
+</details>
 </div>
 </div>

@@ -16,7 +16,6 @@ tags: [电路分析]
 </div>
 
 <div class="note-collections">
-
 <div class="note-card">
 <a href="l1-intro.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
@@ -26,8 +25,7 @@ tags: [电路分析]
 </div>
 <div class="note-card-arrow">→</div>
 </a>
-</div>
-<div class="note-card">
+</div><div class="note-card">
 <a href="l2-basics.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
@@ -36,8 +34,7 @@ tags: [电路分析]
 </div>
 <div class="note-card-arrow">→</div>
 </a>
-</div>
-<div class="note-card">
+</div><div class="note-card">
 <a href="l3-direction.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
@@ -46,8 +43,7 @@ tags: [电路分析]
 </div>
 <div class="note-card-arrow">→</div>
 </a>
-</div>
-<div class="note-card">
+</div><div class="note-card">
 <a href="l4-elements.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
@@ -56,8 +52,7 @@ tags: [电路分析]
 </div>
 <div class="note-card-arrow">→</div>
 </a>
-</div>
-<div class="note-card">
+</div><div class="note-card">
 <a href="l5-kcl.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
@@ -66,8 +61,7 @@ tags: [电路分析]
 </div>
 <div class="note-card-arrow">→</div>
 </a>
-</div>
-<div class="note-card">
+</div><div class="note-card">
 <a href="l6-kvl.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
@@ -77,13 +71,6 @@ tags: [电路分析]
 <div class="note-card-arrow">→</div>
 </a>
 </div>
+</div>
 
-<div class="note-card-icon">✅</div>
-<div class="note-card-info">
-<h2>L8 受控电源的等效变换</h2>
-<p>§1-5 受控源</p>
-</div>
-<div class="note-card-arrow">→</div>
-</a>
-</div>
 </div>

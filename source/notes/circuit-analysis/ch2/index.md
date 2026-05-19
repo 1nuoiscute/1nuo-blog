@@ -16,7 +16,6 @@ tags: [电路分析]
 </div>
 
 <div class="note-collections">
-
 <div class="note-card">
 <a href="l7-equivalent.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
@@ -26,9 +25,7 @@ tags: [电路分析]
 </div>
 <div class="note-card-arrow">→</div>
 </a>
-</div>
-
-<div class="note-card">
+</div><div class="note-card">
 <a href="l8-controlled.html" class="note-card-inner">
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
@@ -38,6 +35,6 @@ tags: [电路分析]
 <div class="note-card-arrow">→</div>
 </a>
 </div>
-
 </div>
+
 </div>
