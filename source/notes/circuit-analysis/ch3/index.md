@@ -31,7 +31,7 @@ tags: [电路分析]
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L10 回路电流法应用实例</h2>
-<p>§3-5 回路分析法进阶</p>
+<p>§3-4/§3-5 选树策略 · 树枝与连枝 · 基本回路方程</p>
 </div>
 <div class="note-card-arrow">→</div>
 </a>
