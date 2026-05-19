@@ -7,8 +7,8 @@ tags: [电路分析]
 <link rel="stylesheet" href="/css/notes.css">
 
 <div class="ncre-header">
-  <span class="ncre-icon">📗</span>
-  <h1>第二章 电阻电路的等效变换</h1>
+<span class="ncre-icon">📗</span>
+<h1>第二章 电阻电路的等效变换</h1>
 </div>
 
 <div class="ncre-content">
@@ -16,12 +16,12 @@ tags: [电路分析]
 </div>
 
 <div class="note-collections">
-  <a class="note-card-inner" href="L7-电阻与电源的等效变换.md">
-    <div class="note-card-icon">✅</div>
-    <div class="note-card-info">
-      <h2>L7 电阻与电源的等效变换</h2>
-      <p>§2-1 串并联 · §2-2 △-Y · §2-4 电源等效变换</p>
-    </div>
-    <div class="note-card-arrow">→</div>
-  </a>
+<a class="note-card-inner" href="L7-电阻与电源的等效变换.md">
+<div class="note-card-icon">✅</div>
+<div class="note-card-info">
+<h2>L7 电阻与电源的等效变换</h2>
+<p>§2-1 串并联 · §2-2 △-Y · §2-4 电源等效变换</p>
+</div>
+<div class="note-card-arrow">→</div>
+</a>
 </div>

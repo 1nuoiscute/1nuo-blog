@@ -7,8 +7,8 @@ tags: [电路分析]
 <link rel="stylesheet" href="/css/notes.css">
 
 <div class="ncre-header">
-  <span class="ncre-icon">📙</span>
-  <h1>第三章 线性电路的基本分析方法</h1>
+<span class="ncre-icon">📙</span>
+<h1>第三章 线性电路的基本分析方法</h1>
 </div>
 
 <div class="ncre-content">
@@ -16,44 +16,44 @@ tags: [电路分析]
 </div>
 
 <div class="note-collections">
-  <a class="note-card-inner" href="L9-网孔电流法与回路电流法.md">
-    <div class="note-card-icon">✅</div>
-    <div class="note-card-info">
-      <h2>L9 网孔电流法与回路电流法</h2>
-      <p>§3-3 网孔法 · §3-4 图论 · §3-5 回路法</p>
-    </div>
-    <div class="note-card-arrow">→</div>
-  </a>
-  <a class="note-card-inner" href="L10-回路电流法应用实例.md">
-    <div class="note-card-icon">✅</div>
-    <div class="note-card-info">
-      <h2>L10 回路电流法应用实例</h2>
-      <p>§3-5 回路分析法进阶</p>
-    </div>
-    <div class="note-card-arrow">→</div>
-  </a>
-  <div class="note-card-inner" style="opacity:0.4;cursor:default;pointer-events:none">
-    <div class="note-card-icon">⏳</div>
-    <div class="note-card-info">
-      <h2>L— 支路电流法 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-      <p>§3-1 支路电流法</p>
-    </div>
-    <div class="note-card-arrow" style="visibility:hidden">→</div>
-  </div>
-  <div class="note-card-inner" style="opacity:0.4;cursor:default;pointer-events:none">
-    <div class="note-card-icon">⏳</div>
-    <div class="note-card-info">
-      <h2>L— 结点电压法 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-      <p>§3-2 结点电压法</p>
-    </div>
-    <div class="note-card-arrow" style="visibility:hidden">→</div>
-  </div>
-  <div class="note-card-inner" style="opacity:0.4;cursor:default;pointer-events:none">
-    <div class="note-card-icon">⏳</div>
-    <div class="note-card-info">
-      <h2>L— 割集分析法 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-      <p>§3-6 割集分析法</p>
-    </div>
-    <div class="note-card-arrow" style="visibility:hidden">→</div>
-  </div>
+<a class="note-card-inner" href="L9-网孔电流法与回路电流法.md">
+<div class="note-card-icon">✅</div>
+<div class="note-card-info">
+<h2>L9 网孔电流法与回路电流法</h2>
+<p>§3-3 网孔法 · §3-4 图论 · §3-5 回路法</p>
+</div>
+<div class="note-card-arrow">→</div>
+</a>
+<a class="note-card-inner" href="L10-回路电流法应用实例.md">
+<div class="note-card-icon">✅</div>
+<div class="note-card-info">
+<h2>L10 回路电流法应用实例</h2>
+<p>§3-5 回路分析法进阶</p>
+</div>
+<div class="note-card-arrow">→</div>
+</a>
+<div class="note-card-inner" style="opacity:0.4;cursor:default;pointer-events:none">
+<div class="note-card-icon">⏳</div>
+<div class="note-card-info">
+<h2>L— 支路电流法 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
+<p>§3-1 支路电流法</p>
+</div>
+<div class="note-card-arrow" style="visibility:hidden">→</div>
+</div>
+<div class="note-card-inner" style="opacity:0.4;cursor:default;pointer-events:none">
+<div class="note-card-icon">⏳</div>
+<div class="note-card-info">
+<h2>L— 结点电压法 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
+<p>§3-2 结点电压法</p>
+</div>
+<div class="note-card-arrow" style="visibility:hidden">→</div>
+</div>
+<div class="note-card-inner" style="opacity:0.4;cursor:default;pointer-events:none">
+<div class="note-card-icon">⏳</div>
+<div class="note-card-info">
+<h2>L— 割集分析法 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
+<p>§3-6 割集分析法</p>
+</div>
+<div class="note-card-arrow" style="visibility:hidden">→</div>
+</div>
 </div>
