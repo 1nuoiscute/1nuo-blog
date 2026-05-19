@@ -48,8 +48,8 @@ tags: [电路分析]
 <div class="note-card-inner" style="cursor:default;pointer-events:none">
 <div class="note-card-icon">📖</div>
 <div class="note-card-info">
-<h2>特勒根定理 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
-<p>§4-4 特勒根定理 · 已讲授，笔记未收录</p>
+<h2>特勒根定理 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
+<p>§4-4 特勒根定理 · 暂缺，待补充</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>
@@ -57,8 +57,8 @@ tags: [电路分析]
 <div class="note-card-inner" style="cursor:default;pointer-events:none">
 <div class="note-card-icon">📖</div>
 <div class="note-card-info">
-<h2>互易定理 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
-<p>§4-5 互易定理 · 已讲授，笔记未收录</p>
+<h2>互易定理 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
+<p>§4-5 互易定理 · 暂缺，待补充</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>
@@ -66,8 +66,8 @@ tags: [电路分析]
 <div class="note-card-inner" style="cursor:default;pointer-events:none">
 <div class="note-card-icon">📖</div>
 <div class="note-card-info">
-<h2>对偶原理 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
-<p>§4-6 对偶原理 · 已讲授，笔记未收录</p>
+<h2>对偶原理 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
+<p>§4-6 对偶原理 · 暂缺，待补充</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>

@@ -21,8 +21,8 @@ tags: [电路分析]
 <div class="note-card-inner" style="cursor:default;pointer-events:none">
 <div class="note-card-icon">📖</div>
 <div class="note-card-info">
-<h2>互感与互感电压 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
-<p>§7-1 互感与互感电压 · 已讲授，笔记未收录</p>
+<h2>互感与互感电压 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
+<p>§7-1 互感与互感电压 · 暂缺，待补充</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>
@@ -30,8 +30,8 @@ tags: [电路分析]
 <div class="note-card-inner" style="cursor:default;pointer-events:none">
 <div class="note-card-icon">📖</div>
 <div class="note-card-info">
-<h2>含互感电路分析 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
-<p>§7-2 含互感电路分析 · 已讲授，笔记未收录</p>
+<h2>含互感电路分析 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
+<p>§7-2 含互感电路分析 · 暂缺，待补充</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>
@@ -39,8 +39,8 @@ tags: [电路分析]
 <div class="note-card-inner" style="cursor:default;pointer-events:none">
 <div class="note-card-icon">📖</div>
 <div class="note-card-info">
-<h2>空芯变压器 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
-<p>§7-3 空芯变压器 · 已讲授，笔记未收录</p>
+<h2>空芯变压器 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
+<p>§7-3 空芯变压器 · 暂缺，待补充</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>

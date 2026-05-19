@@ -40,7 +40,7 @@ tags: [电路分析]
 <div class="note-card-icon">✅</div>
 <div class="note-card-info">
 <h2>L20 向量欧姆定律</h2>
-<p>§6-3 相量形式 · §6-4 阻抗与导纳</p>
+<p>§6-1~§6-10 正弦量/相量法/元件相量/阻抗导纳/功率/谐振（综合覆盖全章）</p>
 </div>
 <div class="note-card-arrow">→</div>
 </a>
@@ -48,8 +48,8 @@ tags: [电路分析]
 <div class="note-card-inner" style="cursor:default;pointer-events:none">
 <div class="note-card-icon">📖</div>
 <div class="note-card-info">
-<h2>正弦交流电路的功率 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
-<p>§6-5 功率 · 已讲授，笔记未收录</p>
+<h2>正弦交流电路的功率 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
+<p>§6-5 功率 · 暂缺，待补充</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>
@@ -57,8 +57,8 @@ tags: [电路分析]
 <div class="note-card-inner" style="cursor:default;pointer-events:none">
 <div class="note-card-icon">📖</div>
 <div class="note-card-info">
-<h2>功率因数的提高 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
-<p>§6-6 功率因数 · 已讲授，笔记未收录</p>
+<h2>功率因数的提高 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
+<p>§6-6 功率因数 · 暂缺，待补充</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>
@@ -66,8 +66,8 @@ tags: [电路分析]
 <div class="note-card-inner" style="cursor:default;pointer-events:none">
 <div class="note-card-icon">📖</div>
 <div class="note-card-info">
-<h2>稳态分析 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
-<p>§6-7 稳态分析 · 已讲授，笔记未收录</p>
+<h2>稳态分析 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
+<p>§6-7 稳态分析 · 暂缺，待补充</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>
@@ -75,8 +75,8 @@ tags: [电路分析]
 <div class="note-card-inner" style="cursor:default;pointer-events:none">
 <div class="note-card-icon">📖</div>
 <div class="note-card-info">
-<h2>最大功率传输 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
-<p>§6-8 最大功率传输 · 已讲授，笔记未收录</p>
+<h2>最大功率传输 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
+<p>§6-8 最大功率传输 · 暂缺，待补充</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>
@@ -84,8 +84,8 @@ tags: [电路分析]
 <div class="note-card-inner" style="cursor:default;pointer-events:none">
 <div class="note-card-icon">📖</div>
 <div class="note-card-info">
-<h2>串联谐振 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
-<p>§6-9 串联谐振 · 已讲授，笔记未收录</p>
+<h2>串联谐振 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
+<p>§6-9 串联谐振 · 暂缺，待补充</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>
@@ -93,8 +93,8 @@ tags: [电路分析]
 <div class="note-card-inner" style="cursor:default;pointer-events:none">
 <div class="note-card-icon">📖</div>
 <div class="note-card-info">
-<h2>并联谐振 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
-<p>§6-10 并联谐振 · 已讲授，笔记未收录</p>
+<h2>并联谐振 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
+<p>§6-10 并联谐振 · 暂缺，待补充</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>

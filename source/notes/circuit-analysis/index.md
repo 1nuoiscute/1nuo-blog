@@ -13,7 +13,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 </div>
 
 <div class="ncre-content">
-<blockquote>西南交通大学 · 电气工程及其自动化<br>按课本七章结构组织。</blockquote>
+<blockquote>西南交通大学 · 电气工程及其自动化<br>教材：西南交通大学出版社《电路分析》（第三版）<br>授课教师：张丽艳<br><br>笔记系课堂录音转文字 AI 整理，部分内容未完整收录。<br>部分章节附有转写原文/课堂录音/手写笔记，会持续补充。<br>如涉及侵权，请联系删除。</blockquote>
 </div>
 
 <div class="note-collections">

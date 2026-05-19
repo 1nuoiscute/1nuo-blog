@@ -21,8 +21,8 @@ tags: [电路分析]
 <div class="note-card-inner" style="cursor:default;pointer-events:none">
 <div class="note-card-icon">📖</div>
 <div class="note-card-info">
-<h2>运算放大器简介 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
-<p>§5-1 运放简介 · 已讲授，笔记未收录</p>
+<h2>运算放大器简介 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
+<p>§5-1 运放简介 · 暂缺，待补充</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>
@@ -30,8 +30,8 @@ tags: [电路分析]
 <div class="note-card-inner" style="cursor:default;pointer-events:none">
 <div class="note-card-icon">📖</div>
 <div class="note-card-info">
-<h2>运放外部特性 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
-<p>§5-2 运放外部特性 · 已讲授，笔记未收录</p>
+<h2>运放外部特性 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
+<p>§5-2 运放外部特性 · 暂缺，待补充</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>
@@ -39,8 +39,8 @@ tags: [电路分析]
 <div class="note-card-inner" style="cursor:default;pointer-events:none">
 <div class="note-card-icon">📖</div>
 <div class="note-card-info">
-<h2>比例放大电路 <span style="color:var(--second-color,#999);font-size:0.8em">（未收录）</span></h2>
-<p>§5-3 比例放大电路 · 已讲授，笔记未收录</p>
+<h2>比例放大电路 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
+<p>§5-3 比例放大电路 · 暂缺，待补充</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>
