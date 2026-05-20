@@ -8,6 +8,10 @@ tags: [电路分析]
 
 <link rel="stylesheet" href="/css/notes.css">
 
+<div class="ncre-breadcrumb">
+  <a href="../">← 电路分析 AⅠ</a>
+</div>
+
 <div class="ncre-header">
 <span class="ncre-icon">📒</span>
 <h1>第六章 正弦交流电路的稳态分析</h1>

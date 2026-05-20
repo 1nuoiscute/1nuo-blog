@@ -8,6 +8,10 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 
 <link rel="stylesheet" href="/css/notes.css">
 
+<div class="ncre-breadcrumb">
+  <a href="/notes/">← 笔记</a>
+</div>
+
 <div class="ncre-header">
 <span class="ncre-icon">⚡</span>
 <h1>电路分析 AⅠ</h1>

@@ -8,6 +8,10 @@ tags: [电路分析]
 
 <link rel="stylesheet" href="/css/notes.css">
 
+<div class="ncre-breadcrumb">
+  <a href="../">← 电路分析 AⅠ</a>
+</div>
+
 <div class="ncre-header">
 <span class="ncre-icon">📓</span>
 <h1>第五章 含运算放大器的电路</h1>

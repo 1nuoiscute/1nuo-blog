@@ -8,6 +8,10 @@ tags: [电路分析]
 
 <link rel="stylesheet" href="/css/notes.css">
 
+<div class="ncre-breadcrumb">
+  <a href="../">← 电路分析 AⅠ</a>
+</div>
+
 <div class="ncre-header">
 <span class="ncre-icon">📙</span>
 <h1>第三章 线性电路的基本分析方法</h1>

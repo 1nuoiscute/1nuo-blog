@@ -8,6 +8,10 @@ tags: [电路分析]
 
 <link rel="stylesheet" href="/css/notes.css">
 
+<div class="ncre-breadcrumb">
+  <a href="../">← 电路分析 AⅠ</a>
+</div>
+
 <div class="ncre-header">
 <span class="ncre-icon">📗</span>
 <h1>第二章 电阻电路的等效变换</h1>
