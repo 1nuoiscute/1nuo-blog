@@ -1,5 +1,6 @@
 ﻿---
 title: 第一章 电路的基本概念及基本定律
+top_img: https://img.1nuo.me/img/categoriesbanner.webp
 date: 2026-05-20
 comments: false
 aside: false

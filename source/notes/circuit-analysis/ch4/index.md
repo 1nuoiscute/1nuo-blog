@@ -1,5 +1,6 @@
 ---
 title: 第四章 电路定理
+top_img: https://img.1nuo.me/img/banner.webp
 
 comments: false
 tags: [电路分析]

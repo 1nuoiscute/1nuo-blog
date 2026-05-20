@@ -1,5 +1,6 @@
 ---
 title: 第七章 含有互感的电路
+top_img: https://img.1nuo.me/img/pagebanner1%2026211.webp
 
 comments: false
 tags: [电路分析]

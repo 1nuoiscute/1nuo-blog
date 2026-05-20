@@ -1,5 +1,6 @@
 ---
 title: 第五章 含运算放大器的电路
+top_img: https://img.1nuo.me/img/categoriesbanner.webp
 
 comments: false
 tags: [电路分析]

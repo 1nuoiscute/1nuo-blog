@@ -1,5 +1,6 @@
 ---
 title: 第二章 电阻电路的等效变换
+top_img: https://img.1nuo.me/img/academicbanner.webp
 
 comments: false
 tags: [电路分析]
