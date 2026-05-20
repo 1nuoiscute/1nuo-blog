@@ -22,8 +22,8 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 .news-btn {
   display: inline-block;
   padding: 10px 28px;
-  background: var(--btn-bg);
-  color: var(--btn-color);
+  background: #5A82B8;
+  color: #fff;
   border-radius: 8px;
   font-size: 1rem;
   text-decoration: none;
