@@ -52,5 +52,4 @@ tags: [电路分析]
 <summary style="cursor:pointer;color:var(--second-color,#858585);font-size:0.9em">📌 课内已讲授但笔记未收录的内容</summary>
 <ul style="margin-top:8px;padding-left:20px;color:var(--second-color,#858585)"><li>L14~L17 可能为习题课或第五章内容</li></ul>
 </details>
-</div>
-</div>
+</div>
