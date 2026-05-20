@@ -1,4 +1,4 @@
----
+﻿---
 title: 第一章 电路的基本概念及基本定律
 date: 2026-05-20
 comments: false
@@ -8,9 +8,7 @@ tags: [电路分析]
 
 <link rel="stylesheet" href="/css/notes.css">
 
-<div class="ncre-breadcrumb">
-  <a href="../">← 电路分析 AⅠ</a>
-</div>
+<div class="ncre-breadcrumb"><a href="../">← 电路分析 AⅠ</a></div>
 
 <div class="ncre-header">
 <span class="ncre-icon">📘</span>

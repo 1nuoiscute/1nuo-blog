@@ -1,16 +1,13 @@
 ---
 title: 第七章 含有互感的电路
 
-aside: false
 comments: false
 tags: [电路分析]
 ---
 
 <link rel="stylesheet" href="/css/notes.css">
 
-<div class="ncre-breadcrumb">
-  <a href="../">← 电路分析 AⅠ</a>
-</div>
+<div class="ncre-breadcrumb"><a href="../">← 电路分析 AⅠ</a></div>
 
 <div class="ncre-header">
 <span class="ncre-icon">📔</span>
