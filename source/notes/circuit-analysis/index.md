@@ -1,6 +1,7 @@
 ---
 title: 电路分析 AⅠ
-date: 2026-05-20
+
+aside: false
 comments: false
 top_img: https://img.1nuo.me/img/categoriesbanner.webp
 ---

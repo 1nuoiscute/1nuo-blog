@@ -1,6 +1,7 @@
 ---
 title: 第二章 电阻电路的等效变换
-date: 2026-05-20
+
+aside: false
 comments: false
 tags: [电路分析]
 ---

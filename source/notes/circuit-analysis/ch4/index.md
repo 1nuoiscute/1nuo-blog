@@ -1,6 +1,7 @@
 ---
 title: 第四章 电路定理
-date: 2026-05-20
+
+aside: false
 comments: false
 tags: [电路分析]
 ---
