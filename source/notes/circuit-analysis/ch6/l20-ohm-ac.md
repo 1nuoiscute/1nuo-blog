@@ -1,5 +1,6 @@
 ---
 title: L20 向量欧姆定律
+top_img: https://img.1nuo.me/img/academicbanner.webp
 date: 2026-05-20
 tags: [电路分析]
 ---

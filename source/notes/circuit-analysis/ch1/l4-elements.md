@@ -1,5 +1,6 @@
 ---
 title: L4 无源元件
+top_img: https://img.1nuo.me/img/banner.webp
 date: 2026-05-20
 tags: [电路分析]
 ---

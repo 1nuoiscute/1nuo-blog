@@ -1,5 +1,6 @@
 ---
 title: L8 受控源
+top_img: https://img.1nuo.me/img/banner.webp
 date: 2026-05-20
 tags: [电路分析]
 ---

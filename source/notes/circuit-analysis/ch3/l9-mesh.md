@@ -1,5 +1,6 @@
 ---
 title: L9 网孔法
+top_img: https://img.1nuo.me/img/categoriesbanner.webp
 date: 2026-05-20
 tags: [电路分析]
 ---

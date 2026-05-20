@@ -1,5 +1,6 @@
 ---
 title: L3 参考方向
+top_img: https://img.1nuo.me/img/pagebanner1%2026211.webp
 date: 2026-05-20
 tags: [电路分析]
 ---
