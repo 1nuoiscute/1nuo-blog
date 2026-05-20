@@ -4,6 +4,8 @@ date: 2026-05-20
 tags: [电路分析]
 ---
 
+<p style="margin-bottom:16px"><a href="../" style="color:var(--second-color,#858585);text-decoration:none;font-size:0.85em">← 返回第一章</a></p>
+
 # 电路分析 Lesson 6:基尔霍夫电压定律及其电路应用
 
 >  课程定位:详细讲解 KVL 和 KCL 的原理及应用,强调参考方向设定、支路与回路分析、电源功率判定,并引入了电阻的等效化简  。

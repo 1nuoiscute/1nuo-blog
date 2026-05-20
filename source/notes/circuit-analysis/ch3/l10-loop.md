@@ -4,6 +4,8 @@ date: 2026-05-20
 tags: [电路分析]
 ---
 
+<p style="margin-bottom:16px"><a href="../" style="color:var(--second-color,#858585);text-decoration:none;font-size:0.85em">← 返回第三章</a></p>
+
 # 电路分析 Lesson 10：回路电流法应用实例
 
 > **课程内容**：含多个独立电流源的电路运用回路电流法求解，重点练习选树策略与列方程。

@@ -4,6 +4,8 @@ date: 2026-05-20
 tags: [电路分析]
 ---
 
+<p style="margin-bottom:16px"><a href="../" style="color:var(--second-color,#858585);text-decoration:none;font-size:0.85em">← 返回第四章</a></p>
+
 # 电路分析 Lesson 11：叠加定理与替代定理
 
 > **课程内容**：叠加定理的适用条件与使用方法，齐次性（比例性），以及替代定理。

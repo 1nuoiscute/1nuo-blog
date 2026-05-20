@@ -4,6 +4,8 @@ date: 2026-05-20
 tags: [电路分析]
 ---
 
+<p style="margin-bottom:16px"><a href="../" style="color:var(--second-color,#858585);text-decoration:none;font-size:0.85em">← 返回第一章</a></p>
+
 # 电路分析 Lesson 3:参考方向与功率判别的核心法则
 
 >  课程定位:本节课重点讲解了电路分析中至关重要的"参考方向"概念,明确了电位、电压与电流的关系,并通过关联/非关联参考方向对欧姆定律和功率计算进行了严谨的修订   。这是后续复杂电路分析的基础  。

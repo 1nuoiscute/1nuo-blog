@@ -4,6 +4,8 @@ date: 2026-05-20
 tags: [电路分析]
 ---
 
+<p style="margin-bottom:16px"><a href="../" style="color:var(--second-color,#858585);text-decoration:none;font-size:0.85em">← 返回第六章</a></p>
+
 # 电路分析 Lesson 20：交流电路中的向量欧姆定律
 
 > **课程内容**：本课讲解交流电路中的阻抗与导纳概念、向量形式的欧姆定律、RLC串并联电路分析，以及通过习题巩固节点电压法和回路电流法在正弦稳态电路中的应用。

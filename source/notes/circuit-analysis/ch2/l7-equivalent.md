@@ -4,6 +4,8 @@ date: 2026-05-20
 tags: [电路分析]
 ---
 
+<p style="margin-bottom:16px"><a href="../" style="color:var(--second-color,#858585);text-decoration:none;font-size:0.85em">← 返回第二章</a></p>
+
 # 电路分析 Lesson 7：电阻与电源的等效变换
 
 > **课程内容**：电阻等效变换的三种主要方法（串并联简化、惠斯通电桥、星-三角变换），实际电源的等效变换，对外等效原则，以及多余元件的处理。

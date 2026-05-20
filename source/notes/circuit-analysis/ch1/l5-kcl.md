@@ -4,6 +4,8 @@ date: 2026-05-20
 tags: [电路分析]
 ---
 
+<p style="margin-bottom:16px"><a href="../" style="color:var(--second-color,#858585);text-decoration:none;font-size:0.85em">← 返回第一章</a></p>
+
 # 电路分析 Lesson 5：电流源与基尔霍夫电流定律 (KCL)
 
 > 课程定位：本节课讲解了电流源特性、功率计算及基尔霍夫电流定律（KCL），重点分析了理想与实际电流源的区别、电源吸收/发出功率的判断方法，以及广义节点概念  。

@@ -4,6 +4,8 @@ date: 2026-05-20
 tags: [电路分析]
 ---
 
+<p style="margin-bottom:16px"><a href="../" style="color:var(--second-color,#858585);text-decoration:none;font-size:0.85em">← 返回第一章</a></p>
+
 # 电路分析课程导论与基本概念
 
 > **课程定位**：本课程为电路分析入门，强调参考方向、基尔霍夫定律及欧姆定律的严谨应用，聚焦集中参数电路模型中电压、电流、电位等基本物理量的定义与计算。

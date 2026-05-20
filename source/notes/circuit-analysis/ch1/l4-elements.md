@@ -4,6 +4,8 @@ date: 2026-05-20
 tags: [电路分析]
 ---
 
+<p style="margin-bottom:16px"><a href="../" style="color:var(--second-color,#858585);text-decoration:none;font-size:0.85em">← 返回第一章</a></p>
+
 # 电路分析 Lesson 4:无源元件与理想电源特性
 
 >  课程定位:本课程讲解电路分析基础,重点阐述参考方向、功率计算、电阻/电容/电感的伏安特性及理想电源特性  。

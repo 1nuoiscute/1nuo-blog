@@ -4,6 +4,8 @@ date: 2026-05-20
 tags: [电路分析]
 ---
 
+<p style="margin-bottom:16px"><a href="../" style="color:var(--second-color,#858585);text-decoration:none;font-size:0.85em">← 返回第六章</a></p>
+
 # 电路分析 Lesson 18：相位差与初相位的概念解析
 
 > **课程内容**：本课讲解正弦交流电中有效值与最大值的关系、初相位与相位差的概念，以及用复数相量表示正弦量的方法及其在电路分析中的应用。

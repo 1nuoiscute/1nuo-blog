@@ -4,6 +4,8 @@ date: 2026-05-20
 tags: [电路分析]
 ---
 
+<p style="margin-bottom:16px"><a href="../" style="color:var(--second-color,#858585);text-decoration:none;font-size:0.85em">← 返回第二章</a></p>
+
 # 电路分析 Lesson 8：受控电源的等效变换
 
 > **课程内容**：含受控源电路中的电源等效变换方法，与独立源变换的相同与不同之处，以及变换中不能改变受控源控制量的核心原则。

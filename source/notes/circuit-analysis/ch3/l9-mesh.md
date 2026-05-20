@@ -4,6 +4,8 @@ date: 2026-05-20
 tags: [电路分析]
 ---
 
+<p style="margin-bottom:16px"><a href="../" style="color:var(--second-color,#858585);text-decoration:none;font-size:0.85em">← 返回第三章</a></p>
+
 # 电路分析 Lesson 9：网孔电流法与回路电流法
 
 > **课程内容**：本课讲解网孔电流法的标准形式与特殊处理（电流源、受控源），从网孔法到回路电流法的推广，以及图论基础（树、树枝、连枝、基本回路、基本割集）。

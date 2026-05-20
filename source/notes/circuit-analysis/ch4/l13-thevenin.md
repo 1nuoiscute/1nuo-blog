@@ -4,6 +4,8 @@ date: 2026-05-20
 tags: [电路分析]
 ---
 
+<p style="margin-bottom:16px"><a href="../" style="color:var(--second-color,#858585);text-decoration:none;font-size:0.85em">← 返回第四章</a></p>
+
 # 电路分析 Lesson 12：替代定理与戴维宁定理
 
 > **课程内容**：本课深入讲解替代定理的定义、证明与应用，以及戴维宁定理的基本概念、证明方法和等效参数的求法。
