@@ -2,7 +2,7 @@
 title: 基于 Cloudflare + Deepseek 的私人资产管理平台 1nuo-wealth 发布
 date: 2026-02-27 13:54:13
 tags: [开源项目, Java, DeepSeek, Cloudflare, 资产管理, AI,]
-categories: [项目记录]
+categories: [项目经历]
 top_img: https://img.1nuo.me/img/academicbanner.webp
 ---
 

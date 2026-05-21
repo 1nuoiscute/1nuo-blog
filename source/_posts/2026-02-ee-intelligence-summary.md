@@ -7,6 +7,7 @@ tags:
   - 汇总
   - 电气简报
   - 西南交通大学
+hide: true
 top_img: https://img.1nuo.me/img/categoriesbanner.webp
 ---
 

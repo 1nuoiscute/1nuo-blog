@@ -1,14 +1,7 @@
 name: EE Intelligence Satellite
 
 on:
-  schedule:
-    # ⏲️ 定时任务设置 (UTC时间)
-    # 北京时间比UTC早8小时
-    # 下面设定为：北京时间 每天 08:00 和 20:00 运行
-    - cron: '0 0,12 * * *'
-    # 2026-05 v1.5: 智能过滤 + Chat模型降本 + 诺诺点评栏
-  
-  # 允许你在 GitHub 网页上点击 "Run workflow" 手动触发
+  # 已停更 — 保留手动触发入口
   workflow_dispatch:
 
 jobs:
