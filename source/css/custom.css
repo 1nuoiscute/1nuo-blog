@@ -92,7 +92,7 @@ main {
 /* 首页副标题打字效果 */
 #site-subtitle {
   font-size: clamp(0.9rem, 2.5vw, 1.3rem) !important;
-  font-weight: 500 !important;
+  font-weight: 600 !important;
 }
 
 /* --- 侧栏作者名 --- */
@@ -101,12 +101,11 @@ main {
   font-size: clamp(1rem, 2vw, 1.3rem) !important;
 }
 
-/* --- 站点标题/导航用 DM Sans --- */
+/* --- 站点标题用系统原生字体 --- */
 #site-title,
 #site-subtitle,
 #nav .site-name,
 .author-info-name {
-  font-family: "Sora", sans-serif !important;
   letter-spacing: -0.01em;
 }
 
