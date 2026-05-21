@@ -11,6 +11,8 @@ hide: true
 top_img: https://img.1nuo.me/img/pagebanner1%2026211.webp
 ---
 
+> 🧩 本文由 OpenClaw 小易生成
+
 ## Chapter 1: 来处
 
 今年 2 月，我搭了一套自动化爬虫＋AI 整理的流水线，用来抓取西南交大新闻和电气学院官网的动态，再由 DeepSeek 提炼成带 Action Tip 的简报。初衷很朴素：信息源太散，与其每天在各网站间来回翻，不如让机器先把活干了，我只看高信噪比的那部分。

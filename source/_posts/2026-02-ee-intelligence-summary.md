@@ -11,6 +11,8 @@ hide: true
 top_img: https://img.1nuo.me/img/categoriesbanner.webp
 ---
 
+> 🧩 本文由 OpenClaw 小易生成
+
 > 2026 年 2 月至 5 月，电气简报共发布 **29 期**。以下是按月份整理的核心内容汇总。
 
 ---
