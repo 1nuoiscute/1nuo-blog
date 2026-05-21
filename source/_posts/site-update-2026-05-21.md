@@ -7,6 +7,7 @@ tags:
   - 更新
   - 主题
   - 设计
+  - AI
 top_img: https://img.1nuo.me/img/academicbanner.webp
 ---
 
