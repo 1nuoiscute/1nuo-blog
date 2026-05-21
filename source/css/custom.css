@@ -1,0 +1,108 @@
+/* =========================================
+   1nuo.me 自定义样式 — 浅粉主题
+   ========================================= */
+
+/* --- 文章阅读体验 --- */
+#article-container {
+  font-size: 16px;
+  line-height: 1.8;
+}
+
+#article-container p {
+  margin: 1.2em 0;
+}
+
+#article-container h1,
+#article-container h2,
+#article-container h3,
+#article-container h4 {
+  margin-top: 1.8em;
+  margin-bottom: 0.6em;
+}
+
+#article-container h1 { font-size: 1.75em; }
+#article-container h2 { font-size: 1.45em; }
+#article-container h3 { font-size: 1.2em; }
+#article-container h4 { font-size: 1.05em; }
+
+/* 正文超链接 */
+#article-container a {
+  text-decoration: none;
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+#article-container a:hover {
+  border-bottom-color: currentColor;
+}
+
+/* 文章卡片微调 */
+.recent-post-item {
+  border-radius: 12px;
+  overflow: hidden;
+  transition: transform 0.2s cubic-bezier(0.16, 1, 0.3, 1),
+              box-shadow 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.recent-post-item:hover {
+  transform: translateY(-2px);
+}
+
+/* 侧栏卡片 */
+.card-widget {
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* 按钮统一圆角 */
+#article-container .btn-wrap .btn,
+a.article-meta__categories,
+.comment-button,
+.pagination .page-number,
+.pagination .extend {
+  border-radius: 10px;
+}
+
+/* 头部导航 */
+#nav {
+  transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* 页面淡入动画 */
+main {
+  animation: pageIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@keyframes pageIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  main, .recent-post-item, a, #nav, .btn, .card-widget {
+    animation: none !important;
+    transition: none !important;
+  }
+}
+
+/* --- 标题/站点名称用 Instrument Serif --- */
+#site-title,
+#site-subtitle,
+#nav .site-name {
+  font-family: "Instrument Serif", serif !important;
+  letter-spacing: 0.02em;
+}
+
+/* --- 移动端优化 --- */
+@media (max-width: 768px) {
+  #article-container { font-size: 15px; }
+  .recent-post-item { margin-bottom: 12px; }
+}
+
+/* --- 焦点状态 --- */
+a:focus-visible,
+button:focus-visible,
+.btn:focus-visible,
+.page-number:focus-visible {
+  outline: 2px solid var(--theme-color, #F2A2C8);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
