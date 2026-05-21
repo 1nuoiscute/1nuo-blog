@@ -37,7 +37,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 
 ---
 
-在糖吧之前的记录贴：『【记录】我好想去看星星啊』（https://tieba.baidu.com/p/9047022087）
+在糖吧之前的记录贴：『我好想去看星星啊』（https://www.1nuo.me/2026/05/21/lets-go-see-stars/）
 
 看到这个帖子，心里还是挺感慨的。
 
