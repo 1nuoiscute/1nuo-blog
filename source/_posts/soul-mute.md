@@ -15,7 +15,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 
 > 本文章首发于百度贴吧（天堂鸡汤吧）
 > 原帖写于 2025-07-21，今日转载至个人网站
-> 内容均属原创
+> 内容均属原创，转载由小易辅助整理
 
 ---
 
@@ -86,6 +86,8 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 其实还好..?）
 
 ![](https://img.1nuo.me/img/posts/soul-mute-03.webp)
+
+---
 
 ## March
 
