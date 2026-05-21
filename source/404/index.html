@@ -6,37 +6,33 @@
   <title>404 · 1nuo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,500;9..40,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --space-8: 8px; --space-16: 16px; --space-24: 24px; --space-32: 32px;
-      --space-48: 48px; --space-64: 64px; --space-96: 96px; --space-128: 128px;
+      --space-16: 16px; --space-24: 24px; --space-32: 32px; --space-48: 48px;
+      --space-64: 64px; --space-96: 96px; --space-128: 128px;
       --bg: oklch(0.98 0.005 80);
-      --surface: oklch(0.95 0.008 80);
       --text: oklch(0.15 0.02 60);
-      --text-muted: oklch(0.45 0.03 60);
+      --text-muted: oklch(0.5 0.03 60);
       --accent: oklch(0.55 0.18 280);
-      --accent-glow: oklch(0.55 0.18 280 / 0.08);
+      --accent-soft: oklch(0.55 0.18 280 / 0.06);
       --border: oklch(0.88 0.01 80);
-      --line: oklch(0.85 0.01 80);
       --ease: cubic-bezier(0.16, 1, 0.3, 1);
     }
 
     [data-theme="dark"] {
       --bg: oklch(0.09 0.01 280);
-      --surface: oklch(0.14 0.015 280);
       --text: oklch(0.93 0.01 80);
       --text-muted: oklch(0.55 0.02 80);
       --accent: oklch(0.65 0.18 280);
-      --accent-glow: oklch(0.65 0.18 280 / 0.12);
+      --accent-soft: oklch(0.65 0.18 280 / 0.08);
       --border: oklch(0.2 0.015 280);
-      --line: oklch(0.18 0.01 280);
     }
 
     @media (prefers-color-scheme: dark) {
-      [data-theme="auto"] { --bg: oklch(0.09 0.01 280); --surface: oklch(0.14 0.015 280); --text: oklch(0.93 0.01 80); --text-muted: oklch(0.55 0.02 80); --accent: oklch(0.65 0.18 280); --accent-glow: oklch(0.65 0.18 280 / 0.12); --border: oklch(0.2 0.015 280); --line: oklch(0.18 0.01 280); }
+      [data-theme="auto"] { --bg: oklch(0.09 0.01 280); --text: oklch(0.93 0.01 80); --text-muted: oklch(0.55 0.02 80); --accent: oklch(0.65 0.18 280); --accent-soft: oklch(0.65 0.18 280 / 0.08); --border: oklch(0.2 0.015 280); }
     }
 
     html { font-size: 16px; height: 100%; }
@@ -45,245 +41,147 @@
       background: var(--bg);
       color: var(--text);
       height: 100%;
-      transition: background 0.4s var(--ease), color 0.4s var(--ease);
-      -webkit-font-smoothing: antialiased;
-      overflow: hidden;
-    }
-
-    /* --- Full page grid --- */
-    .page {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      height: 100vh;
-      min-height: 100dvh;
-    }
-
-    /* --- Left side — visual --- */
-    .visual {
       display: flex;
       align-items: center;
       justify-content: center;
-      background: var(--surface);
-      position: relative;
-      overflow: hidden;
+      padding: var(--space-24);
+      transition: background 0.4s var(--ease), color 0.4s var(--ease);
+      -webkit-font-smoothing: antialiased;
     }
 
-    .visual-bg {
-      position: absolute;
-      inset: 0;
-      background: 
-        radial-gradient(ellipse 60% 50% at 50% 50%, var(--accent-glow) 0%, transparent 70%);
-      opacity: 0.6;
+    main {
+      max-width: 720px;
+      width: 100%;
+      animation: in 0.7s var(--ease) both;
     }
 
-    .number {
+    @keyframes in {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .top-row {
+      display: flex;
+      align-items: baseline;
+      gap: var(--space-24);
+      margin-bottom: var(--space-32);
+    }
+
+    .code {
       font-family: "Instrument Serif", serif;
-      font-size: clamp(10rem, 18vw, 20rem);
+      font-size: clamp(5rem, 12vw, 8rem);
       line-height: 1;
       letter-spacing: -0.06em;
-      color: var(--text);
-      position: relative;
-      z-index: 1;
-      animation: floatIn 0.8s var(--ease) both;
-    }
-
-    .number span {
-      display: inline-block;
-      animation: digitPop 0.6s var(--ease) both;
-    }
-    .number span:nth-child(1) { animation-delay: 0.1s; }
-    .number span:nth-child(2) { animation-delay: 0.25s; }
-    .number span:nth-child(3) { animation-delay: 0.4s; }
-
-    @keyframes floatIn {
-      from { opacity: 0; transform: translateY(40px) scale(0.95); }
-      to { opacity: 1; transform: translateY(0) scale(1); }
-    }
-
-    @keyframes digitPop {
-      0% { opacity: 0; transform: translateY(60px) rotate(-3deg); }
-      100% { opacity: 1; transform: translateY(0) rotate(0); }
-    }
-
-    /* --- Right side — content --- */
-    .content {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: var(--space-64) var(--space-48);
-      animation: slideRight 0.7s var(--ease) 0.3s both;
-    }
-
-    @keyframes slideRight {
-      from { opacity: 0; transform: translateX(24px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-
-    .label {
-      font-size: 0.75rem;
-      font-weight: 600;
-      letter-spacing: 0.08em;
-      text-transform: uppercase;
       color: var(--accent);
-      margin-bottom: var(--space-16);
+    }
+
+    .tag {
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      background: var(--accent-soft);
+      padding: 4px 12px;
+      border-radius: 999px;
     }
 
     h1 {
-      font-size: clamp(1.5rem, 3vw, 2.25rem);
+      font-size: clamp(1.25rem, 2.5vw, 1.75rem);
       font-weight: 500;
-      line-height: 1.3;
+      line-height: 1.4;
       margin-bottom: var(--space-16);
     }
 
-    .desc {
+    p {
       font-size: 1rem;
       line-height: 1.7;
       color: var(--text-muted);
       margin-bottom: var(--space-48);
-      max-width: 42ch;
+      max-width: 48ch;
     }
 
-    .actions {
+    .stack {
       display: flex;
       gap: var(--space-12);
       flex-wrap: wrap;
     }
 
-    .btn {
+    .link {
       display: inline-flex;
       align-items: center;
-      gap: var(--space-8);
-      padding: var(--space-12) var(--space-28);
-      border-radius: 10px;
-      font-family: "DM Sans", sans-serif;
+      gap: 6px;
       font-size: 0.9375rem;
       font-weight: 500;
       text-decoration: none;
+      color: var(--text);
+      padding: 8px 0;
+      border-bottom: 1.5px solid var(--border);
       transition: all 0.2s var(--ease);
     }
-
-    .btn-primary {
-      background: var(--accent);
-      color: oklch(1 0 0);
+    .link:hover {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+      gap: 10px;
     }
-    .btn-primary:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px var(--accent-glow);
-    }
-
-    .btn-secondary {
-      background: transparent;
-      color: var(--text);
-      border: 1px solid var(--border);
-    }
-    .btn-secondary:hover {
-      background: var(--surface);
-      border-color: var(--text-muted);
-      transform: translateY(-2px);
-    }
-
-    .btn:focus-visible {
+    .link:focus-visible {
       outline: 2px solid var(--accent);
-      outline-offset: 3px;
+      outline-offset: 4px;
+      border-radius: 2px;
     }
 
-    .footer-note {
+    .divider {
+      color: var(--border);
+      align-self: center;
+    }
+
+    .foot {
       margin-top: var(--space-64);
       font-size: 0.8125rem;
       color: var(--text-muted);
-      opacity: 0.4;
-      transition: opacity 0.3s ease;
+      opacity: 0.35;
     }
-    .footer-note:hover { opacity: 0.8; }
-
-    .footer-note code {
-      font-family: "DM Sans", monospace;
+    .foot:hover { opacity: 0.7; }
+    .foot code {
       font-size: 0.75rem;
-      background: var(--surface);
+      background: var(--accent-soft);
       padding: 2px 8px;
       border-radius: 4px;
-      border: 1px solid var(--border);
-    }
-
-    /* --- Subtle grid lines on visual side --- */
-    .visual::before {
-      content: '';
-      position: absolute;
-      inset: 0;
-      background-image:
-        linear-gradient(var(--line) 1px, transparent 1px),
-        linear-gradient(90deg, var(--line) 1px, transparent 1px);
-      background-size: 64px 64px;
-      opacity: 0.15;
-      z-index: 0;
-    }
-
-    /* --- Responsive --- */
-    @media (max-width: 768px) {
-      .page { grid-template-columns: 1fr; grid-template-rows: 40vh 60vh; }
-      .visual { min-height: 40vh; }
-      .content { padding: var(--space-32) var(--space-24); }
-      .number { font-size: clamp(6rem, 25vw, 10rem); }
     }
 
     @media (max-width: 480px) {
-      .content { padding: var(--space-24) var(--space-16); }
-      .actions { flex-direction: column; }
-      .btn { justify-content: center; }
+      body { padding: var(--space-16); }
+      .stack { flex-direction: column; align-items: flex-start; }
+      .divider { display: none; }
     }
 
     @media (prefers-reduced-motion: reduce) {
-      .number, .number span, .content, .btn { animation: none !important; transition: none !important; }
+      main, .link { animation: none !important; transition: none !important; }
     }
   </style>
 </head>
 <body>
-  <div class="page">
-    <div class="visual" aria-hidden="true">
-      <div class="visual-bg"></div>
-      <div class="number">
-        <span>4</span><span>0</span><span>4</span>
-      </div>
+  <main>
+    <div class="top-row">
+      <div class="code">404</div>
+      <div class="tag">not found</div>
     </div>
-
-    <div class="content">
-      <div class="label">Error · Not Found</div>
-      <h1>这页走丢了</h1>
-      <p class="desc">
-        别找了，我这儿没有你要的东西。<br>
-        可能是链接不对，也可能是它自己跑路了。
-      </p>
-      <div class="actions">
-        <a href="/" class="btn btn-primary">回首页</a>
-        <a href="/archives/" class="btn btn-secondary">翻归档</a>
-      </div>
-      <div class="footer-note">
-        🧩 第 <code>0x198</code> 号页面不存在
-      </div>
+    <h1>你找的东西不在这儿</h1>
+    <p>链接可能写错了，页面可能搬家了，<br>也可能它从来就没存在过。</p>
+    <div class="stack">
+      <a href="/" class="link">← 回首页</a>
+      <span class="divider">/</span>
+      <a href="/archives/" class="link">翻归档</a>
+      <span class="divider">/</span>
+      <a href="https://github.com/1nuoiscute/1nuo-blog/issues/new" class="link">告诉我 →</a>
     </div>
-  </div>
+    <div class="foot">🧩 0x198</div>
+  </main>
 
   <script>
-    (function() {
-      const html = document.documentElement;
-      const theme = html.getAttribute('data-theme');
-      if (theme === 'auto') {
-        const mq = window.matchMedia('(prefers-color-scheme: dark)');
-        const apply = (isDark) => {
-          const vars = {
-            '--bg': isDark ? 'oklch(0.09 0.01 280)' : 'oklch(0.98 0.005 80)',
-            '--surface': isDark ? 'oklch(0.14 0.015 280)' : 'oklch(0.95 0.008 80)',
-            '--text': isDark ? 'oklch(0.93 0.01 80)' : 'oklch(0.15 0.02 60)',
-            '--text-muted': isDark ? 'oklch(0.55 0.02 80)' : 'oklch(0.45 0.03 60)',
-            '--accent': isDark ? 'oklch(0.65 0.18 280)' : 'oklch(0.55 0.18 280)',
-            '--accent-glow': isDark ? 'oklch(0.65 0.18 280 / 0.12)' : 'oklch(0.55 0.18 280 / 0.08)',
-            '--border': isDark ? 'oklch(0.2 0.015 280)' : 'oklch(0.88 0.01 80)',
-            '--line': isDark ? 'oklch(0.18 0.01 280)' : 'oklch(0.85 0.01 80)',
-          };
-          Object.entries(vars).forEach(([k, v]) => html.style.setProperty(k, v));
-        };
-        apply(mq.matches);
-        mq.addEventListener('change', e => apply(e.matches));
+    (function(){
+      const h=document.documentElement;
+      if(h.getAttribute('data-theme')==='auto'){
+        const m=window.matchMedia('(prefers-color-scheme:dark)'),a=v=>{Object.entries(v).forEach(([k,v])=>h.style.setProperty(k,v))};
+        a(m.matches?{'--bg':'oklch(0.09 0.01 280)','--text':'oklch(0.93 0.01 80)','--text-muted':'oklch(0.55 0.02 80)','--accent':'oklch(0.65 0.18 280)','--accent-soft':'oklch(0.65 0.18 280 / 0.08)','--border':'oklch(0.2 0.015 280)'}:{'--bg':'oklch(0.98 0.005 80)','--text':'oklch(0.15 0.02 60)','--text-muted':'oklch(0.5 0.03 60)','--accent':'oklch(0.55 0.18 280)','--accent-soft':'oklch(0.55 0.18 280 / 0.06)','--border':'oklch(0.88 0.01 80)'});
+        m.addEventListener('change',e=>a(e.matches?{'--bg':'oklch(0.09 0.01 280)','--text':'oklch(0.93 0.01 80)','--text-muted':'oklch(0.55 0.02 80)','--accent':'oklch(0.65 0.18 280)','--accent-soft':'oklch(0.65 0.18 280 / 0.08)','--border':'oklch(0.2 0.015 280)'}:{'--bg':'oklch(0.98 0.005 80)','--text':'oklch(0.15 0.02 60)','--text-muted':'oklch(0.5 0.03 60)','--accent':'oklch(0.55 0.18 280)','--accent-soft':'oklch(0.55 0.18 280 / 0.06)','--border':'oklch(0.88 0.01 80)'}));
       }
     })();
   </script>
