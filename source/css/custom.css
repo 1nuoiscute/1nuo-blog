@@ -4,7 +4,7 @@
 
 /* --- 文章阅读体验 --- */
 #article-container {
-  font-size: 16px;
+  font-size: 1rem;
   line-height: 1.8;
 }
 
@@ -83,46 +83,36 @@ main {
   }
 }
 
-/* --- 首页标题缩小 & 加粗 --- */
+/* --- 首页标题 — 流式缩放 --- */
 #site-title {
-  font-size: 1.6em !important;
+  font-size: clamp(1.5rem, 5vw, 2.4rem) !important;
   font-weight: 700 !important;
-}
-@media (min-width: 768px) {
-  #site-title {
-    font-size: 2.2em !important;
-  }
 }
 
 /* 首页副标题打字效果 */
 #site-subtitle {
-  font-size: 1em !important;
+  font-size: clamp(0.9rem, 2.5vw, 1.3rem) !important;
   font-weight: 500 !important;
 }
-@media (min-width: 768px) {
-  #site-subtitle {
-    font-size: 1.3em !important;
-  }
-}
 
-/* --- 侧栏作者名加粗 --- */
+/* --- 侧栏作者名 --- */
 #aside-content .author-info-name {
   font-weight: 700 !important;
-  font-size: 1.3em !important;
+  font-size: clamp(1rem, 2vw, 1.3rem) !important;
 }
 
-/* --- 站点标题/导航用 DM Sans 加粗 --- */
+/* --- 站点标题/导航用 DM Sans --- */
 #site-title,
 #site-subtitle,
 #nav .site-name,
 .author-info-name {
-  font-family: "DM Sans", "Instrument Serif", serif !important;
+  font-family: "DM Sans", sans-serif !important;
   letter-spacing: -0.01em;
 }
 
-/* --- 移动端优化 --- */
+/* --- 移动端文章字号微调 --- */
 @media (max-width: 768px) {
-  #article-container { font-size: 15px; }
+  #article-container { font-size: 0.95rem; }
   .recent-post-item { margin-bottom: 12px; }
 }
 
