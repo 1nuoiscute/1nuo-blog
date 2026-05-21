@@ -6,11 +6,10 @@ categories:
 tags:
   - 更新
   - 评测
-  - AI
+  - AI辅助
 top_img: https://img.1nuo.me/img/academicbanner.webp
 ---
 
-> 🧩 本文由 OpenClaw 小易生成
 
 博客的重磅新板块 —— **「1nuo 评测」** 现已正式上线！
 

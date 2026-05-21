@@ -1,13 +1,11 @@
 ﻿---
 title: 基于 Cloudflare + Deepseek 的私人资产管理平台 1nuo-wealth 发布
 date: 2026-02-27 13:54:13
-tags: [开源项目, Java, DeepSeek, Cloudflare, 资产管理, AI,]
-  - AI
+tags: [开源项目, Java, DeepSeek, Cloudflare, 资产管理, AI辅助]
 categories: [项目经历]
 top_img: https://img.1nuo.me/img/academicbanner.webp
 ---
 
-> 🧩 本文由 OpenClaw 小易生成
 
 市面上的记账 App 很多，但用起来总觉得差点意思：要么充斥着理财广告和开屏弹窗，要么很难把“日常流水账”和“基金理财动态市值”有机地结合在一个大盘里。
 我决定自己动手，写一个完全受自己控制的财务中枢——**1nuo-wealth**。

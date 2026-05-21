@@ -6,12 +6,12 @@ categories:
 tags:
   - Python
   - GitHub Actions
-  - AI
+  - AI辅助
   - 自动化
 top_img: https://img.1nuo.me/img/pagebanner1%2026211.webp
 ---
 
-> 🧩 本文由 OpenClaw 小易生成
+
 ## Chapter 1: 起因
 这其实是 **Gemini** 的主意。
 我觉得这个想法很酷。

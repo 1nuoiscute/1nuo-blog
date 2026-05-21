@@ -6,11 +6,10 @@ categories:
 tags:
   - 更新
   - 建站
-  - AI
+  - AI辅助
 top_img: https://img.1nuo.me/img/academicbanner.webp
 ---
 
-> 🧩 本文由 OpenClaw 小易生成
 
 ### 📦 导航结构调整
 

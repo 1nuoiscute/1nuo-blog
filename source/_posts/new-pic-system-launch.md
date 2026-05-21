@@ -7,11 +7,10 @@ tags:
   - 更新
   - 图床
   - Cloudflare
-  - AI
+  - AI辅助
 top_img: https://img.1nuo.me/img/academicbanner.webp
 ---
 
-> 🧩 本文由 OpenClaw 小易生成
 
 随着「1nuo 评测」的上线，网站内的照片（尤其是山西之行永乐宫壁画等高清大图）越来越多，我意识到传统的“图片随源码一起存放在本地”的方式已经达到了瓶颈：GitHub 仓库日益臃肿，国内访问加载缓慢，每次部署都在痛苦转圈。
 
