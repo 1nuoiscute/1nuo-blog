@@ -85,7 +85,7 @@ main {
 
 /* --- 首页标题 — 流式缩放 --- */
 #site-title {
-  font-size: clamp(1.5rem, 5vw, 2.4rem) !important;
+  font-size: clamp(1.3rem, 4vw, 2rem) !important;
   font-weight: 700 !important;
 }
 
@@ -113,6 +113,11 @@ main {
 @media (max-width: 768px) {
   #article-container { font-size: 0.95rem; }
   .recent-post-item { margin-bottom: 12px; }
+}
+
+/* --- 文章卡片整张可点击 --- */
+.recent-post-item {
+  cursor: pointer;
 }
 
 /* --- 焦点状态 --- */
