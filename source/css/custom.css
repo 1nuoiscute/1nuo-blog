@@ -83,12 +83,23 @@ main {
   }
 }
 
-/* --- 标题/站点名称用 Instrument Serif --- */
+/* --- 标题/站点名称 --- */
 #site-title,
 #site-subtitle,
 #nav .site-name {
-  font-family: "Instrument Serif", serif !important;
-  letter-spacing: 0.02em;
+  font-family: "DM Sans", "Instrument Serif", serif !important;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+
+/* 手机端标题字号调小 */
+@media (max-width: 768px) {
+  #site-title {
+    font-size: 2.2rem !important;
+  }
+  #site-subtitle {
+    font-size: 1rem !important;
+  }
 }
 
 /* --- 移动端优化 --- */
