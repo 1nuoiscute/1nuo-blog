@@ -83,23 +83,41 @@ main {
   }
 }
 
-/* --- 标题/站点名称 --- */
-#site-title,
-#site-subtitle,
-#nav .site-name {
-  font-family: "DM Sans", "Instrument Serif", serif !important;
-  font-weight: 700;
-  letter-spacing: -0.01em;
+/* --- 首页标题缩小 & 加粗 --- */
+#site-title {
+  font-size: 1.6em !important;
+  font-weight: 700 !important;
+}
+@media (min-width: 768px) {
+  #site-title {
+    font-size: 2.2em !important;
+  }
 }
 
-/* 手机端标题字号调小 */
-@media (max-width: 768px) {
-  #site-title {
-    font-size: 2.2rem !important;
-  }
+/* 首页副标题打字效果 */
+#site-subtitle {
+  font-size: 1em !important;
+  font-weight: 500 !important;
+}
+@media (min-width: 768px) {
   #site-subtitle {
-    font-size: 1rem !important;
+    font-size: 1.3em !important;
   }
+}
+
+/* --- 侧栏作者名加粗 --- */
+#aside-content .author-info-name {
+  font-weight: 700 !important;
+  font-size: 1.3em !important;
+}
+
+/* --- 站点标题/导航用 DM Sans 加粗 --- */
+#site-title,
+#site-subtitle,
+#nav .site-name,
+.author-info-name {
+  font-family: "DM Sans", "Instrument Serif", serif !important;
+  letter-spacing: -0.01em;
 }
 
 /* --- 移动端优化 --- */
