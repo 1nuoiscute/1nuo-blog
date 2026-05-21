@@ -37,7 +37,7 @@ top_img: https://img.1nuo.me/img/pagebanner1%2026211.webp
 | 涉及通知 | 估测 300+ 条 |
 | AI 模型 | 最初 DeepSeek → 后期 DeepSeek-V4-Flash |
 
-所有内容已按主题整理进 **[月度汇总](/2026/02/ee-intelligence-summary/)**，方便回顾查阅。
+所有内容已按主题整理进 **[月度汇总](/2026/05/21/2026-02-ee-intelligence-summary/)**，方便回顾查阅。
 
 ---
 

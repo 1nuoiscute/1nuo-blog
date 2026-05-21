@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="zh-CN" data-theme="auto">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>404 · 1nuo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,500;9..40,700&family=Instrument+Serif:opsz@14&display=swap" rel="stylesheet">
+  <style>
+    /* --- Reset & Base --- */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    
+    :root {
+      --space-4: 4px; --space-8: 8px; --space-16: 16px; --space-24: 24px;
+      --space-32: 32px; --space-48: 48px; --space-64: 64px; --space-96: 96px;
+      --content-width: 65ch;
+      --bg: oklch(0.98 0.005 80);
+      --bg-card: oklch(0.96 0.008 80);
+      --text: oklch(0.2 0.02 60);
+      --text-muted: oklch(0.5 0.03 60);
+      --accent: oklch(0.55 0.18 280);
+      --accent-soft: oklch(0.9 0.05 280);
+      --border: oklch(0.88 0.01 80);
+      --glow: oklch(0.55 0.18 280 / 0.12);
+      --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    [data-theme="dark"] {
+      --bg: oklch(0.13 0.01 280);
+      --bg-card: oklch(0.17 0.015 280);
+      --text: oklch(0.92 0.01 80);
+      --text-muted: oklch(0.6 0.02 80);
+      --accent: oklch(0.65 0.18 280);
+      --accent-soft: oklch(0.25 0.06 280);
+      --border: oklch(0.22 0.015 280);
+      --glow: oklch(0.65 0.18 280 / 0.15);
+    }
+
+    @media (prefers-color-scheme: dark) {
+      [data-theme="auto"] { --bg: oklch(0.13 0.01 280); --bg-card: oklch(0.17 0.015 280); --text: oklch(0.92 0.01 80); --text-muted: oklch(0.6 0.02 80); --accent: oklch(0.65 0.18 280); --accent-soft: oklch(0.25 0.06 280); --border: oklch(0.22 0.015 280); --glow: oklch(0.65 0.18 280 / 0.15); }
+    }
+
+    html { font-size: 16px; }
+    body {
+      font-family: "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--space-24);
+      transition: background 0.4s var(--ease-out-expo), color 0.4s var(--ease-out-expo);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* --- Container --- */
+    .container {
+      max-width: var(--content-width);
+      width: 100%;
+      text-align: center;
+      animation: fadeSlideUp 0.6s var(--ease-out-expo) both;
+    }
+
+    @keyframes fadeSlideUp {
+      from { opacity: 0; transform: translateY(24px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* --- Code / Number --- */
+    .error-code {
+      font-family: "Instrument Serif", serif;
+      font-size: clamp(6rem, 20vw, 12rem);
+      line-height: 1;
+      color: var(--text);
+      letter-spacing: -0.04em;
+      position: relative;
+      display: inline-block;
+      margin-bottom: var(--space-16);
+    }
+
+    .error-code::after {
+      content: '';
+      position: absolute;
+      inset: 20% -12% 0 -12%;
+      background: var(--glow);
+      filter: blur(48px);
+      border-radius: 50%;
+      z-index: -1;
+      animation: pulseGlow 3s ease-in-out infinite;
+    }
+
+    @keyframes pulseGlow {
+      0%, 100% { opacity: 0.5; transform: scale(1); }
+      50% { opacity: 1; transform: scale(1.08); }
+    }
+
+    /* --- Message --- */
+    .error-title {
+      font-size: clamp(1.25rem, 3vw, 1.75rem);
+      font-weight: 500;
+      color: var(--text);
+      margin-bottom: var(--space-8);
+    }
+
+    .error-desc {
+      font-size: 1rem;
+      line-height: 1.6;
+      color: var(--text-muted);
+      margin-bottom: var(--space-48);
+      max-width: 40ch;
+      margin-left: auto;
+      margin-right: auto;
+    }
+
+    /* --- Actions --- */
+    .actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: var(--space-12);
+      justify-content: center;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-8);
+      padding: var(--space-12) var(--space-24);
+      border-radius: 12px;
+      font-family: "DM Sans", sans-serif;
+      font-size: 0.9375rem;
+      font-weight: 500;
+      text-decoration: none;
+      transition: all 0.2s var(--ease-out-expo);
+      cursor: pointer;
+      border: none;
+    }
+
+    .btn-primary {
+      background: var(--accent);
+      color: oklch(1 0 0);
+      box-shadow: 0 2px 12px var(--glow);
+    }
+    .btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px var(--glow);
+    }
+    .btn-primary:active {
+      transform: translateY(0);
+    }
+
+    .btn-secondary {
+      background: var(--bg-card);
+      color: var(--text);
+      border: 1px solid var(--border);
+    }
+    .btn-secondary:hover {
+      background: var(--accent-soft);
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .btn-secondary:active {
+      transform: translateY(0);
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--accent);
+      outline-offset: 3px;
+    }
+
+    /* --- Fun detail --- */
+    .easter-egg {
+      margin-top: var(--space-64);
+      font-size: 0.8125rem;
+      color: var(--text-muted);
+      opacity: 0.5;
+      transition: opacity 0.3s ease;
+    }
+    .easter-egg:hover { opacity: 1; }
+
+    .easter-egg span {
+      display: inline-block;
+      transition: transform 0.3s var(--ease-out-expo);
+      cursor: default;
+    }
+    .easter-egg:hover span { transform: rotate(12deg); }
+
+    /* --- Responsive --- */
+    @media (max-width: 480px) {
+      body { padding: var(--space-16); }
+      .error-desc { margin-bottom: var(--space-32); }
+      .actions { flex-direction: column; }
+      .btn { justify-content: center; }
+    }
+
+    /* --- Reduced motion --- */
+    @media (prefers-reduced-motion: reduce) {
+      .container, .btn, .error-code::after, .easter-egg span {
+        animation: none !important;
+        transition: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <main class="container" role="main">
+    <div class="error-code" aria-hidden="true">404</div>
+    <h1 class="error-title">这页好像走丢了</h1>
+    <p class="error-desc">
+      你要找的东西不在我这儿。可能是链接写错了，或者它已经被风吹走了。
+    </p>
+    <div class="actions">
+      <a href="/" class="btn btn-primary">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+          <path d="M1 8h14M8 1l7 7-7 7" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+        回首页
+      </a>
+      <a href="/archives/" class="btn btn-secondary">
+        翻翻归档
+      </a>
+    </div>
+    <div class="easter-egg">
+      <span>🧩</span> 第 <code>0x198</code> 号页面不存在
+    </div>
+  </main>
+
+  <script>
+    // System theme detection for 404 page shown outside regular site wrapper
+    (function() {
+      const html = document.documentElement;
+      const theme = html.getAttribute('data-theme');
+      if (theme === 'auto') {
+        const mq = window.matchMedia('(prefers-color-scheme: dark)');
+        const apply = (isDark) => {
+          html.style.setProperty('--bg', isDark ? 'oklch(0.13 0.01 280)' : 'oklch(0.98 0.005 80)');
+          html.style.setProperty('--bg-card', isDark ? 'oklch(0.17 0.015 280)' : 'oklch(0.96 0.008 80)');
+          html.style.setProperty('--text', isDark ? 'oklch(0.92 0.01 80)' : 'oklch(0.2 0.02 60)');
+          html.style.setProperty('--text-muted', isDark ? 'oklch(0.6 0.02 80)' : 'oklch(0.5 0.03 60)');
+          html.style.setProperty('--accent', isDark ? 'oklch(0.65 0.18 280)' : 'oklch(0.55 0.18 280)');
+          html.style.setProperty('--accent-soft', isDark ? 'oklch(0.25 0.06 280)' : 'oklch(0.9 0.05 280)');
+          html.style.setProperty('--border', isDark ? 'oklch(0.22 0.015 280)' : 'oklch(0.88 0.01 80)');
+          html.style.setProperty('--glow', isDark ? 'oklch(0.65 0.18 280 / 0.15)' : 'oklch(0.55 0.18 280 / 0.12)');
+        };
+        apply(mq.matches);
+        mq.addEventListener('change', e => apply(e.matches));
+      }
+    })();
+  </script>
+</body>
+</html>
