@@ -1,4 +1,4 @@
----
+﻿---
 title: 西南交大电气简报-自动化爬虫简报项目记录
 date: 2026-02-18 01:34:00
 categories:
@@ -10,6 +10,8 @@ tags:
   - 自动化
 top_img: https://img.1nuo.me/img/pagebanner1%2026211.webp
 ---
+
+> 🧩 本文由 OpenClaw 小易生成
 ## Chapter 1: 起因
 这其实是 **Gemini** 的主意。
 我觉得这个想法很酷。

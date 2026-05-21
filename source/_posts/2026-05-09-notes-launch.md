@@ -1,4 +1,4 @@
----
+﻿---
 title: 【更新公告】导航改版、新增「探索」板块与多项功能
 date: 2026-05-09 22:00:00
 categories:
@@ -6,8 +6,11 @@ categories:
 tags:
   - 更新
   - 建站
+  - AI
 top_img: https://img.1nuo.me/img/academicbanner.webp
 ---
+
+> 🧩 本文由 OpenClaw 小易生成
 
 ### 📦 导航结构调整
 

@@ -1,4 +1,4 @@
----
+﻿---
 title: 【更新公告】1nuo 评测系统正式上线！
 date: 2026-02-20 23:00:00
 categories:
@@ -6,8 +6,11 @@ categories:
 tags:
   - 更新
   - 评测
+  - AI
 top_img: https://img.1nuo.me/img/academicbanner.webp
 ---
+
+> 🧩 本文由 OpenClaw 小易生成
 
 博客的重磅新板块 —— **「1nuo 评测」** 现已正式上线！
 

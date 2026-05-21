@@ -1,4 +1,4 @@
----
+﻿---
 title: 【更新公告】博客图床全面云端化：Cloudflare R2 架构上线！
 date: 2026-02-21 19:09:00
 categories:
@@ -7,8 +7,11 @@ tags:
   - 更新
   - 图床
   - Cloudflare
+  - AI
 top_img: https://img.1nuo.me/img/academicbanner.webp
 ---
+
+> 🧩 本文由 OpenClaw 小易生成
 
 随着「1nuo 评测」的上线，网站内的照片（尤其是山西之行永乐宫壁画等高清大图）越来越多，我意识到传统的“图片随源码一起存放在本地”的方式已经达到了瓶颈：GitHub 仓库日益臃肿，国内访问加载缓慢，每次部署都在痛苦转圈。
 
@@ -28,5 +31,4 @@ top_img: https://img.1nuo.me/img/academicbanner.webp
 面对大量历史旧图和错综复杂的 Markdown 路径，**Python 自动化清洗脚本**帮了我大忙。
 
 仅用几秒钟，脚本就自动完成了全站旧图的 WebP 转换、云端路径正则替换，甚至顺手把「评测数据中心」里的 JSON 核心数据也完美切入到了新图床。
-
 
