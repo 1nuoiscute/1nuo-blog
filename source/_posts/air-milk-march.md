@@ -30,7 +30,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 
 话说我也不知道应该记录点什么。
 
-以前在糖吧写过一个记录贴（注：刚才那个帖子），写到最后全是负能量，希望不要重蹈覆辙。
+以前在糖吧写过一个记录贴（注：[我好想去看星星啊](https://www.1nuo.me/2026/05/21/lets-go-see-stars/)），写到最后全是负能量，希望不要重蹈覆辙。
 
 ---
 
