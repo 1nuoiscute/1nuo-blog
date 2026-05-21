@@ -19,8 +19,12 @@ hexo.extend.helper.register('aside_categories', function (categories, options = 
   const expandClass = isExpand && options.expand === true ? 'expand' : ''
   const buttonLabel = this._p('aside.more_button')
 
+  const filteredCategories = options.exclude && options.exclude.length
+    ? categories.filter(cat => !options.exclude.includes(cat.name))
+    : categories
+
   const categoryMap = new Map()
-  categories.forEach(cat => {
+  filteredCategories.forEach(cat => {
     if (cat.length) {
       const parentId = cat.parent || 'root'
       if (!categoryMap.has(parentId)) {

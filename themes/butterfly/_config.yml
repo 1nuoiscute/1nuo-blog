@@ -329,7 +329,13 @@ aside:
     limit: 8
     # Choose: none / true / false
     expand: none
-    sort_order:
+    # Sort by post count: length / name
+    orderby: length
+    # 1 asc, -1 desc
+    order: -1
+    # Categories to hide from sidebar (array)
+    exclude:
+      - AI简报
   card_tags:
     enable: true
     # If set 0 will show all

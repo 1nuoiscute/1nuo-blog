@@ -1,4 +1,8 @@
 if theme.aside.card_categories.enable
   if site.categories.length
     .card-widget.card-categories
-      !=aside_categories({ limit: theme.aside.card_categories.limit === 0 ? 0 : theme.aside.card_categories.limit || 8 , expand: theme.aside.card_categories.expand })
+      - const catOpts = { limit: theme.aside.card_categories.limit === 0 ? 0 : theme.aside.card_categories.limit || 8, expand: theme.aside.card_categories.expand }
+      - if (theme.aside.card_categories.orderby) catOpts.orderby = theme.aside.card_categories.orderby
+      - if (theme.aside.card_categories.order) catOpts.order = theme.aside.card_categories.order
+      - if (theme.aside.card_categories.exclude && theme.aside.card_categories.exclude.length) catOpts.exclude = theme.aside.card_categories.exclude
+      !=aside_categories(catOpts)
