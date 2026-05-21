@@ -3,191 +3,136 @@ layout: false
 ---
 
 <!DOCTYPE html>
-<html lang="zh-CN" data-theme="auto">
+<html lang="zh-CN" data-theme="light">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>404 · 1nuo</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,500&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:opsz,wght@9..40,300;9..40,500;9..40,700&family=Instrument+Serif:ital@0;1&display=swap" rel="stylesheet">
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
-
-    :root {
-      --space-16: 16px; --space-24: 24px; --space-32: 32px; --space-48: 48px;
-      --space-64: 64px; --space-96: 96px; --space-128: 128px;
-      --bg: oklch(0.98 0.005 80);
-      --text: oklch(0.15 0.02 60);
-      --text-muted: oklch(0.5 0.03 60);
-      --accent: oklch(0.55 0.18 280);
-      --accent-soft: oklch(0.55 0.18 280 / 0.06);
-      --border: oklch(0.88 0.01 80);
-      --ease: cubic-bezier(0.16, 1, 0.3, 1);
-    }
-
-    [data-theme="dark"] {
-      --bg: oklch(0.09 0.01 280);
-      --text: oklch(0.93 0.01 80);
-      --text-muted: oklch(0.55 0.02 80);
-      --accent: oklch(0.65 0.18 280);
-      --accent-soft: oklch(0.65 0.18 280 / 0.08);
-      --border: oklch(0.2 0.015 280);
-    }
-
-    @media (prefers-color-scheme: dark) {
-      [data-theme="auto"] { --bg: oklch(0.09 0.01 280); --text: oklch(0.93 0.01 80); --text-muted: oklch(0.55 0.02 80); --accent: oklch(0.65 0.18 280); --accent-soft: oklch(0.65 0.18 280 / 0.08); --border: oklch(0.2 0.015 280); }
-    }
-
     html { font-size: 16px; height: 100%; }
     body {
       font-family: "DM Sans", -apple-system, BlinkMacSystemFont, sans-serif;
-      background: var(--bg);
-      color: var(--text);
+      background: #ffffff;
+      color: #111;
       height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: var(--space-24);
-      transition: background 0.4s var(--ease), color 0.4s var(--ease);
+      padding: 24px;
       -webkit-font-smoothing: antialiased;
     }
 
     main {
-      max-width: 720px;
-      width: 100%;
-      animation: in 0.7s var(--ease) both;
+      text-align: center;
+      animation: in 0.7s cubic-bezier(0.16, 1, 0.3, 1) both;
     }
-
     @keyframes in {
       from { opacity: 0; transform: translateY(20px); }
       to { opacity: 1; transform: translateY(0); }
     }
 
-    .top-row {
-      display: flex;
-      align-items: baseline;
-      gap: var(--space-24);
-      margin-bottom: var(--space-32);
-    }
-
     .code {
       font-family: "Instrument Serif", serif;
-      font-size: clamp(5rem, 12vw, 8rem);
+      font-size: clamp(5rem, 14vw, 10rem);
       line-height: 1;
       letter-spacing: -0.06em;
-      color: var(--accent);
+      color: #333;
+      margin-bottom: 8px;
     }
-
     .tag {
-      font-size: 0.8125rem;
-      color: var(--text-muted);
-      background: var(--accent-soft);
-      padding: 4px 12px;
-      border-radius: 999px;
+      font-size: 0.75rem;
+      color: #888;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      margin-bottom: 40px;
     }
-
     h1 {
-      font-size: clamp(1.25rem, 2.5vw, 1.75rem);
+      font-size: 1.25rem;
       font-weight: 500;
-      line-height: 1.4;
-      margin-bottom: var(--space-16);
+      color: #111;
+      margin-bottom: 12px;
     }
-
     p {
-      font-size: 1rem;
+      font-size: 0.9375rem;
       line-height: 1.7;
-      color: var(--text-muted);
-      margin-bottom: var(--space-48);
-      max-width: 48ch;
+      color: #666;
+      margin-bottom: 56px;
     }
 
-    .stack {
+    /* Three-button row */
+    .row {
       display: flex;
-      gap: var(--space-12);
-      flex-wrap: wrap;
+      justify-content: center;
+      gap: 48px;
+      max-width: 480px;
+      margin: 0 auto;
     }
-
-    .link {
+    .btn {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
+      justify-content: center;
+      gap: 8px;
+      padding: 14px 36px;
+      border-radius: 12px;
+      font-family: "DM Sans", sans-serif;
       font-size: 0.9375rem;
       font-weight: 500;
       text-decoration: none;
-      color: var(--text);
-      padding: 8px 0;
-      border-bottom: 1.5px solid var(--border);
-      transition: all 0.2s var(--ease);
+      transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
+      border: 1.5px solid #e0e0e0;
+      color: #333;
+      background: #fff;
+      flex: 1;
     }
-    .link:hover {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-      gap: 10px;
+    .btn:hover {
+      background: #f5f5f5;
+      border-color: #bbb;
+      transform: translateY(-1px);
     }
-    .link:focus-visible {
-      outline: 2px solid var(--accent);
-      outline-offset: 4px;
-      border-radius: 2px;
+    .btn-primary {
+      background: #111;
+      color: #fff;
+      border-color: #111;
     }
-
-    .divider {
-      color: var(--border);
-      align-self: center;
+    .btn-primary:hover {
+      background: #333;
+      border-color: #333;
+    }
+    .btn:focus-visible {
+      outline: 2px solid #111;
+      outline-offset: 3px;
     }
 
     .foot {
-      margin-top: var(--space-64);
+      margin-top: 64px;
       font-size: 0.8125rem;
-      color: var(--text-muted);
-      opacity: 0.35;
-    }
-    .foot:hover { opacity: 0.7; }
-    .foot code {
-      font-size: 0.75rem;
-      background: var(--accent-soft);
-      padding: 2px 8px;
-      border-radius: 4px;
+      color: #bbb;
     }
 
-    @media (max-width: 480px) {
-      body { padding: var(--space-16); }
-      .stack { flex-direction: column; align-items: flex-start; }
-      .divider { display: none; }
-    }
-
+    @media (max-width: 640px) {
+      .row { flex-direction: column; align-items: center; gap: 12px; max-width: 280px; }
+      .btn { width: 100%; }
     @media (prefers-reduced-motion: reduce) {
-      main, .link { animation: none !important; transition: none !important; }
+      main, .btn { animation: none !important; transition: none !important; }
     }
   </style>
 </head>
 <body>
   <main>
-    <div class="top-row">
-      <div class="code">404</div>
-      <div class="tag">not found</div>
-    </div>
+    <div class="code">404</div>
+    <div class="tag">page not found</div>
     <h1>你找的东西不在这儿</h1>
     <p>链接可能写错了，页面可能搬家了，<br>也可能它从来就没存在过。</p>
-    <div class="stack">
-      <a href="/" class="link">← 回首页</a>
-      <span class="divider">/</span>
-      <a href="/archives/" class="link">翻归档</a>
-      <span class="divider">/</span>
-      <a href="https://github.com/1nuoiscute/1nuo-blog/issues/new" class="link">告诉我 →</a>
+    <div class="row">
+      <a href="/" class="btn">← 回首页</a>
+      <a href="/archives/" class="btn btn-primary">翻归档</a>
+      <a href="https://github.com/1nuoiscute/1nuo-blog/issues/new" class="btn">告诉我 →</a>
     </div>
     <div class="foot">🧩 0x198</div>
   </main>
-
-  <script>
-    (function(){
-      const h=document.documentElement;
-      if(h.getAttribute('data-theme')==='auto'){
-        const m=window.matchMedia('(prefers-color-scheme:dark)'),a=v=>{Object.entries(v).forEach(([k,v])=>h.style.setProperty(k,v))};
-        a(m.matches?{'--bg':'oklch(0.09 0.01 280)','--text':'oklch(0.93 0.01 80)','--text-muted':'oklch(0.55 0.02 80)','--accent':'oklch(0.65 0.18 280)','--accent-soft':'oklch(0.65 0.18 280 / 0.08)','--border':'oklch(0.2 0.015 280)'}:{'--bg':'oklch(0.98 0.005 80)','--text':'oklch(0.15 0.02 60)','--text-muted':'oklch(0.5 0.03 60)','--accent':'oklch(0.55 0.18 280)','--accent-soft':'oklch(0.55 0.18 280 / 0.06)','--border':'oklch(0.88 0.01 80)'});
-        m.addEventListener('change',e=>a(e.matches?{'--bg':'oklch(0.09 0.01 280)','--text':'oklch(0.93 0.01 80)','--text-muted':'oklch(0.55 0.02 80)','--accent':'oklch(0.65 0.18 280)','--accent-soft':'oklch(0.65 0.18 280 / 0.08)','--border':'oklch(0.2 0.015 280)'}:{'--bg':'oklch(0.98 0.005 80)','--text':'oklch(0.15 0.02 60)','--text-muted':'oklch(0.5 0.03 60)','--accent':'oklch(0.55 0.18 280)','--accent-soft':'oklch(0.55 0.18 280 / 0.06)','--border':'oklch(0.88 0.01 80)'}));
-      }
-    })();
-  </script>
 </body>
 </html>
