@@ -11,6 +11,7 @@ tags:
   - 记录
   - 转载
 top_img: https://img.1nuo.me/img/categoriesbanner.webp
+description: 高考结束后写下的长文，关于消失的这段时间，和自己的一些想法。
 ---
 
 > 本文章首发于百度贴吧（天堂鸡汤吧）
@@ -35,6 +36,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 
 ![](https://img.1nuo.me/img/posts/soul-mute-01.webp)
 
+description: 高考结束后写下的长文，关于消失的这段时间，和自己的一些想法。
 ---
 
 在糖吧之前的记录贴：『我好想去看星星啊』（https://www.1nuo.me/2026/05/21/lets-go-see-stars/）
@@ -63,6 +65,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 
 结果就是啥也没干（笑）。不出意外的是寒假也差不多。最后是怎么做的决定呢，也记不清了。也许是一时冲动吧。当时觉得自己数学物理好差啊，尤其是物理，所以打算重新学一遍。
 
+description: 高考结束后写下的长文，关于消失的这段时间，和自己的一些想法。
 ---
 
 ## February
@@ -87,6 +90,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 
 ![](https://img.1nuo.me/img/posts/soul-mute-03.webp)
 
+description: 高考结束后写下的长文，关于消失的这段时间，和自己的一些想法。
 ---
 
 ## March
@@ -121,6 +125,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 
 心有点乱。平均一天两个多小时的话，肯定是远远不够努力的吧。但是我的确很累。
 
+description: 高考结束后写下的长文，关于消失的这段时间，和自己的一些想法。
 ---
 
 寒假这段时间其实心情不太好，而且不知道该去做点什么，总觉得我在浪费时间。
@@ -133,6 +138,8 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 
 不出所料呢，毕竟是保的专业。其实我还是想上好一点的，但是我又害怕自己以后不够努力，如果考虑转专业的话——
 
+description: 高考结束后写下的长文，关于消失的这段时间，和自己的一些想法。
 ---
 
 > 原帖内容到此为止，未完待续。
+

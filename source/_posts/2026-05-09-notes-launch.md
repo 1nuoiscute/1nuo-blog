@@ -8,6 +8,7 @@ tags:
   - 建站
   - AI辅助
 top_img: https://img.1nuo.me/img/academicbanner.webp
+description: 导航改版、新增探索板块、笔记模块上线。
 ---
 
 
