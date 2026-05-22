@@ -1,5 +1,5 @@
 ---
-title: 在 Smogon 的树洞里
+title: 我只想要个答案
 date: 2026-05-23 00:34:00
 categories:
   - 生活记录
@@ -11,31 +11,10 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 
 > 🧩 本文由 OpenClaw 小易整理 · 翻译
 >
-> 2022 年，诺诺在 Smogon 论坛的一个长期帖子里断断续续写了一些话。
-> 原文是英文，中文翻译附后。
+> 2022 年，我在 Smogon 论坛的一个长期帖子里断断续续写了一些话。
+> 原文英文，中文翻译在后。
 
 <style>
-.detail-box {
-  margin: 4px 0 16px;
-}
-.detail-summary {
-  cursor: pointer;
-  color: #888;
-  font-size: 0.85em;
-  user-select: none;
-  padding: 4px 0;
-}
-.detail-summary:hover { color: #555; }
-.detail-summary::before { content: "▶ "; display: inline-block; transition: transform 0.2s; }
-details[open] .detail-summary::before { transform: rotate(90deg); }
-.detail-content {
-  margin-top: 8px;
-  padding: 12px 16px;
-  background: #f9f9f9;
-  border-radius: 8px;
-  border-left: 3px solid #F2A2C8;
-  line-height: 1.8;
-}
 .pagination-post { display: none; }
 #post-comment { display: none; }
 .relatedPosts { display: none; }
@@ -55,22 +34,15 @@ It's too late for me now, it's time to stop. Thank you for reading, have a good 
 
 Edit: I am sure that my friends won't see this, at least i wish.
 
-<details class="detail-box">
-<summary class="detail-summary">查看翻译</summary>
-<div class="detail-content">
-
 我不知道自己有没有心理问题，但心情很差，想在这里写点话。
 
 在压抑的氛围里生活，感觉过了很久。疫情两年间，我失去了很多朋友，浑浑噩噩地完成了三年的学业。他们是现实中的也好，网上的也罢——都是对我很重要的人。
 
 我骗自己变得麻木，暂时逃离现实。直到现在，我终于完成了这一阶段的学习。也许是我的问题，我总会以某种方式伤害到他们。虽然尽力补救，但可惜总是没用。与此同时，我在很多地方都一败涂地——宝可梦也好，考试也好。我一直很压抑，却没有人可以倾诉。我已经有点厌倦那些强颜欢笑的对话了，因为我分不清那是真正的我还是装出来的，这让我有点不认识自己了。对了，我想我是在期待有人回应我？也许吧。
 
-很晚了，该停下了。谢谢你的阅读，祝你有美好的一天。这篇帖子是我即兴写的，可能有很多错误，抱歉:) 我想我会期待你的回复，如果有机会的话我也会回复的。
+很晚了，该停下了。谢谢你的阅读，祝你有美好的一天。这篇帖子是我即兴写的，可能有很多错误，抱歉。我想我会期待你的回复，如果有机会的话我也会回复的。
 
 编辑：我确定我的朋友不会看到这个——至少我希望如此。
-
-</div>
-</details>
 
 ---
 
@@ -87,18 +59,11 @@ Here are some new things I want to say. Recently, a friend who has left me told 
 
 I succeeded in the exam mentioned in my last post, which at least gave me some comfort. After I work, I want to engage in research, which should keep me away from those things, lol. Btw, recently, I have been very fond of reading literary works, and I have empathy with them, which makes me understand everything around me more to a certain extent. I don't know what I said. Thank you for reading. Please take care of yourself.
 
-<details class="detail-box">
-<summary class="detail-summary">查看翻译</summary>
-<div class="detail-content">
-
 我想了一段时间，你说得应该没错。
 
 有些新的话想说。最近一个已经离开我的朋友告诉我，他觉得我很逃避。我只是把难题堆起来，选择逃跑。这让我失去了很多朋友。我当然知道逃避是错的，但我一直在逃。我想我只是在逃避，在麻痹自己。
 
 上次帖子提到的考试我通过了，至少这给了我一点安慰。工作后我想做研究，这样应该就能远离那些事了，哈哈。另外，最近我很喜欢读文学作品，能与之共情，某种程度上这让我更理解周围的一切。我也不知道自己在说什么。谢谢阅读，请照顾好自己。
-
-</div>
-</details>
 
 ---
 
@@ -128,10 +93,6 @@ well, What I wrote was really confusing lol, all in all thanks and good luck!
 Cheers from China!
 will try what u say in the future
 
-<details class="detail-box">
-<summary class="detail-summary">查看翻译</summary>
-<div class="detail-content">
-
 非常感谢你分享你的经历，这对我好像很有帮助。就在最近，我结束了大部分联赛，计划以后只花少量时间在宝可梦上。也许尝试点新东西也会很有趣？希望能真的有收获。
 
 其实我一直对写小说、唱歌、画画感兴趣。根据目前的学习环境，我决定正式毕业后去试试这些。这应该会很吸引我。
@@ -141,9 +102,6 @@ will try what u say in the future
 好吧，我写的真的很混乱哈哈，总之谢谢，祝好运！
 来自中国的问候！
 以后我会试试你说的。
-
-</div>
-</details>
 
 ---
 
@@ -159,10 +117,6 @@ What I do now is to empty my mind and immerse myself in it, lol. English and moo
 
 DuGuo on 22.11.3
 
-<details class="detail-box">
-<summary class="detail-summary">查看翻译</summary>
-<div class="detail-content">
-
 我很久没来这里了，甚至 Smogon 也很久没上。离开这么久后，我决定再来写点什么。虽然很明显没多少人会在意我，但我还是想解释一下我去了哪里。我的寄宿学校因为疫情封校了一个月，现在我正在家里上网课。不幸的是，我猜我的心理问题可能最近更严重了。想从两个方面说起。
 
 首先，在学校的时候我很迷茫，不知道该怎么办。两次考试都搞砸了，离目标差得很远。有时候觉得自己的努力没有得到回报，有时候又劝自己别担心——该来的总会来。但看到付出更少的人收获更多，总让我觉得这个世界不公平。而且，我不知道努力的方向和目标。我几乎想象不到将来会从事什么职业，会变成什么样的人。幻想中的死亡大概是最好归宿。
@@ -172,9 +126,6 @@ DuGuo on 22.11.3
 我现在做的就是放空自己，沉浸其中，哈哈。英语很差，心情也差，所以这些文字可能有很多错误，谢谢阅读。
 
 DuGuo · 2022.11.3
-
-</div>
-</details>
 
 ---
 
@@ -188,8 +139,6 @@ DuGuo · 2022.11.3
 > 不可否认的是，学科并不会对我们将来要做的事产生很大影响（如果我们对基础知识本身不感兴趣的话……）
 
 The late appreciation.
-
-迟来的感谢。
 
 Surprised but not accidental that you will see my article here and reply. Maybe I'm writing here to make people see, or maybe not, just don't know what I'm longing for.
 
@@ -205,9 +154,7 @@ Also imagine my future, just say i cant see anything.
 
 all thanks, and if u are interest just add my qq.
 
-<details class="detail-box">
-<summary class="detail-summary">查看翻译</summary>
-<div class="detail-content">
+迟来的感谢。
 
 你在这里看到我的帖子并回复，让我很惊讶但又不意外。也许我在这里写东西就是想让别人看到，也许不是——只是不知道自己在渴望什么。
 
@@ -222,9 +169,6 @@ all thanks, and if u are interest just add my qq.
 也想象过未来，只能说我看不到任何东西。
 
 谢谢了，如果你感兴趣，可以加我 QQ。
-
-</div>
-</details>
 
 ---
 

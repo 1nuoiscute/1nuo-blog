@@ -12,14 +12,14 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 
 > 🧩 本文由 OpenClaw 小易整理
 
-整理了一下以前在贴吧和 Smogon 论坛发的内容，按时间线列在这里。
+整理了一下以前在网上公开发布的内容，按时间线列在这里。
 
 ---
 
 ## Smogon 论坛
 
 **2022.7.3 — 2022.11.30** · Smogon
-[在 Smogon 的树洞里](/2026/05/23/smogon-treehole-2022/)
+[我只想要个答案](/2026/05/23/smogon-treehole-2022/)
 
 ---
 
