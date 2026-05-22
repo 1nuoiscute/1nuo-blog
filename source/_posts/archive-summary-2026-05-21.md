@@ -9,7 +9,7 @@ tags:
   - 汇总
   - 转载
 top_img: https://img.1nuo.me/img/categoriesbanner.webp
-excerpt: 天空落下雨，好像在问你，Who you wanna be。
+excerpt: 天空落下雨，好像在问你，Who you wanna be。 —— 整理了一下以前在网上公开发布的内容。Smogon 论坛：我只想要个答案。贴吧：我会用蜡笔画出银河的气势、我好想去看星星啊、空气牛奶进行曲、我的灵魂是个哑巴（上）。随笔：幸福，死亡与抹茶芭菲。
 ---
 
 <div class="rain-quote">
