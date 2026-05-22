@@ -12,12 +12,39 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 > 🧩 本文由 OpenClaw 小易整理 · 翻译
 >
 > 2022 年，我在 Smogon 论坛的一个长期帖子里断断续续写了一些话。
-> 原文英文，中文翻译在后。
 
 <style>
 .pagination-post { display: none; }
 #post-comment { display: none; }
 .relatedPosts { display: none; }
+
+/* 翻译块统一样式 — 淡灰底色 + 左边框 */
+.trans {
+  background: #f5f5f5;
+  border-left: 3px solid #ddd;
+  padding: 10px 16px;
+  margin: 8px 0 16px;
+  border-radius: 0 6px 6px 0;
+  color: #555;
+}
+/* 他人回复中的翻译 */
+blockquote .trans {
+  background: #f0f0f0;
+  border-left-color: #ccc;
+}
+blockquote {
+  border-left: 3px solid #F2A2C8;
+  background: #fafafa;
+  padding: 8px 16px;
+  margin: 12px 0;
+  border-radius: 0 6px 6px 0;
+}
+blockquote p { margin: 4px 0; }
+blockquote .quot-author {
+  font-weight: 600;
+  font-size: 0.9em;
+  color: #555;
+}
 </style>
 
 ---
@@ -34,24 +61,26 @@ It's too late for me now, it's time to stop. Thank you for reading, have a good 
 
 Edit: I am sure that my friends won't see this, at least i wish.
 
+<div class="trans">
 我不知道自己有没有心理问题，但心情很差，想在这里写点话。
 
 在压抑的氛围里生活，感觉过了很久。疫情两年间，我失去了很多朋友，浑浑噩噩地完成了三年的学业。他们是现实中的也好，网上的也罢——都是对我很重要的人。
 
 我骗自己变得麻木，暂时逃离现实。直到现在，我终于完成了这一阶段的学习。也许是我的问题，我总会以某种方式伤害到他们。虽然尽力补救，但可惜总是没用。与此同时，我在很多地方都一败涂地——宝可梦也好，考试也好。我一直很压抑，却没有人可以倾诉。我已经有点厌倦那些强颜欢笑的对话了，因为我分不清那是真正的我还是装出来的，这让我有点不认识自己了。对了，我想我是在期待有人回应我？也许吧。
 
-很晚了，该停下了。谢谢你的阅读，祝你有美好的一天。这篇帖子是我即兴写的，可能有很多错误，抱歉。我想我会期待你的回复，如果有机会的话我也会回复的。
+很晚了，该停下了。谢谢你的阅读，祝你有美好的一天。这篇帖子是我即兴写的，可能有很多错误，抱歉:) 我想我会期待你的回复，如果有机会的话我也会回复的。
 
 编辑：我确定我的朋友不会看到这个——至少我希望如此。
+</div>
 
 ---
 
 ### Jul 12, 2022 · #630
 
-> **dave said:**
+> <span class="quot-author">dave said:</span>
 > am i right in assuming you're trying to figure out if it's worthwhile for you to act a certain way when talking to some of your friends, even if you don't explicitly feel this way?
 >
-> 我是不是可以这么理解——你在试图弄清楚，跟某些朋友说话时摆出某种态度是否值得，即使你内心并不真的有那种感觉？
+> <div class="trans">我是不是可以这么理解——你在试图弄清楚，跟某些朋友说话时摆出某种态度是否值得，即使你内心并不真的有那种感觉？</div>
 
 I thought about it carefully for a period of time. You should be right.
 
@@ -59,29 +88,31 @@ Here are some new things I want to say. Recently, a friend who has left me told 
 
 I succeeded in the exam mentioned in my last post, which at least gave me some comfort. After I work, I want to engage in research, which should keep me away from those things, lol. Btw, recently, I have been very fond of reading literary works, and I have empathy with them, which makes me understand everything around me more to a certain extent. I don't know what I said. Thank you for reading. Please take care of yourself.
 
+<div class="trans">
 我想了一段时间，你说得应该没错。
 
 有些新的话想说。最近一个已经离开我的朋友告诉我，他觉得我很逃避。我只是把难题堆起来，选择逃跑。这让我失去了很多朋友。我当然知道逃避是错的，但我一直在逃。我想我只是在逃避，在麻痹自己。
 
 上次帖子提到的考试我通过了，至少这给了我一点安慰。工作后我想做研究，这样应该就能远离那些事了，哈哈。另外，最近我很喜欢读文学作品，能与之共情，某种程度上这让我更理解周围的一切。我也不知道自己在说什么。谢谢阅读，请照顾好自己。
+</div>
 
 ---
 
 ### Aug 30, 2022 · #633
 
-> **mushamu said:**
+> <span class="quot-author">mushamu said:</span>
 > It's probably a good idea to look into therapy based on this. Therapy would help a lot with maintaining relationships as well as a healthy lifestyle and better coping mechanisms. Coping mechanisms in particular is something that's really important here for picking yourself back up after hardships. I wish you luck with everything regardless!
 >
-> 根据这些情况，也许去看看心理治疗是个好主意。治疗对维持人际关系、保持健康的生活方式和建立更好的应对机制都有很大帮助。尤其是应对机制——这在你经历挫折后重新站起来的时候非常重要。无论如何，祝你好运！
+> <div class="trans">根据这些情况，也许去看看心理治疗是个好主意。治疗对维持人际关系、保持健康的生活方式和建立更好的应对机制都有很大帮助。尤其是应对机制——这在你经历挫折后重新站起来的时候非常重要。无论如何，祝你好运！</div>
 
 Thank you very much, same blessing to you.
 
-非常感谢，也祝福你。
+<div class="trans">非常感谢，也祝福你。</div>
 
-> **Ktütverde said:**
+> <span class="quot-author">Ktütverde said:</span>
 > Hey ! I think I can in some way relate to you since I have for a moment used mons to escape from reality and lost most of my friends during my depression but at the end of the day, we didn't have anything very relevant to tell each other, so that may be for better. I want to say that I don't believe one has to choose between playing mons or quitting mons. I'll get back to this at the end of...
 >
-> 嘿！我想我某种程度上能理解你，因为我也曾有一段时间用宝可梦逃避现实，在抑郁期间失去了大部分朋友。但说到底，我们之间本来也没有太多真正值得聊的东西，所以也许这样也好。我想说的是，我不认为人必须在玩宝可梦和戒掉宝可梦之间做选择。我最后会再回到这个话题……
+> <div class="trans">嘿！我想我某种程度上能理解你，因为我也曾有一段时间用宝可梦逃避现实，在抑郁期间失去了大部分朋友。但说到底，我们之间本来也没有太多真正值得聊的东西，所以也许这样也好。我想说的是，我不认为人必须在玩宝可梦和戒掉宝可梦之间做选择。我最后会再回到这个话题……</div>
 
 Thank you so much for sharing your experience for me, it seems to be very helpful to me. Just recently I ended most of my leagues and plan to focus only a small amount on mons in the future. Maybe it would also be fun for me to try something new? Hope I can actually get something out of it.
 
@@ -93,6 +124,7 @@ well, What I wrote was really confusing lol, all in all thanks and good luck!
 Cheers from China!
 will try what u say in the future
 
+<div class="trans">
 非常感谢你分享你的经历，这对我好像很有帮助。就在最近，我结束了大部分联赛，计划以后只花少量时间在宝可梦上。也许尝试点新东西也会很有趣？希望能真的有收获。
 
 其实我一直对写小说、唱歌、画画感兴趣。根据目前的学习环境，我决定正式毕业后去试试这些。这应该会很吸引我。
@@ -102,6 +134,7 @@ will try what u say in the future
 好吧，我写的真的很混乱哈哈，总之谢谢，祝好运！
 来自中国的问候！
 以后我会试试你说的。
+</div>
 
 ---
 
@@ -117,7 +150,8 @@ What I do now is to empty my mind and immerse myself in it, lol. English and moo
 
 DuGuo on 22.11.3
 
-我很久没来这里了，甚至 Smogon 也很久没上。离开这么久后，我决定再来写点什么。虽然很明显没多少人会在意我，但我还是想解释一下我去了哪里。我的寄宿学校因为疫情封校了一个月，现在我正在家里上网课。不幸的是，我猜我的心理问题可能最近更严重了。想从两个方面说起。
+<div class="trans">
+我很久没来这里了，甚至 Smogon 也很久没上。离开这么久后，我决定再来写点什么。虽然很明显没多少人会在意我，但我还是想解释一下我去了哪里。我的寄宿学校因为疫情封校了一个月，现在我正在家里上网课。不幸的是，我猜我的心理问题可能最近更严重了。
 
 首先，在学校的时候我很迷茫，不知道该怎么办。两次考试都搞砸了，离目标差得很远。有时候觉得自己的努力没有得到回报，有时候又劝自己别担心——该来的总会来。但看到付出更少的人收获更多，总让我觉得这个世界不公平。而且，我不知道努力的方向和目标。我几乎想象不到将来会从事什么职业，会变成什么样的人。幻想中的死亡大概是最好归宿。
 
@@ -125,18 +159,19 @@ DuGuo on 22.11.3
 
 我现在做的就是放空自己，沉浸其中，哈哈。英语很差，心情也差，所以这些文字可能有很多错误，谢谢阅读。
 
-DuGuo · 2022.11.3
+—— DuGuo · 2022.11.3
+</div>
 
 ---
 
 ### Nov 30, 2022 · #666
 
-> **SirinC&Kokomi said:**
+> <span class="quot-author">SirinC&amp;Kokomi said:</span>
 > Hi there, although it seems strange for us to talking here, but ~~My English writing exams screwed up~~ I believe we could get a better understanding through reading&thinking a language with some distance in our first sight.
 > There's Sth that we can't deny that the subjects does not make a big influence on what we'll gonna do (if we are not interested in basic knowledge...
 >
-> 你好，虽然在这里说话好像有点奇怪——但~~我的英语写作考试考砸了~~我相信通过阅读和思考一门有一定距离感的语言，我们能更好地理解彼此。
-> 不可否认的是，学科并不会对我们将来要做的事产生很大影响（如果我们对基础知识本身不感兴趣的话……）
+> <div class="trans">你好，虽然在这里说话好像有点奇怪——但~~我的英语写作考试考砸了~~我相信通过阅读和思考一门有一定距离感的语言，我们能更好地理解彼此。
+> 不可否认的是，学科并不会对我们将来要做的事产生很大影响（如果我们对基础知识本身不感兴趣的话……）</div>
 
 The late appreciation.
 
@@ -154,6 +189,7 @@ Also imagine my future, just say i cant see anything.
 
 all thanks, and if u are interest just add my qq.
 
+<div class="trans">
 迟来的感谢。
 
 你在这里看到我的帖子并回复，让我很惊讶但又不意外。也许我在这里写东西就是想让别人看到，也许不是——只是不知道自己在渴望什么。
@@ -169,6 +205,7 @@ all thanks, and if u are interest just add my qq.
 也想象过未来，只能说我看不到任何东西。
 
 谢谢了，如果你感兴趣，可以加我 QQ。
+</div>
 
 ---
 
