@@ -9,7 +9,7 @@ tags:
   - 记录
   - 转载
 top_img: https://img.1nuo.me/img/categoriesbanner.webp
-description: 高三最后半年的日常，考试、失眠、和朋友的碎碎念。
+description: 感觉发现了什么不得了的地方呢。
 ---
 
 > 本文章首发于百度贴吧（空气牛奶进行曲吧）
