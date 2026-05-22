@@ -183,19 +183,19 @@ Who you wanna be。
 <div class="tl-list">
   <div class="tl-item">
     <div class="tl-date">2024.1.24 — 2 月</div>
-    <a class="tl-link" href="/2026/05/21/crayon-milky-way/">我会用蜡笔画出银河的气势 <span class="tl-label tl-label-tieba">贴吧</span></a>
+    <a class="tl-link" href="/2026/05/21/crayon-milky-way/">我会用蜡笔画出银河的气势 <span class="tl-label tl-label-tieba">高考吧</span></a>
   </div>
   <div class="tl-item">
     <div class="tl-date">2024.6.10 — 7.11</div>
-    <a class="tl-link" href="/2026/05/21/lets-go-see-stars/">我好想去看星星啊 <span class="tl-label tl-label-tieba">贴吧</span></a>
+    <a class="tl-link" href="/2026/05/21/lets-go-see-stars/">我好想去看星星啊 <span class="tl-label tl-label-tieba">天堂鸡汤吧</span></a>
   </div>
   <div class="tl-item">
     <div class="tl-date">2024.11.29 — 12 月</div>
-    <a class="tl-link" href="/2026/05/21/air-milk-march/">空气牛奶进行曲 <span class="tl-label tl-label-tieba">贴吧</span></a>
+    <a class="tl-link" href="/2026/05/21/air-milk-march/">空气牛奶进行曲 <span class="tl-label tl-label-tieba">空气牛奶进行曲吧</span></a>
   </div>
   <div class="tl-item">
     <div class="tl-date">2025.7.21</div>
-    <a class="tl-link" href="/2026/05/21/soul-mute/">我的灵魂是个哑巴（上） <span class="tl-label tl-label-tieba">贴吧</span></a>
+    <a class="tl-link" href="/2026/05/21/soul-mute/">我的灵魂是个哑巴（上） <span class="tl-label tl-label-tieba">天堂鸡汤吧</span></a>
   </div>
 </div>
 </div>
