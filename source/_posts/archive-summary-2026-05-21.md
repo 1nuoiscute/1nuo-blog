@@ -12,9 +12,18 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 
 > 🧩 本文由 OpenClaw 小易整理
 
-整理了一下高中阶段在贴吧发的内容，按时间线列在这里。
+整理了一下以前在贴吧和 Smogon 论坛发的内容，按时间线列在这里。
 
 ---
+
+## Smogon 论坛
+
+**2022.7.3 — 2022.11.30** · Smogon
+[在 Smogon 的树洞里](/2026/05/23/smogon-treehole-2022/)
+
+---
+
+## 贴吧
 
 **2024.1.24 — 2 月** · 高考吧
 [我会用蜡笔画出银河的气势](/2026/05/21/crayon-milky-way/)
