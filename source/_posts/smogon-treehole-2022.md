@@ -7,12 +7,45 @@ tags:
   - 转载
   - Smogon
 top_img: https://img.1nuo.me/img/categoriesbanner.webp
-excerpt: 2022 年，我在 Smogon 论坛的一个长期帖子里断断续续写了一些话。（本文标题为新拟） 五段帖子，从 2022 年 7 月到 11 月，记录了一些当时的心情。
+description: 2022 年，我在 Smogon 论坛的一个长期帖子里断断续续写了一些话。（本文标题为新拟）
 ---
 
 > 🧩 本文由 OpenClaw 小易整理 · 翻译
 >
 > 2022 年，我在 Smogon 论坛的一个长期帖子里断断续续写了一些话。（本文标题为新拟）
+
+<!-- more -->
+
+<style>
+.pagination-post { display: none; }
+#post-comment { display: none; }
+.relatedPosts { display: none; }
+.trans {
+  background: #f5f5f5;
+  border-left: 3px solid #ddd;
+  padding: 10px 16px;
+  margin: 8px 0 16px;
+  border-radius: 0 6px 6px 0;
+  color: #555;
+}
+blockquote .trans {
+  background: #f0f0f0;
+  border-left-color: #ccc;
+}
+blockquote {
+  border-left: 3px solid #F2A2C8;
+  background: #fafafa;
+  padding: 8px 16px;
+  margin: 12px 0;
+  border-radius: 0 6px 6px 0;
+}
+blockquote p { margin: 4px 0; }
+.quot-author {
+  font-weight: 600;
+  font-size: 0.9em;
+  color: #555;
+}
+</style>
 
 ---
 
