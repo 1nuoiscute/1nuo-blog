@@ -9,6 +9,7 @@ tags:
   - 汇总
   - 转载
 top_img: https://img.1nuo.me/img/categoriesbanner.webp
+excerpt: 天空落下雨，好像在问你，Who you wanna be。
 ---
 
 <div class="rain-quote">
@@ -20,8 +21,6 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 Who you wanna be。
 
 </div>
-
-<!-- more -->
 
 <style>
 /* ===== 雨后醒来 · 时间线 ===== */

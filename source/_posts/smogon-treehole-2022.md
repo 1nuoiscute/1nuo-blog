@@ -7,13 +7,12 @@ tags:
   - 转载
   - Smogon
 top_img: https://img.1nuo.me/img/categoriesbanner.webp
+excerpt: 2022 年，我在 Smogon 论坛的一个长期帖子里断断续续写了一些话。
 ---
 
 > 🧩 本文由 OpenClaw 小易整理 · 翻译
 >
 > 2022 年，我在 Smogon 论坛的一个长期帖子里断断续续写了一些话。
-
-<!-- more -->
 
 <style>
 .pagination-post { display: none; }
