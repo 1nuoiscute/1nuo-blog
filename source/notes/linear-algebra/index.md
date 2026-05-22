@@ -2,7 +2,10 @@
 title: 线性代数笔记
 date: 2026-05-22
 tags: [线性代数, 笔记]
+top_img: https://img.1nuo.me/img/academicbanner.webp
 ---
+
+<p style="margin-bottom:16px"><a href="/notes/" style="color:var(--second-color,#858585);text-decoration:none;font-size:0.85em">← 返回笔记总览</a></p>
 
 <style>
 .la-viewer {
