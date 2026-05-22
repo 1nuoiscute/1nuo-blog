@@ -131,3 +131,122 @@ button:focus-visible,
   outline-offset: 3px;
   border-radius: 4px;
 }
+
+/* ===== 在雨后醒来 · 时间线 ===== */
+.rain-quote {
+  text-align: center;
+  font-size: 1.15em;
+  line-height: 2;
+  color: #666;
+  margin: 32px 0 48px;
+  letter-spacing: 0.02em;
+}
+.tl-wrap {
+  max-width: 720px;
+  margin: 0 auto;
+}
+.tl-section { margin-bottom: 36px; }
+.tl-section-title {
+  font-size: 0.85em;
+  font-weight: 600;
+  color: #bbb;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  margin-bottom: 16px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid #eee;
+}
+.tl-list {
+  position: relative;
+  padding-left: 20px;
+}
+.tl-list::before {
+  content: '';
+  position: absolute;
+  left: 5px;
+  top: 4px;
+  bottom: 4px;
+  width: 2px;
+  background: #eee;
+  border-radius: 1px;
+}
+.tl-item {
+  position: relative;
+  padding: 0 0 24px 20px;
+}
+.tl-item:last-child { padding-bottom: 0; }
+.tl-item::before {
+  content: '';
+  position: absolute;
+  left: -18px;
+  top: 6px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: #F2A2C8;
+  border: 2px solid #fff;
+  box-shadow: 0 0 0 2px #F2A2C8;
+}
+.tl-section-smogon .tl-item::before {
+  background: #6C5CE7;
+  box-shadow: 0 0 0 2px #6C5CE7;
+}
+.tl-section-tieba .tl-item::before {
+  background: #4a9eff;
+  box-shadow: 0 0 0 2px #4a9eff;
+}
+.tl-section-essay .tl-item::before {
+  background: #F2A2C8;
+  box-shadow: 0 0 0 2px #F2A2C8;
+}
+.tl-date {
+  font-size: 0.82em;
+  color: #aaa;
+  margin-bottom: 2px;
+}
+.tl-link {
+  font-size: 0.95em;
+  color: #555;
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.tl-link:hover { color: #F2A2C8; }
+.tl-label {
+  display: inline-block;
+  font-size: 0.72em;
+  padding: 1px 8px;
+  border-radius: 10px;
+  margin-left: 6px;
+  vertical-align: middle;
+}
+.tl-label-smogon { background: #6C5CE7; color: #fff; }
+.tl-label-tieba { background: #4a9eff; color: #fff; }
+.tl-label-essay { background: #F2A2C8; color: #fff; }
+@media (max-width: 480px) { .tl-wrap { max-width: 100%; } }
+
+/* ===== 我只想要个答案 · 翻译块 ===== */
+.trans {
+  background: #f5f5f5;
+  border-left: 3px solid #ddd;
+  padding: 10px 16px;
+  margin: 8px 0 16px;
+  border-radius: 0 6px 6px 0;
+  color: #555;
+}
+blockquote .trans {
+  background: #f0f0f0;
+  border-left-color: #ccc;
+}
+blockquote {
+  border-left: 3px solid #F2A2C8;
+  background: #fafafa;
+  padding: 8px 16px;
+  margin: 12px 0;
+  border-radius: 0 6px 6px 0;
+}
+blockquote p { margin: 4px 0; }
+.quot-author {
+  font-weight: 600;
+  font-size: 0.9em;
+  color: #555;
+}
