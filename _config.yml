@@ -68,6 +68,9 @@ prismjs:
     path: ''
     per_page: 10
     order_by: -top -date
+  topindex_generator:
+    per_page: 10
+    order_by: -top -date
 # Category & Tag
 default_category: uncategorized
 category_map:
