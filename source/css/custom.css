@@ -121,24 +121,33 @@ main {
 }
 
 /* --- 碎碎念（已暂停） --- */
-a[href="/shuoshuo/"] {
+.menus_item_child a[href="/shuoshuo/"] {
   color: #bbb !important;
   text-decoration: line-through !important;
-  position: relative;
+  text-decoration-color: #bbb !important;
 }
-a[href="/shuoshuo/"]:hover::after {
+.menus_item_child a[href="/shuoshuo/"] .fa-comment-dots {
+  color: #bbb !important;
+}
+.menus_item_child a[href="/shuoshuo/"]:hover {
+  color: #bbb !important;
+  cursor: default;
+}
+.menus_item_child a[href="/shuoshuo/"]:hover::after {
   content: "暂停开放";
   position: absolute;
   left: 50%;
-  top: -28px;
+  top: -24px;
   transform: translateX(-50%);
   background: rgba(0,0,0,0.75);
   color: #fff;
   font-size: 12px;
-  padding: 4px 10px;
+  padding: 3px 10px;
   border-radius: 6px;
   white-space: nowrap;
   text-decoration: none !important;
+  z-index: 999;
+  pointer-events: none;
 }
 
 /* --- 焦点状态 --- */
