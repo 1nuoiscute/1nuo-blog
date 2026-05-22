@@ -209,6 +209,4 @@ all thanks, and if u are interest just add my qq.
 
 ---
 
-*以上内容转载自 Smogon 论坛，原帖链接已不可考。*
-
 *DuGuo on 22.7.3 — 22.11.30*
