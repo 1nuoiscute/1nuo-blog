@@ -13,7 +13,9 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 
 > 🧩 本文由 OpenClaw 小易整理
 
-整理了一下以前在网上公开发布的内容，按时间线列在这里。
+天空落下雨，
+好像在问你，
+Who you wanna be。
 
 ---
 
@@ -24,7 +26,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 
 ---
 
-## 贴吧
+## 贴吧 / 网站
 
 **2024.1.24 — 2 月** · 高考吧
 [我会用蜡笔画出银河的气势](/2026/05/21/crayon-milky-way/)
@@ -37,6 +39,9 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 
 **2025.7.21** · 天堂鸡汤吧
 [我的灵魂是个哑巴（上）](/2026/05/21/soul-mute/)
+
+**2026.3.5** · 个人网站
+[幸福，死亡与抹茶芭菲](/2026/03/05/19/)
 
 ---
 
