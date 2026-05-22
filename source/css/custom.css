@@ -120,6 +120,27 @@ main {
   cursor: pointer;
 }
 
+/* --- 碎碎念（已暂停） --- */
+a[href="/shuoshuo/"] {
+  color: #bbb !important;
+  text-decoration: line-through !important;
+  position: relative;
+}
+a[href="/shuoshuo/"]:hover::after {
+  content: "暂停开放";
+  position: absolute;
+  left: 50%;
+  top: -28px;
+  transform: translateX(-50%);
+  background: rgba(0,0,0,0.75);
+  color: #fff;
+  font-size: 12px;
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+  text-decoration: none !important;
+}
+
 /* --- 焦点状态 --- */
 a:focus-visible,
 button:focus-visible,
