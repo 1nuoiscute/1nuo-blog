@@ -1085,7 +1085,7 @@ inject:
     - <script src="/js/snowflake.js"></script>
     - <script src="/js/timing.js"></script>
     - <script>document.querySelectorAll('#menus a[href^="http"]').forEach(function(a){a.target="_blank";a.rel="noopener"})</script>
-    - <script>document.querySelectorAll('#menus a[href="/shuoshuo/"],#sidebar-menus a[href="/shuoshuo/"]').forEach(function(a){a.style.color="#bbb";a.style.textDecoration="line-through";a.title="暂停开放"})</script>
+
     - <script>document.querySelectorAll('.recent-post-item').forEach(function(c){c.addEventListener('click',function(e){if(e.target.closest('a'))return;var l=this.querySelector('.article-title');if(l)location.href=l.getAttribute('href')})})</script>
     - <script>document.querySelectorAll(\
 
