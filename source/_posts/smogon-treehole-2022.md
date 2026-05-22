@@ -13,6 +13,8 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 >
 > 2022 年，我在 Smogon 论坛的一个长期帖子里断断续续写了一些话。
 
+<!-- more -->
+
 <style>
 .pagination-post { display: none; }
 #post-comment { display: none; }

@@ -21,6 +21,8 @@ Who you wanna be。
 
 </div>
 
+<!-- more -->
+
 <style>
 /* ===== 雨后醒来 · 时间线 ===== */
 
