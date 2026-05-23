@@ -11,6 +11,9 @@ top_img: https://img.1nuo.me/img/academicbanner.webp
 description: 导航结构调整，新增「探索」板块与多项功能。
 ---
 
+> ⚠️ **AIGC**：本文由 AI 生成
+
+
 
 ### 📦 导航结构调整
 

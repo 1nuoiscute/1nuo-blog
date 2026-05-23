@@ -6,6 +6,9 @@ categories: [项目经历]
 top_img: https://img.1nuo.me/img/academicbanner.webp
 ---
 
+> ⚠️ **AIGC**：本文由 AI 生成
+
+
 
 市面上的记账 App 很多，但用起来总觉得差点意思：要么充斥着理财广告和开屏弹窗，要么很难把“日常流水账”和“基金理财动态市值”有机地结合在一个大盘里。
 我决定自己动手，写一个完全受自己控制的财务中枢——**1nuo-wealth**。

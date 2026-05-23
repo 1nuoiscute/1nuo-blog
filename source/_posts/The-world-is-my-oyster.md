@@ -11,6 +11,9 @@ tags:
   - Cloudflare
 top_img: https://img.1nuo.me/img/pagebanner1%2026211.webp
 ---
+
+> ⚠️ **AIGC**：本文由 AI 生成
+
 ## Chapter 1: The Motive
 The motivation for this project came from a simple observation: a friend's personal website. It was a technically impressive build, but more importantly, it represented complete ownership over one's digital presence. This resonated with a long-held desire of my own: to create a centralized, self-owned platform for my writings. Writing has long been a consistent habit of mine, and I wanted a proper home for that content. While I've always been hesitant due to a perceived lack of skill, this time I decided to commit to the process.
 ## Chapter 2: Choosing the Stack

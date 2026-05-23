@@ -11,6 +11,9 @@ tags:
 top_img: https://img.1nuo.me/img/academicbanner.webp
 ---
 
+> ⚠️ **AIGC**：本文由 AI 生成
+
+
 
 ### 📁 简报频道独立化
 为了保持主页流的纯粹，我将 AI 相关的简报内容从首页剥离，正式设立了独立的[「AI简报」](/categories/AI简报/)频道。现在，深度长文与每日动态将各得其所。

@@ -10,6 +10,9 @@ tags:
 top_img: https://img.1nuo.me/img/academicbanner.webp
 ---
 
+> ⚠️ **AIGC**：本文由 AI 生成
+
+
 
 博客的重磅新板块 —— **「1nuo 评测」** 现已正式上线！
 

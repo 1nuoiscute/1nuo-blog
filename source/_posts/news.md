@@ -11,6 +11,9 @@ tags:
 top_img: https://img.1nuo.me/img/pagebanner1%2026211.webp
 ---
 
+> ⚠️ **AIGC**：本文由 AI 生成
+
+
 
 ## Chapter 1: 起因
 这其实是 **Gemini** 的主意。
