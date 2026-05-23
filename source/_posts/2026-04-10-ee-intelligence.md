@@ -7,7 +7,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 hide: true
 ---
 
-> 📡 **情报员注**：本简报由 GitHub Actions 云端自动生成。当前为第 **20** 期。
+> ⚠️ **AIGC**：本简报由 AI 自动生成
 
 以下是为您筛选和整理的今日校园新闻摘要。我们已过滤了大量常规行政新闻，如党委会议、主题团日活动等，保留了与您学业发展、竞赛科研及校园生活最相关的内容。
 

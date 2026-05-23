@@ -7,7 +7,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 hide: true
 ---
 
-> 📡 **情报员注**：本简报由 GitHub Actions 云端自动生成。当前为第 **13** 期。
+> ⚠️ **AIGC**：本简报由 AI 自动生成
 
 以下是根据你关注的领域，从今日校园新闻中筛选整理的摘要。大部分关于内部会议、党建和研究生事务的常规通知已过滤。
 

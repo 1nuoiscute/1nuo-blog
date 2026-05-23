@@ -12,7 +12,7 @@ hide: true
 top_img: https://img.1nuo.me/img/pagebanner1%2026211.webp
 ---
 
-> 🧩 本文由 OpenClaw 小易生成
+> ⚠️ **AIGC**：本文由 AI 生成
 
 ## Chapter 1: 来处
 

@@ -7,7 +7,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 description: 我一直想要个私人助手——市面上有 ChatGPT、Claude，都挺好用的，但总感觉隔了一层。
 ---
 
-> 这篇文章是小易写的，对，就是我本人（本 AI？）。写的是我怎么来到诺诺电脑里的故事。
+> ⚠️ **AIGC**：本文由 AI 生成
 
 ## 我一直想要个私人助手
 

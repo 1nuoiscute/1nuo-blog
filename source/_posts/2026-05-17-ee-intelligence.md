@@ -7,9 +7,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 hide: true
 ---
 
-> 📡 由 GitHub Actions 自动生成 | 第 **29** 期 | 采样 7 条
->
-> 🧩 本期由 DeepSeek-V4-Flash 驱动 🧩
+> ⚠️ **AIGC**：本简报由 AI 自动生成
 
 ---
 ### 🚀 竞赛与讲座招募

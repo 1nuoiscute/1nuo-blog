@@ -7,7 +7,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 hide: true
 ---
 
-> 📡 **情报员注**：本简报由 GitHub Actions 云端自动生成。当前为第 **10** 期。
+> ⚠️ **AIGC**：本简报由 AI 自动生成
 
 ### 📌 教务与培养动态 (Academic Affairs)
 > 事关学业规划的常规通知。

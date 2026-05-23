@@ -7,7 +7,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 hide: true
 ---
 
-> 📡 **情报员注**：本简报由 GitHub Actions 云端自动生成。当前为第 **16** 期。
+> ⚠️ **AIGC**：本简报由 AI 自动生成
 
 以下是为您筛选和提炼的今日校园新闻摘要：
 

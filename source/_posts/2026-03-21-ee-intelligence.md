@@ -7,7 +7,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 hide: true
 ---
 
-> 📡 **情报员注**：本简报由 GitHub Actions 云端自动生成。当前为第 **14** 期。
+> ⚠️ **AIGC**：本简报由 AI 自动生成
 
 ### 📌 教务与培养动态 (Academic Affairs)
 - **转发关于西南交通大学2025-2026学年春季学期微专业拟录取名单及见面安排的公示**：2026年春季学期微专业拟录取名单已公示，请注意查看并留意后续的见面会安排。

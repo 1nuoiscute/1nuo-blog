@@ -7,7 +7,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 hide: true
 ---
 
-> 📡 **情报员注**：本简报由 GitHub Actions 云端自动生成。当前为第 **8** 期。
+> ⚠️ **AIGC**：本简报由 AI 自动生成
 
 今日新闻已过滤多条关于“院长书记新学期检查”、“荣誉教授受邀参加活动”等行政类新闻。以下是提取出的核心信息：
 

@@ -7,7 +7,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 hide: true
 ---
 
-> 📡 **情报员注**：本简报由 GitHub Actions 云端自动生成。当前为第 **17** 期。
+> ⚠️ **AIGC**：本简报由 AI 自动生成
 
 ### 🚨 紧急与核心预警 (Urgent & Important)
 - **[关于2026届本科毕业设计（论文）进行中期检查的通知]**：**截止时间4月15日**。2026届毕业生需按要求提交中期检查材料，请相关同学和指导教师及时完成。

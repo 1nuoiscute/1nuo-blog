@@ -7,7 +7,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 hide: true
 ---
 
-> 📡 **情报员注**：本简报由 GitHub Actions 云端自动生成。当前为第 **23** 期。
+> ⚠️ **AIGC**：本简报由 AI 自动生成
 
 ### 🚨 紧急与核心预警 (Urgent & Important)
 - **《计算机程序设计基础》期中考试通知**：本学期计算机基础课期中考试安排已发布，请及时查看考试时间地点，提前复习准备。

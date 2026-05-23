@@ -7,7 +7,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 hide: true
 ---
 
-> 📡 **情报员注**：本简报由 GitHub Actions 云端自动生成。当前为第 **15** 期。
+> ⚠️ **AIGC**：本简报由 AI 自动生成
 
 ### 🚨 紧急与核心预警 (Urgent & Important)
 - **关于清明假期和运动会期间大学物理实验课程安排的通知**：请留意清明假期及学校运动会期间，大学物理实验课程的具体调整安排，避免错过课程。

@@ -7,7 +7,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 hide: true
 ---
 
-> 📡 **情报员注**：本简报由 GitHub Actions 云端自动生成。当前为第 **24** 期。
+> ⚠️ **AIGC**：本简报由 AI 自动生成
 
 根据规则，过滤掉所有行政会议（党委会议、党政联席会议、实验教学示范中心会议等），仅保留与学生直接相关的通知。以下为处理后的摘要：
 

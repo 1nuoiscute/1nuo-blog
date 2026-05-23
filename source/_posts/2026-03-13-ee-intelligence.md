@@ -7,7 +7,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 hide: true
 ---
 
-> 📡 **情报员注**：本简报由 GitHub Actions 云端自动生成。当前为第 **12** 期。
+> ⚠️ **AIGC**：本简报由 AI 自动生成
 
 ### 🚨 紧急与核心预警 (Urgent & Important)
 > 提取带有明确时间节点（Deadline）或必须立刻执行的操作。

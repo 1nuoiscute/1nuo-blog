@@ -7,7 +7,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 hide: true
 ---
 
-> 📡 **情报员注**：本简报由 GitHub Actions 云端自动生成。当前为第 **21** 期。
+> ⚠️ **AIGC**：本简报由 AI 自动生成
 
 根据你关注的领域，对今日校园新闻进行筛选和摘要如下。行政类新闻（如导师选聘、教师培训等）已做过滤，仅在最后略作提及。
 

@@ -7,7 +7,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 hide: true
 ---
 
-> 📡 **情报员注**：本简报由 GitHub Actions 云端自动生成。
+> ⚠️ **AIGC**：本简报由 AI 自动生成
 
 ---
 ### ⚡️ 电气频道 | Signal-to-Noise: High

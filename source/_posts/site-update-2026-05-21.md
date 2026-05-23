@@ -12,7 +12,7 @@ top_img: https://img.1nuo.me/img/academicbanner.webp
 description: 今晚对博客做了一波前端调整：配色、字体与体验优化。
 ---
 
-> 🧩 本文由 OpenClaw 小易生成
+> ⚠️ **AIGC**：本文由 AI 生成
 
 ---
 

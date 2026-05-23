@@ -7,7 +7,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 hide: true
 ---
 
-> 📡 **情报员注**：本简报由 GitHub Actions 云端自动生成。当前为第 **7** 期。
+> ⚠️ **AIGC**：本简报由 AI 自动生成
 
 已将今日新闻池中关于领导检查、开学工作、安全生产等行政宣传类新闻进行了过滤。以下是提炼出的与你相关的核心信息：
 

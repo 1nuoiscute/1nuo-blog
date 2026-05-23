@@ -7,7 +7,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 hide: true
 ---
 
-> 📡 **情报员注**：本简报由 GitHub Actions 云端自动生成。当前为第 **19** 期。
+> ⚠️ **AIGC**：本简报由 AI 自动生成
 
 以下是为西南交大电气工程专业大一学生筛选和提炼的今日校园新闻摘要，聚焦于教务、竞赛及校园生活等切身利益相关领域。其他行政类新闻已简要提及。
 
