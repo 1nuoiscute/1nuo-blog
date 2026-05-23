@@ -1,6 +1,7 @@
 ---
 title: 在雨后醒来
 date: 2026-05-21 22:10:00
+permalink: /wake-after-rain/
 sticky: 100
 top: 100
 categories:
