@@ -40,9 +40,23 @@ comments: false
 
 ---
 
-<div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 10px;">
-  <img src="https://github-readme-streak-stats.herokuapp.com/?user=1nuoiscute&theme=dark&hide_border=true" style="margin: 0; width: 39%; object-fit: contain;" />
-  <img src="https://github-readme-activity-graph.vercel.app/graph?username=1nuoiscute&bg_color=0D1117&color=9DC183&line=9DC183&point=9DC183&area=true&area_color=9DC183&hide_border=true" style="margin: 0; width: 59%; object-fit: contain;" />
+<div style="display: flex; flex-direction: column; gap: 12px; margin-bottom: 12px;">
+
+<div style="background: var(--card-bg); padding: 10px 15px; border-radius: 8px; border: 1px solid var(--border-color);">
+<span style="font-weight: bold; font-size: 1.1em;">📖 你可以在这个网站找到什么</span>
+</div>
+
+<div style="display: flex; flex-wrap: wrap; gap: 8px; justify-content: center;">
+  <a href="/" style="text-decoration: none;"><span style="display: inline-block; background: var(--card-bg); color: var(--font-color); padding: 6px 14px; border-radius: 6px; font-size: 0.9em; border: 1px solid var(--border-color);">📝 博客文章</span></a>
+  <a href="/notes/" style="text-decoration: none;"><span style="display: inline-block; background: var(--card-bg); color: var(--font-color); padding: 6px 14px; border-radius: 6px; font-size: 0.9em; border: 1px solid var(--border-color);">📚 学习笔记</span></a>
+  <a href="/explore/" style="text-decoration: none;"><span style="display: inline-block; background: var(--card-bg); color: var(--font-color); padding: 6px 14px; border-radius: 6px; font-size: 0.9em; border: 1px solid var(--border-color);">🎮 探索（测试/Bingo/幸运签）</span></a>
+  <a href="/academic/" style="text-decoration: none;"><span style="display: inline-block; background: var(--card-bg); color: var(--font-color); padding: 6px 14px; border-radius: 6px; font-size: 0.9em; border: 1px solid var(--border-color);">🏆 学术成果</span></a>
+  <a href="/shuoshuo/" style="text-decoration: none;"><span style="display: inline-block; background: var(--card-bg); color: var(--font-color); padding: 6px 14px; border-radius: 6px; font-size: 0.9em; border: 1px solid var(--border-color);">💭 碎碎念</span></a>
+  <a href="/rate/" style="text-decoration: none;"><span style="display: inline-block; background: var(--card-bg); color: var(--font-color); padding: 6px 14px; border-radius: 6px; font-size: 0.9em; border: 1px solid var(--border-color);">⭐ 评测系统</span></a>
+  <a href="/news/" style="text-decoration: none;"><span style="display: inline-block; background: var(--card-bg); color: var(--font-color); padding: 6px 14px; border-radius: 6px; font-size: 0.9em; border: 1px solid var(--border-color);">📋 电气简报</span></a>
+  <a href="/categories/" style="text-decoration: none;"><span style="display: inline-block; background: var(--card-bg); color: var(--font-color); padding: 6px 14px; border-radius: 6px; font-size: 0.9em; border: 1px solid var(--border-color);">📂 分类归档</span></a>
+</div>
+
 </div>
 
 ---
