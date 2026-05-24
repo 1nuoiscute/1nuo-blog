@@ -51,10 +51,8 @@ comments: false
   <a href="/notes/" style="text-decoration: none;"><span style="display: inline-block; background: var(--card-bg); color: var(--font-color); padding: 6px 14px; border-radius: 6px; font-size: 0.9em; border: 1px solid var(--border-color);">📚 学习笔记</span></a>
   <a href="/explore/" style="text-decoration: none;"><span style="display: inline-block; background: var(--card-bg); color: var(--font-color); padding: 6px 14px; border-radius: 6px; font-size: 0.9em; border: 1px solid var(--border-color);">🎮 探索（测试/Bingo/幸运签）</span></a>
   <a href="/academic/" style="text-decoration: none;"><span style="display: inline-block; background: var(--card-bg); color: var(--font-color); padding: 6px 14px; border-radius: 6px; font-size: 0.9em; border: 1px solid var(--border-color);">🏆 学术成果</span></a>
-  <a href="/shuoshuo/" style="text-decoration: none;"><span style="display: inline-block; background: var(--card-bg); color: var(--font-color); padding: 6px 14px; border-radius: 6px; font-size: 0.9em; border: 1px solid var(--border-color);">💭 碎碎念</span></a>
   <a href="/rate/" style="text-decoration: none;"><span style="display: inline-block; background: var(--card-bg); color: var(--font-color); padding: 6px 14px; border-radius: 6px; font-size: 0.9em; border: 1px solid var(--border-color);">⭐ 评测系统</span></a>
   <a href="/news/" style="text-decoration: none;"><span style="display: inline-block; background: var(--card-bg); color: var(--font-color); padding: 6px 14px; border-radius: 6px; font-size: 0.9em; border: 1px solid var(--border-color);">📋 电气简报</span></a>
-  <a href="/categories/" style="text-decoration: none;"><span style="display: inline-block; background: var(--card-bg); color: var(--font-color); padding: 6px 14px; border-radius: 6px; font-size: 0.9em; border: 1px solid var(--border-color);">📂 分类归档</span></a>
 </div>
 
 </div>
