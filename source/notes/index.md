@@ -27,11 +27,11 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 <div class="note-collections" id="note-list">
 
 <!-- 线性代数笔记（最新） -->
-<div class="note-card" data-tags="本科课程" data-date="2026-05-22" data-title="线性代数笔记" data-desc="手写笔记整理 · 矩阵 · 行列式 · 线性方程组 · 13页完整版">
+<div class="note-card" data-tags="本科课程" data-date="2026-05-22" data-title="线性代数" data-desc="手写笔记整理 · 矩阵 · 行列式 · 线性方程组 · 13页完整版">
 <a href="/notes/linear-algebra/" class="note-card-inner">
 <div class="note-card-icon">📐</div>
 <div class="note-card-info">
-<h2>线性代数笔记</h2>
+<h2>线性代数</h2>
 <p>手写笔记整理 · 矩阵 · 行列式 · 线性方程组 · 13页完整版</p>
 </div>
 <div class="note-card-arrow">→</div>
@@ -39,7 +39,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 </div>
 
 <!-- 电路分析 -->
-<div class="note-card" data-tags="本科课程" data-date="2026-05-20" data-title="电路分析 AⅠ" data-desc="西南交通大学 · 电气工程 · 教材七章完整目录导航">
+<div class="note-card" data-tags="本科课程" data-date="2026-05-26" data-title="电路分析 AⅠ" data-desc="西南交通大学 · 电气工程 · 教材七章完整目录导航">
 <a href="/notes/circuit-analysis/" class="note-card-inner">
 <div class="note-card-icon">⚡</div>
 <div class="note-card-info">
