@@ -27,7 +27,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 <div class="note-collections" id="note-list">
 
 <!-- 计算机程序设计基础 理论选择题复习 -->
-<div class="note-card" data-tags="课外学习" data-date="2026-05-26" data-title="计算机程序设计基础" data-desc="理论选择题复习 · Unit 1~10 · 数制/运算符/指针/文件操作">
+<div class="note-card" data-tags="本科课程" data-date="2026-05-26" data-title="计算机程序设计基础" data-desc="理论选择题复习 · Unit 1~10 · 数制/运算符/指针/文件操作">
 <a href="/notes/c-programming-review/" class="note-card-inner">
 <div class="note-card-icon">💻</div>
 <div class="note-card-info">
