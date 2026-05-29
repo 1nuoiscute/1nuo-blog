@@ -20,21 +20,23 @@ tags: [电路分析]
 </div>
 
 <div class="note-collections">
-<div class="note-card" style="opacity:0.5">
-<div class="note-card-inner" style="cursor:default;pointer-events:none">
+<a href="l22-resonance-and-coupled-inductors">
+<div class="note-card">
+<div class="note-card-inner">
 <div class="note-card-icon">📖</div>
 <div class="note-card-info">
-<h2>互感与互感电压 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-<p>§7-1 互感与互感电压 · 暂缺，待补充</p>
+<h2>L22 谐振应用与耦合电感基础</h2>
+<p>谐振实际案例 · 互感基础 · 同名端 · 耦合系数 · 去耦等效</p>
 </div>
-<div class="note-card-arrow" style="visibility:hidden">→</div>
+<div class="note-card-arrow">→</div>
 </div>
-</div><div class="note-card" style="opacity:0.5">
+</div>
+</a><div class="note-card" style="opacity:0.5">
 <div class="note-card-inner" style="cursor:default;pointer-events:none">
 <div class="note-card-icon">📖</div>
 <div class="note-card-info">
 <h2>含互感电路分析 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-<p>§7-2 含互感电路分析 · 暂缺，待补充</p>
+<p>后续课时 · 暂缺，待补充</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>
@@ -43,7 +45,7 @@ tags: [电路分析]
 <div class="note-card-icon">📖</div>
 <div class="note-card-info">
 <h2>空芯变压器 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-<p>§7-3 空芯变压器 · 暂缺，待补充</p>
+<p>后续课时 · 暂缺，待补充</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
 </div>
@@ -55,4 +57,4 @@ tags: [电路分析]
 <summary style="cursor:pointer;color:var(--second-color,#858585);font-size:0.9em">📌 课内已讲授但笔记未收录的内容</summary>
 <ul style="margin-top:8px;padding-left:20px;color:var(--second-color,#858585)"><li>后续L序号课程可能覆盖本章内容</li></ul>
 </details>
-</div>
+</div>
