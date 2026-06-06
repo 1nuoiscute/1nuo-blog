@@ -44,11 +44,11 @@ tags: [电路分析]
 </div>
 </div>
 </a>
-<div class="note-card" style="opacity:0.5">
+<div class="note-card" style="opacity:0.6">
 <div class="note-card-inner" style="cursor:default;pointer-events:none">
-<div class="note-card-icon">📖</div>
+<div class="note-card-icon">📝</div>
 <div class="note-card-info">
-<h2>L24 全耦合变压器与理想变压器 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
+<h2>L24 全耦合变压器与理想变压器</h2>
 <p>§7-4 全耦合变压器 · 笔记暂缺</p>
 </div>
 <div class="note-card-arrow" style="visibility:hidden">→</div>
