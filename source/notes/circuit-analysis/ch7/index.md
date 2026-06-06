@@ -31,30 +31,17 @@ tags: [电路分析]
 <div class="note-card-arrow">→</div>
 </div>
 </div>
-</a><div class="note-card" style="opacity:0.5">
-<div class="note-card-inner" style="cursor:default;pointer-events:none">
+</a>
+<a href="l23-transformers-and-ideal-transformer">
+<div class="note-card">
+<div class="note-card-inner">
 <div class="note-card-icon">📖</div>
 <div class="note-card-info">
-<h2>含互感电路分析 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-<p>后续课时 · 暂缺，待补充</p>
+<h2>L23 互感串并联 · T型去耦 · 变压器</h2>
+<p>顺反向串联 · 同异侧并联 · T型去耦等效 · 空心变压器 · 反射阻抗 · 理想变压器</p>
 </div>
-<div class="note-card-arrow" style="visibility:hidden">→</div>
-</div>
-</div><div class="note-card" style="opacity:0.5">
-<div class="note-card-inner" style="cursor:default;pointer-events:none">
-<div class="note-card-icon">📖</div>
-<div class="note-card-info">
-<h2>空芯变压器 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
-<p>后续课时 · 暂缺，待补充</p>
-</div>
-<div class="note-card-arrow" style="visibility:hidden">→</div>
+<div class="note-card-arrow">→</div>
 </div>
 </div>
-</div>
-
-<div class="ncre-content" style="margin-top:12px">
-<details>
-<summary style="cursor:pointer;color:var(--second-color,#858585);font-size:0.9em">📌 课内已讲授但笔记未收录的内容</summary>
-<ul style="margin-top:8px;padding-left:20px;color:var(--second-color,#858585)"><li>后续L序号课程可能覆盖本章内容</li></ul>
-</details>
+</a>
 </div>
