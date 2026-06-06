@@ -16,7 +16,7 @@ tags: [电路分析]
 </div>
 
 <div class="ncre-content">
-<blockquote>互感与互感电压、含互感电路分析、空芯变压器</blockquote>
+<blockquote>§7-1 互感与互感电路 · §7-2 含互感电路分析 · §7-3 空芯变压器 · §7-4 全耦合变压器与理想变压器</blockquote>
 </div>
 
 <div class="note-collections">
@@ -44,4 +44,21 @@ tags: [电路分析]
 </div>
 </div>
 </a>
+<div class="note-card" style="opacity:0.5">
+<div class="note-card-inner" style="cursor:default;pointer-events:none">
+<div class="note-card-icon">📖</div>
+<div class="note-card-info">
+<h2>L24 全耦合变压器与理想变压器 <span style="color:var(--second-color,#999);font-size:0.8em">（待补充）</span></h2>
+<p>§7-4 全耦合变压器 · 笔记暂缺</p>
+</div>
+<div class="note-card-arrow" style="visibility:hidden">→</div>
+</div>
+</div>
+</div>
+
+<div class="ncre-content" style="margin-top:12px">
+<details>
+<summary style="cursor:pointer;color:var(--second-color,#858585);font-size:0.9em">📌 课内已讲授但笔记未收录的内容</summary>
+<ul style="margin-top:8px;padding-left:20px;color:var(--second-color,#858585)"><li>L24 全耦合变压器与理想变压器（未录音，笔记暂缺）</li></ul>
+</details>
 </div>

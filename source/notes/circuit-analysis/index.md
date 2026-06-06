@@ -79,7 +79,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 <div class="note-card-icon">📔</div>
 <div class="note-card-info">
 <h2>第七章 含有互感的电路</h2>
-<p>§7-1 互感与互感电压 · §7-2 含互感电路分析 · §7-3 空芯变压器</p>
+<p>§7-1 互感与互感电路 · §7-2 含互感电路分析 · §7-3 空芯变压器 · §7-4 全耦合变压器与理想变压器</p>
 </div>
 <div class="note-card-arrow">→</div>
 </a>
