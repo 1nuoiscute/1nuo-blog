@@ -129,7 +129,7 @@ body{font-family:"DM Sans","Noto Serif SC",serif;background:#f8f6f2;color:#1c191
     var m = getMeanings(card, rev).slice(0,4);
     singleResult.className = 'card-display show';
     singleResult.innerHTML =
-      '<img class="card-img" src="cards/' + card.img + '" alt="' + card.name + '">' +
+      '<img class="card-img" src="https://img.1nuo.me/tarot/' + card.img + '" alt="' + card.name + '">' +
       '<div class="result">' +
       (rev ? '<div class="result-reverse">⚡ 逆位</div>' : '') +
       '<div class="result-name">' + zhName(card) + '</div>' +
@@ -145,7 +145,7 @@ body{font-family:"DM Sans","Noto Serif SC",serif;background:#f8f6f2;color:#1c191
     var h = '<div class="positions">';
     arr.forEach(function(c,i){
       var r = Math.random()<0.3;
-      h += '<div class="position-card"><img class="position-img" src="cards/'+c.img+'" alt="'+c.name+'">' +
+      h += '<div class="position-card"><img class="position-img" src="https://img.1nuo.me/tarot/'+c.img+'" alt="'+c.name+'">' +
         '<div class="position-label">'+(labels[i]||'')+'</div>' +
         '<div class="position-name">'+zhName(c)+(r?'(逆)':'')+'</div></div>';
     });
