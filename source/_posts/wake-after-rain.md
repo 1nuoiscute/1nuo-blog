@@ -159,6 +159,10 @@ Who you wanna be。
 <div class="tl-list">
   <div class="tl-item">
     <div class="tl-date">2026.6.10</div>
+    <a class="tl-link" href="/2026/06/10/tao-yuanming-what-kind-of-life/">陶渊明，你想活出怎样的人生？ <span class="tl-label tl-label-essay">随笔</span></a>
+  </div>
+  <div class="tl-item">
+    <div class="tl-date">2026.6.10</div>
     <a class="tl-link" href="/2026/06/10/soul-mute-part-2/">我的灵魂是个哑巴（下） <span class="tl-label tl-label-essay">随笔</span></a>
   </div>
   <div class="tl-item">
