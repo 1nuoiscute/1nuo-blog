@@ -14,10 +14,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 description: 时隔一年，终于把这篇补完了。
 ---
 
-> 本文章首发于百度贴吧（天堂鸡汤吧）
-> 内容均属原创
 
----
 
 一年以后。
 
