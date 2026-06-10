@@ -158,6 +158,10 @@ Who you wanna be。
 <div class="tl-section-title">✍️ 随笔</div>
 <div class="tl-list">
   <div class="tl-item">
+    <div class="tl-date">2026.6.10</div>
+    <a class="tl-link" href="/2026/06/10/soul-mute-part-2/">我的灵魂是个哑巴（下） <span class="tl-label tl-label-essay">随笔</span></a>
+  </div>
+  <div class="tl-item">
     <div class="tl-date">2026.3.5</div>
     <a class="tl-link" href="/2026/03/05/19/">幸福，死亡与抹茶芭菲 <span class="tl-label tl-label-essay">随笔</span></a>
   </div>
