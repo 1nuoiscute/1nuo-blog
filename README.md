@@ -9,7 +9,7 @@
 - `source/explore/`：互动小应用及其页面入口
 - `source/rate/`：1nuo 评测系统
 - `themes/butterfly/`：主题及本项目的定制
-- `spy_v1.5.py`：西南交大电气情报采集脚本
+- `spy_v1.5.py`：西南交大电气情报采集脚本（历史项目，已于 2026-05-21 停用）
 
 ## 本地开发
 
@@ -37,11 +37,8 @@ npx hexo new post "文章标题"
 
 编辑生成的 Markdown 文件后运行 `npm run build` 检查，再按仓库的部署配置发布。
 
-## 自动化情报采集
+## 历史项目：西南交大电气简报
 
-`.github/workflows/news_spy.yml` 提供手动触发入口。运行前需要在 GitHub Actions Secrets 中配置：
+电气简报自动化流水线曾在 2026-02-17 至 2026-05-20 运行，共发布 29 期，后来因维护成本和精力安排停止。历史文章已整理到站内的月度汇总页面。
 
-- `DEEPSEEK_API_KEY`
-- `PUSHPLUS_TOKEN`
-
-脚本会更新历史标题、待发布数据和文章文件；请先检查生成内容再发布到生产站点。
+仓库中的 `spy_v1.4.py`、`spy_v1.5.py` 与 `.github/workflows/news_spy.yml` 仅作为项目记录保留，不属于当前网站的运行链路，也不应作为日常发布流程使用。
