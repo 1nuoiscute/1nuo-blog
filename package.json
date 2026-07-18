@@ -7,7 +7,8 @@
     "clean": "hexo clean",
     "deploy": "hexo deploy",
     "server": "hexo server",
-    "test:cards": "node scripts/test-cards.js"
+    "test:cards": "node scripts/test-cards.js",
+    "test:tools": "node --check source/js/nuo-tools.js"
   },
   "hexo": {
     "version": "8.1.1"
