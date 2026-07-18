@@ -15,7 +15,7 @@
 
 这些应用主要是独立的静态 HTML/CSS/JavaScript 页面，通过 Hexo 页面中的 iframe 嵌入，彼此隔离，适合快速迭代和部署。
 
-### 1nuo 评测
+### 1nuo 评测（已隐藏的实验功能）
 
 `/rate/` 是一个自制的量化评测系统，目前用于记录景点体验：
 
@@ -26,7 +26,7 @@
 - 提供“景点对撞机”，可以选择两个景点进行横向比较。
 - 评测数据存放在 `source/rate/rate_data.json`，管理页面位于 `source/rate/admin/`。
 
-评测系统的独立源码和数据结构已开源于 [1nuoiscute/1nuo-rate](https://github.com/1nuoiscute/1nuo-rate)。
+该系统目前已从站点导航中隐藏，仅作为个人 vibe coding 实验保留，后续可能移除。
 
 ### 内容与笔记
 
