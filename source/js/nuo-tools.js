@@ -215,15 +215,21 @@
     // and make both the preview and PNG download fail in some browsers.
     context.fillStyle = 'rgba(255, 255, 255, .72)';
     roundedRect(context, 770, 70, 350, 490, 24); context.fill();
+    // Use a quiet abstract motif instead of a large logo competing with the title.
+    context.strokeStyle = 'rgba(207, 95, 145, .28)';
+    context.lineWidth = 2;
+    [145, 205, 265].forEach(function (offset) {
+      context.beginPath();
+      context.arc(945, 315, offset, Math.PI * .12, Math.PI * .88);
+      context.stroke();
+    });
     context.fillStyle = '#cf5f91';
-    context.font = '700 96px "DM Sans", "Microsoft YaHei", sans-serif';
-    context.fillText('1N', 860, 290);
+    context.globalAlpha = .7;
+    context.beginPath(); context.arc(945, 315, 8, 0, Math.PI * 2); context.fill();
+    context.globalAlpha = 1;
     context.fillStyle = '#a58b96';
     context.font = '600 18px "DM Sans", "Microsoft YaHei", sans-serif';
-    context.fillText('DIGITAL GARDEN', 852, 335);
-    context.globalAlpha = .4;
-    context.fillRect(852, 365, 180, 2);
-    context.globalAlpha = 1;
+    context.fillText('DIGITAL GARDEN', 852, 505);
 
     context.fillStyle = '#7a5264';
     context.font = '600 28px "DM Sans", "Microsoft YaHei", sans-serif';
