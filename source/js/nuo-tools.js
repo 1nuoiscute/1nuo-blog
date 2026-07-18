@@ -84,8 +84,8 @@
   function bookmarks() { return readStorage(BOOKMARKS_KEY, {}); }
   function reading() { return readStorage(READING_KEY, {}); }
 
-  function isBookmarked(path) { return Boolean(bookmarks()[path]); }
-  function isRead(path) { return Boolean(reading()[path] && reading()[path].read); }
+  function isBookmarked(path) { var state = bookmarks(); return Boolean(state[path]); }
+  function isRead(path) { var state = reading(); return Boolean(state[path] && state[path].read); }
 
   function makeButton(label, action, extraClass) {
     var button = document.createElement('button');
