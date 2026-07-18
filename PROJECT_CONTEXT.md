@@ -12,6 +12,7 @@
 - `source/notes/`：C 语言、数据结构、线性代数、电路分析等学习笔记。
 - `source/explore/`：SBTI、SCL-90、Bingo、2048、幸运签、塔罗牌等互动功能。
 - `source/rate/`：个人景点评测记录、数据和展示页面。这些内容属于博客记录，不应因为独立仓库的状态而删除。
+- `source/wander/`、`source/favorites/`：随机漫游和浏览器本地收藏页面。
 
 ## 真实部署链路
 
@@ -35,7 +36,7 @@ git push git@github.com:1nuoiscute/1nuo-blog.git master
 
 ### 当前内容
 
-“探索”和博客里的评测页面是网站现有内容的一部分。探索区是互动实验和娱乐功能，评测页面是个人旅行记录与展示，不应仅按“是否有外部用户”判断其存在意义。
+“探索”、博客里的评测页面，以及随机漫游、分享卡片和本地收藏工具，都是网站现有内容的一部分。探索区是互动实验和娱乐功能，评测页面是个人旅行记录与展示，不应仅按“是否有外部用户”判断其存在意义。
 
 ### 已停用的电气简报
 
@@ -71,4 +72,3 @@ git push git@github.com:1nuoiscute/1nuo-blog.git master
 - 增加了 GitHub Actions 构建校验，但它不替代 Vercel 部署。
 - 博客评测后台不再把 GitHub Token 写入 `localStorage`。
 - README 已改为介绍当前网站功能，并注明评测系统目前是隐藏的实验功能。
-

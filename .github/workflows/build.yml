@@ -2,7 +2,7 @@ name: Build site
 
 on:
   push:
-    branches: [main]
+    branches: [master]
   pull_request:
   workflow_dispatch:
 
@@ -24,5 +24,7 @@ jobs:
         run: npm ci
       - name: Validate tarot data
         run: npm run test:cards
+      - name: Validate browser tools syntax
+        run: npm run test:tools
       - name: Generate site
         run: npm run build
