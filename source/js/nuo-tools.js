@@ -193,10 +193,14 @@
     return lines.length;
   }
 
-  function drawShareCard(canvas, info, withImage) {
+  function generateShareImage(info) {
+    var canvas = document.createElement('canvas');
+    canvas.width = 1200;
+    canvas.height = 630;
     var context = canvas.getContext('2d');
-    var width = canvas.width = 1200;
-    var height = canvas.height = 630;
+    if (!context) throw new Error('当前浏览器不支持 Canvas');
+    var width = canvas.width;
+    var height = canvas.height;
     var gradient = context.createLinearGradient(0, 0, width, height);
     gradient.addColorStop(0, '#fff4f8');
     gradient.addColorStop(1, '#f8e5ee');
@@ -207,35 +211,33 @@
     context.beginPath(); context.arc(1050, 40, 230, 0, Math.PI * 2); context.fill();
     context.globalAlpha = 1;
 
-    var image = new Image();
-    image.crossOrigin = 'anonymous';
-    image.onload = function () {
-      if (withImage) {
-        context.save();
-        roundedRect(context, 770, 70, 350, 490, 24); context.clip();
-        context.drawImage(image, 770, 70, 350, 490);
-        context.restore();
-      }
-      finish();
-    };
-    image.onerror = function () { finish(); };
-    function finish() {
-      context.fillStyle = '#7a5264';
-      context.font = '600 28px "DM Sans", "Microsoft YaHei", sans-serif';
-      context.fillText('1nuo.me', 82, 92);
-      context.fillStyle = '#3d2934';
-      context.font = '700 54px "DM Sans", "Microsoft YaHei", sans-serif';
-      wrapText(context, info.title, 82, 205, withImage ? 610 : 1000, 72, 3);
-      context.fillStyle = '#856b77';
-      context.font = '400 25px "DM Sans", "Microsoft YaHei", sans-serif';
-      wrapText(context, info.description || '在 1nuo 的数字花园里留下一个坐标。', 82, 430, withImage ? 610 : 1000, 38, 3);
-      context.fillStyle = '#a58b96';
-      context.font = '400 22px "DM Sans", "Microsoft YaHei", sans-serif';
-      context.fillText(info.kind + '  ·  ' + info.path, 82, 550);
-      canvas.dataset.ready = 'true';
-    }
-    if (withImage && info.image) image.src = info.image;
-    else finish();
+    // Keep the card self-contained: external cover images can taint a canvas
+    // and make both the preview and PNG download fail in some browsers.
+    context.fillStyle = 'rgba(255, 255, 255, .72)';
+    roundedRect(context, 770, 70, 350, 490, 24); context.fill();
+    context.fillStyle = '#cf5f91';
+    context.font = '700 96px "DM Sans", "Microsoft YaHei", sans-serif';
+    context.fillText('1N', 860, 290);
+    context.fillStyle = '#a58b96';
+    context.font = '600 18px "DM Sans", "Microsoft YaHei", sans-serif';
+    context.fillText('DIGITAL GARDEN', 852, 335);
+    context.globalAlpha = .4;
+    context.fillRect(852, 365, 180, 2);
+    context.globalAlpha = 1;
+
+    context.fillStyle = '#7a5264';
+    context.font = '600 28px "DM Sans", "Microsoft YaHei", sans-serif';
+    context.fillText('1nuo.me', 82, 92);
+    context.fillStyle = '#3d2934';
+    context.font = '700 54px "DM Sans", "Microsoft YaHei", sans-serif';
+    wrapText(context, info.title, 82, 205, 610, 72, 3);
+    context.fillStyle = '#856b77';
+    context.font = '400 25px "DM Sans", "Microsoft YaHei", sans-serif';
+    wrapText(context, info.description || '在 1nuo 的数字花园里留下一个坐标。', 82, 430, 610, 38, 3);
+    context.fillStyle = '#a58b96';
+    context.font = '400 22px "DM Sans", "Microsoft YaHei", sans-serif';
+    context.fillText(info.kind + '  ·  ' + info.path, 82, 550);
+    return canvas.toDataURL('image/png');
   }
 
   function showShareModal() {
@@ -245,24 +247,23 @@
     var modal = document.createElement('div');
     modal.className = 'nuo-share-modal';
     modal.innerHTML = '<div class="nuo-share-dialog" role="dialog" aria-modal="true" aria-label="生成分享卡片">' +
-      '<h3>生成分享卡片</h3><canvas class="nuo-share-preview" width="1200" height="630"></canvas>' +
-      '<div class="nuo-share-actions"><button class="nuo-tool-btn" data-share-action="download">下载 PNG</button>' +
+      '<h3>生成分享卡片</h3><img class="nuo-share-preview" alt="分享卡片预览">' +
+      '<div class="nuo-share-actions"><a class="nuo-tool-btn" data-share-action="download" download="1nuo-share-card.png">下载 PNG</a>' +
       '<button class="nuo-tool-btn" data-share-action="copy">复制链接</button>' +
       '<button class="nuo-tool-btn" data-share-action="close">关闭</button></div></div>';
     document.body.appendChild(modal);
+    try {
+      var dataUrl = generateShareImage(currentInfo);
+      modal.querySelector('.nuo-share-preview').src = dataUrl;
+      modal.querySelector('[data-share-action="download"]').href = dataUrl;
+    } catch (error) {
+      modal.querySelector('.nuo-share-preview').alt = '分享卡片生成失败';
+    }
     var closeButton = modal.querySelector('[data-share-action="close"]');
     if (closeButton && typeof closeButton.focus === 'function') closeButton.focus();
     modal.addEventListener('keydown', function (event) { if (event.key === 'Escape') modal.remove(); });
-    var canvas = modal.querySelector('canvas');
     modal.addEventListener('click', function (event) {
       if (event.target === modal || event.target.dataset.shareAction === 'close') modal.remove();
-      if (event.target.dataset.shareAction === 'download') {
-        if (!canvas.dataset.ready) return;
-        var link = document.createElement('a');
-        link.download = '1nuo-share-card.png';
-        try { link.href = canvas.toDataURL('image/png'); link.click(); }
-        catch (error) { drawShareCard(canvas, currentInfo, false); window.setTimeout(function () { link.href = canvas.toDataURL('image/png'); link.click(); }, 80); }
-      }
       if (event.target.dataset.shareAction === 'copy') {
         var copy = navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(currentInfo.url) : Promise.reject();
         copy.then(function () { event.target.textContent = '已复制'; }).catch(function () { window.prompt('复制这个链接', currentInfo.url); });
