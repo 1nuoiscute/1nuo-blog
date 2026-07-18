@@ -133,10 +133,12 @@
       var percent = Math.max(0, Math.min(1, (window.innerHeight * .25 - rect.top) / total));
       progress.style.width = (percent * 100).toFixed(1) + '%';
       if (currentInfo && percent > 0) {
+        var path = currentInfo.path;
+        var progressValue = percent;
         clearTimeout(scrollTimer);
         scrollTimer = setTimeout(function () {
           var state = reading();
-          state[currentInfo.path] = Object.assign({}, state[currentInfo.path], { progress: percent, updatedAt: Date.now() });
+          state[path] = Object.assign({}, state[path], { progress: progressValue, updatedAt: Date.now() });
           writeStorage(READING_KEY, state);
         }, 250);
       }
