@@ -248,8 +248,10 @@
       '<button class="nuo-tool-btn" data-share-action="copy">复制链接</button>' +
       '<button class="nuo-tool-btn" data-share-action="close">关闭</button></div></div>';
     document.body.appendChild(modal);
+    var closeButton = modal.querySelector('[data-share-action="close"]');
+    if (closeButton && typeof closeButton.focus === 'function') closeButton.focus();
+    modal.addEventListener('keydown', function (event) { if (event.key === 'Escape') modal.remove(); });
     var canvas = modal.querySelector('canvas');
-    drawShareCard(canvas, currentInfo, true);
     modal.addEventListener('click', function (event) {
       if (event.target === modal || event.target.dataset.shareAction === 'close') modal.remove();
       if (event.target.dataset.shareAction === 'download') {
