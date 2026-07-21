@@ -23,7 +23,7 @@ menu:
   友链: /link/ || fas fa-link
   关于: /about/ || fas fa-heart
   随机漫游: /wander/ || fas fa-dice
-  我的收藏: /favorites/ || fas fa-bookmark
+  阅读清单: /favorites/ || fas fa-bookmark
   收纳||fas fa-boxes:
     分类: /categories/ || fas fa-folder-open
     标签: /tags/ || fas fa-tags

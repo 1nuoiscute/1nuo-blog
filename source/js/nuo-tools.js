@@ -3,6 +3,7 @@
 
   var BOOKMARKS_KEY = 'nuo:bookmarks:v1';
   var READING_KEY = 'nuo:reading:v1';
+  var HISTORY_KEY = 'nuo:history:v1';
   var currentInfo = null;
   var scrollTimer = null;
   var wanderPromise = null;
@@ -83,9 +84,22 @@
 
   function bookmarks() { return readStorage(BOOKMARKS_KEY, {}); }
   function reading() { return readStorage(READING_KEY, {}); }
+  function history() {
+    var value = readStorage(HISTORY_KEY, []);
+    return Array.isArray(value) ? value : [];
+  }
 
   function isBookmarked(path) { var state = bookmarks(); return Boolean(state[path]); }
   function isRead(path) { var state = reading(); return Boolean(state[path] && state[path].read); }
+
+  function recordVisit() {
+    if (!currentInfo) return;
+    var visitedAt = Date.now();
+    var entry = Object.assign({}, currentInfo, { visitedAt: visitedAt });
+    var items = history().filter(function (item) { return item && item.path !== entry.path; });
+    items.unshift(entry);
+    writeStorage(HISTORY_KEY, items.slice(0, 18));
+  }
 
   function makeButton(label, action, extraClass) {
     var button = document.createElement('button');
@@ -138,7 +152,7 @@
         clearTimeout(scrollTimer);
         scrollTimer = setTimeout(function () {
           var state = reading();
-          state[path] = Object.assign({}, state[path], { progress: progressValue, updatedAt: Date.now() });
+          state[path] = Object.assign({}, state[path], currentInfo, { progress: progressValue, updatedAt: Date.now() });
           writeStorage(READING_KEY, state);
         }, 250);
       }
@@ -161,7 +175,7 @@
     if (!currentInfo) return;
     var state = reading();
     var previous = state[currentInfo.path] || {};
-    state[currentInfo.path] = Object.assign({}, previous, { read: !previous.read, updatedAt: Date.now() });
+    state[currentInfo.path] = Object.assign({}, previous, currentInfo, { read: !previous.read, updatedAt: Date.now() });
     writeStorage(READING_KEY, state);
     updateButtonState();
   }
@@ -305,6 +319,7 @@
     var existing = document.querySelector('.nuo-content-tools');
     if (existing) existing.remove();
     if (!currentInfo || currentInfo.path === '/wander' || currentInfo.path === '/favorites') return;
+    recordVisit();
 
     var host = document.getElementById('post') || document.getElementById('page');
     if (!host) return;
@@ -316,7 +331,7 @@
     toolbar.appendChild(makeButton('♡ 收藏', 'bookmark'));
     toolbar.appendChild(makeButton('○ 标记已读', 'read'));
     var spacer = document.createElement('span'); spacer.className = 'nuo-tool-spacer'; toolbar.appendChild(spacer);
-    var link = document.createElement('a'); link.className = 'nuo-tool-link'; link.href = '/favorites/'; link.textContent = '我的收藏'; toolbar.appendChild(link);
+    var link = document.createElement('a'); link.className = 'nuo-tool-link'; link.href = '/favorites/'; link.textContent = '阅读清单'; toolbar.appendChild(link);
     toolbar.addEventListener('click', function (event) {
       var action = event.target.dataset.action;
       if (action === 'wander') wander();
@@ -331,34 +346,88 @@
     initReadingProgress();
   }
 
-  function renderFavorites() {
-    var container = document.querySelector('.nuo-favorite-list');
-    if (!container) return;
-    var saved = bookmarks();
-    var items = Object.keys(saved).map(function (key) { return saved[key]; }).sort(function (a, b) { return (b.savedAt || 0) - (a.savedAt || 0); });
+  function libraryItem(path, saved, states, visits) {
+    var item = Object.assign({}, visits[path], saved[path], states[path], { path: path });
+    item.url = internalUrl(item.url || path) || path;
+    item.title = item.title || path;
+    return item;
+  }
+
+  function formatDate(timestamp, prefix) {
+    if (!timestamp) return '';
+    return (prefix ? prefix + ' ' : '') + new Date(timestamp).toLocaleDateString('zh-CN');
+  }
+
+  function renderLibraryItems(container, items, emptyText, options) {
     container.innerHTML = '';
     if (!items.length) {
-      container.innerHTML = '<div class="nuo-favorites-empty">还没有收藏。去文章里点一下“♡ 收藏”吧。</div>';
+      container.innerHTML = '<div class="nuo-library-empty">' + escapeHtml(emptyText) + '</div>';
       return;
     }
     items.forEach(function (item) {
-      var row = document.createElement('div'); row.className = 'nuo-favorite-item';
-      row.innerHTML = '<div class="nuo-favorite-item-main"><a class="nuo-favorite-item-title" href="' + escapeHtml(internalUrl(item.url) || '/') + '">' + escapeHtml(item.title) + '</a><div class="nuo-favorite-item-meta">' + escapeHtml(item.kind || '页面') + ' · 收藏于 ' + new Date(item.savedAt || Date.now()).toLocaleDateString('zh-CN') + '</div></div>';
-      var remove = makeButton('移除', 'remove-favorite', 'nuo-favorite-remove');
-      remove.dataset.path = item.path;
-      row.appendChild(remove); container.appendChild(row);
+      var row = document.createElement('div'); row.className = 'nuo-library-item';
+      var meta = [item.kind || '页面', options.meta(item)].filter(Boolean).join(' · ');
+      row.innerHTML = '<div class="nuo-library-item-main"><a class="nuo-library-item-title" href="' + escapeHtml(item.url) + '">' + escapeHtml(item.title) + '</a><div class="nuo-library-item-meta">' + escapeHtml(meta) + '</div></div>';
+      if (options.progress && item.progress > 0) {
+        var progress = document.createElement('div'); progress.className = 'nuo-library-progress';
+        var progressBar = document.createElement('span'); progressBar.style.width = Math.round(Math.min(1, item.progress) * 100) + '%';
+        progress.appendChild(progressBar); row.appendChild(progress);
+      }
+      if (options.removable) {
+        var remove = makeButton('移除', 'remove-bookmark', 'nuo-library-remove');
+        remove.dataset.path = item.path;
+        row.appendChild(remove);
+      }
+      container.appendChild(row);
     });
-    if (container.dataset.bound !== 'true') {
-      container.dataset.bound = 'true';
-      container.addEventListener('click', function (event) {
-        if (event.target.dataset.action !== 'remove-favorite') return;
-        var state = bookmarks(); delete state[event.target.dataset.path]; writeStorage(BOOKMARKS_KEY, state); renderFavorites();
+  }
+
+  function renderReadingList() {
+    var root = document.querySelector('.nuo-library-page');
+    if (!root) return;
+    var saved = bookmarks();
+    var states = reading();
+    var visitMap = {};
+    history().forEach(function (item) { if (item && item.path) visitMap[item.path] = item; });
+    var byPath = function (path) { return libraryItem(path, saved, states, visitMap); };
+    var byUpdated = function (a, b) { return (b.updatedAt || b.visitedAt || b.savedAt || 0) - (a.updatedAt || a.visitedAt || a.savedAt || 0); };
+
+    var continuing = Object.keys(states).map(byPath).filter(function (item) {
+      return !item.read && item.progress > .03 && item.progress < .97;
+    }).sort(byUpdated);
+    var savedItems = Object.keys(saved).map(byPath).sort(function (a, b) { return (b.savedAt || 0) - (a.savedAt || 0); });
+    var completed = Object.keys(states).map(byPath).filter(function (item) { return item.read; }).sort(byUpdated);
+    var recent = history().map(function (item) { return byPath(item.path); }).slice(0, 8);
+
+    renderLibraryItems(root.querySelector('[data-library-section="continuing"]'), continuing, '还没有读到一半的文章。', {
+      progress: true,
+      meta: function (item) { return '已读 ' + Math.round(item.progress * 100) + '%'; }
+    });
+    renderLibraryItems(root.querySelector('[data-library-section="saved"]'), savedItems, '还没有收藏。去文章里点一下“♡ 收藏”吧。', {
+      removable: true,
+      meta: function (item) { return formatDate(item.savedAt, '收藏于'); }
+    });
+    renderLibraryItems(root.querySelector('[data-library-section="completed"]'), completed, '还没有标记为已读的内容。', {
+      meta: function (item) { return formatDate(item.updatedAt, '标记于'); }
+    });
+    renderLibraryItems(root.querySelector('[data-library-section="recent"]'), recent, '最近还没有浏览记录。', {
+      meta: function (item) { return formatDate(item.visitedAt, '浏览于'); }
+    });
+
+    if (root.dataset.bound !== 'true') {
+      root.dataset.bound = 'true';
+      root.addEventListener('click', function (event) {
+        if (event.target.dataset.action !== 'remove-bookmark') return;
+        var state = bookmarks();
+        delete state[event.target.dataset.path];
+        writeStorage(BOOKMARKS_KEY, state);
+        renderReadingList();
       });
     }
   }
 
   function boot() {
-    window.setTimeout(function () { initContentTools(); renderFavorites(); }, 0);
+    window.setTimeout(function () { initContentTools(); renderReadingList(); }, 0);
   }
 
   window.NuoTools = { wander: wander, refresh: boot };
