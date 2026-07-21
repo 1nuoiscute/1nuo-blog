@@ -337,7 +337,7 @@
     toolbar.appendChild(makeButton('♡ 收藏', 'bookmark'));
     toolbar.appendChild(makeButton('○ 标记已读', 'read'));
     var spacer = document.createElement('span'); spacer.className = 'nuo-tool-spacer'; toolbar.appendChild(spacer);
-    var link = document.createElement('a'); link.className = 'nuo-tool-link'; link.href = '/favorites/'; link.textContent = '阅读清单'; toolbar.appendChild(link);
+    var link = document.createElement('a'); link.className = 'nuo-tool-link'; link.href = '/favorites/'; link.textContent = '书架'; toolbar.appendChild(link);
     toolbar.addEventListener('click', function (event) {
       var action = event.target.dataset.action;
       if (action === 'wander') wander();
@@ -365,6 +365,7 @@
   }
 
   function renderLibraryItems(container, items, emptyText, options) {
+    if (!container) return;
     container.innerHTML = '';
     if (!items.length) {
       container.innerHTML = '<div class="nuo-library-empty">' + escapeHtml(emptyText) + '</div>';

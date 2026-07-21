@@ -23,7 +23,7 @@ menu:
   友链: /link/ || fas fa-link
   关于: /about/ || fas fa-heart
   随机漫游: /wander/ || fas fa-dice
-  阅读清单: /favorites/ || fas fa-bookmark
+  书架: /favorites/ || fas fa-bookmark
   收纳||fas fa-boxes:
     分类: /categories/ || fas fa-folder-open
     标签: /tags/ || fas fa-tags
@@ -1080,13 +1080,13 @@ css_prefix: true
 inject:
   head:
     - <!-- Font loaded via custom.css @import -->
-    - <link rel="stylesheet" href="/css/custom.css">
+    - <link rel="stylesheet" href="/css/custom.css?v=20260722">
     - <script defer src="https://cloud.umami.is/script.js" data-website-id="6bbc26e5-009c-4364-8b91-b12efdda7794"></script>
   bottom:
     # - <script src="xxxx"></script>
     - <script src="/js/snowflake.js"></script>
     - <script src="/js/timing.js"></script>
-    - <script src="/js/nuo-tools.js"></script>
+    - <script src="/js/nuo-tools.js?v=20260722"></script>
     - <script>document.querySelectorAll('#menus a[href^="http"]').forEach(function(a){a.target="_blank";a.rel="noopener"})</script>
 
     - <script>document.querySelectorAll('.recent-post-item').forEach(function(c){c.addEventListener('click',function(e){if(e.target.closest('a'))return;var l=this.querySelector('.article-title');if(l)location.href=l.getAttribute('href')})})</script>
