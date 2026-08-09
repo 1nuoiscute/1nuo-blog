@@ -1,0 +1,92 @@
+.nuo-map-hero {
+  display: grid;
+  grid-template-columns: minmax(0, 1.5fr) minmax(240px, .5fr);
+  gap: 18px;
+}
+
+.nuo-map-panel,
+.nuo-map-sidebar {
+  background: #fff;
+  border: 1px solid #e2e8f0;
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 8px 24px rgba(15, 23, 42, .06);
+}
+
+.nuo-map-copy { padding: 18px 20px 14px; }
+.nuo-map-copy h2 { margin: 0 0 6px; font-size: 20px; color: #1e293b; }
+.nuo-map-copy p { margin: 0; color: #64748b; font-size: 13px; }
+
+#travel-map {
+  width: 100%;
+  height: min(62vh, 560px);
+  min-height: 380px;
+  background: linear-gradient(135deg, #eff6ff, #f8fafc);
+}
+
+.nuo-map-status {
+  margin: 0;
+  padding: 10px 18px;
+  color: #475569;
+  background: #f8fafc;
+  border-top: 1px solid #e2e8f0;
+  font-size: 12px;
+}
+
+.nuo-map-stats {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  padding: 16px;
+}
+
+.nuo-map-stat {
+  padding: 12px;
+  border-radius: 12px;
+  background: #f8fafc;
+  text-align: center;
+}
+
+.nuo-map-stat strong { display: block; color: #0f172a; font-size: 22px; }
+.nuo-map-stat span { color: #64748b; font-size: 11px; }
+.nuo-map-list-title { margin: 2px 16px 8px; font-size: 13px; color: #334155; }
+
+.nuo-map-list {
+  margin: 0;
+  padding: 0 12px 14px;
+  list-style: none;
+  max-height: 430px;
+  overflow: auto;
+}
+
+.nuo-map-place {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 26px minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 8px;
+  border: 0;
+  border-radius: 9px;
+  color: #334155;
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.nuo-map-place:hover,
+.nuo-map-place:focus-visible { background: #eff6ff; outline: 2px solid transparent; }
+.nuo-map-place:focus-visible { box-shadow: 0 0 0 2px #3b82f6; }
+.nuo-map-place-index { color: #fff; background: #2563eb; border-radius: 50%; text-align: center; line-height: 22px; font-size: 11px; }
+.nuo-map-place-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; font-weight: 700; }
+.nuo-map-place-score { color: #e11d48; font-weight: 800; }
+
+@media (max-width: 768px) {
+  .nuo-map-hero { grid-template-columns: 1fr; }
+  #travel-map { height: 56vh; min-height: 340px; }
+  .nuo-map-list { max-height: 280px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nuo-map-place { scroll-behavior: auto; }
+}

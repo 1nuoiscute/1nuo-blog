@@ -8,6 +8,7 @@
     "deploy": "hexo deploy",
     "server": "hexo server",
     "test:cards": "node scripts/test-cards.js",
+    "test:map": "node scripts/test-rate-map.js && node --check source/js/rate-map.js && node --check scripts/tencent-lbs-config.js",
     "test:tools": "node --check source/js/nuo-tools.js"
   },
   "hexo": {

@@ -6,16 +6,41 @@ comments: false
 ---
 
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
+<link rel="stylesheet" href="/css/rate-map.css">
+<script src="/js/tencent-lbs-config.js"></script>
+<script src="/js/rate-map.js" defer></script>
 
 <div class="nuo-nav-container">
   <div class="nuo-nav-left">
     <button id="btn-attractions" class="nuo-tab-btn" onclick="switchTab('attractions')">🏛️ 景点评测</button>
+    <button id="btn-map" class="nuo-tab-btn" onclick="switchTab('map')">🗺️ 旅行足迹</button>
     <button id="btn-digital" class="nuo-tab-btn" onclick="switchTab('digital')">🍹 饮品评测</button>
     <button class="nuo-tab-btn nuo-pk-trigger" onclick="openPKModal()">⚔️ 景点比拼</button>
   </div>
   <a href="/rate/admin/index.html" class="nuo-tab-btn nuo-admin-btn">
     <span>⚙️</span> 评测后台
   </a>
+</div>
+
+<div id="section-map" class="nuo-section" style="display: none;">
+  <div class="nuo-map-hero">
+    <div class="nuo-map-panel">
+      <div class="nuo-map-copy">
+        <h2>🗺️ 我的旅行足迹</h2>
+        <p>以景点评测为坐标，把走过的地方连成一张持续生长的地图。</p>
+      </div>
+      <div id="travel-map" role="region" aria-label="腾讯地图旅行足迹"></div>
+      <p id="travel-map-status" class="nuo-map-status" role="status" aria-live="polite">打开地图页后加载足迹。</p>
+    </div>
+    <aside class="nuo-map-sidebar" aria-label="足迹概览">
+      <div class="nuo-map-stats">
+        <div class="nuo-map-stat"><strong id="travel-map-count">0</strong><span>到访地点</span></div>
+        <div class="nuo-map-stat"><strong id="travel-map-cities">0</strong><span>覆盖城市</span></div>
+      </div>
+      <h3 class="nuo-map-list-title">按评测查看</h3>
+      <ol id="travel-map-list" class="nuo-map-list"></ol>
+    </aside>
+  </div>
 </div>
 
 <div id="nuo-filter-bar" style="display: none; margin-bottom: 20px; padding: 15px; background: #fff; border-radius: 12px; border: 1px solid #eee; gap: 12px; align-items: center; flex-wrap: wrap; box-shadow: 0 4px 12px rgba(0,0,0,0.03);">
@@ -104,6 +129,7 @@ comments: false
   let globalData = {};
   let myChart = null;
   let pkSelected = [null, null];
+  let activeCategory = null;
 
   function parseLocation(locStr) {
     if (!locStr) return { province: '未知', city: '未知' };
@@ -115,7 +141,9 @@ comments: false
   }
 
   fetch('/rate/rate_data.json').then(r => r.json()).then(data => { 
-    globalData = data; initFilterOptions(); switchTab('attractions');
+    globalData = data; window.globalData = data; window.dispatchEvent(new CustomEvent('rate-data-ready')); initFilterOptions();
+    if (!activeCategory) switchTab('attractions');
+    if (activeCategory === 'map' && window.ensureTravelMap) window.ensureTravelMap();
   });
 
   function initFilterOptions() {
@@ -245,11 +273,13 @@ comments: false
   }
   function closeModal() { document.getElementById('nuo-modal').style.display = 'none'; }
   function switchTab(cat) {
+    activeCategory = cat;
     document.querySelectorAll('.nuo-tab-btn').forEach(b => b.classList.remove('active'));
     document.getElementById(`btn-${cat}`)?.classList.add('active');
     document.querySelectorAll('.nuo-section').forEach(s => s.style.display = 'none');
     document.getElementById('nuo-filter-bar').style.display = (cat === 'attractions') ? 'flex' : 'none';
     document.getElementById(`section-${cat}`).style.display = 'block';
     if (cat === 'attractions') setTimeout(() => { if(myChart) myChart.resize(); applyFilters(); }, 100);
+    if (cat === 'map' && window.ensureTravelMap) window.ensureTravelMap();
   }
 </script>
