@@ -185,6 +185,17 @@
 
             <div class="time-row">
                 <div>
+                    <label>地图纬度</label>
+                    <input type="number" id="in-lat" min="-90" max="90" step="0.000001" placeholder="例如：34.841800">
+                </div>
+                <div>
+                    <label>地图经度</label>
+                    <input type="number" id="in-lng" min="-180" max="180" step="0.000001" placeholder="例如：110.321900">
+                </div>
+            </div>
+
+            <div class="time-row">
+                <div>
                     <label>🗓️ 游览日期</label>
                     <input type="text" id="in-vtime" placeholder="2026.2.18">
                 </div>
@@ -412,6 +423,10 @@
 
         const fullReview = "✍️ 记录于: " + rDate + "\n\n" + formattedReview;
         const customId = document.getElementById('in-id').value.trim() || ("nuo-" + Date.now());
+        const latRaw = document.getElementById('in-lat').value.trim();
+        const lngRaw = document.getElementById('in-lng').value.trim();
+        const lat = Number(latRaw);
+        const lng = Number(lngRaw);
 
         const json = {
             id: customId,
@@ -433,6 +448,9 @@
                     return cleanUrl;
                 }),
             location: document.getElementById('in-loc').value,
+            coordinates: latRaw && lngRaw && Number.isFinite(lat) && Number.isFinite(lng) && lat >= -90 && lat <= 90 && lng >= -180 && lng <= 180
+                ? { lat, lng }
+                : undefined,
             visit_time: document.getElementById('in-vtime').value,
             scores: scoresObj,
             tags: tags,

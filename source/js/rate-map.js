@@ -2,7 +2,6 @@
   'use strict'
 
   const DEFAULT_CENTER = { lat: 35.0263, lng: 111.0073 }
-  const CACHE_KEY = 'nuo-travel-map-geocodes-v1'
   let loadPromise
   let initPromise
   let map
@@ -35,7 +34,7 @@
   }
 
   function loadTencentMap(key) {
-    if (window.TMap && window.TMap.service && window.TMap.service.Geocoder) return Promise.resolve(window.TMap)
+    if (window.TMap && window.TMap.Map) return Promise.resolve(window.TMap)
     if (loadPromise) return loadPromise
 
     loadPromise = new Promise(function (resolve, reject) {
@@ -50,55 +49,21 @@
       const waitUntilReady = function () {
         const startedAt = Date.now()
         timer = setInterval(function () {
-          if (window.TMap && window.TMap.Map && window.TMap.service && window.TMap.service.Geocoder) {
+          if (window.TMap && window.TMap.Map) {
             finish()
           } else if (Date.now() - startedAt > 15000) {
-            finish(new Error('腾讯地图 SDK 初始化超时，请检查 Key 的应用类型和域名白名单'))
+            finish(new Error('腾讯地图 SDK 初始化超时'))
           }
         }, 100)
       }
       const script = document.createElement('script')
-      script.src = `https://map.qq.com/api/gljs?v=1.exp&key=${encodeURIComponent(key)}&libraries=service`
+      script.src = `https://map.qq.com/api/gljs?v=1.exp&key=${encodeURIComponent(key)}`
       script.async = true
       script.onload = waitUntilReady
       script.onerror = function () { finish(new Error('地图 SDK 加载失败')) }
       document.head.appendChild(script)
     })
     return loadPromise
-  }
-
-  function readCache() {
-    try { return JSON.parse(localStorage.getItem(CACHE_KEY) || '{}') }
-    catch (_) { return {} }
-  }
-
-  function writeCache(cache) {
-    try { localStorage.setItem(CACHE_KEY, JSON.stringify(cache)) } catch (_) {}
-  }
-
-  async function geocodeAttraction(geocoder, attraction, cache) {
-    if (cache[attraction.id]) return cache[attraction.id]
-    const response = await geocoder.getLocation({ address: `${attraction.location}${attraction.name}` })
-    const location = response && response.result && response.result.location
-    if (!location || !Number.isFinite(Number(location.lat)) || !Number.isFinite(Number(location.lng))) {
-      throw new Error(`无法定位 ${attraction.name}`)
-    }
-    cache[attraction.id] = { lat: Number(location.lat), lng: Number(location.lng) }
-    writeCache(cache)
-    return cache[attraction.id]
-  }
-
-  async function mapWithConcurrency(items, limit, worker) {
-    const results = new Array(items.length)
-    let cursor = 0
-    async function run() {
-      while (cursor < items.length) {
-        const index = cursor++
-        try { results[index] = await worker(items[index], index) } catch (_) { results[index] = null }
-      }
-    }
-    await Promise.all(Array.from({ length: Math.min(limit, items.length) }, run))
-    return results
   }
 
   function markerIcon() {
@@ -151,7 +116,7 @@
       return
     }
 
-    status('正在加载腾讯地图并定位足迹…')
+    status('正在加载腾讯地图…')
     const TMap = await loadTencentMap(key)
     map = new TMap.Map(document.getElementById('travel-map'), {
       center: new TMap.LatLng(DEFAULT_CENTER.lat, DEFAULT_CENTER.lng),
@@ -159,18 +124,14 @@
       pitch: 0,
       rotation: 0
     })
-    const geocoder = new TMap.service.Geocoder()
-    const cache = readCache()
-    const locations = await mapWithConcurrency(attractions, 3, function (item) {
-      return geocodeAttraction(geocoder, item, cache)
-    })
-    points = locations.map(function (location, index) {
-      if (!location) return null
+    points = attractions.map(function (item) {
+      const location = item.coordinates
+      if (!location || !Number.isFinite(location.lat) || !Number.isFinite(location.lng)) return null
       return {
-        id: attractions[index].id,
+        id: item.id,
         styleId: 'footprint',
         position: new TMap.LatLng(location.lat, location.lng),
-        attraction: attractions[index]
+        attraction: item
       }
     }).filter(Boolean)
 

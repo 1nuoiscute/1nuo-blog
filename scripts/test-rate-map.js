@@ -8,11 +8,14 @@ const data = JSON.parse(fs.readFileSync(path.join(root, 'source/rate/rate_data.j
 const page = fs.readFileSync(path.join(root, 'source/rate/index.md'), 'utf8')
 const client = fs.readFileSync(path.join(root, 'source/js/rate-map.js'), 'utf8')
 const generator = fs.readFileSync(path.join(root, 'scripts/tencent-lbs-config.js'), 'utf8')
+const admin = fs.readFileSync(path.join(root, 'source/rate/admin/index.html'), 'utf8')
 
 if (!Array.isArray(data.attractions) || !data.attractions.length) throw new Error('缺少景点评测数据')
 const ids = new Set()
 for (const item of data.attractions) {
   if (!item.id || !item.name || !item.location) throw new Error('足迹缺少 id、名称或位置')
+  if (!item.coordinates || !Number.isFinite(item.coordinates.lat) || !Number.isFinite(item.coordinates.lng)) throw new Error(`足迹缺少有效坐标: ${item.id}`)
+  if (item.coordinates.lat < -90 || item.coordinates.lat > 90 || item.coordinates.lng < -180 || item.coordinates.lng > 180) throw new Error(`足迹坐标越界: ${item.id}`)
   if (ids.has(item.id)) throw new Error(`重复足迹 id: ${item.id}`)
   ids.add(item.id)
 }
@@ -21,14 +24,14 @@ for (const required of ['btn-map', 'section-map', 'travel-map', 'travel-map-stat
   if (!page.includes(required)) throw new Error(`评测页缺少 ${required}`)
 }
 if (!client.includes('encodeURIComponent(key)')) throw new Error('地图 Key 未安全编码')
-if (!client.includes('&libraries=service')) throw new Error('腾讯地图地理编码服务库未声明')
-if (!client.includes('window.TMap.service.Geocoder')) throw new Error('缺少地理编码服务可用性检查')
+if (client.includes('libraries=service') || client.includes('TMap.service.Geocoder')) throw new Error('不应依赖腾讯地图地理编码服务库')
 if (!client.includes('SDK 初始化超时')) throw new Error('缺少腾讯地图异步初始化超时处理')
 if (!client.includes('地图鉴权尚未配置')) throw new Error('缺少无 Key 降级提示')
 if (!client.includes('rate-data-ready')) throw new Error('缺少评测数据加载同步')
 if (!client.includes("classList.contains('active')")) throw new Error('缺少地图脚本延迟加载恢复')
 if (!page.includes('if (!activeCategory)')) throw new Error('缺少快速切换页签保护')
 if (!generator.includes('process.env.TENCENT_LBS_KEY')) throw new Error('未从构建环境读取地图 Key')
+if (!admin.includes('id="in-lat"') || !admin.includes('id="in-lng"') || !admin.includes('coordinates:')) throw new Error('评测后台缺少地图坐标录入')
 if (/TENCENT_LBS_KEY\s*=\s*['"][^'"]+/.test(page + client + generator)) throw new Error('检测到疑似硬编码 Key')
 
 console.log(`旅行足迹地图检查通过：${data.attractions.length} 个地点，Key 未写入源码。`)

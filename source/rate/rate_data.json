@@ -11,6 +11,7 @@
         "https://img.1nuo.me/blog/2026/02/22/943ce61fcb589b163192155d384bd0ab.webp"
       ],
       "location": "山西省运城市平陆县部官镇",
+      "coordinates": { "lat": 35.0416, "lng": 111.2518 },
       "visit_time": "2026.2.21",
       "scores": {
         "architecture": {
@@ -54,6 +55,7 @@
         "https://img.1nuo.me/blog/2026/02/22/3049ee758519cc7a518c95ab7b7d4341.webp"
       ],
       "location": "山西省运城市平陆县",
+      "coordinates": { "lat": 34.8416, "lng": 111.1941 },
       "visit_time": "2026.2.21",
       "scores": {
         "architecture": {
@@ -95,6 +97,7 @@
         "https://img.1nuo.me/rate/rateimg/cpgyjm.webp"
       ],
       "location": "山西省运城市盐湖区常平乡常平村",
+      "coordinates": { "lat": 34.9586, "lng": 110.9128 },
       "visit_time": "2026.2.19",
       "scores": {
         "architecture": {
@@ -134,6 +137,7 @@
         "https://img.1nuo.me/rate/rateimg/hzgdm3.webp"
       ],
       "location": "山西省运城市盐湖区解州镇解州村",
+      "coordinates": { "lat": 34.9084, "lng": 110.8458 },
       "visit_time": "2026.2.19",
       "scores": {
         "architecture": {
@@ -171,6 +175,7 @@
         "https://img.1nuo.me/rate/rateimg/pjd.webp"
       ],
       "location": "山西省运城市永济市蒲州镇",
+      "coordinates": { "lat": 34.8426, "lng": 110.3284 },
       "visit_time": "2026.2.19",
       "scores": {
         "architecture": {
@@ -213,6 +218,7 @@
         "https://img.1nuo.me/rate/rateimg/flgd2.webp"
       ],
       "location": "山西省运城市芮城县风陵渡",
+      "coordinates": { "lat": 34.6268, "lng": 110.3008 },
       "visit_time": "2026.2.18",
       "scores": {
         "architecture": {
@@ -258,6 +264,7 @@
         "https://img.1nuo.me/rate/rateimg/grwm.webp"
       ],
       "location": "山西省运城市芮城县龙泉村",
+      "coordinates": { "lat": 34.7358, "lng": 110.6907 },
       "visit_time": "2026.2.18",
       "scores": {
         "architecture": {
@@ -297,6 +304,7 @@
         "https://img.1nuo.me/rate/rateimg/ylg3.webp"
       ],
       "location": "山西省运城市芮城县龙泉村",
+      "coordinates": { "lat": 34.7183, "lng": 110.6942 },
       "visit_time": "2026.2.18",
       "scores": {
         "architecture": {
@@ -336,6 +344,7 @@
         "https://img.1nuo.me/rate/rateimg/pjst3.webp"
       ],
       "location": "山西省运城市永济市蒲州镇",
+      "coordinates": { "lat": 34.8666, "lng": 110.3374 },
       "visit_time": "2026.2.18",
       "scores": {
         "architecture": {
@@ -379,6 +388,7 @@
         "https://img.1nuo.me/rate/rateimg/wgs3.webp"
       ],
       "location": "山西省运城市永济市蒲州镇",
+      "coordinates": { "lat": 34.8795, "lng": 110.3942 },
       "visit_time": "2026.2.19",
       "scores": {
         "architecture": {
@@ -417,6 +427,7 @@
         "https://img.1nuo.me/rate/rateimg/gql2.webp"
       ],
       "location": "山西省运城市永济市蒲州镇",
+      "coordinates": { "lat": 34.8418, "lng": 110.3219 },
       "visit_time": "2026.2.18",
       "scores": {
         "architecture": {
