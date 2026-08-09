@@ -8,7 +8,7 @@ comments: false
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 <link rel="stylesheet" href="/css/rate-map.css">
 <script src="/js/tencent-lbs-config.js"></script>
-<script src="/js/rate-map.js" defer></script>
+<script src="/js/rate-map.js?v=20260809.2" defer></script>
 
 <div class="nuo-nav-container">
   <div class="nuo-nav-left">

@@ -17,7 +17,7 @@ for (const item of data.attractions) {
   ids.add(item.id)
 }
 
-for (const required of ['btn-map', 'section-map', 'travel-map', 'travel-map-status', '/js/tencent-lbs-config.js', '/js/rate-map.js']) {
+for (const required of ['btn-map', 'section-map', 'travel-map', 'travel-map-status', '/js/tencent-lbs-config.js', '/js/rate-map.js?v=']) {
   if (!page.includes(required)) throw new Error(`评测页缺少 ${required}`)
 }
 if (!client.includes('encodeURIComponent(key)')) throw new Error('地图 Key 未安全编码')
