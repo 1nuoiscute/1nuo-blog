@@ -36,6 +36,7 @@ post:
 
 search:
   title: Search
+  close: Close search
   load_data: Loading Database
   input_placeholder: Search for Posts
   algolia_search:

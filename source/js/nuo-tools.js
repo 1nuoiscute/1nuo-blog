@@ -260,7 +260,7 @@
     return canvas.toDataURL('image/png');
   }
 
-  function showShareModal() {
+  function showShareModal(trigger) {
     if (!currentInfo) return;
     var old = document.querySelector('.nuo-share-modal');
     if (old) old.remove();
@@ -281,9 +281,13 @@
     }
     var closeButton = modal.querySelector('[data-share-action="close"]');
     if (closeButton && typeof closeButton.focus === 'function') closeButton.focus();
-    modal.addEventListener('keydown', function (event) { if (event.key === 'Escape') modal.remove(); });
+    function closeModal() {
+      modal.remove();
+      if (trigger && typeof trigger.focus === 'function') trigger.focus();
+    }
+    modal.addEventListener('keydown', function (event) { if (event.key === 'Escape') closeModal(); });
     modal.addEventListener('click', function (event) {
-      if (event.target === modal || event.target.dataset.shareAction === 'close') modal.remove();
+      if (event.target === modal || event.target.dataset.shareAction === 'close') closeModal();
       if (event.target.dataset.shareAction === 'copy') {
         var copy = navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(currentInfo.url) : Promise.reject();
         copy.then(function () { event.target.textContent = '已复制'; }).catch(function () { window.prompt('复制这个链接', currentInfo.url); });
@@ -341,7 +345,7 @@
     toolbar.addEventListener('click', function (event) {
       var action = event.target.dataset.action;
       if (action === 'wander') wander();
-      if (action === 'share') showShareModal();
+      if (action === 'share') showShareModal(event.target);
       if (action === 'bookmark') toggleBookmark();
       if (action === 'read') toggleRead();
     });

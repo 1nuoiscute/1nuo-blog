@@ -36,6 +36,7 @@ post:
 
 search:
   title: 검색
+  close: 검색 닫기
   load_data: 데이터베이스 로드 중
   input_placeholder: 글 검색
   algolia_search:

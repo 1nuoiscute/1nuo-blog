@@ -4,7 +4,7 @@ mixin indexPostUI()
   #recent-posts.recent-posts.nc(class=masonryLayoutClass)
     .recent-post-items
       each article, index in page.posts.data
-        .recent-post-item
+        article.recent-post-item
           - const link = article.link || article.path
           - const title = article.title || _p('no_title')
           - const leftOrRight = indexLayout === 3 ? (index % 2 === 0 ? 'left' : 'right') : (indexLayout === 2 ? 'right' : '')
@@ -15,7 +15,7 @@ mixin indexPostUI()
             .post_cover(class=leftOrRight)
               a(href=url_for(link) title=title)
                 if article.cover_type === 'img'
-                  img.post-bg(src=url_for(postCover) onerror=`this.onerror=null;this.src='${url_for(theme.error_img.post_page)}'` alt=title)
+                  img.post-bg(src=url_for(postCover) onerror=`this.onerror=null;this.src='${url_for(theme.error_img.post_page)}'` alt=title loading=index === 0 ? 'eager' : 'lazy' fetchpriority=index === 0 ? 'high' : 'auto' decoding='async')
                 else
                   div.post-bg(style=`background: ${postCover}`)
           .recent-post-info(class=noCover)

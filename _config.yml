@@ -118,6 +118,14 @@ hide_posts:
   # 注意：这里必须严格使用单数形式的生成器名称
   allowlist_generators: ['category', 'archive', 'tag'] 
   blocklist_generators: ['index']
+
+# Used by hexo-generator-robotstxt (site-level plugins do not read theme config).
+robotstxt:
+  useragent: '*'
+  allow:
+    - /
+  disallow: []
+  sitemap: https://1nuo.me/sitemap.xml
   
 
 

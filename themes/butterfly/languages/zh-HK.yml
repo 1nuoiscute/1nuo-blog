@@ -36,6 +36,7 @@ post:
 
 search:
   title: 搜尋
+  close: 關閉搜尋
   load_data: 正在加載數據庫
   input_placeholder: 搜尋文章
   algolia_search:

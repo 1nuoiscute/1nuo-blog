@@ -36,6 +36,7 @@ post:
 
 search:
   title: 検索
+  close: 検索を閉じる
   load_data: データベースを読み込んでいます
   input_placeholder: 記事を検索
   algolia_search:

@@ -37,6 +37,7 @@ post:
 
 search:
   title: 搜索
+  close: 关闭搜索
   load_data: 数据加载中
   input_placeholder: 搜索文章
   algolia_search:
