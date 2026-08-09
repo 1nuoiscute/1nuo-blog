@@ -21,6 +21,8 @@ for (const required of ['btn-map', 'section-map', 'travel-map', 'travel-map-stat
   if (!page.includes(required)) throw new Error(`评测页缺少 ${required}`)
 }
 if (!client.includes('encodeURIComponent(key)')) throw new Error('地图 Key 未安全编码')
+if (!client.includes('&libraries=service')) throw new Error('腾讯地图地理编码服务库未声明')
+if (!client.includes('!TMap.service || !TMap.service.Geocoder')) throw new Error('缺少地理编码服务可用性检查')
 if (!client.includes('地图鉴权尚未配置')) throw new Error('缺少无 Key 降级提示')
 if (!client.includes('rate-data-ready')) throw new Error('缺少评测数据加载同步')
 if (!client.includes("classList.contains('active')")) throw new Error('缺少地图脚本延迟加载恢复')

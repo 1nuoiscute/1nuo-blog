@@ -35,12 +35,12 @@
   }
 
   function loadTencentMap(key) {
-    if (window.TMap) return Promise.resolve(window.TMap)
+    if (window.TMap && window.TMap.service && window.TMap.service.Geocoder) return Promise.resolve(window.TMap)
     if (loadPromise) return loadPromise
 
     loadPromise = new Promise(function (resolve, reject) {
       const script = document.createElement('script')
-      script.src = `https://map.qq.com/api/gljs?v=1.exp&key=${encodeURIComponent(key)}`
+      script.src = `https://map.qq.com/api/gljs?v=1.exp&key=${encodeURIComponent(key)}&libraries=service`
       script.async = true
       script.onload = function () { window.TMap ? resolve(window.TMap) : reject(new Error('地图 SDK 未初始化')) }
       script.onerror = function () { reject(new Error('地图 SDK 加载失败')) }
@@ -135,6 +135,9 @@
 
     status('正在加载腾讯地图并定位足迹…')
     const TMap = await loadTencentMap(key)
+    if (!TMap.service || !TMap.service.Geocoder) {
+      throw new Error('腾讯地图地理编码服务库未加载')
+    }
     map = new TMap.Map(document.getElementById('travel-map'), {
       center: new TMap.LatLng(DEFAULT_CENTER.lat, DEFAULT_CENTER.lng),
       zoom: 8,
