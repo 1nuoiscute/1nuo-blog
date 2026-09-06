@@ -6,7 +6,7 @@ comments: false
 ---
 
 <div id="bingo-container" style="min-height:70vh;position:relative;">
-  <iframe id="bingo-frame" src="/explore/bingo-app/" frameborder="0" style="width:100%;height:100%;min-height:70vh;border:none;border-radius:0;background:transparent;" allowfullscreen></iframe>
+  <iframe title="Bingo 宾果" id="bingo-frame" src="/explore/bingo-app/" frameborder="0" style="width:100%;height:100%;min-height:70vh;border:none;border-radius:0;background:transparent;" allowfullscreen></iframe>
 </div>
 
 <script>

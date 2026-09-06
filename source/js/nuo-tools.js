@@ -8,6 +8,7 @@
   var scrollTimer = null;
   var wanderPromise = null;
   var removeReadingListener = null;
+  var closeShareModal = null;
 
   var FALLBACK_DESTINATIONS = [
     { title: '探索', url: '/explore/', kind: '探索' },
@@ -67,18 +68,20 @@
 
     var titleElement = post
       ? document.querySelector('#post-info .post-title')
-      : page.querySelector('.page-title, h1');
+      : document.querySelector('#page-site-info #site-title') || page.querySelector('.page-title, h1');
     if (!titleElement || !titleElement.textContent.trim()) return null;
 
     var canonical = document.querySelector('link[rel="canonical"]');
-    var url = internalUrl(canonical ? canonical.href : location.href) || location.href.split('#')[0];
+    var url = canonical && normalizePath(canonical.href) === normalizePath(location.href)
+      ? internalUrl(canonical.href) : '';
+    url = url || location.origin + location.pathname;
     return {
       title: titleElement.textContent.trim(),
       url: url,
       path: normalizePath(url),
       image: getMeta('og:image', 'property'),
       description: getMeta('description'),
-      kind: post ? '文章' : '页面'
+      kind: post ? '文章' : (/^\/notes\//.test(location.pathname) ? '笔记' : '页面')
     };
   }
 
@@ -128,37 +131,89 @@
     }
   }
 
-  function initReadingProgress() {
+  function cleanupReading() {
     if (removeReadingListener) removeReadingListener();
+    removeReadingListener = null;
+    clearTimeout(scrollTimer);
     var oldProgress = document.querySelector('.nuo-reading-progress');
     if (oldProgress) oldProgress.remove();
-    if (!document.getElementById('post')) return;
+  }
+
+  function initReadingProgress() {
+    var article = document.getElementById('article-container');
+    if (!article || !currentInfo) return;
+    // Notes with substantive prose are readable; directory-only pages are not.
+    var isNote = currentInfo.kind === '笔记' && !article.querySelector('.note-collections')
+      && article.textContent.trim().length > 500;
+    if (!document.getElementById('post') && !isNote) return;
+    var info = Object.assign({}, currentInfo);
+    var previous = reading()[info.path];
+    var resume = new URL(location.href).searchParams.get('resume') === '1';
+    var restoring = resume && previous && previous.progress > 0;
+    var pending = null;
+    var active = true;
+    var restoreTimer = null;
+    var observer = null;
 
     var progress = document.createElement('div');
     progress.className = 'nuo-reading-progress';
     progress.setAttribute('aria-hidden', 'true');
     document.body.appendChild(progress);
 
+    function save() {
+      clearTimeout(scrollTimer);
+      if (!pending) return;
+      var state = reading();
+      state[info.path] = Object.assign({}, state[info.path], info, pending);
+      writeStorage(READING_KEY, state);
+      pending = null;
+    }
+
     function update() {
-      var article = document.getElementById('article-container');
-      if (!article) return;
+      if (!active || restoring) return;
       var rect = article.getBoundingClientRect();
       var total = Math.max(article.offsetHeight - window.innerHeight * .55, 1);
       var percent = Math.max(0, Math.min(1, (window.innerHeight * .25 - rect.top) / total));
       progress.style.width = (percent * 100).toFixed(1) + '%';
-      if (currentInfo && percent > 0) {
-        var path = currentInfo.path;
-        var progressValue = percent;
+      if (percent > 0) {
+        pending = { progress: percent, updatedAt: Date.now() };
         clearTimeout(scrollTimer);
-        scrollTimer = setTimeout(function () {
-          var state = reading();
-          state[path] = Object.assign({}, state[path], currentInfo, { progress: progressValue, updatedAt: Date.now() });
-          writeStorage(READING_KEY, state);
-        }, 250);
+        scrollTimer = setTimeout(save, 250);
       }
     }
+    function position() {
+      if (!active || !restoring) return;
+      var total = Math.max(article.offsetHeight - window.innerHeight * .55, 1);
+      window.scrollTo(0, Math.max(0, window.scrollY + article.getBoundingClientRect().top
+        + Math.min(1, previous.progress) * total - window.innerHeight * .25));
+    }
+    function finishRestore() {
+      restoring = false;
+      clearTimeout(restoreTimer);
+      if (observer) observer.disconnect();
+      article.removeEventListener('load', position, true);
+      window.removeEventListener('wheel', finishRestore);
+      window.removeEventListener('touchstart', finishRestore);
+      window.removeEventListener('keydown', finishRestore);
+    }
+    if (restoring) {
+      position();
+      article.addEventListener('load', position, true);
+      if (window.ResizeObserver) { observer = new ResizeObserver(position); observer.observe(article); }
+      window.addEventListener('wheel', finishRestore, { passive: true });
+      window.addEventListener('touchstart', finishRestore, { passive: true });
+      window.addEventListener('keydown', finishRestore);
+      restoreTimer = setTimeout(function () { position(); finishRestore(); update(); }, 3000);
+      var cleanUrl = new URL(location.href); cleanUrl.searchParams.delete('resume');
+      window.history.replaceState(window.history.state, '', cleanUrl.href);
+    }
     window.addEventListener('scroll', update, { passive: true });
-    removeReadingListener = function () { window.removeEventListener('scroll', update); };
+    window.addEventListener('resize', update);
+    removeReadingListener = function () {
+      active = false; finishRestore(); save();
+      window.removeEventListener('scroll', update);
+      window.removeEventListener('resize', update);
+    };
     update();
   }
 
@@ -262,6 +317,8 @@
 
   function showShareModal(trigger) {
     if (!currentInfo) return;
+    if (closeShareModal) closeShareModal();
+    var shareInfo = Object.assign({}, currentInfo);
     var old = document.querySelector('.nuo-share-modal');
     if (old) old.remove();
     var modal = document.createElement('div');
@@ -283,14 +340,24 @@
     if (closeButton && typeof closeButton.focus === 'function') closeButton.focus();
     function closeModal() {
       modal.remove();
+      closeShareModal = null;
       if (trigger && typeof trigger.focus === 'function') trigger.focus();
     }
-    modal.addEventListener('keydown', function (event) { if (event.key === 'Escape') closeModal(); });
+    closeShareModal = closeModal;
+    modal.addEventListener('keydown', function (event) {
+      if (event.key === 'Escape') closeModal();
+      if (event.key === 'Tab') {
+        var items = modal.querySelectorAll('a[href], button:not([disabled])');
+        var first = items[0], last = items[items.length - 1];
+        if (event.shiftKey && document.activeElement === first) { event.preventDefault(); last.focus(); }
+        else if (!event.shiftKey && document.activeElement === last) { event.preventDefault(); first.focus(); }
+      }
+    });
     modal.addEventListener('click', function (event) {
       if (event.target === modal || event.target.dataset.shareAction === 'close') closeModal();
       if (event.target.dataset.shareAction === 'copy') {
-        var copy = navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(currentInfo.url) : Promise.reject();
-        copy.then(function () { event.target.textContent = '已复制'; }).catch(function () { window.prompt('复制这个链接', currentInfo.url); });
+        var copy = navigator.clipboard && navigator.clipboard.writeText ? navigator.clipboard.writeText(shareInfo.url) : Promise.reject();
+        copy.then(function () { event.target.textContent = '已复制'; }).catch(function () { window.prompt('复制这个链接', shareInfo.url); });
       }
     });
   }
@@ -325,6 +392,7 @@
   }
 
   function initContentTools() {
+    cleanupReading();
     currentInfo = getPageInfo();
     var existing = document.querySelector('.nuo-content-tools');
     if (existing) existing.remove();
@@ -380,6 +448,10 @@
       var meta = [item.kind || '页面', options.meta(item)].filter(Boolean).join(' · ');
       row.innerHTML = '<div class="nuo-library-item-main"><a class="nuo-library-item-title" href="' + escapeHtml(item.url) + '">' + escapeHtml(item.title) + '</a><div class="nuo-library-item-meta">' + escapeHtml(meta) + '</div></div>';
       if (options.progress && item.progress > 0) {
+        var resumeUrl = new URL(item.url, location.origin); resumeUrl.searchParams.set('resume', '1');
+        row.querySelector('a').href = resumeUrl.href;
+        var fromStart = document.createElement('a'); fromStart.href = item.url;
+        fromStart.className = 'nuo-tool-link'; fromStart.textContent = '从头读'; row.appendChild(fromStart);
         var progress = document.createElement('div'); progress.className = 'nuo-library-progress';
         var progressBar = document.createElement('span'); progressBar.style.width = Math.round(Math.min(1, item.progress) * 100) + '%';
         progress.appendChild(progressBar); row.appendChild(progress);
@@ -444,4 +516,10 @@
   window.NuoTools = { wander: wander, refresh: boot };
   document.addEventListener('DOMContentLoaded', boot);
   document.addEventListener('pjax:complete', boot);
+  document.addEventListener('pjax:send', function () {
+    cleanupReading(); currentInfo = null;
+    if (closeShareModal) closeShareModal();
+  });
+  window.addEventListener('pagehide', cleanupReading);
+  window.addEventListener('pageshow', function (event) { if (event.persisted) boot(); });
 })();

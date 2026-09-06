@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
 <title>2048</title>
 <style>
+[hidden]{display:none!important}
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 body{font-family:'DM Sans',-apple-system,system-ui,sans-serif;background:transparent;min-height:100vh;display:flex;flex-direction:column;align-items:center;padding:16px;margin:0}
 .container{width:100%;max-width:400px}
@@ -66,6 +67,7 @@ body{font-family:'DM Sans',-apple-system,system-ui,sans-serif;background:transpa
     <div class="game-over-overlay" id="go">
       <h2 id="rt">游戏结束</h2>
       <p id="rm">再试一次吧</p>
+      <button id="continue-game" class="btn" hidden onclick="g.continueGame()">继续挑战</button>
       <button class="btn btn-primary" onclick="g.restart()">再来一局</button>
     </div>
   </div>
@@ -79,6 +81,8 @@ class G{
     try{this.b=parseInt(localStorage.getItem('gb'))||0}catch(e){}
     this.init();this.r();
     document.addEventListener('keydown',e=>{
+      if(e.target.closest('input, textarea, [contenteditable="true"]'))return;
+      if(document.getElementById('go').classList.contains('show'))return;
       if(this.o)return;
       const m={ArrowLeft:0,ArrowUp:1,ArrowRight:2,ArrowDown:3};
       if(e.key in m){e.preventDefault();this.m(m[e.key])}
@@ -149,7 +153,7 @@ class G{
     this.a();this.r();this.c();
   }
   c(){
-    if(this.g.some(r=>r.some(t=>t&&t.v===2048))){this.w=true;this.save();this.over('🎉 你赢了！','继续挑战更高分数吧');return;}
+    if(!this.w&&this.g.some(r=>r.some(t=>t&&t.v>=2048))){this.w=true;this.save();this.over('🎉 你赢了！','继续挑战更高分数吧');return;}
     for(let r=0;r<S;r++)for(let c=0;c<S;c++){
       if(!this.g[r][c])return;
       if(c+1<S&&this.g[r][c+1]&&this.g[r][c].v===this.g[r][c+1].v)return;
@@ -157,14 +161,15 @@ class G{
     }
     this.o=true;this.save();this.over('😵 游戏结束','得分：'+this.s);
   }
-  over(t,m){document.getElementById('rt').textContent=t;document.getElementById('rm').textContent=m;document.getElementById('go').classList.add('show');}
+  over(t,m){document.getElementById('rt').textContent=t;document.getElementById('rm').textContent=m;document.getElementById('continue-game').hidden=this.o;document.getElementById('go').classList.add('show');}
+  continueGame(){document.getElementById('go').classList.remove('show');this.c();}
   save(){if(this.s>this.b){this.b=this.s;try{localStorage.setItem('gb',this.b.toString())}catch(e){}}}
   undo(){
     if(!this.u.length)return;
     const s=this.u.pop();this.g=s.g;this.s=s.s;this.w=s.w;this.o=false;
     document.getElementById('go').classList.remove('show');this.r();
   }
-  restart(){this.init();this.r();document.getElementById('go').classList.remove('show');}
+  restart(){this.init();this.r();document.getElementById('go').classList.remove('show');document.getElementById('lb-form')?.remove();}
   r(){
     const gl=document.getElementById('gl');
     // Build grid cells
@@ -216,50 +221,56 @@ window.addEventListener('resize',function(){if(g&&!g.o){g.r()}});
 </style>
 
 <script>
-// 加载排行榜
-fetch('https://status.1nuo.me/leaderboard')
-  .then(r=>r.json())
-  .then(data=>{
-    if(!data||!data.length){document.getElementById('lb-list').innerHTML='<div style="padding:12px;color:#a8a29e;font-size:13px">暂无记录，来玩一局吧 🎮</div>';return;}
-    var html='';data.forEach(function(item,i){
-      html+='<div class="lb-item"><span class="lb-rank">#'+(i+1)+'</span><span class="lb-name">'+item.name+'</span><span class="lb-score">'+item.score+'</span><span class="lb-date">'+item.date.slice(5)+'</span></div>';
+// The leaderboard is untrusted remote data; render all fields as text.
+function loadLeaderboard(){
+  var list=document.getElementById('lb-list');
+  list.textContent='加载中…';
+  return fetch('https://status.1nuo.me/leaderboard').then(function(response){
+    if(!response.ok) throw new Error('加载失败');
+    return response.json();
+  }).then(function(data){
+    if(!Array.isArray(data)) throw new Error('无效排行榜');
+    list.replaceChildren();
+    if(!data.length){list.textContent='暂无记录，来玩一局吧';return;}
+    data.slice(0,100).forEach(function(item,i){
+      if(!item || typeof item.name!=='string' || !Number.isFinite(item.score)) return;
+      var row=document.createElement('div');row.className='lb-item';
+      var fields=[['lb-rank','#'+(i+1)],['lb-name',item.name],['lb-score',String(item.score)],['lb-date',typeof item.date==='string'?item.date.slice(5):'']];
+      fields.forEach(function(field){var span=document.createElement('span');span.className=field[0];span.textContent=field[1];row.appendChild(span);});
+      list.appendChild(row);
     });
-    document.getElementById('lb-list').innerHTML=html;
-  })
-  .catch(function(){document.getElementById('lb-list').innerHTML='<div style="padding:12px;color:#a8a29e;font-size:13px">加载失败</div>';});
+  }).catch(function(){list.textContent='排行榜加载失败。';var retry=document.createElement('button');retry.textContent='重试';retry.onclick=loadLeaderboard;list.appendChild(retry);});
+}
+loadLeaderboard();
 
-// 提交分数（等游戏初始化完再覆写）
 function setupLeaderboard(){
-  if(!g||!g.over){setTimeout(setupLeaderboard,100);return;}
-  var origOver=g.over;
+  if(!g){setTimeout(setupLeaderboard,100);return;}
+  var original=g.over;
   g.over=function(t,m){
-    origOver.call(this,t,m);
-    if(this.s>0){
-      setTimeout(function(){
-        var overlay=document.getElementById('go');
-        var input=document.createElement('div');
-        input.style.cssText='margin-top:12px;display:flex;gap:6px;align-items:center;justify-content:center;width:100%';
-        input.innerHTML='<input id="lb-input" placeholder="输入昵称" maxlength="8" style="width:100px;padding:6px 10px;border:1px solid #e7e5e4;border-radius:6px;font-size:13px;outline:none"><button onclick="submitScore()" style="padding:6px 14px;background:#1c1917;color:#fff;border:none;border-radius:6px;font-size:13px;cursor:pointer">提交</button>';
-        overlay.appendChild(input);
-      },300);
-    }
+    original.call(this,t,m);
+    document.getElementById('lb-form')?.remove();
+    if(this.s<=0)return;
+    var form=document.createElement('form');form.id='lb-form';
+    form.style.cssText='margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center';
+    var input=document.createElement('input');input.id='lb-input';input.placeholder='输入昵称';input.maxLength=8;input.setAttribute('aria-label','排行榜昵称');
+    var button=document.createElement('button');button.type='submit';button.className='btn';button.textContent='提交分数';
+    var status=document.createElement('p');status.setAttribute('role','status');
+    var score=this.s,maxTile=Math.max(...this.g.flat().map(function(tile){return tile?tile.v:0;}));
+    form.append(input,button,status);
+    form.addEventListener('submit',function(event){
+      event.preventDefault();if(button.disabled)return;button.disabled=true;status.textContent='提交中…';
+      fetch('https://status.1nuo.me/leaderboard',{
+        method:'POST',headers:{'Content-Type':'application/json'},
+        body:JSON.stringify({name:input.value.trim()||'匿名',score:score,maxTile:maxTile})
+      }).then(function(response){
+        if(!response.ok)throw new Error('提交失败');
+        status.textContent='已提交';return loadLeaderboard();
+      }).catch(function(){status.textContent='提交失败，请重试。';button.disabled=false;});
+    });
+    document.getElementById('go').appendChild(form);
   };
 }
 setupLeaderboard();
-
-function submitScore(){
-  var name=document.getElementById('lb-input').value.trim()||'匿名';
-  fetch('https://status.1nuo.me/leaderboard',{
-    method:'POST',
-    headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({name:name,score:g.s,maxTile:g.s})
-  }).then(function(){
-    document.getElementById('lb-list').innerHTML='<div style="padding:12px;color:#166534;font-size:13px">✅ 已提交！刷新页面查看排名</div>';
-    location.reload();
-  }).catch(function(){
-    document.getElementById('lb-list').innerHTML='<div style="padding:12px;color:#ef4444;font-size:13px">❌ 提交失败</div>';
-  });
-}
 </script>
 
 </body>

@@ -8,7 +8,9 @@ comments: false
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 <link rel="stylesheet" href="/css/rate-map.css">
 <script src="/js/tencent-lbs-config.js"></script>
-<script src="/js/rate-map.js?v=20260810.1" defer></script>
+<script src="/js/rate-map.js?v=20260906" defer></script>
+<p id="rate-load-status" role="status">正在加载评测…</p>
+<button id="rate-load-retry" class="nuo-tab-btn" hidden onclick="loadRateData()">重新加载评测</button>
 
 <div class="nuo-nav-container">
   <div class="nuo-nav-left">
@@ -31,6 +33,7 @@ comments: false
       </div>
       <div id="travel-map" role="region" aria-label="腾讯地图旅行足迹"></div>
       <p id="travel-map-status" class="nuo-map-status" role="status" aria-live="polite">打开地图页后加载足迹。</p>
+      <button id="travel-map-retry" class="nuo-tab-btn" hidden>重新加载地图</button>
     </div>
     <aside class="nuo-map-sidebar" aria-label="足迹概览">
       <div class="nuo-map-stats">
@@ -126,10 +129,11 @@ comments: false
 </style>
 
 <script>
-  let globalData = {};
-  let myChart = null;
-  let pkSelected = [null, null];
-  let activeCategory = null;
+  var globalData = {}; window.globalData = globalData;
+  var myChart = null;
+  var pkSelected = [null, null];
+  var activeCategory = null;
+  var rateLoading = false;
 
   function parseLocation(locStr) {
     if (!locStr) return { province: '未知', city: '未知' };
@@ -140,11 +144,29 @@ comments: false
     return { province, city: cMatch ? cMatch[0] : '全境' };
   }
 
-  fetch('/rate/rate_data.json').then(r => r.json()).then(data => { 
-    globalData = data; window.globalData = data; window.dispatchEvent(new CustomEvent('rate-data-ready')); initFilterOptions();
-    if (!activeCategory) switchTab('attractions');
-    if (activeCategory === 'map' && window.ensureTravelMap) window.ensureTravelMap();
-  });
+  function loadRateData() {
+    if (rateLoading) return;
+    rateLoading = true;
+    var status = document.getElementById('rate-load-status');
+    var retry = document.getElementById('rate-load-retry');
+    retry.hidden = true; status.textContent = '正在加载评测…';
+    return fetch('/rate/rate_data.json').then(function(response) {
+      if (!response.ok) throw new Error('请求失败');
+      return response.json();
+    }).then(function(data) {
+      if (!Array.isArray(data.attractions)) throw new Error('数据格式错误');
+      if (!status.isConnected) return;
+      globalData = data; window.globalData = data;
+      window.dispatchEvent(new CustomEvent('rate-data-ready')); initFilterOptions();
+      status.textContent = '';
+      if (!activeCategory) switchTab('attractions');
+      if (activeCategory === 'map' && window.ensureTravelMap) window.ensureTravelMap();
+    }).catch(function() {
+      if (!status.isConnected) return;
+      status.textContent = '评测加载失败，请重试。'; retry.hidden = false;
+    }).finally(function() { rateLoading = false; });
+  }
+  loadRateData();
 
   function initFilterOptions() {
     const pSelect = document.getElementById('filter-province');
@@ -167,6 +189,7 @@ comments: false
   }
 
   function applyFilters() {
+    if (!Array.isArray(globalData.attractions)) return;
     const p = document.getElementById('filter-province').value, c = document.getElementById('filter-city').value;
     const k = document.getElementById('filter-search').value.toLowerCase(), s = document.getElementById('filter-sort').value;
     let res = globalData.attractions.filter(item => {
@@ -177,6 +200,9 @@ comments: false
     res.sort((a, b) => {
       if (s === 'final_score') return b.final_score - a.final_score;
       if (s === 'arch') return b.scores.architecture.val - a.scores.architecture.val;
+      if (s === 'cult') return b.scores.culture.val - a.scores.culture.val;
+      if (s === 'exp') return b.scores.experience.val - a.scores.experience.val;
+      if (s === 'val') return b.scores.value.val - a.scores.value.val;
       if (s === 'visit_time') return new Date(b.visit_time.replace(/\./g, '/')) - new Date(a.visit_time.replace(/\./g, '/'));
       return 0;
     });
@@ -184,10 +210,16 @@ comments: false
   }
 
   function renderAverageBarChart(data) {
-    const len = data.length; if (!len) return;
+    const len = data.length;
+    if (!len) {
+      document.getElementById('global-avg-score').innerText = '—';
+      if (myChart) myChart.clear();
+      return;
+    }
     let arch=0, cult=0, exp=0, val=0, final=0;
     data.forEach(i => { arch+=i.scores.architecture.val; cult+=i.scores.culture.val; exp+=i.scores.experience.val; val+=i.scores.value.val; final+=i.final_score; });
     document.getElementById('global-avg-score').innerText = (final/len).toFixed(2);
+    if (typeof echarts === 'undefined') return;
     if (!myChart) myChart = echarts.init(document.getElementById('average-bar-chart'));
     myChart.setOption({
       tooltip: { trigger: 'axis' }, grid: { top: 20, left: '85', right: '50', bottom: '35' },
@@ -200,6 +232,8 @@ comments: false
   function renderCards(data) {
     const container = document.getElementById('cards-container');
     container.innerHTML = '';
+    document.getElementById('filter-count').textContent = data.length + ' 个结果';
+    if (!data.length) { container.textContent = '没有符合条件的景点。'; return; }
     const colors = { 'S': '#FACA30', 'A': '#e74c3c', 'B': '#3498db', 'C': '#2ecc71' };
     data.forEach(item => {
       const idx = globalData.attractions.findIndex(a => a.id === item.id);
@@ -243,6 +277,7 @@ comments: false
     if (pkSelected[0] && pkSelected[1]) renderPKComparison();
   }
   function showPKList(idx, e) {
+    if (!Array.isArray(globalData.attractions)) return;
     const pop = document.getElementById('pk-list-popover');
     document.getElementById('pk-list-items').innerHTML = globalData.attractions.map(a => `<div class="pk-item" onclick="selectForPK(${idx},'${a.id}')">${a.name}</div>`).join('');
     const rect = e.currentTarget.getBoundingClientRect();
@@ -260,8 +295,9 @@ comments: false
     area.style.display = 'block';
   }
 
-  window.onclick = (e) => { 
-    document.getElementById('pk-list-popover').style.display = 'none';
+  function rateClick(e) {
+    const popover = document.getElementById('pk-list-popover');
+    if (popover) popover.style.display = 'none';
     if (e.target.id === 'nuo-modal' || e.target.id === 'pk-modal') { closeModal(); closePKModal(); }
   }
   function openModal(idx) {
@@ -282,4 +318,11 @@ comments: false
     if (cat === 'attractions') setTimeout(() => { if(myChart) myChart.resize(); applyFilters(); }, 100);
     if (cat === 'map' && window.ensureTravelMap) window.ensureTravelMap();
   }
+  window.addEventListener('click', rateClick);
+  function cleanupRate() {
+    if (myChart) myChart.dispose();
+    window.removeEventListener('click', rateClick);
+    document.removeEventListener('pjax:send', cleanupRate);
+  }
+  document.addEventListener('pjax:send', cleanupRate);
 </script>

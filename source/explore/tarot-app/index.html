@@ -140,18 +140,19 @@ body{font-family:"DM Sans","Noto Serif SC",serif;background:#f8f6f2;color:#1c191
   }
 
   function showMulti(arr){
+    var reversed = arr.map(function(){ return Math.random() < 0.3; });
     multiResult.className = 'card-display show';
     var labels = ['过去','现在','未来','辅助','阻碍'];
     var h = '<div class="positions">';
     arr.forEach(function(c,i){
-      var r = Math.random()<0.3;
+      var r = reversed[i];
       h += '<div class="position-card"><img class="position-img" src="https://img.1nuo.me/tarot/'+c.img+'" alt="'+c.name+'">' +
         '<div class="position-label">'+(labels[i]||'')+'</div>' +
         '<div class="position-name">'+zhName(c)+(r?'(逆)':'')+'</div></div>';
     });
     h += '</div><div class="result">';
     arr.forEach(function(c,i){
-      var r = Math.random()<0.3;
+      var r = reversed[i];
       var z = getMeanings(c,r).slice(0,2);
       h += '<div style="margin-bottom:8px">';
       h += '<strong>'+(labels[i]||'')+'：</strong> '+zhName(c)+(r?'（逆位）':'')+'<br>';
@@ -162,6 +163,7 @@ body{font-family:"DM Sans","Noto Serif SC",serif;background:#f8f6f2;color:#1c191
   }
 
   function draw(){
+    if (drawBtn.disabled) return;
     app.classList.add('shuffling');
     drawBtn.disabled = true;
     clearResult();

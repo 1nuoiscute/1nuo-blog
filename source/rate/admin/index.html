@@ -278,6 +278,7 @@
             const db = JSON.parse(decodeURIComponent(escape(atob(fileData.content))));
             const sha = fileData.sha;
 
+            validateRecord();
             const newData = JSON.parse(generateJSON(true));
             if (!db.attractions) db.attractions = [];
 
@@ -324,6 +325,7 @@
     async function saveToLocal() {
         if (!fileHandle) { alert("❌ 请先点击【关联本地】"); return; }
         try {
+            validateRecord();
             const newData = JSON.parse(generateJSON(true));
             const file = await fileHandle.getFile();
             const text = await file.text();
@@ -341,7 +343,7 @@
             await writable.write(JSON.stringify(db, null, 2));
             await writable.close();
             alert("✅ 本地写入成功！");
-        } catch (err) { alert("❌ 写入失败。"); }
+        } catch (err) { alert("❌ 写入失败：" + err.message); }
     }
 
     function handleCategoryChange() {
@@ -397,6 +399,16 @@
         generateJSON(true);
     }
 
+    function validateRecord() {
+        const latRaw = document.getElementById('in-lat').value.trim();
+        const lngRaw = document.getElementById('in-lng').value.trim();
+        const lat = Number(latRaw), lng = Number(lngRaw);
+        if (!latRaw || !lngRaw || !Number.isFinite(lat) || !Number.isFinite(lng) || lat < -90 || lat > 90 || lng < -180 || lng > 180) {
+            throw new Error('请填写有效的纬度（-90 到 90）和经度（-180 到 180）。');
+        }
+        if (!document.getElementById('in-name').value.trim()) throw new Error('请填写景点名称。');
+    }
+
     function generateJSON(silent = false) {
         const cfg = CONFIG.attractions;
         const tags = [];
@@ -423,6 +435,7 @@
 
         const fullReview = "✍️ 记录于: " + rDate + "\n\n" + formattedReview;
         const customId = document.getElementById('in-id').value.trim() || ("nuo-" + Date.now());
+        document.getElementById('in-id').value = customId;
         const latRaw = document.getElementById('in-lat').value.trim();
         const lngRaw = document.getElementById('in-lng').value.trim();
         const lat = Number(latRaw);

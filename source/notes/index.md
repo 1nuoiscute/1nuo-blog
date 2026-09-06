@@ -83,4 +83,5 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 </div>
 
 <link rel="stylesheet" href="/css/notes.css">
+<p>查找章节正文中的知识点，请使用导航栏的站内搜索。</p>
 <script src="/js/notes.js"></script>

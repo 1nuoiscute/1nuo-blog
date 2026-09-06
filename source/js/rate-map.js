@@ -8,6 +8,7 @@
   let markerLayer
   let infoWindow
   let points = []
+  let disposed = false
 
   function status(message) {
     const node = document.getElementById('travel-map-status')
@@ -19,11 +20,16 @@
       return Promise.resolve(window.globalData.attractions)
     }
     return new Promise(function (resolve) {
-      const timeout = setTimeout(function () { resolve([]) }, 5000)
-      window.addEventListener('rate-data-ready', function () {
+      const ready = function () {
         clearTimeout(timeout)
+        window.removeEventListener('rate-data-ready', ready)
         resolve((window.globalData && window.globalData.attractions) || [])
-      }, { once: true })
+      }
+      const timeout = setTimeout(function () {
+        window.removeEventListener('rate-data-ready', ready)
+        resolve([])
+      }, 5000)
+      window.addEventListener('rate-data-ready', ready, { once: true })
     })
   }
 
@@ -40,10 +46,13 @@
     loadPromise = new Promise(function (resolve, reject) {
       let settled = false
       let timer
+      const deadline = setTimeout(function () { finish(new Error('腾讯地图 SDK 初始化超时')) }, 15000)
       const finish = function (error) {
         if (settled) return
         settled = true
         clearInterval(timer)
+        clearTimeout(deadline)
+        if (error) script.remove()
         error ? reject(error) : resolve(window.TMap)
       }
       const waitUntilReady = function () {
@@ -63,6 +72,7 @@
       script.onerror = function () { finish(new Error('地图 SDK 加载失败')) }
       document.head.appendChild(script)
     })
+    loadPromise = loadPromise.catch(function (error) { loadPromise = null; throw error })
     return loadPromise
   }
 
@@ -94,30 +104,30 @@
       const match = item.location && item.location.match(/.*?省(.*?市)/)
       return match ? match[1] : item.location
     }).filter(Boolean)).size
-    list.addEventListener('click', function (event) {
+    list.onclick = function (event) {
       const button = event.target.closest('[data-map-id]')
       if (!button) return
       const index = points.findIndex(function (point) { return point.id === button.dataset.mapId })
       if (index >= 0) showPlace(index)
-    })
+    }
   }
 
   async function initialize() {
     const attractions = await waitForAttractions()
+    if (disposed) return
     renderList(attractions)
     if (!attractions.length) {
-      status('暂无足迹数据。')
-      return
+      throw new Error('暂无足迹数据，请在数据加载后重试')
     }
 
     const key = window.__NUO_TENCENT_LBS__ && window.__NUO_TENCENT_LBS__.key
     if (!key) {
-      status('地图鉴权尚未配置，足迹清单仍可浏览。')
-      return
+      throw new Error('地图鉴权尚未配置，足迹清单仍可浏览')
     }
 
     status('正在加载腾讯地图…')
     const TMap = await loadTencentMap(key)
+    if (disposed) return
     map = new TMap.Map(document.getElementById('travel-map'), {
       center: new TMap.LatLng(DEFAULT_CENTER.lat, DEFAULT_CENTER.lng),
       zoom: 8,
@@ -161,11 +171,28 @@
 
   window.ensureTravelMap = function () {
     if (!initPromise) initPromise = initialize().catch(function (error) {
+      initPromise = null
+      if (disposed) return
+      if (map && map.destroy) map.destroy()
+      map = null
       status(`地图暂时无法加载：${error.message}。足迹清单仍可浏览。`)
+      const retry = document.getElementById('travel-map-retry')
+      if (retry) retry.hidden = false
     })
     if (map) setTimeout(function () { map.resize() }, 50)
     return initPromise
   }
+
+  const retry = document.getElementById('travel-map-retry')
+  if (retry) retry.onclick = function () { retry.hidden = true; window.ensureTravelMap() }
+  function teardown() {
+    disposed = true
+    if (map && map.destroy) map.destroy()
+    map = null
+    window.ensureTravelMap = null
+    document.removeEventListener('pjax:send', teardown)
+  }
+  document.addEventListener('pjax:send', teardown)
 
   if (document.getElementById('btn-map') && document.getElementById('btn-map').classList.contains('active')) {
     window.ensureTravelMap()

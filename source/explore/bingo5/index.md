@@ -5,7 +5,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 comments: false
 ---
 <div style="min-height:70vh;position:relative;">
-  <iframe src="/explore/bingo5-app/" frameborder="0" style="width:100%;height:100%;min-height:70vh;border:none;border-radius:0;background:transparent;" allowfullscreen></iframe>
+  <iframe title="Shiny 青春 BINGO" src="/explore/bingo5-app/" frameborder="0" style="width:100%;height:100%;min-height:70vh;border:none;border-radius:0;background:transparent;" allowfullscreen></iframe>
 </div>
 <script>
 (function(){

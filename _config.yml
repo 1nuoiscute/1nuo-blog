@@ -108,7 +108,7 @@ deploy:
 # Search
 search:
   path: search.json
-  field: post
+  field: all
   content: true
   format: html
 hide_posts:

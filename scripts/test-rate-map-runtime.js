@@ -67,6 +67,8 @@ const context = {
   Number,
   Set,
   document: {
+    addEventListener() {},
+    removeEventListener() {},
     getElementById: node,
     createElement(tag) {
       if (tag === 'script') return {}

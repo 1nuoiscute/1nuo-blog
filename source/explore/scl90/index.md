@@ -6,7 +6,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 ---
 
 <div id="scl-container" style="min-height:70vh;position:relative;">
-  <iframe id="scl-frame" src="/explore/scl90-app/" frameborder="0" style="width:100%;height:100%;min-height:70vh;border:none;border-radius:0;background:transparent;" allowfullscreen></iframe>
+  <iframe title="SCL-90 症状自评量表" id="scl-frame" src="/explore/scl90-app/" frameborder="0" style="width:100%;height:100%;min-height:70vh;border:none;border-radius:0;background:transparent;" allowfullscreen></iframe>
 </div>
 
 <script>

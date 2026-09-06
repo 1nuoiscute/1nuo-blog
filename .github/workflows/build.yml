@@ -26,5 +26,7 @@ jobs:
         run: npm run test:cards
       - name: Validate browser tools syntax
         run: npm run test:tools
+      - name: Validate maps and interaction regressions
+        run: npm run test:map && npm run test:regression
       - name: Generate site
         run: npm run build
