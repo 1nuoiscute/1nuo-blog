@@ -193,7 +193,7 @@ class G{
   }
 }
 let g;
-function start(){g=new G();}
+function start(){g=new G();if(typeof setupLeaderboard==='function')setupLeaderboard();}
 if(document.readyState==='complete'||document.readyState==='interactive'){start()}else{document.addEventListener('DOMContentLoaded',start)}
 window.addEventListener('resize',function(){if(g&&!g.o){g.r()}});
 </script>
@@ -244,7 +244,8 @@ function loadLeaderboard(){
 loadLeaderboard();
 
 function setupLeaderboard(){
-  if(!g){setTimeout(setupLeaderboard,100);return;}
+  if(!g || g.leaderboardReady)return;
+  g.leaderboardReady=true;
   var original=g.over;
   g.over=function(t,m){
     original.call(this,t,m);
