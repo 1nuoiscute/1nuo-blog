@@ -31,6 +31,17 @@ layout: false
     .route button { margin:10px 0 0 22px; padding:6px 0; border:0; color:var(--route-color); background:none; font:inherit; font-size:13px; font-weight:650; text-decoration:underline; text-underline-offset:3px; cursor:pointer; }
     .route button:focus-visible { outline:2px solid currentColor; outline-offset:3px; }
     .route.is-active { padding-left:12px; border-left:3px solid var(--route-color); }
+    .route .meta { margin-left:22px; color:var(--green); font-weight:650; }
+    .route-stops { display:flex; flex-wrap:wrap; gap:7px; margin:10px 0 0 22px; }
+    .route-stops button { margin:0; padding:6px 9px; border:1px solid var(--line); border-radius:16px; text-decoration:none; }
+    .route-stops button:hover, .route-stops button[aria-pressed="true"] { color:#fff; background:var(--route-color); border-color:var(--route-color); }
+    .detail { margin-top:14px; padding-top:14px; border-top:1px solid var(--line); }
+    .detail h3 { margin:0 0 8px; font-size:16px; }
+    .detail p { margin:7px 0; color:var(--muted); font-size:13px; line-height:1.6; }
+    .detail img { display:block; width:100%; max-height:210px; object-fit:cover; border-radius:8px; background:#e8ece6; }
+    .detail .credit { font-size:11px; }
+    .day-plan { margin:12px 0 0; padding-left:20px; color:var(--muted); font-size:12px; line-height:1.65; }
+    .day-plan li + li { margin-top:5px; }
     .note { margin:16px 0 0; padding-top:13px; border-top:1px solid var(--line); color:var(--muted); font-size:12px; line-height:1.65; }
     .legend { display:flex; flex-wrap:wrap; gap:12px 18px; padding:12px 0 0; color:var(--muted); font-size:12px; }
     .legend span { display:flex; gap:7px; align-items:center; }
@@ -54,25 +65,20 @@ layout: false
     <header>
       <div>
         <h1>国庆自驾路线</h1>
-        <p class="subtitle">三门峡出发 · 人文为主 · 少爬山</p>
+        <p class="subtitle">三门峡出发 · 人文为主 · 少爬山 · 点景点看照片</p>
       </div>
       <div class="dates">10月2日—4日 · 三人同行</div>
     </header>
     <section class="layout" aria-label="路线地图与方案说明">
-      <div id="map" role="img" aria-label="三门峡周边自驾候选路线地图，颜色区分南阳西峡和洛阳线路"></div>
+      <div id="map" role="application" aria-label="三门峡周边自驾候选路线地图，点击景点标记查看照片和介绍"></div>
       <aside>
-        <p class="hint">地图箭头表示建议行进方向。点景点标记可看简要说明；选择“查看路线”可聚焦对应线路。</p>
-        <article class="route is-active" style="--route-color:var(--green)" data-route-card="nanyang">
-          <div class="route-head"><span class="swatch"></span><h2>南阳—内乡—西峡环线</h2></div>
-          <p>三门峡 → 南阳市区 → 内乡 → 西峡 → 三门峡<br>南阳人文为主，西峡景点按体力选；跳过登山项目。</p>
-          <button type="button" data-focus="nanyang">查看路线</button>
-        </article>
-        <article class="route" style="--route-color:var(--blue)" data-route-card="luoyang">
-          <div class="route-head"><span class="swatch"></span><h2>洛阳人文往返线</h2></div>
-          <p>三门峡 → 洛阳 → 三门峡<br>车程较短，可住同一家酒店，适合博物馆和古都文化慢游。</p>
-          <button type="button" data-focus="luoyang">查看路线</button>
-        </article>
-        <p class="note">推荐优先细排南阳环线：它最符合“人文＋沿途串游”的想法。父母能走平地景点，不必按高龄老人节奏设计；把长距离爬坡景区排除即可。</p>
+        <p class="hint">点地图上的景点标记，或点下方景点小标签看照片和简介。路线箭头表示推荐顺序；切换线路会尝试请求腾讯驾车路线。途中预留服务区休息和上厕所时间。</p>
+        <div id="route-list"></div>
+        <section class="detail" id="selected-spot" aria-live="polite">
+          <h3 id="spot-title">先选一条路线</h3>
+          <div id="spot-content"><p>会优先展示更轻松、少走回头路的方案。</p></div>
+        </section>
+        <p class="note">建议排序：洛阳（最省心）→ 潼关/华阴/华州（串游顺）→ 南阳西峡（符合原设想但返程更累）→ 晋城、韩城（文化浓，单程车程更长）。</p>
       </aside>
     </section>
     <div class="legend" aria-label="地图图例">
@@ -80,42 +86,90 @@ layout: false
       <span>➜ 箭头为建议行进方向</span>
       <span>路线颜色与右侧方案对应</span>
     </div>
-    <footer>线路用于方案比较，景点标记为近似位置，箭头表示建议方向，不代替导航。地图由腾讯位置服务提供；路线为站点间参考连线，不是逐路段导航规划。实际路线、用时、开放时间及国庆交通情况请出发前复核。</footer>
+    <footer>线路用于方案比较；腾讯驾车服务可用时显示道路路线和估算，否则保留站点参考线。景点点位为近似位置，不代替导航。图片均链接到来源页；开放时间、预约、停车与节日交通请出发前核实。</footer>
   </main>
   <div id="map-status" role="status" aria-live="polite">正在准备腾讯地图…</div>
   <script>
+    const commonsPhoto = (file, credit) => ({
+      photo: `https://commons.wikimedia.org/wiki/Special:FilePath/${encodeURIComponent(file)}?width=900`,
+      source: `https://commons.wikimedia.org/wiki/File:${encodeURIComponent(file)}`,
+      credit
+    });
     const routes = {
       nanyang: {
-        color: '#18745d',
-        stops: [
-          {name:'三门峡', coord:[34.772,111.200], type:'start', text:'出发地'},
-          {name:'南阳武侯祠 / 汉画馆', coord:[33.003,112.516], type:'sight', text:'三国文化与汉画像石；景区范围较大，可只走主要展区。'},
-          {name:'南阳府衙', coord:[32.994,112.535], type:'sight', text:'明清府衙建筑群，适合慢逛院落。'},
-          {name:'内乡县衙', coord:[33.045,111.849], type:'sight', text:'保存完整的清代县衙建筑群，人文景点。'},
-          {name:'西峡恐龙遗迹园（可选）', coord:[33.256,111.605], type:'optional', text:'恐龙化石与科普展馆；园区较大，先确认观光车和步行距离。'}
-        ],
-        waypoints:[[34.772,111.200],[32.991,112.532],[33.045,111.849],[33.303,111.473],[34.772,111.200]]
+        title:'南阳—内乡—西峡环线', color:'#18745d', badge:'沿用原想法 · 返程较累',
+        summary:'南阳人文为主，第三天经内乡、西峡回三门峡，不走原路；这些候选里车程负担较大。',
+        plan:['10/2：三门峡 → 南阳，下午只安排武侯祠，住南阳。','10/3：睡饱后休息、午休，下午开到内乡住一晚，不再叠景点。','10/4：内乡县衙慢逛；若父母状态好再去西峡恐龙遗迹园，否则直接返程。'],
+        stops:[
+          {name:'三门峡',coord:[34.772,111.200],type:'start',text:'出发地。建议满油出发，途中按需服务区休息。'},
+          {name:'南阳武侯祠',coord:[33.003,112.516],type:'sight',text:'三国文化主题院落。园内不必全走完，先问清卫生间位置，按体力逛核心区域。',...commonsPhoto('WuHouCi Nanyang-China.jpg','Eniss a · CC BY-SA 3.0')},
+          {name:'内乡县衙',coord:[33.0504,111.8431],type:'sight',text:'保存较完整的清代县级衙署，院落式参观；门槛、台阶和石板路较多，慢走即可。',...commonsPhoto('Neixiang Yamen 04.jpg','Gary Todd · CC0')},
+          {name:'西峡恐龙遗迹园（可选）',coord:[33.2341,111.6800],type:'optional',text:'化石与科普展馆，作为返程加选点；园区步行可能偏多，先确认观光车与开放情况。',...commonsPhoto('Xixia Dinosaur Park 19.jpg','Gary Todd · CC0')},
+          {name:'返回三门峡',coord:[34.772,111.200],type:'end',text:'终点。若当天游览西峡，返程里程较长，建议提前取消其他加选点。'}
+        ]
       },
       luoyang: {
-        color: '#3965b3',
-        stops: [
-          {name:'三门峡', coord:[34.772,111.200], type:'start', text:'出发地'},
-          {name:'洛阳博物馆', coord:[34.620,112.451], type:'sight', text:'室内人文主景点；建议提前预约并留足休息时间。'},
-          {name:'洛阳古墓博物馆（可选）', coord:[34.729,112.423], type:'optional', text:'专题博物馆；馆区较大，作为备选点，不必和多个大型景区连排。'}
-        ],
-        waypoints:[[34.772,111.200],[34.620,112.451],[34.772,111.200]]
+        title:'洛阳古都轻松往返线', color:'#3965b3', badge:'最轻松 · 同城连住',
+        summary:'往返距离相对短，连续两晚住同一家；主打博物馆和古都街区，龙门石窟只作体力允许时的加选。',
+        plan:['10/2：三门峡 → 洛阳，入住后休息；若时间合适，轻逛应天门周边。','10/3：洛阳博物馆（主项）＋午休；下午仅在体力好时去老城坐坐。','10/4：从容早餐后返三门峡；不建议把多个大型景区塞进一天。'],
+        stops:[
+          {name:'三门峡',coord:[34.772,111.200],type:'start',text:'出发地。'},
+          {name:'洛阳博物馆',coord:[34.6431,112.4465],type:'sight',text:'室内人文主项，适合慢逛和随时休息；假期预约、闭馆安排以官方公告为准。',...commonsPhoto('Exterior, Luoyang Museum 20240929.jpg','Tim Wu · CC BY-SA 4.0')},
+          {name:'洛阳古墓博物馆（可选）',coord:[34.7327,112.4090],type:'optional',text:'专题博物馆，室内为主；馆区较大，留作替换项，不必和龙门石窟同一天连排。',...commonsPhoto('Entrance, Luoyang Museum of Ancient Tombs 20240929.jpg','Tim Wu · CC BY-SA 4.0')},
+          {name:'龙门石窟（可选）',coord:[34.5523,112.4722],type:'optional',text:'石窟景观很有代表性，但景区跨度和步行量不小；如选它就删掉当天其他景点，确认无障碍路线。',...commonsPhoto('Longmen Grottoes 20240810 100.jpg','Windmemories · CC0')},
+          {name:'返回三门峡',coord:[34.772,111.200],type:'end',text:'终点。'}
+        ]
       },
+      tongguan: {
+        title:'华阴—华州古建非遗线', color:'#a45b2a', badge:'新增 · 近程串游',
+        summary:'西岳庙古建加华州皮影非遗，不安排华山登山；中间车程短，节奏比较好控。',
+        plan:['10/2：三门峡 → 华阴，入住后休息；不额外爬山。','10/3：西岳庙慢逛；午休后去华州皮影文化园看展或演出（先核实场次）。','10/4：睡足后返三门峡；若前一日走得多，就删掉一个景点。'],
+        stops:[
+          {name:'三门峡',coord:[34.772,111.200],type:'start',text:'出发地。'},
+          {name:'西岳庙',coord:[34.5806,110.1023],type:'sight',text:'华阴古建与祭祀文化景点，院落平地为主但有门槛台阶；量力参观，不爬华山。',...commonsPhoto('Xi Yue Temple.JPG','Acstar · CC BY-SA 3.0')},
+          {name:'华州皮影文化园',coord:[34.512,109.766],type:'sight',text:'室内非遗展陈，可坐着看展/演出，比较符合少爬山要求；演出场次和开放时间需提前问。',photo:'https://img.wqdres.com/res/714501635124105216/20230526/0b95f99e35ea4b8b906f93a445997a78.jpg',source:'https://www.huazhoupiying.com/',credit:'华州皮影文化园官网'},
+          {name:'返回三门峡',coord:[34.772,111.200],type:'end',text:'终点。'}
+        ]
+      },
+      jincheng: {
+        title:'晋城阳城古堡人文线', color:'#7953a8', badge:'新增 · 古建浓 · 车程较长',
+        summary:'皇城相府、郭峪古城在一片区域，可住景区附近；古院落有台阶，控制每日游览量。',
+        plan:['10/2：三门峡 → 阳城，途中服务区休息，抵达后不排景点。','10/3：皇城相府为主，午休后体力允许再去相邻郭峪古城；不追演出、不赶场。','10/4：睡足后返三门峡；不建议再加第三个古建点。'],
+        stops:[
+          {name:'三门峡',coord:[34.772,111.200],type:'start',text:'出发地。'},
+          {name:'皇城相府',coord:[35.504,112.532],type:'sight',text:'陈廷敬故居与明清城堡式官宅；院落面积不小，建议使用景区交通车、只走核心线路并预留休息。',...commonsPhoto('Huangcheng Xiangfu 2.JPG','Underbar dk · CC BY-SA 4.0')},
+          {name:'郭峪古城',coord:[35.487,112.545],type:'optional',text:'与皇城相府相邻的古村落，老街石板路不太平整；走一小段即可，穿舒适防滑鞋。',photo:'https://dimg04.c-ctrip.com/images/1mf3c12000ekl2jb932C9_W_640_0_Q90.jpg?proc=autoorient',source:'https://gs.ctrip.com/html5/you/travels/2076/4138942.html',credit:'携程游记照片来源'},
+          {name:'返回三门峡',coord:[34.772,111.200],type:'end',text:'终点。'}
+        ]
+      },
+      hancheng: {
+        title:'韩城古城—党家村慢游线', color:'#287a78', badge:'新增 · 人文安静 · 车程偏长',
+        summary:'古城街巷加传统村落，避开司马迁祠长台阶；适合喜欢古建、愿意接受较长往返车程的家庭。',
+        plan:['10/2：三门峡 → 韩城，抵达后休息，不安排远郊景点。','10/3：上午韩城古城选一段平缓街区；午休后看父母状态决定是否去党家村。','10/4：早饭后直接返程；党家村石板路不平，腿累就取消。'],
+        stops:[
+          {name:'三门峡',coord:[34.772,111.200],type:'start',text:'出发地。'},
+          {name:'韩城古城',coord:[35.477,110.439],type:'sight',text:'明清街巷和传统院落，建议只走平缓主街、随时找店休息；不安排司马迁祠登台阶。',...commonsPhoto('Hancheng City.jpg','Chlukoe · CC0')},
+          {name:'党家村（可选）',coord:[35.522,110.522],type:'optional',text:'传统村落与民居建筑，部分路面石板不平；若腿脚疲劳或厕所不方便，直接取消。',...commonsPhoto('Dangjiacun.JPG','Cshcts · CC BY-SA 3.0 / GFDL')},
+          {name:'返回三门峡',coord:[34.772,111.200],type:'end',text:'终点。'}
+        ]
+      }
     };
 
     const mapStatus = document.getElementById('map-status');
+    const routeList = document.getElementById('route-list');
     const layers = {};
+    const routeOrder = ['luoyang','tongguan','nanyang','jincheng','hancheng'];
     let map;
     let infoWindow;
-    let markerLayer;
+    let selectedRoute = 'luoyang';
+    let routeRequestId = 0;
 
     function setStatus(message) { mapStatus.textContent = message; }
     function escapeHtml(value) {
       return String(value).replace(/[&<>"']/g, ch => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+    }
+    function getPath(route) {
+      return route.stops.filter((stop,index) => stop.type !== 'optional' || index === route.activeOptionalIndex).map(stop => stop.coord);
     }
     function loadScript(src) {
       return new Promise((resolve, reject) => {
@@ -133,92 +187,154 @@ layout: false
       const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="210" height="42" viewBox="0 0 210 42"><circle cx="18" cy="21" r="15" fill="${color}" stroke="white" stroke-width="3"/><text x="18" y="25" text-anchor="middle" font-family="sans-serif" font-size="12" font-weight="700" fill="white">${safeLabel}</text><rect x="38" y="5" width="168" height="32" rx="5" fill="#fffefa" fill-opacity=".96"/><text x="46" y="25" font-family="sans-serif" font-size="12" font-weight="600" fill="#18312d">${safeName}</text></svg>`;
       return 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg);
     }
+    function renderRouteCards() {
+      routeList.innerHTML = routeOrder.map(key => {
+        const route = routes[key];
+        const spots = route.stops.map((stop, index) => stop.type === 'start' || stop.type === 'end' ? '' :
+          `<button type="button" data-spot="${key}:${index}" aria-pressed="false">${stop.type === 'optional' ? '可选 · ' : ''}${escapeHtml(stop.name)}</button>`).join('');
+        return `<article class="route${key === selectedRoute ? ' is-active' : ''}" style="--route-color:${route.color}" data-route-card="${key}">
+          <div class="route-head"><span class="swatch"></span><h2>${escapeHtml(route.title)}</h2></div>
+          <p class="meta">${escapeHtml(route.badge)}</p><p>${escapeHtml(route.summary)}</p>
+          <div class="route-stops">${spots}</div>
+          <button type="button" data-focus="${key}" aria-pressed="${key === selectedRoute}">查看行程与路线</button>
+        </article>`;
+      }).join('');
+    }
+    function renderRoutePlan(key) {
+      selectedRoute = key;
+      document.querySelectorAll('[data-route-card]').forEach(card => card.classList.toggle('is-active', card.dataset.routeCard === key));
+      document.querySelectorAll('[data-focus]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.focus === key)));
+      document.getElementById('spot-title').textContent = routes[key].title + ' · 三日节奏';
+      document.getElementById('spot-content').innerHTML = `<ol class="day-plan">${routes[key].plan.map(day => `<li>${escapeHtml(day)}</li>`).join('')}</ol><p class="credit">景点小标签可点开照片；带“可选”的项目累了就删掉。</p>`;
+    }
+    function showSpot(key, index) {
+      const stop = routes[key].stops[index];
+      if (!stop || stop.type === 'start' || stop.type === 'end') return;
+      renderRoutePlan(key);
+      const title = document.getElementById('spot-title');
+      const content = document.getElementById('spot-content');
+      title.textContent = stop.name;
+      content.innerHTML = `<img src="${escapeHtml(stop.photo)}" alt="${escapeHtml(stop.name)}" loading="lazy" referrerpolicy="no-referrer"><p>${escapeHtml(stop.text)}</p><p class="credit"><a href="${escapeHtml(stop.source)}" target="_blank" rel="noopener">图片来源：${escapeHtml(stop.credit)}（查看原页）</a></p>`;
+      const photo = content.querySelector('img');
+      photo.addEventListener('error', () => {
+        photo.remove();
+        const notice = document.createElement('p');
+        notice.className = 'credit';
+        notice.textContent = '图片源暂时无法载入，可点下方来源页查看。';
+        content.prepend(notice);
+      }, {once:true});
+      document.querySelectorAll('[data-spot]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.spot === `${key}:${index}`)));
+    }
+    function setLine(key, coords) {
+      const TMap = window.TMap;
+      const styleId = `${key}-line`;
+      layers[key].setGeometries([{id:`path-${key}`,styleId,paths:coords.map(point => new TMap.LatLng(point.lat ?? point[0], point.lng ?? point[1]))}]);
+    }
+    async function requestDrivingRoute(key) {
+      const route = routes[key];
+      const requestId = ++routeRequestId;
+      const TMap = window.TMap;
+      try {
+        if (!window.TMap.service || !window.TMap.service.Driving) throw new Error('驾车服务不可用');
+        const points = getPath(route);
+        const driving = new TMap.service.Driving({policy:'LEAST_TIME',mp:false,noStep:true});
+        const legs = await Promise.all(points.slice(1).map(([lat,lng],index) => driving.search({
+          from:new TMap.LatLng(points[index][0],points[index][1]),
+          to:new TMap.LatLng(lat,lng)
+        }).then(response => response && response.result && response.result.routes && response.result.routes[0])));
+        if (requestId !== routeRequestId) return;
+        if (legs.some(leg => !leg || !Array.isArray(leg.polyline) || !leg.polyline.length)) throw new Error('未返回完整道路路线');
+        const fullPath = [];
+        legs.forEach(leg => leg.polyline.forEach((point,index) => {
+          if (!fullPath.length || index > 0) fullPath.push(point);
+        }));
+        setLine(key,fullPath);
+        const distance = legs.reduce((sum,leg) => sum + (leg.distance || 0),0);
+        const duration = legs.reduce((sum,leg) => sum + (leg.duration || 0),0);
+        const km = distance ? `${(distance / 1000).toFixed(0)} 公里` : '距离估算已更新';
+        const mins = duration ? `，约 ${(duration / 60).toFixed(1)} 小时（不含休息）` : '';
+        setStatus(`${route.title}：腾讯驾车路线已绘制，${km}${mins}。假期实际耗时通常更长。`);
+      } catch (error) {
+        if (requestId === routeRequestId) setStatus(`${route.title}：驾车规划暂不可用，地图显示景点顺序参考线；可点标签看照片与简介。`);
+      }
+    }
     async function initializeMap() {
       try {
         setStatus('正在读取网站的腾讯地图配置…');
         if (!window.__NUO_TENCENT_LBS__) {
-          if (!/^https?:$/.test(window.location.protocol)) {
-            throw new Error('本地 file:// 预览无法读取网站配置。请把此页面放到 1nuo.me 网站下再查看地图。');
-          }
+          if (!/^https?:$/.test(window.location.protocol)) throw new Error('请从 1nuo.me 页面打开地图。');
           await loadScript(new URL('/js/tencent-lbs-config.js', window.location.origin).href);
         }
         const key = window.__NUO_TENCENT_LBS__ && window.__NUO_TENCENT_LBS__.key;
-        if (!key) throw new Error('网站未配置腾讯地图 Key。请从 1nuo.me 网站路径打开，并确认构建环境已设置地图 Key。');
+        if (!key) throw new Error('网站未配置腾讯地图 Key。');
         setStatus('正在加载腾讯地图…');
-        await loadScript(`https://map.qq.com/api/gljs?v=1.exp&key=${encodeURIComponent(key)}`);
+        await loadScript(`https://map.qq.com/api/gljs?v=1.exp&libraries=service&key=${encodeURIComponent(key)}`);
         if (!window.TMap || !window.TMap.Map) throw new Error('腾讯地图 SDK 未就绪');
         const TMap = window.TMap;
-        map = new TMap.Map(document.getElementById('map'), {
-          center: new TMap.LatLng(33.8, 111.9), zoom: 7,
-          pitch: 0, rotation: 0, viewMode: '2D'
-        });
-        infoWindow = new TMap.InfoWindow({map, position: map.getCenter(), offset: {x: 0, y: -18}});
+        map = new TMap.Map(document.getElementById('map'), {center:new TMap.LatLng(34.5,111.1),zoom:7,pitch:0,rotation:0,viewMode:'2D'});
+        infoWindow = new TMap.InfoWindow({map,position:map.getCenter(),offset:{x:0,y:-18}});
         infoWindow.close();
-
         const allStops = [];
         const allGeometries = [];
         for (const [keyName, route] of Object.entries(routes)) {
           const lineStyleId = `${keyName}-line`;
-          layers[keyName] = new TMap.MultiPolyline({
-            id: `route-${keyName}`, map,
-            styles: {[lineStyleId]: new TMap.PolylineStyle({
-              color: route.color, width: 7, borderWidth: 2, borderColor: '#ffffff',
-              lineCap: 'round', showArrow: true, arrowOptions: {width: 8, height: 9, space: 90}
-            })},
-            geometries: [{id: `path-${keyName}`, styleId: lineStyleId,
-              paths: route.waypoints.map(([lat, lng]) => new TMap.LatLng(lat, lng))}]
-          });
-          route.stops.forEach((stop, index) => {
-            const label = stop.type === 'start' ? '始' : stop.type === 'optional' ? '选' : String(index);
+          const path = getPath(route).map(([lat,lng]) => new TMap.LatLng(lat,lng));
+          layers[keyName] = new TMap.MultiPolyline({id:`route-${keyName}`,map,
+            styles:{[lineStyleId]:new TMap.PolylineStyle({color:route.color,width:6,borderWidth:2,borderColor:'#ffffff',lineCap:'round',showArrow:true,arrowOptions:{width:8,height:9,space:90}})},
+            geometries:[{id:`path-${keyName}`,styleId:lineStyleId,paths:path}]});
+          route.stops.forEach((stop,index) => {
+            const label = stop.type === 'start' ? '始' : stop.type === 'end' ? '终' : stop.type === 'optional' ? '选' : String(index);
             const styleId = `pin-${keyName}-${index}`;
-            allGeometries.push({
-              id: `marker-${keyName}-${index}`, styleId,
-              position: new TMap.LatLng(stop.coord[0], stop.coord[1]),
-              properties: {routeKey: keyName, stopIndex: index}
-            });
-            allStops.push({styleId, image: markerSvg(route.color, label, stop.name), stop, routeKey: keyName});
+            allGeometries.push({id:`marker-${keyName}-${index}`,styleId,position:new TMap.LatLng(stop.coord[0],stop.coord[1]),properties:{routeKey:keyName,stopIndex:index}});
+            allStops.push({styleId,image:markerSvg(route.color,label,stop.name)});
           });
         }
         const styles = {};
-        allStops.forEach(item => {
-          styles[item.styleId] = new TMap.MarkerStyle({
-            width: 210, height: 42, anchor: {x: 18, y: 21}, src: item.image
-          });
-        });
-        markerLayer = new TMap.MultiMarker({map, styles, geometries: allGeometries});
+        allStops.forEach(item => { styles[item.styleId] = new TMap.MarkerStyle({width:210,height:42,anchor:{x:18,y:21},src:item.image}); });
+        const markerLayer = new TMap.MultiMarker({map,styles,geometries:allGeometries});
         markerLayer.on('click', event => {
-          const properties = event.geometry && event.geometry.properties;
-          if (!properties) return;
-          const stop = routes[properties.routeKey].stops[properties.stopIndex];
-          const position = new TMap.LatLng(stop.coord[0], stop.coord[1]);
-          infoWindow.setPosition(position);
-          infoWindow.setContent(`<strong>${escapeHtml(stop.name)}</strong><br>${escapeHtml(stop.text)}`);
+          const props = event.geometry && event.geometry.properties;
+          if (!props) return;
+          focusRoute(props.routeKey,props.stopIndex);
+          showSpot(props.routeKey,props.stopIndex);
+          infoWindow.setPosition(new TMap.LatLng(...routes[props.routeKey].stops[props.stopIndex].coord));
+          infoWindow.setContent(`<strong>${escapeHtml(routes[props.routeKey].stops[props.stopIndex].name)}</strong><br>照片与详细说明已显示在路线列表旁。`);
           infoWindow.open();
         });
-        focusRoute('nanyang');
-        setStatus('腾讯地图已加载。点景点标记查看说明；箭头为建议行进方向。');
+        focusRoute(selectedRoute);
+        setStatus('腾讯地图已加载。线路正尝试按腾讯驾车道路绘制；点景点标记可查看对应照片。');
       } catch (error) {
-        setStatus(`地图暂时无法加载：${error.message} 路线文字方案仍可查看。`);
+        setStatus(`地图暂时无法加载：${error.message}；下方仍可点景点名称查看照片和行程。`);
       }
     }
-    function focusRoute(key) {
+    function focusRoute(key, selectedStopIndex = null) {
+      if (!routes[key]) return;
+      const selectedStop = selectedStopIndex === null ? null : routes[key].stops[selectedStopIndex];
+      routes[key].activeOptionalIndex = selectedStop && selectedStop.type === 'optional' ? selectedStopIndex : null;
+      renderRoutePlan(key);
       if (!map) return;
-      Object.entries(routes).forEach(([name, route]) => {
-        const emphasized = name === key;
-        const styleId = `${name}-line`;
-        layers[name].setStyles({[styleId]: new TMap.PolylineStyle({
-          color: route.color, width: emphasized ? 8 : 5, borderWidth: emphasized ? 2 : 1,
-          borderColor: '#ffffff', lineCap: 'round', showArrow: true,
-          arrowOptions: {width: emphasized ? 8 : 6, height: 9, space: 90}
-        })});
-      });
-      document.querySelectorAll('[data-route-card]').forEach(card => card.classList.toggle('is-active', card.dataset.routeCard === key));
       const TMap = window.TMap;
+      Object.entries(routes).forEach(([name, route]) => {
+        const active = name === key;
+        layers[name].setStyles({[`${name}-line`]:new TMap.PolylineStyle({color:route.color,width:active?8:4,borderWidth:active?2:1,borderColor:'#ffffff',lineCap:'round',showArrow:true,arrowOptions:{width:active?8:6,height:9,space:90}})});
+      });
       const bounds = new TMap.LatLngBounds();
-      routes[key].waypoints.forEach(([lat, lng]) => bounds.extend(new TMap.LatLng(lat, lng)));
-      map.fitBounds(bounds, {padding: 64});
+      getPath(routes[key]).forEach(([lat,lng]) => bounds.extend(new TMap.LatLng(lat,lng)));
+      map.fitBounds(bounds,{padding:64});
+      setLine(key,getPath(routes[key]));
+      requestDrivingRoute(key);
     }
-    document.querySelectorAll('[data-focus]').forEach(button => button.addEventListener('click', () => focusRoute(button.dataset.focus)));
+    routeList.addEventListener('click', event => {
+      const spot = event.target.closest('[data-spot]');
+      const focus = event.target.closest('[data-focus]');
+      if (spot) {
+        const [key,index] = spot.dataset.spot.split(':');
+        focusRoute(key,Number(index));
+        showSpot(key,Number(index));
+      } else if (focus) focusRoute(focus.dataset.focus);
+    });
+    renderRouteCards();
+    renderRoutePlan(selectedRoute);
     initializeMap();
   </script>
 </body>
