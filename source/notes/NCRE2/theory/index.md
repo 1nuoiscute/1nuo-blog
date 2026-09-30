@@ -1,7 +1,7 @@
 ﻿---
 title: 纯背
 date: 2026-05-09
-tags: [理论, 概念, 结构化, 软件工程]
+tags: [计算机二级]
 ---
 
 <link rel="stylesheet" href="/css/notes.css">

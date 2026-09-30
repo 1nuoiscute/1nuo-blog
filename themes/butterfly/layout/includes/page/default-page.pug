@@ -1,2 +1,10 @@
 #article-container.container
   != page.content
+  - const noteNeighbours = nuo_note_neighbours(page)
+  - const noteCourse = nuo_note_course(page)
+  if noteCourse || noteNeighbours
+    section.nuo-related(aria-label='同课程笔记')
+      h2.nuo-related-heading 同课程笔记
+        != noteCourse
+      if noteNeighbours
+        .nuo-related-list!= noteNeighbours

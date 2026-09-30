@@ -49,6 +49,13 @@
 - `source/about/`、`source/link/`：关于和友链等站点页面。
 - `source/shuoshuo/`：已停用的碎碎念页面保留在仓库中，不作为当前维护功能。
 
+### 笔记标签与相关阅读
+
+- 每篇笔记带**一个课程标签**：`电路分析`、`计算机二级`、`线性代数`、`计算机程序设计`；笔记首页按课程筛选。
+- 笔记页末尾渲染「同课程笔记」：上一课、下一课、课程目录，课次按数字排序（`l9` 在 `l10` 之前）。
+- 文章页末尾渲染「相关笔记」，由 `scripts/related-notes.js` 的主题规则决定，只在确实相关时出现；也可以用文章前言的 `related_notes` 指定路径前缀（如 `related_notes: notes/circuit-analysis/`）。
+- 文章与笔记的自动关联很弱（标签几乎零交集），所以没有做模糊关键词匹配，避免出现「电气简报 → 计算机基础」这类误报。
+
 仓库中的电气简报脚本和文章记录的是一个已经结束的实验：自动化简报于 2026-02-17 至 2026-05-20 运行，共 29 期，现已停用，历史内容已整理为月度汇总。
 
 ## 目录结构
@@ -66,8 +73,8 @@
 ## 订阅与搜索引擎元数据
 
 - 订阅说明页：[`https://www.1nuo.me/subscribe/`](https://www.1nuo.me/subscribe/)，解释 RSS/Atom 是什么以及如何使用阅读器订阅。
-- Atom：`https://www.1nuo.me/atom.xml`；RSS 2.0：`https://www.1nuo.me/rss.xml`，导航顶部的「订阅」菜单中提供说明和两个订阅源入口。
-- 订阅最近 20 篇公开博客文章，提供摘要；隐藏、加密、私人及 `noindex` 内容不会进入订阅和 sitemap。
+- Atom：`https://www.1nuo.me/atom.xml`；RSS 2.0：`https://www.1nuo.me/rss.xml`，导航「订阅」菜单中提供说明和两个订阅源入口。
+- 订阅是**全文**输出（`feed.content: true`），最近 20 篇公开文章；隐藏、加密、私人及 `noindex` 内容不会进入订阅和 sitemap。
 - 公开文章提供 `BlogPosting` 结构化数据，首页提供 `WebSite`；普通页面不冒充文章。
 - 正式主域名为 `https://www.1nuo.me`，与当前线上非 www → www 的跳转方向一致。站点 URL、canonical、订阅和 sitemap 统一使用 www；Vercel 路由增加同方向永久重定向。平台级域名规则可能先返回现有的 307，最终状态码及路径、查询参数保留仍需上线后核验。
 - 评测后台通过 robots meta 和 `X-Robots-Tag` 请求搜索引擎不收录，并从 sitemap 排除。故意不使用 `Disallow`，避免爬虫读不到 `noindex`；这不是密码保护或访问认证。

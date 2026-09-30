@@ -1,7 +1,7 @@
 ---
 title: 线性代数笔记
 date: 2026-05-22
-tags: [线性代数, 笔记]
+tags: [线性代数]
 top_img: https://img.1nuo.me/img/academicbanner.webp
 ---
 

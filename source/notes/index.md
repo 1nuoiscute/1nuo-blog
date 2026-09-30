@@ -19,15 +19,16 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 
 <div class="notes-tags">
 <button class="tag-btn active" data-tag="all">全部</button>
-<button class="tag-btn" data-tag="本科课程">本科课程</button>
-<button class="tag-btn" data-tag="备考经历">备考经历</button>
-<button class="tag-btn" data-tag="课外学习">课外学习</button>
+<button class="tag-btn" data-tag="电路分析">电路分析</button>
+<button class="tag-btn" data-tag="计算机二级">计算机二级</button>
+<button class="tag-btn" data-tag="线性代数">线性代数</button>
+<button class="tag-btn" data-tag="计算机程序设计">计算机程序设计</button>
 </div>
 
 <div class="note-collections" id="note-list">
 
 <!-- 计算机程序设计基础 理论选择题复习 -->
-<div class="note-card" data-tags="本科课程" data-date="2026-05-26" data-title="计算机程序设计基础" data-desc="理论选择题复习 · Unit 1~10 · 数制/运算符/指针/文件操作">
+<div class="note-card" data-tags="计算机程序设计" data-date="2026-05-26" data-title="计算机程序设计基础" data-desc="理论选择题复习 · Unit 1~10 · 数制/运算符/指针/文件操作">
 <a href="/notes/c-programming-review/" class="note-card-inner">
 <div class="note-card-icon">💻</div>
 <div class="note-card-info">
@@ -39,7 +40,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 </div>
 
 <!-- 线性代数（最新） -->
-<div class="note-card" data-tags="本科课程" data-date="2026-05-22" data-title="线性代数" data-desc="手写笔记整理 · 矩阵 · 行列式 · 线性方程组 · 13页完整版">
+<div class="note-card" data-tags="线性代数" data-date="2026-05-22" data-title="线性代数" data-desc="手写笔记整理 · 矩阵 · 行列式 · 线性方程组 · 13页完整版">
 <a href="/notes/linear-algebra/" class="note-card-inner">
 <div class="note-card-icon">📐</div>
 <div class="note-card-info">
@@ -51,7 +52,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 </div>
 
 <!-- 电路分析 -->
-<div class="note-card" data-tags="本科课程" data-date="2026-06-06" data-title="电路分析 AⅠ" data-desc="西南交通大学 · 电气工程 · 教材七章完整目录导航">
+<div class="note-card" data-tags="电路分析" data-date="2026-06-06" data-title="电路分析 AⅠ" data-desc="西南交通大学 · 电气工程 · 教材七章完整目录导航">
 <a href="/notes/circuit-analysis/" class="note-card-inner">
 <div class="note-card-icon">⚡</div>
 <div class="note-card-info">
@@ -63,7 +64,7 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 </div>
 
 <!-- NCRE 备考 -->
-<div class="note-card" data-tags="备考经历" data-date="2026-05-09" data-title="计算机二级 NCRE 备考" data-desc="C 语言程序设计 · 数据结构与算法 · 上机实操 · 理论背诵">
+<div class="note-card" data-tags="计算机二级" data-date="2026-05-09" data-title="计算机二级 NCRE 备考" data-desc="C 语言程序设计 · 数据结构与算法 · 上机实操 · 理论背诵">
 <a href="/notes/NCRE2/" class="note-card-inner">
 <div class="note-card-icon">🏅</div>
 <div class="note-card-info">

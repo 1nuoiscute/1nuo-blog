@@ -10,6 +10,11 @@ block content
         include includes/post/outdate-notice.pug
       else
         !=page.content
+      - const relatedNotes = nuo_related_notes(page)
+      if relatedNotes
+        section.nuo-related(aria-label='相关笔记')
+          h2.nuo-related-heading 相关笔记
+          .nuo-related-list!= relatedNotes
     include includes/post/post-copyright.pug
     .tag_share
       if (page.tags.length > 0 && theme.post_meta.post.tags)

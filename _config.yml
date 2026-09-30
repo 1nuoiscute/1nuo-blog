@@ -144,7 +144,8 @@ feed:
   type: [atom, rss2]
   path: [atom.xml, rss.xml]
   limit: 20
-  content: false
+  # Full-text feeds: readers can finish an article without leaving the app.
+  content: true
   order_by: -date
   autodiscovery: true
 

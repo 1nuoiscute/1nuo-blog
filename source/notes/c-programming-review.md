@@ -2,7 +2,7 @@
 title: 计算机程序设计基础 理论选择题复习
 top_img: https://img.1nuo.me/img/academicbanner.webp
 date: 2026-05-26
-tags: [C++, 备考, 计算机]
+tags: [计算机程序设计]
 ---
 
 <link rel="stylesheet" href="/css/notes.css">

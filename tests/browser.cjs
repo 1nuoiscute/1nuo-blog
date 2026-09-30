@@ -261,6 +261,18 @@ async function main() {
     check(await page.locator('.nuo-graph-node').count() > 10, 'content graph renders after a PJAX navigation');
     check(await page.evaluate(() => !!window.pjax), 'PJAX stayed active across the graph navigation');
 
+    await go('/notes/circuit-analysis/ch1/l5-kcl.html');
+    await page.locator('.nuo-related-item').first().waitFor();
+    check((await page.locator('.nuo-related-heading').textContent()).includes('电路分析'), 'note page shows its course tag');
+    const neighbourTitles = await page.locator('.nuo-related-item .nuo-related-title').allTextContents();
+    check(neighbourTitles.includes('L4 无源元件') && neighbourTitles.includes('L6 KVL'), 'note page links the lessons before and after it');
+
+    await go('/2026/02/18/news/');
+    await page.locator('.nuo-related-item').first().waitFor();
+    check((await page.locator('.nuo-related-heading').textContent()).includes('相关笔记'), 'an electrical post links to course notes');
+    await go('/2026/06/10/tao-yuanming-what-kind-of-life/');
+    check(await page.locator('.nuo-related').count() === 0, 'an unrelated post shows no related-notes block');
+
     await go('/2026/09/30/site-update-2026-09-30/');
     await page.locator('.nuo-content-tools [data-action=reading-mode]').click();
     check(await page.evaluate(() => document.body.classList.contains('nuo-reading-mode')), 'reading mode hides the sidebar chrome');

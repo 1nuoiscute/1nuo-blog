@@ -1,7 +1,7 @@
 ﻿---
 title: 数据结构与算法
 date: 2026-05-09
-tags: [数据结构, 算法, 二叉树, 排序, 栈, 队列]
+tags: [计算机二级]
 ---
 
 <link rel="stylesheet" href="/css/notes.css">

@@ -1,7 +1,7 @@
 ﻿---
 title: 实操
 date: 2026-05-09
-tags: [上机, 编程, 改错, VC++]
+tags: [计算机二级]
 ---
 
 <link rel="stylesheet" href="/css/notes.css">

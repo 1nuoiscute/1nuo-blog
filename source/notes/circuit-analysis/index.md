@@ -4,6 +4,7 @@ title: 电路分析 AⅠ
 aside: false
 comments: false
 top_img: https://img.1nuo.me/img/categoriesbanner.webp
+tags: [电路分析]
 ---
 
 <link rel="stylesheet" href="/css/notes.css">

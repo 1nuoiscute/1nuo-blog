@@ -12,8 +12,13 @@ function toArray(collection) {
   return Array.from(collection);
 }
 
+// Hexo turns tags/categories into objects for posts, but leaves them as plain
+// strings on pages, so both shapes have to be read.
 function names(collection) {
-  return toArray(collection).map(item => (item && (item.name || item.title)) || '').filter(Boolean);
+  return toArray(collection).map(item => {
+    if (typeof item === 'string') return item;
+    return (item && (item.name || item.title)) || '';
+  }).filter(Boolean);
 }
 
 function kindOf(path) {

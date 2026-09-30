@@ -1,7 +1,7 @@
 ﻿---
 title: C 语言专项
 date: 2026-05-09
-tags: [C语言, 标识符, 指针, 函数, 运算符]
+tags: [计算机二级]
 ---
 
 <link rel="stylesheet" href="/css/notes.css">
