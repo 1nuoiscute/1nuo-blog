@@ -50,7 +50,8 @@
 
 ## 订阅与搜索引擎元数据
 
-- Atom：`https://www.1nuo.me/atom.xml`；RSS 2.0：`https://www.1nuo.me/rss.xml`，导航「收纳」中也有订阅入口。
+- 订阅说明页：[`https://www.1nuo.me/subscribe/`](https://www.1nuo.me/subscribe/)，解释 RSS/Atom 是什么以及如何使用阅读器订阅。
+- Atom：`https://www.1nuo.me/atom.xml`；RSS 2.0：`https://www.1nuo.me/rss.xml`，导航「收纳」中也有订阅说明和订阅源入口。
 - 订阅最近 20 篇公开博客文章，提供摘要；隐藏、加密、私人及 `noindex` 内容不会进入订阅和 sitemap。
 - 公开文章提供 `BlogPosting` 结构化数据，首页提供 `WebSite`；普通页面不冒充文章。
 - 正式主域名为 `https://www.1nuo.me`，与当前线上非 www → www 的跳转方向一致。站点 URL、canonical、订阅和 sitemap 统一使用 www；Vercel 路由增加同方向永久重定向。平台级域名规则可能先返回现有的 307，最终状态码及路径、查询参数保留仍需上线后核验。

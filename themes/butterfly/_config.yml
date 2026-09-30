@@ -29,6 +29,7 @@ menu:
     随机漫游: /wander/ || fas fa-dice
     书架: /favorites/ || fas fa-bookmark
     标签: /tags/ || fas fa-tags
+    订阅说明: /subscribe/ || fas fa-rss
     订阅（Atom）: /atom.xml || fas fa-rss
     订阅（RSS）: /rss.xml || fas fa-rss
     简报归档: /news/ || fas fa-newspaper
