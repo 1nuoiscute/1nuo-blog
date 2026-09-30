@@ -405,6 +405,8 @@ body.nuo-reading-mode #article-container img { border-radius: 12px; }
   position: relative;
   width: 100%;
   aspect-ratio: 1000 / 680;
+  min-height: 420px;
+  max-height: 78vh;
   overflow: hidden;
   border: 1px solid var(--graph-border);
   border-radius: var(--graph-radius);
@@ -541,6 +543,10 @@ body.nuo-reading-mode #article-container img { border-radius: 12px; }
   .nuo-graph-filter-label { padding-top: 0; }
   .nuo-graph-label { font-size: 13px; }
 }
+
+/* 整页模式：侧栏隐藏时给地图更多空间 */
+.nuo-graph-page { max-width: 1180px; margin: 0 auto; }
+.hide-aside .nuo-graph-canvas { min-height: min(72vh, 760px); }
 
 @media (max-width: 600px) {
   /* 小屏保持触摸目标 >= 44px */

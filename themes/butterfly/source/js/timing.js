@@ -4,6 +4,8 @@ function tow(n) {
     return n >= 0 && n < 10 ? '0' + n : '' + n;
 }
 setInterval(function () {
+    // Pages without the sidebar widget have no <timing> element to update.
+    if (!oSpan) return;
     let goTime = new Date();//获取动态时间
     let diffTime = goTime.getTime() - localhostTime.getTime();
     var second = Math.floor(diffTime / 1000);//未来时间距离现在的秒数

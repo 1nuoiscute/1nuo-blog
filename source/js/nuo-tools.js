@@ -431,7 +431,8 @@
     currentInfo = getPageInfo();
     var existing = document.querySelector('.nuo-content-tools');
     if (existing) existing.remove();
-    if (!currentInfo || currentInfo.path === '/wander' || currentInfo.path === '/favorites') {
+    // Pages that are apps rather than reading material do not need the toolbar.
+    if (!currentInfo || ['/wander', '/favorites', '/graph'].indexOf(currentInfo.path) >= 0) {
       applyReadingMode(false);
       return;
     }

@@ -2,11 +2,12 @@
 title: 内容地图
 date: 2026-09-30 12:00:00
 comments: false
-top_img: https://img.1nuo.me/img/categoriesbanner.webp
+aside: false
+top_img: false
 ---
 
 <div class="nuo-graph-page" data-content-graph>
-  <p class="nuo-graph-note">这张图把站内的文章、笔记、探索和评测放在一起。连线的两端共享同一个标签或分类，共同主题越多连线越粗，颜色代表内容类型。悬停可以看清一个节点周围的关联，点击或按回车打开页面，滚轮缩放、拖动平移。</p>
+  <p class="nuo-graph-note">把站内的文章、笔记、探索和评测放在一起看：连线两端共享同一个标签或分类，共同主题越多连线越粗，颜色代表内容类型。悬停可看清一个节点周围的关联，点击或按回车打开页面，滚轮缩放、拖动平移。</p>
 
   <div class="nuo-graph-stats" data-graph-stats aria-hidden="true">
     <div class="nuo-graph-stat"><strong>—</strong><span>个内容节点</span></div>
