@@ -1,4 +1,4 @@
-﻿# Hexo Configuration
+# Hexo Configuration
 ## Docs: https://hexo.io/docs/configuration.html
 ## Source: https://github.com/hexojs/hexo/
 
@@ -11,12 +11,12 @@ language: zh-CN
 timezone: ''
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: https://1nuo.me
+url: https://www.1nuo.me
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
-  trailing_index: true # Set to false to remove trailing 'index.html' from permalinks
-  trailing_html: true # Set to false to remove trailing '.html' from permalinks
+  trailing_index: false # Match Vercel cleanUrls and canonical directory URLs.
+  trailing_html: false # Publish clean canonical links while keeping generated files.
 # Directory
 source_dir: source
 public_dir: public
@@ -124,11 +124,29 @@ robotstxt:
   useragent: '*'
   allow:
     - /
+  # Keep /rate/admin/ crawlable so robots meta / X-Robots-Tag can be read.
+  # Disallow would prevent crawlers seeing noindex; this is not authentication.
   disallow: []
-  sitemap: https://1nuo.me/sitemap.xml
+  sitemap: https://www.1nuo.me/sitemap.xml
+
+# Plugin supports sitemap:false and skip_render, not an exclude option.
+# scripts/site-metadata.js also filters private/hidden/noindex and raw assets.
+sitemap:
+  path: sitemap.xml
+  tags: false
+  categories: false
   
 
 
+
+# Public blog subscriptions (hidden/private/password posts are filtered).
+feed:
+  type: [atom, rss2]
+  path: [atom.xml, rss.xml]
+  limit: 20
+  content: false
+  order_by: -date
+  autodiscovery: true
 
 # Math rendering
 math:

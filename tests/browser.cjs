@@ -3,13 +3,24 @@
 const { chromium } = require('playwright');
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
+const path = require('node:path');
 const base = process.env.TEST_URL || 'http://127.0.0.1:4000';
+if (!['127.0.0.1', 'localhost'].includes(new URL(base).hostname)) throw new Error('Browser tests only run on loopback, never production');
 let checks = 0;
 function check(value, message) { assert(value, message); checks++; console.log('PASS', message); }
 async function main() {
-  const browser = await chromium.launch({ channel: process.env.BROWSER_CHANNEL || 'msedge', headless: true });
+  const browser = await chromium.launch({ ...(process.env.BROWSER_CHANNEL ? { channel: process.env.BROWSER_CHANNEL } : {}), headless: true });
   try {
     const context = await browser.newContext({ viewport: { width: 1280, height: 900 } });
+    await context.route('**/*', route => {
+      const url = new URL(route.request().url());
+      if (url.origin === new URL(base).origin) return route.continue();
+      if (url.pathname.endsWith('/pjax.min.js')) return route.fulfill({ contentType:'application/javascript', path:require.resolve('pjax/pjax.min.js') });
+      // All other remote requests are isolated. Specific mocks below override this route.
+      if (route.request().resourceType() === 'script') return route.fulfill({ contentType:'application/javascript', body:'' });
+      if (route.request().resourceType() === 'stylesheet') return route.fulfill({ contentType:'text/css', body:'' });
+      return route.abort();
+    });
     let submissions = [], failSubmit = true;
     await context.route('https://status.1nuo.me/leaderboard', route => {
       if (route.request().method() === 'POST') {
@@ -85,6 +96,32 @@ async function main() {
     await page.evaluate(() => { g.restart(); g.s = 8; g.o = true; g.over('结束', '第二局'); });
     check(await page.locator('#lb-input').count() === 1, 'second game has exactly one nickname input');
 
+    await go('/explore/scl90-app/');
+    await page.locator('#startBtn').click();
+    const answer = page.locator('.option-btn').nth(1);
+    await answer.focus(); await page.keyboard.press('Space');
+    check(await answer.getAttribute('aria-pressed') === 'true', 'SCL90 selects by keyboard');
+    await page.locator('#nextBtn').click(); await page.locator('#prevBtn').click();
+    check(await page.locator('.option-btn').nth(1).getAttribute('aria-pressed') === 'true', 'SCL90 restores answer after navigation');
+    for (const app of ['bingo', 'bingo2', 'bingo3', 'bingo4', 'bingo5']) {
+      await go(`/explore/${app}-app/`);
+      await page.locator('.cell').first().focus(); await page.keyboard.press('Space');
+      check(await page.locator('.cell').first().getAttribute('aria-pressed') === 'true' && await page.evaluate(() => document.activeElement.dataset.i === '0'), `${app} keyboard toggle preserves focus`);
+      await page.locator('#shareBtn').click();
+      check(await page.evaluate(() => document.activeElement.id === 'closeModalBtn'), `${app} dialog receives initial focus`);
+      await page.keyboard.press('Shift+Tab');
+      check(await page.evaluate(() => document.activeElement.id === 'downloadBtn'), `${app} dialog reverse Tab wraps`);
+      await page.keyboard.press('Tab');
+      check(await page.evaluate(() => document.activeElement.id === 'closeModalBtn'), `${app} dialog forward Tab wraps`);
+      await page.keyboard.press('Escape');
+      check(await page.evaluate(() => document.activeElement.id === 'shareBtn') && !await page.locator('#shareModal').evaluate(el => el.classList.contains('active')), `${app} Escape closes and restores focus`);
+    }
+    await go('/explore/draw-app/');
+    await page.locator('#jar').focus(); await page.keyboard.press('Enter');
+    await page.evaluate(() => { draw(); draw(); });
+    await page.waitForFunction(() => !drawing);
+    check(await page.evaluate(() => usedIndices.length === 1), 'fortune keyboard and repeated calls consume one draw');
+
     await go('/explore/tarot-app/');
     await page.getByRole('button', { name: '三张', exact: true }).click();
     await page.locator('#drawBtn').click();
@@ -156,12 +193,19 @@ async function main() {
     await go('/notes/');
     await page.locator('.nuo-content-tools').waitFor();
     check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth + 2), 'mobile notes page has no horizontal overflow');
-    fs.mkdirSync('docs/reviews/validation', {recursive:true});
+    fs.mkdirSync('test-results', {recursive:true});
     await page.waitForTimeout(1200);
-    await page.screenshot({path:'docs/reviews/validation/mobile-notes.png'});
+    await page.screenshot({path:'test-results/mobile-notes.png'});
     console.log('PAGE_ERRORS', JSON.stringify(errors));
     check(errors.length === 0, 'no uncaught browser errors');
     console.log(`PASS: ${checks} browser checks against ${base}`);
+  } catch (error) {
+    fs.mkdirSync('test-results', {recursive:true});
+    fs.writeFileSync('test-results/failure.txt', String(error.stack || error));
+    for (const [i, page] of browser.contexts().flatMap(context => context.pages()).entries()) {
+      await page.screenshot({ path:path.join('test-results', `failure-${i}.png`), fullPage:true }).catch(() => {});
+    }
+    throw error;
   } finally { await browser.close(); }
 }
 main().catch(error => { console.error(error); process.exitCode = 1; });

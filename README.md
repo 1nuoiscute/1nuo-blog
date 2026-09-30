@@ -17,7 +17,7 @@
 
 站内还提供了面向文章和笔记的个人工具：随机漫游、分享卡片和本地阅读清单。阅读清单汇总收藏、已读标记、阅读进度和最近浏览，所有数据只保存在当前浏览器，不需要账号。
 
-### 1nuo 评测（已隐藏的实验功能）
+### 1nuo 评测
 
 `/rate/` 是一个自制的量化评测系统，目前用于记录景点体验：
 
@@ -28,13 +28,14 @@
 - 提供“景点对撞机”，可以选择两个景点进行横向比较。
 - 评测数据存放在 `source/rate/rate_data.json`，管理页面位于 `source/rate/admin/`。
 
-该系统目前已从站点导航中隐藏，仅作为个人 vibe coding 实验保留，后续可能移除。
+该系统保留使用，可从「收纳 → 评测」进入，并提供旅行足迹地图。当前实际记录以景点为主；饮品入口仍是占位，多分类、快捷打卡与生活年报属于后续方向，尚未实施。独立的 `1nuo-rate` 仓库已设为私有，不影响博客中的评测页面和记录。
 
 ### 内容与笔记
 
 - `source/_posts/`：随笔、项目记录和更新公告。
 - `source/notes/`：课程与备考笔记，包括 C 语言、数据结构、线性代数和电路分析。
-- `source/about/`、`source/link/`、`source/shuoshuo/`：关于、友链和碎碎念等站点页面。
+- `source/about/`、`source/link/`：关于和友链等站点页面。
+- `source/shuoshuo/`：已停用的碎碎念页面保留在仓库中，不作为当前维护功能。
 
 仓库中的电气简报脚本和文章记录的是一个已经结束的实验：自动化简报于 2026-02-17 至 2026-05-20 运行，共 29 期，现已停用，历史内容已整理为月度汇总。
 
@@ -46,6 +47,14 @@
 - `source/rate/`：评测系统页面和数据
 - `themes/butterfly/`：主题及站点定制
 - `scripts/`：项目辅助脚本
+
+## 订阅与搜索引擎元数据
+
+- Atom：`https://www.1nuo.me/atom.xml`；RSS 2.0：`https://www.1nuo.me/rss.xml`，导航「收纳」中也有订阅入口。
+- 订阅最近 20 篇公开博客文章，提供摘要；隐藏、加密、私人及 `noindex` 内容不会进入订阅和 sitemap。
+- 公开文章提供 `BlogPosting` 结构化数据，首页提供 `WebSite`；普通页面不冒充文章。
+- 正式主域名为 `https://www.1nuo.me`，与当前线上非 www → www 的跳转方向一致。站点 URL、canonical、订阅和 sitemap 统一使用 www；Vercel 路由增加同方向永久重定向。平台级域名规则可能先返回现有的 307，最终状态码及路径、查询参数保留仍需上线后核验。
+- 评测后台通过 robots meta 和 `X-Robots-Tag` 请求搜索引擎不收录，并从 sitemap 排除。故意不使用 `Disallow`，避免爬虫读不到 `noindex`；这不是密码保护或访问认证。
 
 ## 本地开发
 
@@ -64,6 +73,23 @@ npm run server
 ```bash
 npm run test:cards
 ```
+
+### 工程验收
+
+```bash
+npm run test:cards
+npm run test:tools
+npm run test:map
+npm run test:regression
+npm run build
+npm run test:metadata
+npx playwright install chromium
+npm run test:browser
+```
+
+浏览器验收会临时启动仅监听本机的静态站点，结束后关闭；排行榜、地图和外部资源被隔离，不会提交生产数据。CI 使用 Chromium（Linux 安装需 `npx playwright install --with-deps chromium`），失败时上传诊断截图。测试输出位于被 Git 忽略的 `test-results/`。
+
+GitHub Actions 仍不是 Vercel 的部署闸门：两者可能并行执行。若要求 CI 通过后才上线，需要另行配置部署策略。
 
 ## 发布文章
 

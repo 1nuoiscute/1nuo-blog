@@ -30,3 +30,18 @@ jobs:
         run: npm run test:map && npm run test:regression
       - name: Generate site
         run: npm run build
+      - name: Validate generated feeds and metadata
+        run: npm run test:metadata
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Validate real browser interactions
+        run: npm run test:browser
+        timeout-minutes: 5
+      - name: Upload browser diagnostics
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: browser-diagnostics
+          path: test-results/
+          if-no-files-found: ignore
+          retention-days: 7

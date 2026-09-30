@@ -187,19 +187,22 @@ body {
   font-size: .75em;
   color: #d6d3d1;
 }
+.jar-wrap { display:block; border:0; background:transparent; padding:0; color:inherit; }
+button:focus-visible, a:focus-visible { outline:3px solid #5A82B8; outline-offset:3px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; } }
 </style>
 </head>
 <body>
 <div class="container" id="app">
 
-  <div class="jar-wrap" id="jar" onclick="draw()">
+  <button type="button" class="jar-wrap" id="jar" aria-label="摇一签" onclick="draw()">
     <div class="jar-rim"></div>
     <div class="jar-body">
       <div class="stick"></div>
       <div class="stick"></div>
       <div class="stick"></div>
     </div>
-  </div>
+  </button>
 
   <div class="result-card" id="result">
     <div class="result-level" id="level"></div>
@@ -251,7 +254,11 @@ var FORTUNES = [
 
 var usedIndices = [];
 
+var drawing = false;
 function draw(){
+  if(drawing) return;
+  drawing = true;
+  document.getElementById('jar').disabled = true;
   var app = document.getElementById('app');
   var btn = document.getElementById('drawBtn');
   app.classList.add('shaking');
@@ -280,12 +287,14 @@ function draw(){
     card.classList.add('show');
 
     app.classList.remove('shaking');
+    drawing = false;
+    document.getElementById('jar').disabled = false;
     btn.disabled = false;
     btn.innerHTML = '<span>🎋</span> 再摇一签';
 
     var remain = FORTUNES.length - usedIndices.length;
     document.getElementById('remainText').textContent = '剩余 ' + remain + ' 签';
-  }, 800);  // 300-500ms 页面过渡规范
+  }, window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 800);
 }
 </script>
 </body>

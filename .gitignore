@@ -7,5 +7,6 @@ public/
 .deploy*/
 _multiconfig.yml
 tips.txt
+test-results/
 
 tips.txt

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="zh-CN">
 <head>
   <meta charset="UTF-8">
@@ -123,7 +123,9 @@
       .option-btn { min-width: 48px; padding: 8px 4px; font-size: 0.8em; }
       .dim-name { flex-basis: 80px; font-size: 0.8em; }
     }
-  </style>
+  button:focus-visible, a:focus-visible { outline:3px solid #5A82B8; outline-offset:3px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; } }
+</style>
 </head>
 <body>
 <div class="container">
@@ -239,10 +241,10 @@
     var labels = ['无','很轻','中等','偏重','严重'];
     var descs  = ['从无','很轻','中度','偏重','严重'];
     for (var o = 1; o <= 5; o++) {
-      html += '<div class="option-btn' + (val === o ? ' selected' : '') + '" data-value="' + o + '">';
+      html += '<button type="button" aria-pressed="' + (val === o) + '" class="option-btn' + (val === o ? ' selected' : '') + '" data-value="' + o + '">';
       html += '<span class="option-label">' + o + '</span>';
       html += '<span class="option-desc">' + labels[o-1] + '</span>';
-      html += '</div>';
+      html += '</button>';
     }
     html += '</div></div>';
     questionArea.innerHTML = html;
@@ -252,8 +254,9 @@
       btn.addEventListener('click', function(){
         var val = parseInt(this.dataset.value);
         app.answers[i] = val;
-        questionArea.querySelectorAll('.option-btn').forEach(function(b){ b.classList.remove('selected'); });
+        questionArea.querySelectorAll('.option-btn').forEach(function(b){ b.classList.remove('selected'); b.setAttribute('aria-pressed', 'false'); });
         this.classList.add('selected');
+        this.setAttribute('aria-pressed', 'true');
       });
     });
 

@@ -1,5 +1,5 @@
 ---
-title: News
+title: 电气简报归档
 date: 2026-05-10
 comments: false
 top_img: https://img.1nuo.me/img/categoriesbanner.webp
@@ -33,12 +33,8 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 </style>
 
 <div class="news-hero">
-  <h2>📡 AI 简报</h2>
-  <p>西南交大电气 & AI 相关的每日动态聚合</p>
-  <a class="news-btn" href="/categories/AI%E7%AE%80%E6%8A%A5/">查看全部简报 →</a>
+  <h2>📡 西南交大电气简报 · 历史归档</h2>
+  <p>自动化简报于 2026 年 2 月 17 日至 5 月 20 日运行，共 29 期，已于 5 月 21 日停更。这里保留历史内容，供回顾查阅，不再更新每日动态。</p>
+  <a class="news-btn" href="/2026/05/21/2026-02-ee-intelligence-summary/">阅读汇总 →</a>
+  <p><a href="/2026/05/21/ee-intelligence-shutdown/">停更说明</a> · <a href="/categories/AI%E7%AE%80%E6%8A%A5/">全部历史简报</a></p>
 </div>
-
-<script>
-// 自动跳转到简报分类页（URL 直接访问时）
-// 让 /news/ 作为简报入口页
-</script>

@@ -24,7 +24,7 @@
   → Cloudflare 为 1nuo.me 提供 DNS、CDN 和 SSL
 ```
 
-日常工作不要求在本地执行 Hexo 构建。推送 GitHub 后由 Vercel 完成构建和部署。仓库的实际域名是 `https://1nuo.me`，不是配置文件里的示例域名。
+日常工作不要求在本地执行 Hexo 构建。推送 GitHub 后由 Vercel 完成构建和部署。正式主域名统一为 `https://www.1nuo.me`；`https://1nuo.me` 仍作为入口跳转到 www，不是示例域名。
 
 由于当前网络环境，GitHub HTTPS 推送可能被重置；SSH 推送通常更可靠：
 
@@ -37,6 +37,10 @@ git push git@github.com:1nuoiscute/1nuo-blog.git master
 ### 当前内容
 
 “探索”、博客里的评测页面，以及随机漫游、分享卡片和本地收藏工具，都是网站现有内容的一部分。探索区是互动实验和娱乐功能，评测页面是个人旅行记录与展示，不应仅按“是否有外部用户”判断其存在意义。
+
+### 已停用的碎碎念
+
+用户已确认碎碎念停用。`source/shuoshuo/` 暂时保留，不作为当前维护功能；不要在未获许可时继续修复、重启或删除它。
 
 ### 已停用的电气简报
 
@@ -56,6 +60,15 @@ git push git@github.com:1nuoiscute/1nuo-blog.git master
 
 用户考虑的是独立仓库是否继续保留，不是删除博客里的评测内容。
 
+## 后续方向与本轮范围
+
+- 本轮获准修复探索应用的交互可靠性与键盘可用性，并校正网站现状介绍。
+- 笔记、关于页面暂不改动。用户已批准实施工程增强：浏览器测试接入 CI、Atom/RSS 订阅、结构化数据、域名统一和后台抓取控制。
+- 这些工程增强在仓库中实现并本地验收，不代表已经提交、部署或在 GitHub Actions 上实际运行。主域名统一为 `https://www.1nuo.me`：已核实线上非 www 返回 307 到 www，故沿用现有方向避免循环。新增同方向 Vercel 永久重定向，部署后仍需核验平台规则的优先级、状态码和查询参数。
+- 后台使用 robots meta 与响应头 `noindex`，不使用 `Disallow` 阻断读取；不代表新增身份认证。
+- 评测快捷打卡与生活年报，以及「最近在做什么」页面可在以后讨论；尚未批准开工。
+- 其他新功能建议暂不推进。
+
 ## 重要协作边界
 
 - 删除、归档或重构较大功能前，先和用户讨论其意义，不要根据“没人关注”直接推断应该删除。
@@ -66,9 +79,9 @@ git push git@github.com:1nuoiscute/1nuo-blog.git master
 
 ## 已完成的工程修复
 
-- `_config.yml` 的站点 URL 已改为 `https://1nuo.me`。
+- `_config.yml` 的站点 URL 和 sitemap 已统一为 `https://www.1nuo.me`，与实际线上跳转方向一致。
 - 修正了 `index_generator` 和 `topindex_generator` 的 YAML 缩进。
 - 塔罗牌数据测试脚本已改为跨平台路径，命令是 `npm run test:cards`。
 - 增加了 GitHub Actions 构建校验，但它不替代 Vercel 部署。
 - 博客评测后台不再把 GitHub Token 写入 `localStorage`。
-- README 已改为介绍当前网站功能，并注明评测系统目前是隐藏的实验功能。
+- README 已改为介绍当前网站功能；评测系统保留使用，当前导航中有入口，多分类与快捷录入仍在规划中。

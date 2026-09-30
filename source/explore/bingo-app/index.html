@@ -85,6 +85,9 @@ body {
   .header-desc { border-left:none; border-top:1px solid #e7e5e4; }
   .cell { font-size:0.65em; padding:4px 2px; }
 }
+.cell { font-family:inherit; color:inherit; background:#fff; min-width:0; appearance:none; }
+button:focus-visible, a:focus-visible { outline:3px solid #5A82B8; outline-offset:3px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation:none !important; transition:none !important; scroll-behavior:auto !important; } }
 </style>
 </head>
 <body>
@@ -108,8 +111,8 @@ body {
 
 <!-- 分享弹窗 -->
 <div class="modal-overlay" id="shareModal">
-  <div class="modal-box">
-    <h3>📤 分享你的宾果</h3>
+  <div class="modal-box" role="dialog" aria-modal="true" aria-labelledby="shareTitle">
+    <h3 id="shareTitle">📤 分享你的宾果</h3>
     <div id="shareImageArea"></div>
     <p id="shareText" style="font-size:0.85em;color:#a8a29e;"></p>
     <div class="modal-btns">
@@ -138,7 +141,7 @@ body {
       var cls = 'cell';
       if (marked[i]) cls += ' marked';
       if (bingo && isBingoCell(i)) cls += ' bingo-line';
-      html += '<div class="' + cls + '" data-i="' + i + '">' + CELLS[i] + '</div>';
+      html += '<button type="button" class="' + cls + '" aria-pressed="' + !!marked[i] + '" data-i="' + i + '">' + CELLS[i] + '</button>';
     }
     document.getElementById('board').innerHTML = html;
 
@@ -148,6 +151,7 @@ body {
         marked[i] = !marked[i];
         checkBingo();
         render();
+        document.querySelector('.cell[data-i="' + i + '"]').focus();
       });
     });
 
@@ -321,13 +325,26 @@ body {
     document.getElementById('shareText').textContent = '已标记 ' + count + '/25 项';
     document.getElementById('downloadBtn').href = dataUrl;
     document.getElementById('shareModal').classList.add('active');
+    modalReturnFocus = document.activeElement;
+    document.getElementById('closeModalBtn').focus();
   });
 
-  document.getElementById('closeModalBtn').addEventListener('click', function(){
+  var modalReturnFocus = null;
+  function closeShareModal(){
     document.getElementById('shareModal').classList.remove('active');
-  });
-  document.getElementById('shareModal').addEventListener('click', function(e){
-    if (e.target === this) this.classList.remove('active');
+    var target = modalReturnFocus && modalReturnFocus.isConnected ? modalReturnFocus : document.getElementById('shareBtn');
+    target.focus();
+  }
+  document.getElementById('closeModalBtn').addEventListener('click', closeShareModal);
+  document.getElementById('shareModal').addEventListener('click', function(e){ if(e.target === this) closeShareModal(); });
+  document.addEventListener('keydown', function(e){
+    if(!document.getElementById('shareModal').classList.contains('active')) return;
+    if(e.key === 'Escape'){ e.preventDefault(); closeShareModal(); }
+    if(e.key === 'Tab'){
+      var first = document.getElementById('closeModalBtn'), last = document.getElementById('downloadBtn');
+      if(e.shiftKey && document.activeElement !== last){ e.preventDefault(); last.focus(); }
+      else if(!e.shiftKey && document.activeElement !== first){ e.preventDefault(); first.focus(); }
+    }
   });
 
   document.getElementById('resetBtn').addEventListener('click', function(){

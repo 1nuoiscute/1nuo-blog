@@ -1,67 +1,41 @@
-if theme.structured_data
+if theme.structured_data && theme.structured_data.enable && site_metadata_public(page)
+  - var jsonLdScript = null
   if page.layout === 'post'
     -
-      // https://developers.google.com/search/docs/appearance/structured-data/article
-
-      const title = page.title
-      const url = page.permalink
-      const imageVal = page.cover_type === 'img' ? page.cover : theme.avatar.img
-      const image = imageVal ? full_url_for(imageVal) : ''
-      const datePublished = page.date.toISOString()
-      const dateModified = (page.updated || page.date).toISOString()
-      const author = page.copyright_author || config.author
-      const authorHrefVal = page.copyright_author_href || theme.post_copyright.author_href || config.url
-      const authorHref = full_url_for(authorHrefVal)
-
+      // Only public articles; do not include body/excerpt or protected content.
       const jsonLd = {
-        "@context": "https://schema.org",
-        "@type": "BlogPosting",
-        "headline": title,
-        "url": url,
-        "image": image,
-        "datePublished": datePublished,
-        "dateModified": dateModified,
-        "author": [{
-          "@type": "Person",
-          "name": author,
-          "url": authorHref
+        '@context': 'https://schema.org',
+        '@type': 'BlogPosting',
+        headline: page.title,
+        url: page.permalink,
+        datePublished: page.date.toISOString(),
+        dateModified: (page.updated || page.date).toISOString(),
+        author: [{
+          '@type': 'Person',
+          name: page.copyright_author || config.author,
+          url: full_url_for(page.copyright_author_href || theme.post_copyright.author_href || config.url)
         }]
       }
-
-      jsonLdScript = JSON.stringify(jsonLd, null, 2)
-    -
-
+      const imageVal = page.cover_type === 'img' ? page.cover : theme.avatar.img
+      if (imageVal) jsonLd.image = full_url_for(imageVal)
+      jsonLdScript = site_metadata_json(jsonLd)
   else if is_home() && (!page.current || page.current === 1)
     -
-      // https://developers.google.com/search/docs/appearance/site-names#website
-
-      const baseUrl = config.url;
-      const currentPath = url_for('/');
-      const isRootOrSubdomain = currentPath.split('/').filter(Boolean).length === 0;
-
-      if (isRootOrSubdomain) {
-        const domain = new URL(config.url).hostname;
-        const alternateNames = theme.structured_data.alternate_name || [];
-
-        if (config.subtitle) {
-          alternateNames.push(config.subtitle);
-        }
-
-        if (domain) {
-          alternateNames.push(domain);
-        }
-
-        const jsonLd = {
-          "@context": "https://schema.org",
-          "@type": "WebSite",
-          "name": config.title,
-          "alternateName": alternateNames,
-          "url": full_url_for('/'),
-        }
-
-        jsonLdScript = JSON.stringify(jsonLd, null, 2)
+      // Google site-name markup applies only to the site's root homepage.
+      const currentPath = url_for('/')
+      if (currentPath.split('/').filter(Boolean).length === 0) {
+        const configuredNames = theme.structured_data.alternate_name
+        const alternateNames = Array.isArray(configuredNames) ? configuredNames.slice() : []
+        if (config.subtitle) alternateNames.push(config.subtitle)
+        alternateNames.push(new URL(config.url).hostname)
+        jsonLdScript = site_metadata_json({
+          '@context': 'https://schema.org',
+          '@type': 'WebSite',
+          name: config.title,
+          alternateName: [...new Set(alternateNames)],
+          url: full_url_for('/')
+        })
       }
-    -
-
-  script(type="application/ld+json").
-    !{jsonLdScript}
+  if jsonLdScript
+    script(type="application/ld+json").
+      !{jsonLdScript}

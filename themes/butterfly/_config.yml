@@ -1,4 +1,4 @@
-﻿# --------------------------------------
+# --------------------------------------
 # Hexo Butterfly Theme Configuration
 # If you have any questions, please refer to the documentation
 # Chinese: https://butterfly.js.org/
@@ -29,6 +29,8 @@ menu:
     随机漫游: /wander/ || fas fa-dice
     书架: /favorites/ || fas fa-bookmark
     标签: /tags/ || fas fa-tags
+    订阅（Atom）: /atom.xml || fas fa-rss
+    订阅（RSS）: /rss.xml || fas fa-rss
     简报归档: /news/ || fas fa-newspaper
     评测: /rate/ || fas fa-rocket
     数据: https://cloud.umami.is/share/sKfrnf4MKWP3znei || fas fa-chart-bar
@@ -1068,7 +1070,7 @@ Open_Graph_meta:
 # Structured Data
 # https://developers.google.com/search/docs/guides/intro-structured-data
 structured_data:
-  enable: false
+  enable: true
   # Alternate name for the site, used in structured data
   # Format: ['name1', 'name2']
   alternate_name:

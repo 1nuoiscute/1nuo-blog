@@ -34,12 +34,14 @@ body{font-family:"DM Sans","Noto Serif SC",serif;background:#f8f6f2;color:#1c191
 .btn:disabled{opacity:.4;cursor:not-allowed;transform:none}
 .positions{display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin:20px 0}
 .position-card{width:140px;text-align:center}
-.position-img{width:100px;height:145px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.08);margin:0 auto 8px;display:object-fit:cover;cursor:pointer;transition:transform .2s}
+.position-img{width:100px;height:145px;border-radius:8px;box-shadow:0 2px 10px rgba(0,0,0,.08);margin:0 auto 8px;display:block;object-fit:cover;cursor:pointer;transition:transform .2s}
 .position-label{font-size:.75em;color:#a8a29e;margin-bottom:4px}
 .position-name{font-size:.85em;font-weight:600}
 .shuffling .deck{animation:shuffle .3s cubic-bezier(0.16,1,0.3,1) 6}
 @keyframes shuffle{0%,100%{transform:rotate(0deg)}25%{transform:rotate(-4deg)}75%{transform:rotate(4deg)}}
 .footer{font-size:.7em;color:#d6d3d1;margin-top:16px}
+button:focus-visible { outline:3px solid #5A82B8; outline-offset:3px; }
+@media (prefers-reduced-motion: reduce) { *, *::before, *::after { animation:none !important; transition:none !important; } }
 </style>
 </head>
 <body>
@@ -54,6 +56,8 @@ body{font-family:"DM Sans","Noto Serif SC",serif;background:#f8f6f2;color:#1c191
   </div>
   <div id="singleResult" class="card-display"></div>
   <div id="multiResult" class="card-display"></div>
+  <p id="dataStatus" role="status" aria-live="polite"></p>
+  <button class="btn" id="retryBtn" hidden>重新加载牌组</button>
   <button class="btn" id="drawBtn">🔮 抽牌</button>
   <div class="footer">Rider-Waite Tarot</div>
 </div>
@@ -68,8 +72,46 @@ body{font-family:"DM Sans","Noto Serif SC",serif;background:#f8f6f2;color:#1c191
   var multiResult = document.getElementById('multiResult');
   var spreadSelect = document.getElementById('spreadSelect');
 
-  var cardList = (typeof CARDS !== 'undefined' && CARDS.cards) ? CARDS.cards : [];
+  var cardList = (typeof CARDS !== 'undefined' && Array.isArray(CARDS.cards)) ? CARDS.cards : [];
   var currentSpread = 'single';
+  var dataStatus = document.getElementById('dataStatus');
+  var retryBtn = document.getElementById('retryBtn');
+  var loadingData = false;
+  var drawing = false;
+
+  function dataReady(){
+    var ready = Array.isArray(cardList) && cardList.length > 0;
+    drawBtn.disabled = !ready || loadingData || drawing;
+    retryBtn.hidden = ready;
+    retryBtn.disabled = loadingData;
+    dataStatus.textContent = loadingData ? '正在重新加载牌组…' : (ready ? '' : '牌组暂时无法加载或为空，请重试。');
+    return ready;
+  }
+
+  function retryData(){
+    if(loadingData || drawing) return;
+    loadingData = true;
+    dataReady();
+    var script = document.createElement('script');
+    script.src = 'cards.json?retry=' + Date.now();
+    var settled = false;
+    var timer = setTimeout(function(){ finish(false); }, 10000);
+    function finish(loaded){
+      if(settled) return;
+      settled = true;
+      clearTimeout(timer);
+      cardList = loaded && typeof CARDS !== 'undefined' && Array.isArray(CARDS.cards) ? CARDS.cards : [];
+      loadingData = false;
+      script.onload = script.onerror = null;
+      script.remove();
+      dataReady();
+    }
+    script.onload = function(){ finish(true); };
+    script.onerror = function(){ finish(false); };
+    document.body.appendChild(script);
+  }
+  retryBtn.addEventListener('click', retryData);
+  dataReady();
 
   // 中文牌名
   var zhNames = {
@@ -163,18 +205,22 @@ body{font-family:"DM Sans","Noto Serif SC",serif;background:#f8f6f2;color:#1c191
   }
 
   function draw(){
-    if (drawBtn.disabled) return;
+    if (drawing || loadingData || !dataReady()) return;
+    drawing = true;
+    var spread = currentSpread;
     app.classList.add('shuffling');
     drawBtn.disabled = true;
     clearResult();
     setTimeout(function(){
-      var n = currentSpread==='single'?1:(currentSpread==='three'?3:5);
+      var n = spread==='single'?1:(spread==='three'?3:5);
       var picked = shuffle(cardList).slice(0,n);
       app.classList.remove('shuffling');
+      drawing = false;
+      if(!picked.length){ cardList = []; dataReady(); return; }
       if(n===1){showSingle(picked[0]);}else{showMulti(picked);}
-      drawBtn.disabled = false;
+      dataReady();
       drawBtn.textContent = '🔮 再抽一次';
-    },600);
+    }, window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 0 : 600);
   }
 
   drawBtn.addEventListener('click', draw);

@@ -1,6 +1,17 @@
 {
   "cleanUrls": true,
   "routes": [
+    {
+      "src": "/(.*)",
+      "has": [{ "type": "host", "value": "1nuo.me" }],
+      "status": 308,
+      "headers": { "Location": "https://www.1nuo.me/$1" }
+    },
+    {
+      "src": "/rate/admin(?:/.*)?",
+      "headers": { "X-Robots-Tag": "noindex, nofollow, noarchive" },
+      "continue": true
+    },
     { "handle": "filesystem" },
     { "src": "/.*", "dest": "/404/index.html", "status": 404 }
   ]
