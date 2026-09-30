@@ -113,6 +113,9 @@
         textarea#out-json { background: #0f172a; color: #10b981; font-family: 'Fira Code', monospace; font-size: 11px; height: 100px; border: none; padding: 10px; }
         #dev-msg { display: none; padding: 50px 20px; text-align: center; background: #fffbeb; border: 2px dashed #f59e0b; border-radius: 15px; color: #b45309; font-weight: bold; margin: 20px 0; }
         .time-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        .quick-checkin { margin: 20px 0; padding: 16px; background: #f5f3ff; border: 1px solid #ddd6fe; border-radius: 12px; }
+        .quick-checkin h3 { margin: 0 0 6px; color: #4f46e5; font-size: 15px; }
+        .quick-checkin p { margin: 0 0 14px; color: #64748b; font-size: 12px; }
     </style>
 </head>
 <body>
@@ -172,6 +175,24 @@
 
             <label>专属评语</label>
             <input type="text" id="in-slogan" placeholder="例如：白日依山尽，黄河入海流">
+
+            <div class="quick-checkin">
+                <h3>⚡ 快速打卡（可选补充）</h3>
+                <p>先记录地点和整体感受即可，细分评分与一句话感受都可以以后再补。</p>
+                <div class="time-row">
+                    <div>
+                        <label>整体感受（可选）</label>
+                        <select id="in-overall" onchange="updateAll()">
+                            <option value="">暂不评分</option>
+                            <option value="1">1 / 5</option><option value="2">2 / 5</option><option value="3">3 / 5</option><option value="4">4 / 5</option><option value="5">5 / 5</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>一句话（可选）</label>
+                        <input type="text" id="in-quick-note" placeholder="以后慢慢补也可以">
+                    </div>
+                </div>
+            </div>
 
             <div id="dims-container"></div>
 
@@ -404,8 +425,8 @@
         const latRaw = document.getElementById('in-lat').value.trim();
         const lngRaw = document.getElementById('in-lng').value.trim();
         const lat = Number(latRaw), lng = Number(lngRaw);
-        if (!latRaw || !lngRaw || !Number.isFinite(lat) || !Number.isFinite(lng) || lat < -90 || lat > 90 || lng < -180 || lng > 180) {
-            throw new Error('请填写有效的纬度（-90 到 90）和经度（-180 到 180）。');
+        if ((latRaw || lngRaw) && (!latRaw || !lngRaw || !Number.isFinite(lat) || !Number.isFinite(lng) || lat < -90 || lat > 90 || lng < -180 || lng > 180)) {
+            throw new Error('如果填写坐标，请同时填写有效的纬度（-90 到 90）和经度（-180 到 180）。');
         }
         if (!document.getElementById('in-name').value.trim()) throw new Error('请填写景点名称。');
     }
@@ -419,11 +440,12 @@
         });
 
         const scoresObj = {};
+        const hasDetailedScores = Array.from(document.querySelectorAll('.score-item')).some(item => item.querySelector('.in-base').value.trim() !== '');
         document.querySelectorAll('.score-item').forEach((item, i) => {
-            const base = item.querySelector('.in-base').value || "0";
+            const baseRaw = item.querySelector('.in-base').value.trim();
             const adj = item.querySelector('.in-adj').value;
             const sym = adj == "0.2" ? "+" : (adj == "-0.2" ? "-" : "");
-            scoresObj[cfg.keys[i]] = { text: base + sym, val: parseFloat(item.querySelector('.res-tag').innerText) };
+            if (baseRaw) scoresObj[cfg.keys[i]] = { text: baseRaw + sym, val: parseFloat(item.querySelector('.res-tag').innerText) };
         });
 
         const rDate = document.getElementById('in-rtime').value || new Date().toLocaleDateString('zh-CN');
@@ -447,6 +469,10 @@
             name: document.getElementById('in-name').value,
             slogan: document.getElementById('in-slogan').value,
             short_review: fullReview,
+            quick_checkin: {
+                overall: document.getElementById('in-overall').value ? Number(document.getElementById('in-overall').value) : null,
+                note: document.getElementById('in-quick-note').value.trim()
+            },
             images: document.getElementById('in-imgs').value.split('\n')
                 .filter(i => i.trim())
                 .map(img => {
@@ -468,8 +494,10 @@
             visit_time: document.getElementById('in-vtime').value,
             scores: scoresObj,
             tags: tags,
-            final_score: parseFloat(document.getElementById('v-final').innerText),
-            rating: document.getElementById('v-level').innerText
+            ...(hasDetailedScores ? {
+                final_score: parseFloat(document.getElementById('v-final').innerText),
+                rating: document.getElementById('v-level').innerText
+            } : {})
         };
 
         const resStr = JSON.stringify(json, null, 2);

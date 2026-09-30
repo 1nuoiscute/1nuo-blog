@@ -1,28 +1,8 @@
 'use strict';
 
-// Metadata is discovery, not access control. Never advertise non-public entries.
-function isPublicMetadata(entry = {}) {
-  if (entry.password || entry.private || entry.hidden || entry.hide || entry.noindex ||
-      entry.draft === true || entry.published === false || entry.sitemap === false) return false;
-  if (/\bnoindex\b/i.test(String(entry.robots || ''))) return false;
-  const paths = [entry.source, entry.path, entry.permalink].filter(Boolean);
-  return paths.every(value => {
-    let pathname = String(value).replace(/\\/g, '/');
-    try { pathname = decodeURIComponent(new URL(pathname, 'https://metadata.invalid/').pathname); }
-    catch { return false; }
-    pathname = pathname.replace(/^\/+/, '');
-    if (/^rate\/(?:admin|rateimg)(?:\/|$)/i.test(pathname) ||
-        /^explore\/(?:app|[^/]+-app|shared)(?:\/|$)/i.test(pathname)) return false;
-    // Only rendered Markdown/HTML and extensionless routes belong in metadata.
-    return !/\.[^/]+$/.test(pathname) || /\.(?:md|html?)$/i.test(pathname);
-  });
-}
-
-function safeJsonLd(value) {
-  return JSON.stringify(value, null, 2)
-    .replace(/</g, '\\u003c').replace(/>/g, '\\u003e').replace(/&/g, '\\u0026')
-    .replace(/\u2028/g, '\\u2028').replace(/\u2029/g, '\\u2029');
-}
+// The public/private predicate lives in metadata-policy so the sitemap, feed,
+// structured data and content graph cannot drift apart.
+const { isPublicMetadata, safeJsonLd } = require('./metadata-policy');
 
 function register(site) {
   site.extend.helper.register('site_metadata_public', isPublicMetadata);

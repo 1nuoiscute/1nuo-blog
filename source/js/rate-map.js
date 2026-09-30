@@ -39,6 +39,14 @@
     return span.innerHTML
   }
 
+  // Quick check-ins may not carry a score yet; never render "undefined".
+  function scoreLabel(attraction) {
+    if (Number.isFinite(attraction.final_score)) return attraction.final_score
+    const quick = attraction.quick_checkin || {}
+    if (quick.overall) return '⚡ ' + quick.overall + '/5'
+    return '待评'
+  }
+
   function loadTencentMap(key) {
     if (window.TMap && window.TMap.Map) return Promise.resolve(window.TMap)
     if (loadPromise) return loadPromise
@@ -87,7 +95,7 @@
     map.setCenter(point.position)
     map.setZoom(15)
     infoWindow.setPosition(point.position)
-    infoWindow.setContent(`<strong>${escapeHtml(point.attraction.name)}</strong><br><span>${escapeHtml(point.attraction.location)}</span><br><span>评分 ${escapeHtml(point.attraction.final_score)}</span>`)
+    infoWindow.setContent(`<strong>${escapeHtml(point.attraction.name)}</strong><br><span>${escapeHtml(point.attraction.location)}</span><br><span>评分 ${escapeHtml(scoreLabel(point.attraction))}</span>`)
     infoWindow.open()
   }
 
@@ -97,7 +105,7 @@
     const cities = document.getElementById('travel-map-cities')
     if (!list) return
     list.innerHTML = attractions.map(function (item, index) {
-      return `<li><button class="nuo-map-place" type="button" data-map-id="${escapeHtml(item.id)}" aria-label="在地图查看${escapeHtml(item.name)}"><span class="nuo-map-place-index">${index + 1}</span><span class="nuo-map-place-name">${escapeHtml(item.name)}</span><span class="nuo-map-place-score">${escapeHtml(item.final_score)}</span></button></li>`
+      return `<li><button class="nuo-map-place" type="button" data-map-id="${escapeHtml(item.id)}" aria-label="在地图查看${escapeHtml(item.name)}"><span class="nuo-map-place-index">${index + 1}</span><span class="nuo-map-place-name">${escapeHtml(item.name)}</span><span class="nuo-map-place-score">${escapeHtml(scoreLabel(item))}</span></button></li>`
     }).join('')
     count.textContent = attractions.length
     cities.textContent = new Set(attractions.map(function (item) {

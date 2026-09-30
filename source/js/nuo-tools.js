@@ -4,6 +4,7 @@
   var BOOKMARKS_KEY = 'nuo:bookmarks:v1';
   var READING_KEY = 'nuo:reading:v1';
   var HISTORY_KEY = 'nuo:history:v1';
+  var READING_MODE_KEY = 'nuo:reading-mode:v1';
   var currentInfo = null;
   var scrollTimer = null;
   var wanderPromise = null;
@@ -137,6 +138,40 @@
     clearTimeout(scrollTimer);
     var oldProgress = document.querySelector('.nuo-reading-progress');
     if (oldProgress) oldProgress.remove();
+  }
+
+  function readingMode() {
+    var state = readStorage(READING_MODE_KEY, {});
+    return { enabled: state.enabled === true, scale: Math.min(1.4, Math.max(0.85, Number(state.scale) || 1)) };
+  }
+
+  // Reading mode is a per-browser preference; it never touches the server.
+  function applyReadingMode(canRead) {
+    var state = readingMode();
+    var enabled = canRead && state.enabled;
+    document.body.classList.toggle('nuo-reading-mode', enabled);
+    var button = document.querySelector('.nuo-content-tools [data-action="reading-mode"]');
+    if (button) {
+      button.textContent = enabled ? '☰ 退出阅读模式' : '☰ 阅读模式';
+      button.classList.toggle('is-active', enabled);
+      button.setAttribute('aria-pressed', enabled ? 'true' : 'false');
+    }
+    var smaller = document.querySelector('.nuo-content-tools [data-action="font-smaller"]');
+    var larger = document.querySelector('.nuo-content-tools [data-action="font-larger"]');
+    if (smaller) smaller.hidden = !enabled;
+    if (larger) larger.hidden = !enabled;
+    var article = document.getElementById('article-container');
+    if (article) {
+      article.style.fontSize = enabled && state.scale !== 1
+        ? (1.12 * state.scale).toFixed(2) + 'rem'
+        : '';
+    }
+  }
+
+  function setReadingMode(patch) {
+    var state = readingMode();
+    writeStorage(READING_MODE_KEY, { enabled: patch.enabled === undefined ? state.enabled : patch.enabled, scale: patch.scale || state.scale });
+    applyReadingMode(true);
   }
 
   function initReadingProgress() {
@@ -396,11 +431,20 @@
     currentInfo = getPageInfo();
     var existing = document.querySelector('.nuo-content-tools');
     if (existing) existing.remove();
-    if (!currentInfo || currentInfo.path === '/wander' || currentInfo.path === '/favorites') return;
+    if (!currentInfo || currentInfo.path === '/wander' || currentInfo.path === '/favorites') {
+      applyReadingMode(false);
+      return;
+    }
     recordVisit();
 
     var host = document.getElementById('post') || document.getElementById('page');
-    if (!host) return;
+    if (!host) { applyReadingMode(false); return; }
+    var article = host.querySelector('#article-container');
+    // Notes with substantive prose are readable; directory-only pages are not.
+    var isNote = currentInfo.kind === '笔记' && article && !article.querySelector('.note-collections')
+      && article.textContent.trim().length > 500;
+    var canRead = Boolean(document.getElementById('post')) || isNote;
+
     var toolbar = document.createElement('div');
     toolbar.className = 'nuo-content-tools';
     toolbar.setAttribute('aria-label', '页面工具');
@@ -408,19 +452,29 @@
     toolbar.appendChild(makeButton('▣ 分享卡片', 'share'));
     toolbar.appendChild(makeButton('♡ 收藏', 'bookmark'));
     toolbar.appendChild(makeButton('○ 标记已读', 'read'));
+    if (canRead) {
+      toolbar.appendChild(makeButton('☰ 阅读模式', 'reading-mode'));
+      toolbar.appendChild(makeButton('A−', 'font-smaller', 'nuo-tool-small'));
+      toolbar.appendChild(makeButton('A＋', 'font-larger', 'nuo-tool-small'));
+    }
     var spacer = document.createElement('span'); spacer.className = 'nuo-tool-spacer'; toolbar.appendChild(spacer);
+    var graphLink = document.createElement('a'); graphLink.className = 'nuo-tool-link'; graphLink.href = '/graph/'; graphLink.textContent = '内容地图'; toolbar.appendChild(graphLink);
     var link = document.createElement('a'); link.className = 'nuo-tool-link'; link.href = '/favorites/'; link.textContent = '书架'; toolbar.appendChild(link);
     toolbar.addEventListener('click', function (event) {
       var action = event.target.dataset.action;
+      var state = readingMode();
       if (action === 'wander') wander();
       if (action === 'share') showShareModal(event.target);
       if (action === 'bookmark') toggleBookmark();
       if (action === 'read') toggleRead();
+      if (action === 'reading-mode') setReadingMode({ enabled: !state.enabled });
+      if (action === 'font-smaller') setReadingMode({ scale: Math.max(0.85, Math.round((state.scale - 0.1) * 100) / 100) });
+      if (action === 'font-larger') setReadingMode({ scale: Math.min(1.4, Math.round((state.scale + 0.1) * 100) / 100) });
     });
-    var article = host.querySelector('#article-container');
     if (article) host.insertBefore(toolbar, article);
     else host.insertBefore(toolbar, host.firstChild);
     updateButtonState();
+    applyReadingMode(canRead);
     initReadingProgress();
   }
 
@@ -516,6 +570,13 @@
   window.NuoTools = { wander: wander, refresh: boot };
   document.addEventListener('DOMContentLoaded', boot);
   document.addEventListener('pjax:complete', boot);
+  document.addEventListener('keydown', function (event) {
+    if (event.key !== 'Escape') return;
+    if (!document.body.classList.contains('nuo-reading-mode')) return;
+    // Let the share dialog own Escape while it is open.
+    if (document.querySelector('.nuo-share-modal')) return;
+    setReadingMode({ enabled: false });
+  });
   document.addEventListener('pjax:send', function () {
     cleanupReading(); currentInfo = null;
     if (closeShareModal) closeShareModal();

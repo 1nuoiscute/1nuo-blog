@@ -194,15 +194,15 @@ comments: false
     const k = document.getElementById('filter-search').value.toLowerCase(), s = document.getElementById('filter-sort').value;
     let res = globalData.attractions.filter(item => {
       const loc = parseLocation(item.location);
-      const searchStr = (item.name + (item.slogan||'') + (item.short_review||'') + item.tags.map(t=>t.name).join('')).toLowerCase();
+      const searchStr = (item.name + (item.slogan||'') + (item.short_review||'') + (item.quick_checkin?.note||'') + (item.tags||[]).map(t=>t.name).join('')).toLowerCase();
       return (p === '全部省份' || loc.province === p) && (c === '全部城市' || loc.city === c) && (!k || searchStr.includes(k));
     });
     res.sort((a, b) => {
-      if (s === 'final_score') return b.final_score - a.final_score;
-      if (s === 'arch') return b.scores.architecture.val - a.scores.architecture.val;
-      if (s === 'cult') return b.scores.culture.val - a.scores.culture.val;
-      if (s === 'exp') return b.scores.experience.val - a.scores.experience.val;
-      if (s === 'val') return b.scores.value.val - a.scores.value.val;
+      if (s === 'final_score') return (b.final_score ?? -1) - (a.final_score ?? -1);
+      if (s === 'arch') return (b.scores?.architecture?.val ?? -1) - (a.scores?.architecture?.val ?? -1);
+      if (s === 'cult') return (b.scores?.culture?.val ?? -1) - (a.scores?.culture?.val ?? -1);
+      if (s === 'exp') return (b.scores?.experience?.val ?? -1) - (a.scores?.experience?.val ?? -1);
+      if (s === 'val') return (b.scores?.value?.val ?? -1) - (a.scores?.value?.val ?? -1);
       if (s === 'visit_time') return new Date(b.visit_time.replace(/\./g, '/')) - new Date(a.visit_time.replace(/\./g, '/'));
       return 0;
     });
@@ -216,9 +216,11 @@ comments: false
       if (myChart) myChart.clear();
       return;
     }
+    const rated = data.filter(i => Number.isFinite(i.final_score) && i.scores?.architecture && i.scores?.culture && i.scores?.experience && i.scores?.value);
+    if (!rated.length) { document.getElementById('global-avg-score').innerText = '—'; if (myChart) myChart.clear(); return; }
     let arch=0, cult=0, exp=0, val=0, final=0;
-    data.forEach(i => { arch+=i.scores.architecture.val; cult+=i.scores.culture.val; exp+=i.scores.experience.val; val+=i.scores.value.val; final+=i.final_score; });
-    document.getElementById('global-avg-score').innerText = (final/len).toFixed(2);
+    rated.forEach(i => { arch+=i.scores.architecture.val; cult+=i.scores.culture.val; exp+=i.scores.experience.val; val+=i.scores.value.val; final+=i.final_score; });
+    document.getElementById('global-avg-score').innerText = (final/rated.length).toFixed(2);
     if (typeof echarts === 'undefined') return;
     if (!myChart) myChart = echarts.init(document.getElementById('average-bar-chart'));
     myChart.setOption({
@@ -237,27 +239,35 @@ comments: false
     const colors = { 'S': '#FACA30', 'A': '#e74c3c', 'B': '#3498db', 'C': '#2ecc71' };
     data.forEach(item => {
       const idx = globalData.attractions.findIndex(a => a.id === item.id);
-      const tags = item.tags.map(t => `<span style="background:${colors[t.tier]||'#94a3b8'}; color:#fff; padding:2px 6px; border-radius:3px; font-size:10px;">${t.name}</span>`).join(' ');
-      
-      // 这里的 row 保持原来的变量名，但样式已在上面 CSS 中修复
-      const row = (l, s) => `<div class="nuo-score-row"><div class="nuo-score-label">${l}</div><div class="nuo-score-bar-bg"><div class="nuo-score-bar-fill" style="width:${(s.val/10)*100}%;"></div></div><div class="nuo-score-value">${s.text}</div></div>`;
+      const tags = (item.tags || []).map(t => `<span style="background:${colors[t.tier]||'#94a3b8'}; color:#fff; padding:2px 6px; border-radius:3px; font-size:10px;">${t.name}</span>`).join(' ');
+      const quick = item.quick_checkin || {};
+      // Quick check-ins have no dimension scores yet; keep the card honest instead of showing zeros.
+      const detailed = ['architecture', 'culture', 'experience', 'value'].every(key => item.scores && item.scores[key]);
+      const badge = item.rating || (quick.overall ? '⚡' : '—');
+      const row = (l, s) => detailed
+        ? `<div class="nuo-score-row"><div class="nuo-score-label">${l}</div><div class="nuo-score-bar-bg"><div class="nuo-score-bar-fill" style="width:${(s.val/10)*100}%;"></div></div><div class="nuo-score-value">${s.text}</div></div>`
+        : '';
+      const scoreTail = detailed
+        ? `<strong style="font-size: 20px; color: #1e293b;">${item.final_score}</strong>`
+        : `<div style="font-size: 11px; color: #94a3b8;">${quick.overall ? `快速打卡 ${quick.overall}/5 · 待补细分评分` : '待补评分'}</div>`;
 
       container.innerHTML += `
         <div class="nuo-card">
-          <div class="nuo-rating-badge">${item.rating}</div>
+          <div class="nuo-rating-badge">${badge}</div>
           <div style="margin-bottom: 12px; width: 88%;">
             <h3 style="margin: 0; font-size: 16px; color: #1e293b; display: flex; align-items: center; flex-wrap: wrap;">${item.name} 
               ${item.link ? `<a href="${item.link}" target="_blank" class="nuo-detail-link">📝 深度评测 ➔</a>` : `<span class="nuo-detail-link nuo-light-link" onclick="openModal(${idx})">💬 简评 & 照片</span>`}</h3>
             ${item.slogan ? `<div style="font-size: 11px; color: #64748b; margin-top: 4px; font-style: italic; opacity: 0.8;">「 ${item.slogan} 」</div>` : ''}
+            ${!detailed && quick.note ? `<div style="font-size: 12px; color: #475569; margin-top: 6px;">⚡ ${quick.note}</div>` : ''}
           </div>
-          ${row('建筑视觉', item.scores.architecture)}
-          ${row('文化共鸣', item.scores.culture)}
-          ${row('游览体验', item.scores.experience)}
-          ${row('质价比', item.scores.value)}
+          ${row('建筑视觉', item.scores && item.scores.architecture)}
+          ${row('文化共鸣', item.scores && item.scores.culture)}
+          ${row('游览体验', item.scores && item.scores.experience)}
+          ${row('质价比', item.scores && item.scores.value)}
           <div style="margin-top: 10px; display: flex; gap: 4px; flex-wrap: wrap;">${tags}</div>
           <div style="margin-top: 12px; padding-top: 10px; border-top: 1px solid #f1f5f9; display:flex; justify-content:space-between; align-items:center;">
             <div style="font-size: 10px; color: #94a3b8;">📍 ${item.location}<br>🗓️ ${item.visit_time}</div>
-            <div style="text-align: right;"><strong style="font-size: 20px; color: #1e293b;">${item.final_score}</strong></div>
+            <div style="text-align: right;">${scoreTail}</div>
           </div>
         </div>`;
     });
@@ -290,8 +300,11 @@ comments: false
   function renderPKComparison() {
     const area = document.getElementById('pk-comparison-area');
     const [a, b] = pkSelected;
+    // Quick check-ins have no dimension scores; compare what actually exists.
+    const val = (item, key) => (item.scores && item.scores[key] ? item.scores[key].val : 0);
+    const text = (item, key) => (item.scores && item.scores[key] ? item.scores[key].text : '待评');
     const row = (l, va, vb, ta, tb) => `<div style="margin-bottom: 20px;"><div style="text-align: center; font-size: 12px; font-weight: bold; color: #64748b; margin-bottom: 8px;">${l}</div><div style="display: flex; align-items: center; gap: 15px;"><div style="flex: 1; text-align: right;"><span style="font-weight: 800;">${ta}</span>${va>vb?'<span class="pk-win-label">🏆</span>':''}<div class="nuo-score-bar-bg" style="transform: rotate(180deg);"><div class="nuo-score-bar-fill" style="width: ${va*10}%"></div></div></div><div style="flex: 1; text-align: left;">${vb>va?'<span class="pk-win-label">🏆</span>':''}<span style="font-weight: 800;">${tb}</span><div class="nuo-score-bar-bg"><div class="nuo-score-bar-fill" style="width: ${vb*10}%"></div></div></div></div></div>`;
-    area.innerHTML = row('综合评分', a.final_score, b.final_score, a.final_score, b.final_score)+row('建筑视觉', a.scores.architecture.val, b.scores.architecture.val, a.scores.architecture.text, b.scores.architecture.text)+row('文化共鸣', a.scores.culture.val, b.scores.culture.val, a.scores.culture.text, b.scores.culture.text)+row('游览体验', a.scores.experience.val, b.scores.experience.val, a.scores.experience.text, b.scores.experience.text)+row('质价比', a.scores.value.val, b.scores.value.val, a.scores.value.text, b.scores.value.text);
+    area.innerHTML = row('综合评分', a.final_score||0, b.final_score||0, a.final_score||'待评', b.final_score||'待评')+row('建筑视觉', val(a,'architecture'), val(b,'architecture'), text(a,'architecture'), text(b,'architecture'))+row('文化共鸣', val(a,'culture'), val(b,'culture'), text(a,'culture'), text(b,'culture'))+row('游览体验', val(a,'experience'), val(b,'experience'), text(a,'experience'), text(b,'experience'))+row('质价比', val(a,'value'), val(b,'value'), text(a,'value'), text(b,'value'));
     area.style.display = 'block';
   }
 

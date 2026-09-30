@@ -57,7 +57,10 @@ const admin = read('source/rate/admin/index.html');
 source = admin.slice(admin.indexOf('    function validateRecord()'), admin.indexOf('    function generateJSON('));
 nodes = { 'in-lat': { value: '' }, 'in-lng': { value: '' }, 'in-name': { value: 'Test' } };
 context = { document: { getElementById: id => nodes[id] } }; vm.runInNewContext(source, context);
-assert.throws(() => context.validateRecord()); checks++;
+// Coordinates are optional now (quick check-in), but must be valid when given.
+context.validateRecord(); checks++;
 nodes['in-lat'].value = '91'; nodes['in-lng'].value = '110'; assert.throws(() => context.validateRecord()); checks++;
-nodes['in-lat'].value = '0'; nodes['in-lng'].value = '0'; context.validateRecord(); checks++;
+nodes['in-lat'].value = '34.8'; nodes['in-lng'].value = ''; assert.throws(() => context.validateRecord()); checks++;
+nodes['in-lat'].value = ''; nodes['in-lng'].value = ''; nodes['in-name'].value = ''; assert.throws(() => context.validateRecord()); checks++;
+nodes['in-name'].value = 'Test'; nodes['in-lat'].value = '0'; nodes['in-lng'].value = '0'; context.validateRecord(); checks++;
 console.log(`PASS: ${checks} syntax, accessibility and behavior regression checks`);

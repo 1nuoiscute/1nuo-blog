@@ -1,8 +1,8 @@
 /* =========================================
-   1nuo.me 自定义样式 — 浅粉主题
+   1nuo.me 鑷畾涔夋牱寮?鈥?娴呯矇涓婚
    ========================================= */
 
-/* --- 文章阅读体验 --- */
+/* --- 鏂囩珷闃呰浣撻獙 --- */
 #article-container {
   font-size: 1rem;
   line-height: 1.8;
@@ -25,7 +25,7 @@
 #article-container h3 { font-size: 1.2em; }
 #article-container h4 { font-size: 1.05em; }
 
-/* 正文超链接 */
+/* 姝ｆ枃瓒呴摼鎺?*/
 #article-container a {
   text-decoration: none;
   border-bottom: 1px solid transparent;
@@ -35,7 +35,7 @@
   border-bottom-color: currentColor;
 }
 
-/* 文章卡片微调 */
+/* 鏂囩珷鍗＄墖寰皟 */
 .recent-post-item {
   border-radius: 12px;
   overflow: hidden;
@@ -61,13 +61,13 @@
   object-fit: cover;
 }
 
-/* 侧栏卡片 */
+/* 渚ф爮鍗＄墖 */
 .card-widget {
   border-radius: 12px;
   overflow: hidden;
 }
 
-/* 按钮统一圆角 */
+/* 鎸夐挳缁熶竴鍦嗚 */
 #article-container .btn-wrap .btn,
 a.article-meta__categories,
 .comment-button,
@@ -76,12 +76,12 @@ a.article-meta__categories,
   border-radius: 10px;
 }
 
-/* 头部导航 */
+/* 澶撮儴瀵艰埅 */
 #nav {
   transition: background 0.3s cubic-bezier(0.16, 1, 0.3, 1);
 }
 
-/* 页面淡入动画 */
+/* 椤甸潰娣″叆鍔ㄧ敾 */
 main {
   animation: pageIn 0.4s cubic-bezier(0.16, 1, 0.3, 1) both;
 }
@@ -98,25 +98,25 @@ main {
   }
 }
 
-/* --- 首页标题 — 流式缩放 --- */
+/* --- 棣栭〉鏍囬 鈥?娴佸紡缂╂斁 --- */
 #site-title {
   font-size: clamp(1.3rem, 4vw, 2rem) !important;
   font-weight: 700 !important;
 }
 
-/* 首页副标题打字效果 */
+/* 棣栭〉鍓爣棰樻墦瀛楁晥鏋?*/
 #site-subtitle {
   font-size: clamp(0.9rem, 2.5vw, 1.3rem) !important;
   font-weight: 600 !important;
 }
 
-/* --- 侧栏作者名 --- */
+/* --- 渚ф爮浣滆€呭悕 --- */
 #aside-content .author-info-name {
   font-weight: 700 !important;
   font-size: clamp(1rem, 2vw, 1.3rem) !important;
 }
 
-/* --- 站点标题用系统原生字体 --- */
+/* --- 绔欑偣鏍囬鐢ㄧ郴缁熷師鐢熷瓧浣?--- */
 #site-title,
 #site-subtitle,
 #nav .site-name,
@@ -124,20 +124,20 @@ main {
   letter-spacing: -0.01em;
 }
 
-/* --- 移动端文章字号微调 --- */
+/* --- 绉诲姩绔枃绔犲瓧鍙峰井璋?--- */
 @media (max-width: 768px) {
   #article-container { font-size: 0.95rem; }
   .recent-post-item { margin-bottom: 12px; }
 }
 
-/* --- 文章卡片整张可点击 --- */
+/* --- 鏂囩珷鍗＄墖鏁村紶鍙偣鍑?--- */
 .recent-post-item {
   cursor: pointer;
 }
 
 
 
-/* --- 焦点状态 --- */
+/* --- 鐒︾偣鐘舵€?--- */
 a:focus-visible,
 button:focus-visible,
 .btn:focus-visible,
@@ -149,7 +149,7 @@ textarea:focus-visible {
   border-radius: 4px;
 }
 
-/* --- 个人工具栏：收藏、已读、分享与随机漫游 --- */
+/* --- 涓汉宸ュ叿鏍忥細鏀惰棌銆佸凡璇汇€佸垎浜笌闅忔満婕父 --- */
 .nuo-content-tools {
   display: flex;
   flex-wrap: wrap;
@@ -188,6 +188,7 @@ textarea:focus-visible {
   transform: translateY(-1px);
 }
 .nuo-tool-btn:disabled { cursor: wait; opacity: .65; }
+.nuo-tool-btn.nuo-tool-small { min-width: 34px; padding: 0 8px; justify-content: center; }
 .nuo-tool-btn:focus-visible,
 .nuo-tool-link:focus-visible { outline-offset: 2px; }
 .nuo-tool-spacer { flex: 1; }
@@ -270,3 +271,288 @@ textarea:focus-visible {
 
 /* Preserve the native hidden state for styled buttons and controls. */
 [hidden] { display: none !important; }
+
+/* --- 闃呰妯″紡 --- */
+body.nuo-reading-mode #sidebar,
+body.nuo-reading-mode #rightside,
+body.nuo-reading-mode #aside-content,
+body.nuo-reading-mode .relatedPosts,
+body.nuo-reading-mode #post-comment {
+  display: none !important;
+}
+body.nuo-reading-mode #content-inner,
+body.nuo-reading-mode #page,
+body.nuo-reading-mode #post {
+  max-width: 820px;
+  margin: 0 auto;
+}
+body.nuo-reading-mode #article-container {
+  font-size: 1.12rem;
+  line-height: 2;
+}
+body.nuo-reading-mode #article-container p { margin: 1.5em 0; }
+body.nuo-reading-mode #article-container img { border-radius: 12px; }
+.nuo-reading-mode-hint {
+  margin: 0 auto 1rem;
+  color: #a58b96;
+  font-size: .78rem;
+  text-align: center;
+}
+
+/* =========================================
+   内容地图（语义令牌，浅色/深色独立取值）
+   ========================================= */
+.nuo-graph-page {
+  --graph-surface: #ffffff;
+  --graph-surface-alt: #fdf7fa;
+  --graph-border: #f0e2e8;
+  --graph-chip: #ffffff;
+  --graph-chip-border: #eadde3;
+  --graph-chip-text: #7b5968;
+  --graph-chip-active-bg: #503845;
+  --graph-chip-active-text: #ffffff;
+  --graph-text: #503845;
+  --graph-body: #856b77;
+  --graph-muted: #a58b96;
+  --graph-accent: #cf5f91;
+  --graph-accent-soft: #fff2f7;
+  --graph-edge: #d9a7c0;
+  --graph-label: #6c4f5d;
+  --graph-halo: #ffffff;
+  --graph-focus: #cf5f91;
+  --graph-shadow: 0 10px 30px rgba(80, 56, 69, .14);
+  --graph-radius: 18px;
+}
+
+[data-theme='dark'] .nuo-graph-page {
+  --graph-surface: var(--card-bg, #1f1f1f);
+  --graph-surface-alt: rgba(255, 255, 255, .04);
+  --graph-border: rgba(255, 255, 255, .18);
+  --graph-chip: rgba(255, 255, 255, .07);
+  --graph-chip-border: rgba(255, 255, 255, .2);
+  --graph-chip-text: #e8dfe4;
+  --graph-chip-active-bg: #f2a2c8;
+  --graph-chip-active-text: #3a2a31;
+  --graph-text: #f2eaee;
+  --graph-body: #cdbfc7;
+  --graph-muted: #a99ba3;
+  --graph-accent: #f2a2c8;
+  --graph-accent-soft: rgba(242, 162, 200, .16);
+  --graph-edge: rgba(242, 162, 200, .55);
+  --graph-label: #f2eaee;
+  --graph-halo: #1f1f1f;
+  --graph-focus: #f2a2c8;
+  --graph-shadow: 0 10px 30px rgba(0, 0, 0, .5);
+}
+
+.nuo-graph-note { color: var(--graph-body); font-size: .92rem; }
+.nuo-graph-status { margin: 0 0 12px; color: var(--graph-muted); font-size: .82rem; }
+
+/* 数据概览 */
+.nuo-graph-stats { display: flex; flex-wrap: wrap; gap: 10px; margin: 16px 0 4px; }
+.nuo-graph-stat {
+  min-width: 96px;
+  padding: 10px 14px;
+  border: 1px solid var(--graph-border);
+  border-radius: 14px;
+  background: var(--graph-surface-alt);
+}
+.nuo-graph-stat strong { display: block; color: var(--graph-text); font-size: 1.32rem; line-height: 1.1; }
+.nuo-graph-stat span { color: var(--graph-muted); font-size: .74rem; }
+
+/* 筛选 */
+.nuo-graph-filters { display: grid; gap: 10px; margin: 16px 0 14px; }
+.nuo-graph-filter-row { display: flex; gap: 10px; align-items: flex-start; }
+.nuo-graph-filter-label { flex: 0 0 auto; padding-top: 8px; color: var(--graph-muted); font-size: .74rem; font-weight: 700; letter-spacing: .08em; }
+.nuo-graph-topics, .nuo-graph-kinds { display: flex; flex-wrap: wrap; gap: 8px; }
+.nuo-graph-topic,
+.nuo-graph-kind,
+.nuo-graph-legend-item,
+.nuo-graph-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 34px;
+  padding: 0 13px;
+  border: 1px solid var(--graph-chip-border);
+  border-radius: 999px;
+  background: var(--graph-chip);
+  color: var(--graph-chip-text);
+  font-size: .78rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: border-color .2s cubic-bezier(.16, 1, .3, 1), background-color .2s, color .2s, transform .12s;
+}
+.nuo-graph-topic:hover,
+.nuo-graph-kind:hover,
+.nuo-graph-btn:hover { border-color: var(--graph-accent); color: var(--graph-accent); transform: translateY(-1px); }
+.nuo-graph-topic:active,
+.nuo-graph-kind:active,
+.nuo-graph-btn:active { transform: translateY(0) scale(.98); }
+.nuo-graph-topic.is-active,
+.nuo-graph-btn[aria-pressed='true'] { border-color: var(--graph-accent); background: var(--graph-accent-soft); color: var(--graph-accent); }
+.nuo-graph-kind.is-active { border-color: var(--graph-accent); background: var(--graph-chip-active-bg); color: var(--graph-chip-active-text); }
+.nuo-graph-topic:focus-visible,
+.nuo-graph-kind:focus-visible,
+.nuo-graph-btn:focus-visible { outline: 2px solid var(--graph-focus); outline-offset: 2px; }
+.nuo-graph-kind i,
+.nuo-graph-legend-item i { width: 9px; height: 9px; border-radius: 50%; flex: 0 0 auto; }
+.nuo-graph-icon { display: block; }
+
+/* 画布 */
+.nuo-graph-stage { position: relative; }
+.nuo-graph-canvas {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1000 / 680;
+  overflow: hidden;
+  border: 1px solid var(--graph-border);
+  border-radius: var(--graph-radius);
+  background:
+    radial-gradient(circle at 22% 18%, rgba(242, 162, 200, .10), transparent 55%),
+    radial-gradient(circle at 78% 82%, rgba(90, 130, 184, .10), transparent 55%),
+    var(--graph-surface);
+}
+.nuo-graph-skeleton {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(100deg, transparent 20%, rgba(242, 162, 200, .14) 45%, transparent 70%) var(--graph-surface-alt);
+  background-size: 220% 100%;
+  animation: nuo-graph-shimmer 1.5s linear infinite;
+}
+@keyframes nuo-graph-shimmer {
+  from { background-position: 120% 0; }
+  to { background-position: -120% 0; }
+}
+.nuo-graph-canvas svg { display: block; width: 100%; height: 100%; cursor: grab; touch-action: none; }
+.nuo-graph-canvas svg.is-dragging { cursor: grabbing; }
+.nuo-graph-viewport { transition: transform .12s ease-out; }
+.nuo-graph-edge { fill: none; stroke: var(--graph-edge); stroke-linecap: round; transition: opacity .18s; }
+.nuo-graph-node { cursor: pointer; }
+.nuo-graph-node circle { transition: opacity .18s; }
+.nuo-graph-halo { opacity: .16; }
+.nuo-graph-dot { stroke: var(--graph-halo); stroke-width: 1.5; }
+.nuo-graph-label {
+  fill: var(--graph-label);
+  font-size: 12px;
+  font-weight: 600;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity .16s;
+  paint-order: stroke;
+  stroke: var(--graph-halo);
+  stroke-width: 3.5px;
+  stroke-linejoin: round;
+}
+.nuo-graph-node.is-labeled .nuo-graph-label,
+.nuo-graph-node:focus-visible .nuo-graph-label,
+.nuo-graph-canvas svg.has-focus .nuo-graph-node:not(.is-dim) .nuo-graph-label { opacity: 1; }
+.nuo-graph-node:focus-visible .nuo-graph-dot { stroke: var(--graph-focus); stroke-width: 3; }
+.nuo-graph-canvas svg.has-focus .nuo-graph-node.is-dim,
+.nuo-graph-canvas svg.has-focus .nuo-graph-edge.is-dim { opacity: .1; }
+.nuo-graph-cluster-label {
+  fill: var(--graph-muted);
+  font-size: 15px;
+  font-weight: 700;
+  letter-spacing: .12em;
+  opacity: .5;
+  pointer-events: none;
+  paint-order: stroke;
+  stroke: var(--graph-halo);
+  stroke-width: 4px;
+  stroke-linejoin: round;
+}
+.nuo-graph-canvas svg.has-focus .nuo-graph-cluster-labels { opacity: .3; }
+
+/* 浮层：图例、控制、信息卡、空状态 */
+.nuo-graph-legend {
+  position: absolute;
+  top: 14px;
+  left: 14px;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  max-width: calc(100% - 28px);
+  pointer-events: none;
+}
+.nuo-graph-legend-item { min-height: 28px; padding: 0 10px; background: var(--graph-surface); cursor: default; font-size: .72rem; }
+.nuo-graph-controls {
+  position: absolute;
+  right: 14px;
+  bottom: 14px;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  justify-content: flex-end;
+}
+.nuo-graph-controls .nuo-graph-btn { min-width: 34px; justify-content: center; background: var(--graph-surface); box-shadow: var(--graph-shadow); }
+.nuo-graph-card {
+  position: absolute;
+  z-index: 3;
+  width: 216px;
+  padding: 10px 12px;
+  border: 1px solid var(--graph-chip-border);
+  border-radius: 12px;
+  background: var(--graph-surface);
+  box-shadow: var(--graph-shadow);
+  font-size: .78rem;
+  line-height: 1.5;
+  pointer-events: none;
+}
+.nuo-graph-card strong {
+  display: -webkit-box;
+  overflow: hidden;
+  color: var(--graph-text);
+  font-size: .86rem;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+}
+.nuo-graph-card-meta { display: block; margin-top: 3px; color: var(--graph-muted); font-size: .72rem; }
+.nuo-graph-card-topics { display: block; margin-top: 5px; color: var(--graph-body); }
+.nuo-graph-empty {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  border: 1px solid var(--graph-border);
+  border-radius: var(--graph-radius);
+  background: var(--graph-surface);
+  color: var(--graph-body);
+  text-align: center;
+}
+
+/* 降级列表 */
+.nuo-graph-fallback { margin-top: 22px; }
+.nuo-graph-cluster { margin-bottom: 20px; content-visibility: auto; contain-intrinsic-size: auto 220px; }
+.nuo-graph-cluster h3 { margin-bottom: 8px; color: var(--graph-text); font-size: 1rem; }
+.nuo-graph-cluster ul { margin: 0; padding-left: 18px; }
+.nuo-graph-cluster li { margin-bottom: 6px; color: var(--graph-body); font-size: .86rem; }
+.nuo-graph-cluster li span { margin-left: 6px; color: var(--graph-muted); font-size: .74rem; }
+
+@media (max-width: 900px) {
+  .nuo-graph-filter-row { flex-direction: column; gap: 6px; }
+  .nuo-graph-filter-label { padding-top: 0; }
+  .nuo-graph-label { font-size: 13px; }
+}
+
+@media (max-width: 600px) {
+  /* 小屏保持触摸目标 >= 44px */
+  .nuo-graph-topic, .nuo-graph-kind, .nuo-graph-btn { min-height: 44px; padding: 0 14px; }
+  .nuo-graph-stats { gap: 8px; }
+  .nuo-graph-stat { min-width: calc(50% - 4px); flex: 1; }
+  .nuo-graph-controls { right: 8px; bottom: 8px; }
+  .nuo-graph-card { width: min(216px, 62vw); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .nuo-graph-viewport { transition: none; }
+  .nuo-graph-skeleton { animation: none; }
+  .nuo-graph-topic, .nuo-graph-kind, .nuo-graph-btn { transition: none; }
+}

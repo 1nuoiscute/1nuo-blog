@@ -20,6 +20,7 @@ nav:
 menu:
   主页: / || fas fa-home
   分类: /categories/ || fas fa-folder-open
+  内容地图: /graph/ || fas fa-project-diagram
   探索: /explore/ || fas fa-compass
   友链: /link/ || fas fa-link
   关于: /about/ || fas fa-heart
@@ -1091,6 +1092,7 @@ inject:
     - <script defer src="/js/snowflake.js"></script>
     - <script defer src="/js/timing.js"></script>
     - <script defer src="/js/nuo-tools.js?v=20260906"></script>
+    - <script defer src="/js/content-graph.js?v=20260930"></script>
     - <script>document.querySelectorAll('#menus a[href^="http"]').forEach(function(a){a.target="_blank";a.rel="noopener"})</script>
 
 
