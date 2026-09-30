@@ -60,9 +60,29 @@
     return width;
   }
 
-  function labelBox(text, x, y, fontSize) {
+  function labelBox(text, x, y, fontSize, anchor) {
     var width = Math.min(textWidth(text, fontSize), 140);
-    return { left: x - width / 2, right: x + width / 2, top: y - fontSize, bottom: y + fontSize * 0.35 };
+    var left = anchor === 'start' ? x : anchor === 'end' ? x - width : x - width / 2;
+    return { left: left, right: left + width, top: y - fontSize, bottom: y + fontSize * 0.35 };
+  }
+
+  // Try below, above, right and left, and keep the first position that is clear.
+  function placeLabel(text, position, radius, obstacles, fontSize) {
+    var gap = 6;
+    var options = [
+      { x: position.x, y: position.y + radius + 15, anchor: 'middle' },
+      { x: position.x, y: position.y - radius - 8, anchor: 'middle' },
+      { x: position.x + radius + gap, y: position.y + 4, anchor: 'start' },
+      { x: position.x - radius - gap, y: position.y + 4, anchor: 'end' }
+    ];
+    for (var i = 0; i < options.length; i++) {
+      var box = labelBox(text, options[i].x, options[i].y, fontSize, options[i].anchor);
+      if (box.left < 0 || box.right > WIDTH || box.top < 0 || box.bottom > HEIGHT) continue;
+      if (obstacles.some(function (other) { return overlaps(box, other); })) continue;
+      obstacles.push(box);
+      return options[i];
+    }
+    return null;
   }
 
   function overlaps(a, b) {
@@ -219,7 +239,7 @@
           var ddx = placed[y].x - placed[x].x;
           var ddy = placed[y].y - placed[x].y;
           var dist = Math.sqrt(ddx * ddx + ddy * ddy) || 0.01;
-          var minimum = radii[x] + radii[y] + 7;
+          var minimum = radii[x] + radii[y] + 11;
           if (dist >= minimum) continue;
           var push = (minimum - dist) / 2;
           var ux = ddx / dist, uy = ddy / dist;
@@ -424,26 +444,35 @@
       .map(function (topic) {
         return { topic: topic, x: groups[topic].x / groups[topic].count, y: groups[topic].y / groups[topic].count };
       });
-    var occupied = regionLabels.map(function (region) { return labelBox(region.topic, region.x, region.y, 15); });
+    var occupied = regionLabels.map(function (region) { return labelBox(region.topic, region.x, region.y, 15, 'middle'); });
+    // Labels must also clear every node dot, not just each other.
+    nodes.forEach(function (item) {
+      var position = positions[item.id];
+      if (!position) return;
+      var radius = 5.5 + ((stats.degree[item.id] || 0) / maxDegree) * 13 + 4;
+      occupied.push({ left: position.x - radius, right: position.x + radius, top: position.y - radius, bottom: position.y + radius });
+    });
 
-    // Only the strongest hubs stay labelled, and only when the label fits without
-    // colliding; hover, focus or "显示全部标签" reveal the rest.
-    var labelled = {};
+    // Only the strongest hubs stay labelled, and only where the label actually
+    // fits; hover, focus or "显示全部标签" reveal the rest.
+    var labelPlacement = {};
     if (nodes.length <= 14) {
-      nodes.forEach(function (item) { labelled[item.id] = true; });
-    } else {
-      nodes.slice().sort(function (a, b) {
-        return (stats.degree[b.id] || 0) - (stats.degree[a.id] || 0) || a.title.localeCompare(b.title);
-      }).slice(0, 12).forEach(function (item) {
+      nodes.forEach(function (item) {
         var position = positions[item.id];
         if (!position) return;
         var radius = 5.5 + ((stats.degree[item.id] || 0) / maxDegree) * 13;
-        var anchorY = position.y < HEIGHT / 2 ? position.y + radius + 15 : position.y - radius - 8;
-        var box = labelBox(item.title, position.x, anchorY, 12);
-        var collides = occupied.some(function (other) { return overlaps(box, other); });
-        if (collides) return;
-        occupied.push(box);
-        labelled[item.id] = true;
+        labelPlacement[item.id] = placeLabel(item.title, position, radius, occupied, 12) ||
+          { x: position.x, y: position.y + radius + 15, anchor: 'middle' };
+      });
+    } else {
+      nodes.slice().sort(function (a, b) {
+        return (stats.degree[b.id] || 0) - (stats.degree[a.id] || 0) || a.title.localeCompare(b.title);
+      }).slice(0, 18).forEach(function (item) {
+        var position = positions[item.id];
+        if (!position) return;
+        var radius = 5.5 + ((stats.degree[item.id] || 0) / maxDegree) * 13;
+        var placement = placeLabel(item.title, position, radius, occupied, 12);
+        if (placement) labelPlacement[item.id] = placement;
       });
     }
 
@@ -454,7 +483,7 @@
       var radius = 5.5 + (nodeDegree / maxDegree) * 13;
       var color = KIND_COLOR[item.kind] || '#8b7f96';
       var group = svgNode('g', {
-        class: 'nuo-graph-node' + (state.allLabels || labelled[item.id] ? ' is-labeled' : ''),
+        class: 'nuo-graph-node' + (state.allLabels || labelPlacement[item.id] ? ' is-labeled' : ''),
         tabindex: '0',
         role: 'link',
         'aria-label': item.title + '，' + item.kind + (item.date ? '，' + item.date : '')
@@ -469,11 +498,14 @@
         group.appendChild(svgNode('circle', { class: 'nuo-graph-halo', cx: position.x, cy: position.y, r: radius + 5, fill: color }));
       }
       group.appendChild(svgNode('circle', { class: 'nuo-graph-dot', cx: position.x, cy: position.y, r: radius, fill: color }));
+      var placement = labelPlacement[item.id] || {
+        x: position.x, y: position.y + radius + 15, anchor: 'middle'
+      };
       var label = svgNode('text', {
         class: 'nuo-graph-label',
-        x: position.x,
-        y: position.y < HEIGHT / 2 ? position.y + radius + 15 : position.y - radius - 8,
-        'text-anchor': 'middle'
+        x: placement.x.toFixed(1),
+        y: placement.y.toFixed(1),
+        'text-anchor': placement.anchor
       });
       label.textContent = item.title.length > 13 ? item.title.slice(0, 13) + '…' : item.title;
       group.appendChild(label);

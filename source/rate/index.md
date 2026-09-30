@@ -8,7 +8,7 @@ comments: false
 <script src="https://cdn.jsdelivr.net/npm/echarts@5.5.0/dist/echarts.min.js"></script>
 <link rel="stylesheet" href="/css/rate-map.css">
 <script src="/js/tencent-lbs-config.js"></script>
-<script src="/js/rate-map.js?v=20260906" defer></script>
+<script src="/js/rate-map.js?v=__NUO_ASSET_V__" defer></script>
 <p id="rate-load-status" role="status">正在加载评测…</p>
 <button id="rate-load-retry" class="nuo-tab-btn" hidden onclick="loadRateData()">重新加载评测</button>
 

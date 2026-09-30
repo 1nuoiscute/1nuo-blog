@@ -250,7 +250,9 @@ async function main() {
 
     // Site navigation is PJAX-based, so the graph must render after an in-page switch too.
     await go('/');
-    await page.locator('#nav a.site-page[href="/graph/"]').first().click();
+    const graphMenuItem = page.locator('#nav a.site-page[href="/graph/"]').first();
+    if (!(await graphMenuItem.isVisible())) await page.locator('#nav .site-page.group', { hasText: '更多' }).first().hover();
+    await graphMenuItem.click();
     await page.locator('[data-graph-canvas] > svg').waitFor();
     check(await page.locator('.nuo-graph-node').count() > 10, 'content graph renders after a PJAX navigation');
     check(await page.evaluate(() => !!window.pjax), 'PJAX stayed active across the graph navigation');
