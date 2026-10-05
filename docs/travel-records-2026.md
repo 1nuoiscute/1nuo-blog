@@ -1,6 +1,6 @@
 # 2026 旅行记录录入与坐标来源
 
-核对日期：2026-10-05。数据文件：`source/rate/rate_data.json`。用户已要求上传本批记录。发布流程为提交至 GitHub master，由 Vercel 自动部署；上线结果以线上数据核对为准。
+核对日期：2026-10-05。数据文件：`source/rate/rate_data.json`。本批已通过 GitHub master 上传，旅行数据提交 f6070b4，Vercel 部署成功。线上 https://www.1nuo.me/rate/rate_data.json 返回68条，与本地数据完整一致。首次 GitHub 浏览器检查仍固定断言11处而失败，已将景点数和地图标记数改为读取当前数据；本地生成站点后96项浏览器检查通过，无页面异常。
 
 ## 西安，2026-02-06 至 2026-02-09
 

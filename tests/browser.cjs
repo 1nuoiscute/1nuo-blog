@@ -5,6 +5,10 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const base = process.env.TEST_URL || 'http://127.0.0.1:4000';
+const attractions = JSON.parse(fs.readFileSync(path.resolve(__dirname, '../source/rate/rate_data.json'), 'utf8')).attractions;
+const attractionCount = attractions.length;
+const mappedCount = attractions.filter(item => item.coordinates && Number.isFinite(item.coordinates.lat) && Number.isFinite(item.coordinates.lng)).length;
+const mapSuccessText = `已在腾讯地图标记 ${mappedCount} / ${attractionCount}`;
 if (!['127.0.0.1', 'localhost'].includes(new URL(base).hostname)) throw new Error('Browser tests only run on loopback, never production');
 let checks = 0;
 function check(value, message) { assert(value, message); checks++; console.log('PASS', message); }
@@ -142,7 +146,7 @@ async function main() {
     failData = false;
     await page.locator('#rate-load-retry').click();
     await page.locator('.nuo-card').first().waitFor();
-    check(await page.locator('.nuo-card').count() === 11, 'rate data retries after HTTP failure');
+    check(await page.locator('.nuo-card').count() === attractionCount, 'rate data retries after HTTP failure');
     await page.locator('#filter-search').fill('NO_MATCH_123');
     check(await page.locator('#global-avg-score').innerText() === '—', 'empty filter clears average');
     check(await page.locator('#cards-container').innerText() === '没有符合条件的景点。', 'empty filter has explicit message');
@@ -152,7 +156,7 @@ async function main() {
     // Key-free preview must recover after config is supplied. No actual map writes.
     if (base.includes('127.0.0.1')) {
       await page.locator('#travel-map-retry').waitFor({ state: 'visible' });
-      check(await page.locator('#travel-map-list li').count() === 11, 'map failure preserves place list');
+      check(await page.locator('#travel-map-list li').count() === attractionCount, 'map failure preserves place list');
       let failSdk = true;
       await page.route('https://map.qq.com/api/gljs*', route => failSdk ? route.abort() : route.fulfill({
         contentType: 'application/javascript', body: `window.TMap={
@@ -168,10 +172,10 @@ async function main() {
       await page.getByText(/地图暂时无法加载：地图 SDK 加载失败/).waitFor();
       failSdk = false;
       await page.locator('#travel-map-retry').click();
-      await page.getByText(/已在腾讯地图标记 11 \/ 11/).waitFor();
-      check(await page.evaluate(() => testMarkerCount === 11 && testMapCount === 1), 'map SDK retries successfully after network failure');
+      await page.getByText(mapSuccessText).waitFor();
+      check(await page.evaluate(expected => testMarkerCount === expected && testMapCount === 1, mappedCount), 'map SDK retries successfully after network failure');
     } else {
-      await page.getByText(/已在腾讯地图标记 11 \/ 11/).waitFor({timeout:25000});
+      await page.getByText(mapSuccessText).waitFor({timeout:25000});
       check(true, 'deployed map initializes with real SDK and all places');
     }
 
@@ -179,7 +183,7 @@ async function main() {
     await page.locator('.nuo-library-page').waitFor();
     await page.locator('.nuo-library-item-title').filter({hasText:'1nuo 评测'}).first().click();
     await page.locator('.nuo-card').first().waitFor();
-    check(await page.locator('.nuo-card').count() === 11, 'rate page can be revisited after PJAX departure');
+    check(await page.locator('.nuo-card').count() === attractionCount, 'rate page can be revisited after PJAX departure');
 
     await go('/rate/admin/');
     await page.locator('#in-id').waitFor();
