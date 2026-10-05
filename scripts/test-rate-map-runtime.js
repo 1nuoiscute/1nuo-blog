@@ -7,6 +7,7 @@ const vm = require('vm')
 const root = path.resolve(__dirname, '..')
 const source = fs.readFileSync(path.join(root, 'source/js/rate-map.js'), 'utf8')
 const data = JSON.parse(fs.readFileSync(path.join(root, 'source/rate/rate_data.json'), 'utf8'))
+const mappedCount = data.attractions.filter(item => item.coordinates && Number.isFinite(item.coordinates.lat) && Number.isFinite(item.coordinates.lng)).length
 const nodes = new Map()
 
 function node(id) {
@@ -98,10 +99,10 @@ vm.runInNewContext(source, context, { filename: 'rate-map.js' })
 
 context.ensureTravelMap().then(() => {
   if (!mapCreated) throw new Error('腾讯地图实例未创建')
-  if (markerCount !== data.attractions.length) throw new Error(`标记数量错误: ${markerCount}`)
+  if (markerCount !== mappedCount) throw new Error(`标记数量错误: ${markerCount}`)
   if (requestedSdkUrl.includes('libraries=service')) throw new Error('运行时仍请求 service 库')
   if (!requestedSdkUrl.includes('api/gljs') || !requestedSdkUrl.includes('key=test-key')) throw new Error('SDK 请求地址错误')
-  if (!node('travel-map-status').textContent.includes(`${data.attractions.length} / ${data.attractions.length}`)) throw new Error('地图成功状态错误')
+  if (!node('travel-map-status').textContent.includes(`${mappedCount} / ${data.attractions.length}`)) throw new Error('地图成功状态错误')
   console.log(`地图运行时模拟通过：创建 ${markerCount} 个腾讯地图标记。`)
 }).catch(error => {
   console.error(error)

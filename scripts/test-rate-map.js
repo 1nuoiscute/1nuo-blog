@@ -14,8 +14,12 @@ if (!Array.isArray(data.attractions) || !data.attractions.length) throw new Erro
 const ids = new Set()
 for (const item of data.attractions) {
   if (!item.id || !item.name || !item.location) throw new Error('足迹缺少 id、名称或位置')
-  if (!item.coordinates || !Number.isFinite(item.coordinates.lat) || !Number.isFinite(item.coordinates.lng)) throw new Error(`足迹缺少有效坐标: ${item.id}`)
-  if (item.coordinates.lat < -90 || item.coordinates.lat > 90 || item.coordinates.lng < -180 || item.coordinates.lng > 180) throw new Error(`足迹坐标越界: ${item.id}`)
+  if (!item.coordinates) {
+    if (!item.quick_checkin || Number.isFinite(item.final_score)) throw new Error(`足迹缺少有效坐标: ${item.id}`)
+  } else {
+    if (!Number.isFinite(item.coordinates.lat) || !Number.isFinite(item.coordinates.lng)) throw new Error(`足迹缺少有效坐标: ${item.id}`)
+    if (item.coordinates.lat < -90 || item.coordinates.lat > 90 || item.coordinates.lng < -180 || item.coordinates.lng > 180) throw new Error(`足迹坐标越界: ${item.id}`)
+  }
   if (ids.has(item.id)) throw new Error(`重复足迹 id: ${item.id}`)
   ids.add(item.id)
 }
