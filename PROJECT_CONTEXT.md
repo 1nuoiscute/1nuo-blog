@@ -82,7 +82,7 @@ git push git@github.com:1nuoiscute/1nuo-blog.git master
 
 ## 已完成的工程修复
 
-- 2026-10-20：评论审核失败原因改为可辨：分类错误码、明确的中文理由和管理员「检查 AI 链路」自检（`/v1/admin/diagnostics`，先用 `/models` 验证出口、密钥与模型名，再发一条固定测试留言）。此前所有失败都写同一句「自动审核未完成」，无法区分密钥、余额、限流、超时和出口问题；该改动已在本地单测通过，尚未部署，也未证明线上调用已恢复。
+- 2026-10-20：定位并修掉评论自动审核 100% 失败的根因：Cloudflare Workers 不接受 `redirect:'error'`，workerd 在发出请求前就抛 `TypeError`，被当时的代码记成「Worker 无法连接接口」，看起来像出口被墙；已改为 `redirect:'manual'` 并对 3xx 显式判失败。同时让失败原因可辨：分类错误码、明确的中文理由、管理员「检查 AI 链路」自检（`/v1/admin/diagnostics`）。临时探针 Worker 已实测 Cloudflare 到 `api.deepseek.com` 的 GET 与 POST 均在 200 ms 内到达（伪造密钥返回 401），13 项单测通过，Worker 与前端均已重新部署。
 
 - 2026-10-20：评论列表底部去除与历史入口重复的分隔线；新增评论记录发布时的 IP 属地，使用 Cloudflare 提供的省级/国家标签，不保存完整 IP 或精确位置。旧评论保持空白，读取与审核不改写属地。
 

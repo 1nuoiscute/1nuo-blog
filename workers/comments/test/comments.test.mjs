@@ -151,6 +151,8 @@ test('DeepSeek auto-publishes only a validated high-confidence approval; identit
   assert.equal((await f.request(endpoint)).data.items[0].state, 'published');
   const sent = JSON.parse(calls[0].init.body);
   assert.equal(calls[0].url, 'https://api.deepseek.com/chat/completions');
+  // Workers rejects redirect:'error' with a TypeError before any network I/O.
+  assert.equal(calls[0].init.redirect, 'manual');
   assert.equal(sent.model, 'deepseek-flash'); assert.deepEqual(sent.thinking, { type: 'disabled' });
   assert.deepEqual(JSON.parse(sent.messages[1].content), { comment: '文章很有帮助' });
   assert(!calls[0].init.body.includes('user_alice')); assert(!calls[0].init.body.includes('私有姓名'));
@@ -196,6 +198,7 @@ test('every moderation failure states its cause in the admin queue, never the bo
     { reply: () => new Response('leaked', { status: 429 }), expect: ['频繁', '429'] },
     { reply: () => new Response('leaked', { status: 503 }), expect: ['繁忙', '503'] },
     { reply: () => new Response('leaked', { status: 400 }), expect: ['参数', '400'] },
+    { reply: () => new Response(null, { status: 302, headers: { Location: 'https://api.deepseek.com/elsewhere' } }), expect: ['重定向', '302'] },
     { reply: () => new Response('<html>challenge</html>', { status: 403 }), expect: ['拒绝', '403'] },
     { reply: () => { throw new DOMException('Timeout', 'TimeoutError'); }, expect: ['超时'] },
     { reply: () => { throw new TypeError('Unable to connect'); }, expect: ['无法连接'] },

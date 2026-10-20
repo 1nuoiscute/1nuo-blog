@@ -30,6 +30,12 @@
 
 管理页「检查 AI 链路」调用 `POST /v1/admin/diagnostics`（仅管理员）。它先用 `GET https://api.deepseek.com/models` 检查 Worker 出口可达、密钥有效、当前 `DEEPSEEK_MODEL` 是否在可用列表中，这一步不消耗 token；随后用与审核完全相同的参数发送一条固定测试留言，确认完整调用（消耗一次调用，不计入每日上限）。健康接口的 `autoModerationConfigured` 只证明绑定存在，不能证明密钥有效，也不能证明 Cloudflare 出口能连上接口。
 
+### redirect: 'error' 在 Workers 里不可用（2026-10-20 根因）
+
+排查确认：审核请求固定写成 `redirect: 'error'`，而 Cloudflare Workers 只接受 `follow` 或 `manual`。workerd 会在发出任何网络请求之前直接抛 `TypeError: Invalid redirect value, must be one of "follow" or "manual" ("error" won't be implemented since it does not make sense at the edge)`，因此审核 100% 失败，且被记成「Worker 无法连接接口」，看起来像出口被墙。Node、Python、curl 都接受 `redirect: 'error'`，所以用电脑直连永远测不出这个问题，模拟 fetch 的单元测试也测不出。
+
+现在固定使用 `redirect: 'manual'`，并对 3xx 显式判为失败（理由写明「接口返回了重定向」），不会静默跟随。用临时探针 Worker 复核：`GET /models` 与 `POST /chat/completions` 从 Cloudflare 均能在 200 ms 内到达并返回 `401`（伪造密钥），说明出口与请求体都没有问题。
+
 人工发布、隐藏或删除会使在途 AI 任务失效，迟到的结果不能覆盖人工操作或恢复已删除正文。删除同时清空审核理由。已有待审核评论不会自动批量发送给 DeepSeek，可在管理页逐条复审；未完成或因 Worker 中断卡住的任务，60 秒后可以重新触发。
 
 评论正文与昵称均按普通文本渲染，不解析 HTML。昵称、头像是用户选择的展示资料快照，不是唯一身份；所有权、管理员权限仅由验证后的 Clerk `sub` 决定。客户端传入的管理员标记、作者 ID 和审核状态无效。
@@ -61,6 +67,6 @@ npm run deploy --prefix workers/comments
 
 API 测试使用本地 RSA 签名和 SQLite，覆盖伪造/过期令牌、越权、审核可见性、跨文章回复、限流，以及模拟 DeepSeek 的放行、人工判断、异常、每日预算和人工操作竞态。浏览器测试使用模拟账号与 API，覆盖草稿、回复、字数、状态切换和审核理由；可用 `COMMENTS_SCREENSHOTS=1` 生成视觉检查截图。线上检查健康接口、读取、未登录写入拒绝和真实组件加载。不代表已代替用户完成真实登录后的发帖、审核全流程。
 
-2026-10-20 已使用用户配置的密钥向 DeepSeek 发送两条合成样本，均返回 HTTP 200：普通感谢留言判断为放行，承诺收益并诱导转账的广告判断为人工审核。未向评论库插入这些测试内容；两个样本不能代表完整风险识别率。生产 Worker 的密钥绑定已核实为 `secret_text`。
+2026-10-20 已使用用户配置的密钥向 DeepSeek 发送两条合成样本，均返回 HTTP 200：普通感谢留言判断为放行，承诺收益并诱导转账的广告判断为人工审核。这两条样本不是从 Worker 发出的——它们只证明密钥、模型名和判定格式可用，不证明 Cloudflare 侧的调用链可用；Worker 侧的调用直到 `redirect` 问题修复后才第一次真正到达接口。生产 Worker 的密钥绑定已核实为 `secret_text`。
 
 备份可在 `workers/comments` 目录运行 `npx wrangler d1 export DB --remote --output ../../test-results/comments-backup.sql`。导出文件可能包含未公开评论，不提交到 Git；重要备份应另存到站点所有者管理的位置。

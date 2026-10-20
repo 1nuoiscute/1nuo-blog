@@ -22,6 +22,7 @@ const FAILURES = {
   incomplete: '返回被截断或没有内容',
   schema: '判定格式不符合约定',
   provider: '接口返回异常',
+  redirect: '接口返回了重定向，请检查地址或入口',
   unknown: '未知错误'
 };
 
@@ -71,8 +72,10 @@ export async function classifyComment(body, env, apiFetch = fetch) {
   if (!key || /\s/.test(key)) throw failure('key');
   let response;
   try {
+    // Workers only accepts 'follow' or 'manual'; 'error' throws a TypeError before any
+    // network I/O, which is why a 3xx is rejected explicitly below instead.
     response = await apiFetch(ENDPOINT, {
-      method: 'POST', redirect: 'error', signal: AbortSignal.timeout(TIMEOUT_MS),
+      method: 'POST', redirect: 'manual', signal: AbortSignal.timeout(TIMEOUT_MS),
       headers: { Authorization: 'Bearer ' + key, 'Content-Type': 'application/json' },
       body: JSON.stringify({
         model: moderationSettings(env).model, thinking: { type: 'disabled' },
@@ -83,6 +86,7 @@ export async function classifyComment(body, env, apiFetch = fetch) {
   } catch (error) {
     throw failure(timedOut(error) ? 'timeout' : 'network');
   }
+  if (response.status >= 300 && response.status < 400) throw failure('redirect', response.status);
   if (!response.ok) throw failure(statusCode(response.status), response.status);
   let payload;
   try { payload = await response.json(); } catch { throw failure('payload'); }
@@ -146,11 +150,12 @@ export async function probeProvider(env, apiFetch = fetch, { chat = false } = {}
   const started = Date.now();
   try {
     const response = await apiFetch(MODELS_ENDPOINT, {
-      method: 'GET', redirect: 'error', signal: AbortSignal.timeout(TIMEOUT_MS),
+      method: 'GET', redirect: 'manual', signal: AbortSignal.timeout(TIMEOUT_MS),
       headers: { Authorization: 'Bearer ' + key }
     });
     models.status = response.status; models.ms = Date.now() - started;
-    if (response.ok) {
+    if (response.status >= 300 && response.status < 400) models.error = failureText('redirect', response.status);
+    else if (response.ok) {
       const payload = await response.json().catch(() => null);
       models.models = Array.isArray(payload?.data)
         ? payload.data.map(item => item?.id).filter(id => typeof id === 'string').slice(0, 20) : [];
