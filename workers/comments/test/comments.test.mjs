@@ -162,9 +162,20 @@ test('DeepSeek auto-publishes only a validated high-confidence approval; identit
   await f.settle(); assert.equal(calls.length, 1);
 });
 
+test('the publish threshold is 0.9: exactly 0.9 publishes, below it stays pending', async () => {
+  for (const [confidence, expected, status] of [[0.9, 'published', 'approved'], [0.89, 'pending', 'review']]) {
+    const f = fixture({ moderationFetch: async () => decision({ decision: 'approve', confidence, reason: '低风险' }) });
+    f.env.DEEPSEEK_API_KEY = 'test-only';
+    await f.request('/v1/comments', { method: 'POST', auth: await token(), body: { thread, body: '边界评论' } });
+    await f.settle();
+    const row = f.sql.prepare('SELECT state, ai_status, ai_confidence FROM comments').get();
+    assert.equal(row.state, expected); assert.equal(row.ai_status, status); assert.equal(row.ai_confidence, confidence);
+  }
+});
+
 test('risk, uncertainty, malformed output, truncation and provider failures stay pending', async () => {
   const responses = [() => decision({ decision: 'review', confidence: 0.99, reason: '疑似引流' }),
-    () => decision({ decision: 'approve', confidence: 0.94, reason: '上下文不足' }),
+    () => decision({ decision: 'approve', confidence: 0.85, reason: '上下文不足' }),
     () => decision({ decision: 'approve', confidence: '1', reason: '类型错误' }),
     () => decision(undefined, 'length'), () => Response.json({ choices: [] }),
     () => new Response('secret error body', { status: 401 }), () => { throw new DOMException('Timeout', 'TimeoutError'); }];
