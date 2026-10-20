@@ -5,26 +5,24 @@
   padding: 48px 24px 64px;
 }
 .type-account #page { width: 100%; padding: 0; background: transparent; box-shadow: none; }
-.nuo-account {
+:root {
   --account-surface: #fff;
   --account-tint: #fff8fb;
   --account-ink: #29252b;
   --account-muted: #746973;
   --account-line: #eedee6;
   --account-accent: #ae4778;
-  max-width: 420px;
-  margin: 0 auto;
-  color: var(--account-ink);
 }
-[data-theme='dark'] .nuo-account {
+[data-theme='dark'] {
   --account-surface: #202024;
   --account-tint: #292329;
   --account-ink: #f1eaf0;
   --account-muted: #baacb7;
   --account-line: #43343e;
   --account-accent: #f2a2c8;
-  color-scheme: dark;
 }
+.nuo-account { max-width: 420px; margin: 0 auto; color: var(--account-ink); }
+[data-theme='dark'] .nuo-account { color-scheme: dark; }
 .nuo-account[data-account-view='profile'] { max-width: 1000px; }
 .nuo-account [data-account-status]:not(:empty) {
   margin: 0 0 20px;
