@@ -184,7 +184,7 @@ subtitle:
   source: false
   # If you close the typewriter effect, the subtitle will only show the first line of sub
   sub: 
-    -  We choose go to the Moon, not because it is easy, but beacuse it is hard.
+    -  We choose to go to the Moon, not because it is easy, but because it is hard.
 
 # Article layout on the homepage
 # 1: Cover on the left, info on the right
