@@ -40,7 +40,7 @@ async function main() {
     let failPost = true;
     const submissions = [];
     const comments = [{ id: 1, thread: '/', parentId: null, authorId: 'user_admin',
-      author: { name: '<b>普通昵称</b>', avatar: '' }, body: '<img src=x onerror=alert(1)>', state: 'published', createdAt: 1700000000 }];
+      author: { name: '<b>普通昵称</b>', avatar: '' }, body: '<img src=x onerror=alert(1)>', state: 'published', createdAt: 1700000000, ipLocation: '四川' }];
     await context.route('https://comments.example.test/**', async route => {
       const req = route.request(), url = new URL(req.url());
       const actor = req.headers().authorization?.replace('Bearer ', '') || '';
@@ -75,6 +75,7 @@ async function main() {
     check(await page.locator('.nuo-comment-body').textContent() === '<img src=x onerror=alert(1)>', 'comment HTML remains literal text');
     check(await page.locator('.nuo-comment-body img').count() === 0, 'comment body creates no executable elements');
     check(await page.locator('.nuo-comment-header strong').textContent() === '<b>普通昵称</b>', 'nickname HTML remains literal text');
+    check(await page.locator('.nuo-comment-location').textContent() === 'IP 属地：四川', 'comment shows its posting-time IP region');
     check(await page.getByText('查看历史评论（Giscus / Twikoo）').count() === 1, 'both historical systems remain available');
     await input.fill('需要保留的草稿');
     check(await page.locator('[data-comments-counter]').textContent() === '7 / 2000', 'character counter follows draft');

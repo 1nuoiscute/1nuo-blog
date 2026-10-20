@@ -36,6 +36,7 @@
 .nuo-comments .nuo-comments-status:empty { display: none; }
 .nuo-comments-list { display: grid; }
 .nuo-comment { position: relative; padding: 22px 0 20px 48px; border-bottom: 1px solid var(--account-line); overflow-wrap: anywhere; min-width: 0; }
+[data-nuo-comments] .nuo-comment:last-child { border-bottom: 0; }
 .nuo-comment[data-parent-id] { margin-left: 48px; padding-left: 40px; }
 .nuo-comment-header { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
 .nuo-comment-header > .nuo-comment-avatar { position: absolute; top: 22px; left: 0; }
@@ -47,6 +48,7 @@
 .nuo-comment > small { color: var(--account-muted); font-size: 11px; }
 .nuo-comment-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
 .nuo-comment-actions button { padding: 2px 0; border: 0; border-radius: 2px; color: var(--account-muted); background: transparent; font-size: 11px; }
+.nuo-comment-location { color: var(--account-muted); font-size: 11px; }
 .nuo-comment-thread { display: block; width: 100%; margin-top: 6px; color: var(--account-muted); font-size: 11px; }
 .nuo-comments-more { display: block; margin: 20px auto 0 !important; }
 .nuo-legacy-comments { margin-top: 28px; padding-top: 15px; border-top: 1px solid var(--account-line); }

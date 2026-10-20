@@ -4,6 +4,7 @@ import { readFileSync, readdirSync } from 'node:fs';
 import { DatabaseSync } from 'node:sqlite';
 import { generateKeyPair, exportJWK, SignJWT } from 'jose';
 import { createWorker } from '../src/index.mjs';
+import { ipLocation } from '../src/location.mjs';
 
 const pair = await generateKeyPair('RS256', { extractable: true });
 const jwk = { ...await exportJWK(pair.publicKey), kid: 'test-key', alg: 'RS256', use: 'sig' };
@@ -29,16 +30,43 @@ function fixture(options = {}) {
   const worker = createWorker({ jwksFetch: async () => Response.json({ keys: [jwk] }), ...options });
   const env = { DB, CLERK_ISSUER: issuer, ALLOWED_ORIGINS: origin, ADMIN_USER_IDS: 'user_admin' };
   const tasks = [];
-  return { sql, env, async settle() { await Promise.all(tasks.splice(0)); }, async request(path, { auth, method = 'GET', body, source = origin, raw, headers = {} } = {}) {
+  return { sql, env, async settle() { await Promise.all(tasks.splice(0)); }, async request(path, { auth, method = 'GET', body, source = origin, raw, headers = {}, cf } = {}) {
     const requestHeaders = { ...(source ? { Origin: source } : {}), ...(auth ? { Authorization: 'Bearer ' + auth } : {}), ...headers };
     if (body !== undefined) requestHeaders['Content-Type'] = 'application/json';
-    const response = await worker.fetch(new Request('https://comments.example.test' + path, {
+    const incoming = new Request('https://comments.example.test' + path, {
       method, headers: requestHeaders, body: raw ?? (body !== undefined ? JSON.stringify(body) : undefined)
-    }), env, { waitUntil(task) { tasks.push(task); } });
+    });
+    if (cf) Object.defineProperty(incoming, 'cf', { value: cf });
+    const response = await worker.fetch(incoming, env, { waitUntil(task) { tasks.push(task); } });
     return { status: response.status, headers: response.headers, data: response.status === 204 ? null : await response.json() };
   } };
 }
 const thread = '/2026/10/20/example/', endpoint = '/v1/comments?thread=' + encodeURIComponent(thread);
+
+test('IP location keeps only a coarse label from trusted request metadata and stays fixed', async () => {
+  assert.equal(ipLocation({ country: 'CN', regionCode: 'SC' }), '四川');
+  assert.equal(ipLocation({ country: 'CN', regionCode: '51' }), '四川');
+  assert.equal(ipLocation({ country: 'CN', regionCode: 'CN-BJ' }), '北京');
+  assert.equal(ipLocation({ country: 'US', regionCode: 'CA', city: 'Los Angeles' }), '美国');
+  assert.equal(ipLocation({ country: 'HK' }), '香港');
+  assert.equal(ipLocation({ country: 'CN', regionCode: '<script>' }), '中国');
+  assert.equal(ipLocation(), ''); assert.equal(ipLocation({ country: 'XX' }), '');
+  const f = fixture(), auth = await token('user_admin');
+  const post = await f.request('/v1/comments', { method: 'POST', auth,
+    body: { thread, body: '属地快照', ipLocation: '上海', ip: '192.0.2.10' },
+    cf: { country: 'CN', regionCode: 'SC', city: 'Chengdu', latitude: '30.6', longitude: '104.0' },
+    headers: { 'CF-IPCountry': 'US', 'CF-Connecting-IP': '192.0.2.10' } });
+  assert.equal(post.status, 201); assert.equal(post.data.item.ipLocation, '四川');
+  const read = await f.request(endpoint, { cf: { country: 'US', regionCode: 'CA' } });
+  assert.equal(read.data.items[0].ipLocation, '四川');
+  const row = f.sql.prepare('SELECT * FROM comments').get();
+  assert.equal(row.ip_location, '四川');
+  assert(!JSON.stringify(row).includes('192.0.2.10')); assert(!JSON.stringify(row).includes('Chengdu'));
+  const unknown = await f.request('/v1/comments', { method: 'POST', auth, body: { thread, body: '无属地的记录' } });
+  assert.equal(unknown.data.item.ipLocation, '');
+  await f.request('/v1/comments/' + post.data.item.id, { method: 'DELETE', auth });
+  assert.equal((await f.request(endpoint)).data.items[0].ipLocation, '');
+});
 
 test('public reads, CORS and anonymous write rejection', async () => {
   const f = fixture();

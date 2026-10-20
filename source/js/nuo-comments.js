@@ -135,6 +135,11 @@
         await request('/v1/comments/' + item.id, { method: 'DELETE' });
         await load();
       }));
+      if (item.ipLocation && item.state !== 'deleted') {
+        const location = element('span', 'IP 属地：' + item.ipLocation, 'nuo-comment-location');
+        location.title = '发布这条评论时的网络属地';
+        actions.append(location);
+      }
       if (actions.childNodes.length) card.append(actions);
       return card;
     }

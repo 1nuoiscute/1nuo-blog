@@ -82,6 +82,8 @@ git push git@github.com:1nuoiscute/1nuo-blog.git master
 
 ## 已完成的工程修复
 
+- 2026-10-20：评论列表底部去除与历史入口重复的分隔线；新增评论记录发布时的 IP 属地，使用 Cloudflare 提供的省级/国家标签，不保存完整 IP 或精确位置。旧评论保持空白，读取与审核不改写属地。
+
 - 2026-10-20：用户要求接入 DeepSeek 辅助审核并重做评论区。评论服务新增异步审核、每日调用上限、失败保留待审核和人工操作优先；后台显示审核理由并可逐条复审。评论输入区与列表适配博客主题、手机和深色模式。密钥仅配置在 Cloudflare Worker Secret，不能填到 Vercel 或仓库，详见 `docs/comments-setup.md`。
 
 - 2026-10-20：用户授权通过 Cloudflare 官方 OAuth 部署新账号评论。独立 Worker / D1 均为 `1nuo-blog-comments`，接口 `https://comments.1nuo.me`，管理页 `/comments-admin/`。使用 Clerk 会话签名验证和用户指定的管理员 ID，新评论预审核；原 Giscus/Twikoo 在折叠入口保留，不删除或自动认领旧评论。收藏、进度和游戏云同步仍未实施，详见 `docs/comments-setup.md`。

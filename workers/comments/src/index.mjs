@@ -1,5 +1,6 @@
 import { createRemoteJWKSet, customFetch, jwtVerify } from 'jose';
 import { moderateComment, moderationSettings } from './moderation.mjs';
+import { ipLocation } from './location.mjs';
 
 class HttpError extends Error {
   constructor(status, message) { super(message); this.status = status; }
@@ -52,6 +53,7 @@ function publicComment(row, actor) {
     author: { name: row.author_name, avatar: row.avatar_url },
     body: row.state === 'deleted' ? '' : row.body,
     state: row.state, createdAt: row.created_at,
+    ipLocation: row.state === 'deleted' ? '' : row.ip_location || '',
     canDelete: !!actor && row.state !== 'deleted' && (actor.id === row.author_id || actor.admin),
     ...(actor?.admin ? { moderation: { status: row.ai_status, reason: row.ai_reason, model: row.ai_model, checkedAt: row.ai_checked_at } } : {})
   };
@@ -142,10 +144,10 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch } = {}
           const now = Math.floor(Date.now() / 1000);
           await limit(env, actor.id, now);
           const run = !actor.admin && moderationSettings(env).configured ? crypto.randomUUID() : null;
-          const row = await env.DB.prepare(`INSERT INTO comments(thread,parent_id,author_id,author_name,avatar_url,body,state,created_at,updated_at,published_at,ai_status,ai_run,ai_checked_at)
-            VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING *`).bind(thread, parentId, actor.id, name || '读者 ' + actor.id.slice(-6),
+          const row = await env.DB.prepare(`INSERT INTO comments(thread,parent_id,author_id,author_name,avatar_url,body,state,created_at,updated_at,published_at,ai_status,ai_run,ai_checked_at,ip_location)
+            VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING *`).bind(thread, parentId, actor.id, name || '读者 ' + actor.id.slice(-6),
               safeAvatar(input.avatar), body, actor.admin ? 'published' : 'pending', now, now, actor.admin ? now : null,
-              actor.admin ? 'skipped' : run ? 'queued' : 'disabled', run, run ? now : null).first();
+              actor.admin ? 'skipped' : run ? 'queued' : 'disabled', run, run ? now : null, ipLocation(request.cf)).first();
           if (run) {
             const task = moderateComment(env, row.id, run, moderationFetch);
             if (ctx?.waitUntil) ctx.waitUntil(task); else await task;
@@ -178,7 +180,7 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch } = {}
           if (!row) reject(404, '评论不存在');
           if (request.method === 'DELETE') {
             if (!actor.admin && row.author_id !== actor.id) reject(403, '没有删除权限');
-            await env.DB.prepare("UPDATE comments SET state='deleted', body='', ai_run=NULL,ai_status='skipped',ai_reason='',ai_model='',updated_at=? WHERE id=?").bind(Math.floor(Date.now() / 1000), id).run();
+            await env.DB.prepare("UPDATE comments SET state='deleted', body='', ip_location='',ai_run=NULL,ai_status='skipped',ai_reason='',ai_model='',updated_at=? WHERE id=?").bind(Math.floor(Date.now() / 1000), id).run();
           } else {
             if (!actor.admin) reject(403, '没有审核权限');
             const input = await jsonBody(request);
