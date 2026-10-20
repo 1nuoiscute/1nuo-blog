@@ -10,7 +10,9 @@
   "vars": {
     "ALLOWED_ORIGINS": "https://www.1nuo.me",
     "CLERK_ISSUER": "https://kind-mackerel-1226.clerk.accounts.dev",
-    "ADMIN_USER_IDS": "user_3KxZesaXpmCqcQZhcHSHFKtGYto"
+    "ADMIN_USER_IDS": "user_3KxZesaXpmCqcQZhcHSHFKtGYto",
+    "DEEPSEEK_MODEL": "deepseek-flash",
+    "AI_DAILY_LIMIT": "100"
   },
   "d1_databases": [{
     "binding": "DB",

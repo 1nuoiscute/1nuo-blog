@@ -30,6 +30,7 @@
     const filter = query('[data-comments-filter]');
     let clerk, me, next = null, parentId = null, unsubscribe, observer, started = false;
     let fetchVersion = 0, identityVersion = 0;
+    const timers = new Set();
     const thread = location.pathname;
 
     async function request(path, options = {}) {
@@ -49,6 +50,29 @@
     function message(error) {
       if (!signal.aborted) status.textContent = error?.message || '评论暂时加载失败，请刷新重试。';
     }
+    function avatar(name, url) {
+      const node = element('span', (name || '访').slice(0, 1), 'nuo-comment-avatar');
+      node.setAttribute('aria-hidden', 'true');
+      if (url) {
+        const image = element('img'); image.src = url; image.alt = '';
+        image.width = image.height = 36; image.loading = 'lazy'; image.referrerPolicy = 'no-referrer';
+        image.onerror = () => image.replaceWith(document.createTextNode((name || '访').slice(0, 1)));
+        node.replaceChildren(image);
+      }
+      return node;
+    }
+    function counter() {
+      const node = query('[data-comments-counter]');
+      if (node) node.textContent = input.value.length + ' / 2000';
+    }
+    function cancelPolling() { timers.forEach(clearTimeout); timers.clear(); }
+    function pollReview() {
+      cancelPolling();
+      [3000, 10000, 25000].forEach(delay => {
+        const timer = setTimeout(() => { timers.delete(timer); if (!signal.aborted) load(); }, delay);
+        timers.add(timer);
+      });
+    }
     function action(label, run) {
       const button = element('button', label);
       button.type = 'button';
@@ -62,12 +86,9 @@
     function draw(item) {
       const card = element('article', undefined, 'nuo-comment');
       card.dataset.commentId = item.id;
+      if (item.parentId) card.dataset.parentId = item.parentId;
       const header = element('div', undefined, 'nuo-comment-header');
-      if (item.author.avatar) {
-        const image = element('img'); image.src = item.author.avatar;
-        image.alt = ''; image.width = image.height = 32; image.loading = 'lazy';
-        image.referrerPolicy = 'no-referrer'; header.append(image);
-      }
+      header.append(avatar(item.author.name, item.author.avatar));
       header.append(element('strong', item.author.name));
       const date = element('time', new Date(item.createdAt * 1000).toLocaleString('zh-CN'));
       date.dateTime = new Date(item.createdAt * 1000).toISOString(); header.append(date);
@@ -76,11 +97,20 @@
       card.append(header);
       if (item.parentId) card.append(element('small', '回复 #' + item.parentId));
       card.append(element('p', item.state === 'deleted' ? '这条评论已删除。' : item.body, 'nuo-comment-body'));
+      if (adminPage && item.moderation) {
+        const labels = { queued: 'AI 审核中', approved: 'AI 已放行', review: '需人工判断', error: 'AI 暂不可用', limited: '今日额度已用完', disabled: '人工审核', skipped: '免审核', manual: '已人工处理' };
+        const review = element('div', undefined, 'nuo-comment-ai');
+        review.dataset.aiStatus = item.moderation.status;
+        review.append(element('strong', labels[item.moderation.status] || '人工审核'));
+        review.append(element('span', item.moderation.reason || (item.moderation.status === 'queued' ? '稍后刷新查看结果' : '由管理员处理')));
+        card.append(review);
+      }
       const actions = element('div', undefined, 'nuo-comment-actions');
       if (!adminPage && clerk?.isSignedIn && !item.parentId && item.state === 'published') {
         actions.append(action('回复', () => {
           parentId = item.id;
-          const notice = query('[data-comments-reply]'); notice.hidden = false;
+          const notice = query('[data-comments-reply]');
+          query('[data-comments-reply-box]').hidden = false;
           notice.textContent = '正在回复 ' + item.author.name;
           query('[data-comments-cancel]').hidden = false;
           input.focus();
@@ -95,6 +125,10 @@
           await request('/v1/comments/' + item.id, { method: 'PATCH', body: { state: 'hidden' } });
           await load();
         }));
+        if (item.state === 'pending' && me.moderation?.configured) actions.append(action('AI 复审', async () => {
+          await request('/v1/comments/' + item.id + '/moderate', { method: 'POST' });
+          await load(); pollReview();
+        }));
       }
       if (item.canDelete) actions.append(action('删除', async () => {
         if (!confirm('确定删除这条评论？')) return;
@@ -106,7 +140,7 @@
     }
     function cancelReply() {
       parentId = null;
-      query('[data-comments-reply]').hidden = true;
+      query('[data-comments-reply-box]').hidden = true;
       query('[data-comments-cancel]').hidden = true;
     }
     async function load(append = false) {
@@ -122,6 +156,8 @@
         data.items.forEach(item => list.append(draw(item)));
         next = data.next;
         if (more) more.hidden = !next;
+        const count = query('[data-comments-count]');
+        if (count) { count.textContent = list.childNodes.length + (next ? '+' : ''); count.setAttribute('aria-label', '已加载 ' + list.childNodes.length + ' 条评论'); }
         status.textContent = list.childNodes.length ? '' : (adminPage ? '这个分类暂无评论。' : '还没有评论，来聊聊吧。');
       } catch (error) { message(error); }
     }
@@ -136,7 +172,16 @@
         if (submit) submit.disabled = !me;
         if (input) input.disabled = !me;
         const identityLabel = query('[data-comments-identity]');
-        if (identityLabel) identityLabel.textContent = me ? '已登录：' + (clerk.user.fullName || clerk.user.username || '读者') : '登录后可发表评论。';
+        const name = me ? (clerk.user.fullName || clerk.user.username || '读者') : '访客';
+        if (identityLabel) identityLabel.textContent = me ? name : '登录后加入讨论';
+        const identityHint = query('[data-comments-identity-hint]');
+        if (identityHint) identityHint.textContent = me ? '以这个身份参与讨论' : '用你的账号，留下一点想法。';
+        const face = query('[data-comments-avatar]');
+        if (face) { const node = avatar(name, me ? clerk.user.imageUrl : ''); node.setAttribute('data-comments-avatar', ''); face.replaceWith(node); }
+        const service = query('[data-comments-service]');
+        if (service) service.textContent = me?.admin
+          ? (me.moderation?.configured ? 'DeepSeek 辅助审核已启用 · 每日最多 ' + me.moderation.dailyLimit + ' 次，不确定的评论保留在此。' : 'DeepSeek 尚未配置，当前使用人工审核。')
+          : '仅管理员可查看审核队列。';
         const adminLink = query('[data-comments-admin-link]');
         if (adminLink) adminLink.hidden = !me?.admin;
         if (adminPage && !me?.admin) {
@@ -162,7 +207,8 @@
             previousId = currentId;
             if (form) cancelReply();
             // Never carry a draft from one signed-in account to another.
-            if (input) input.value = '';
+            if (input) { input.value = ''; counter(); }
+            cancelPolling();
             refreshIdentity();
           });
         }
@@ -180,27 +226,39 @@
       finally { login.disabled = false; }
     };
     if (form) {
+      input.addEventListener('input', counter, { signal });
       query('[data-comments-cancel]').onclick = cancelReply;
       more.onclick = () => load(true);
       form.onsubmit = async event => {
         event.preventDefault();
         const body = input.value.trim();
         if (!me || !body || submit.disabled) return;
+        const authorId = me.id;
         submit.disabled = true;
         try {
           await request('/v1/comments', { method: 'POST', body: {
             thread, parentId, body, name: clerk.user.fullName || clerk.user.username || '读者', avatar: clerk.user.imageUrl || ''
           } });
-          if (signal.aborted) return;
-          if (input.value.trim() === body) input.value = '';
+          if (signal.aborted || me?.id !== authorId) return;
+          if (input.value.trim() === body) { input.value = ''; counter(); }
           cancelReply();
           await load();
-          status.textContent = me.admin ? '评论已发布。' : '已提交，审核通过后公开展示。';
+          status.textContent = me.admin ? '评论已发布。' : '已提交，正在审核。通过后会自动显示。';
+          if (!me.admin) pollReview();
         } catch (error) { message(error); }
         finally { if (!signal.aborted) submit.disabled = !me; }
       };
     }
-    if (filter) filter.onchange = () => load();
+    if (filter) {
+      filter.onchange = () => {
+        host.querySelectorAll('[data-comments-tab]').forEach(button => button.setAttribute('aria-pressed', String(button.dataset.commentsTab === filter.value)));
+        load();
+      };
+      host.querySelectorAll('[data-comments-tab]').forEach(button => {
+        button.onclick = () => { filter.value = button.dataset.commentsTab; filter.onchange(); };
+      });
+      query('[data-comments-refresh]').onclick = () => load();
+    }
     if (adminPage || !('IntersectionObserver' in window)) start();
     else {
       observer = new IntersectionObserver(entries => {
@@ -208,7 +266,7 @@
       }, { rootMargin: '200px' });
       observer.observe(host);
     }
-    dispose = () => { controller.abort(); observer?.disconnect(); unsubscribe?.(); };
+    dispose = () => { controller.abort(); observer?.disconnect(); unsubscribe?.(); cancelPolling(); };
   }
   document.addEventListener('pjax:send', () => { if (dispose) dispose(); dispose = null; });
   document.addEventListener('pjax:complete', boot);

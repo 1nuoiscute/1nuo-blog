@@ -1,17 +1,30 @@
 section.nuo-comments(data-nuo-comments data-api=theme.nuo_comments.api aria-label='评论')
   .nuo-comments-heading
     h2 评论
+      span.nuo-comments-count(data-comments-count)
     a.nuo-comments-admin-link(href='/comments-admin/' hidden data-comments-admin-link) 管理评论
-  p.nuo-comments-status(data-comments-status role='status' aria-live='polite') 正在加载评论…
   form.nuo-comments-form(data-comments-form)
-    p.nuo-comments-identity(data-comments-identity) 登录后可发表评论。
-    p.nuo-comments-reply(data-comments-reply hidden)
-    label(for='nuo-comment-body') 留下你的想法
-    textarea#nuo-comment-body(name='comment' rows='4' maxlength='2000' placeholder='聊聊你的想法，或补充一条信息。' required disabled data-comments-body)
-    .nuo-comments-actions
-      button(type='button' data-comments-login) 登录 / 注册
-      button(type='button' hidden data-comments-cancel) 取消回复
-      button(type='submit' disabled data-comments-submit) 发表评论
-    small 新评论审核后公开展示。
+    .nuo-composer-top
+      .nuo-comments-person
+        span.nuo-comment-avatar(data-comments-avatar aria-hidden='true') 访
+        .nuo-comments-person-copy
+          strong(data-comments-identity) 登录后加入讨论
+          span(data-comments-identity-hint) 用你的账号，留下一点想法。
+      button.nuo-comments-login(type='button' data-comments-login) 登录 / 注册
+    .nuo-comments-reply(hidden data-comments-reply-box)
+      span(data-comments-reply)
+      button(type='button' hidden data-comments-cancel aria-label='取消回复') 取消回复
+    label.nuo-comments-sr-only(for='nuo-comment-body') 留下你的想法
+    textarea#nuo-comment-body(name='comment' rows='3' maxlength='2000' placeholder='聊聊你的想法，或补充一条信息…' required disabled data-comments-body)
+    .nuo-composer-bottom
+      small.nuo-comments-review-note 评论由 DeepSeek 辅助审核
+      .nuo-comments-send
+        span.nuo-comments-counter(data-comments-counter aria-live='off') 0 / 2000
+        button(type='submit' disabled data-comments-submit)
+          span 发表评论
+          svg(width='15' height='15' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='1.7' aria-hidden='true')
+            path(d='m5 12 14-7-5 14-2-7-7 0Z' stroke-linejoin='round')
+            path(d='m12 12 7-7')
+  p.nuo-comments-status(data-comments-status role='status' aria-live='polite') 正在加载评论…
   .nuo-comments-list(data-comments-list)
   button.nuo-comments-more(type='button' hidden data-comments-more) 加载更多

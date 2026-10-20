@@ -1,4 +1,5 @@
 import { createRemoteJWKSet, customFetch, jwtVerify } from 'jose';
+import { moderateComment, moderationSettings } from './moderation.mjs';
 
 class HttpError extends Error {
   constructor(status, message) { super(message); this.status = status; }
@@ -51,11 +52,12 @@ function publicComment(row, actor) {
     author: { name: row.author_name, avatar: row.avatar_url },
     body: row.state === 'deleted' ? '' : row.body,
     state: row.state, createdAt: row.created_at,
-    canDelete: !!actor && row.state !== 'deleted' && (actor.id === row.author_id || actor.admin)
+    canDelete: !!actor && row.state !== 'deleted' && (actor.id === row.author_id || actor.admin),
+    ...(actor?.admin ? { moderation: { status: row.ai_status, reason: row.ai_reason, model: row.ai_model, checkedAt: row.ai_checked_at } } : {})
   };
 }
 
-export function createWorker({ jwksFetch = fetch } = {}) {
+export function createWorker({ jwksFetch = fetch, moderationFetch = fetch } = {}) {
   const keysets = new Map();
   async function authenticate(request, env, required = true) {
     const authorization = request.headers.get('authorization');
@@ -102,11 +104,12 @@ export function createWorker({ jwksFetch = fetch } = {}) {
         const url = new URL(request.url);
         if (request.method === 'GET' && url.pathname === '/health') {
           await env.DB.prepare('SELECT id FROM comments LIMIT 1').all();
-          return reply({ ok: true, service: '1nuo-comments', authConfigured: !!env.CLERK_ISSUER });
+          return reply({ ok: true, service: '1nuo-comments', authConfigured: !!env.CLERK_ISSUER,
+            autoModerationConfigured: moderationSettings(env).configured });
         }
         if (request.method === 'GET' && url.pathname === '/v1/me') {
           const actor = await authenticate(request, env);
-          return reply({ id: actor.id, admin: actor.admin });
+          return reply({ id: actor.id, admin: actor.admin, ...(actor.admin ? { moderation: moderationSettings(env) } : {}) });
         }
         if (request.method === 'GET' && url.pathname === '/v1/comments') {
           const thread = threadPath(url.searchParams.get('thread'));
@@ -138,11 +141,33 @@ export function createWorker({ jwksFetch = fetch } = {}) {
           const name = typeof input.name === 'string' ? input.name.trim().slice(0, 40) : '';
           const now = Math.floor(Date.now() / 1000);
           await limit(env, actor.id, now);
-          const row = await env.DB.prepare(`INSERT INTO comments(thread,parent_id,author_id,author_name,avatar_url,body,state,created_at,updated_at,published_at)
-            VALUES(?,?,?,?,?,?,?,?,?,?) RETURNING *`).bind(thread, parentId, actor.id, name || '读者 ' + actor.id.slice(-6),
-              safeAvatar(input.avatar), body, actor.admin ? 'published' : 'pending', now, now, actor.admin ? now : null).first();
+          const run = !actor.admin && moderationSettings(env).configured ? crypto.randomUUID() : null;
+          const row = await env.DB.prepare(`INSERT INTO comments(thread,parent_id,author_id,author_name,avatar_url,body,state,created_at,updated_at,published_at,ai_status,ai_run,ai_checked_at)
+            VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING *`).bind(thread, parentId, actor.id, name || '读者 ' + actor.id.slice(-6),
+              safeAvatar(input.avatar), body, actor.admin ? 'published' : 'pending', now, now, actor.admin ? now : null,
+              actor.admin ? 'skipped' : run ? 'queued' : 'disabled', run, run ? now : null).first();
+          if (run) {
+            const task = moderateComment(env, row.id, run, moderationFetch);
+            if (ctx?.waitUntil) ctx.waitUntil(task); else await task;
+          }
           if (ctx?.waitUntil) ctx.waitUntil(env.DB.prepare('DELETE FROM comment_limits WHERE bucket IN (SELECT bucket FROM comment_limits WHERE expires_at<? LIMIT 100)').bind(now - 86400).run());
           return reply({ item: publicComment(row, actor) }, 201);
+        }
+        const moderateRoute = /^\/v1\/comments\/([1-9][0-9]*)\/moderate$/.exec(url.pathname);
+        if (moderateRoute && request.method === 'POST') {
+          const actor = await authenticate(request, env);
+          if (!actor.admin) reject(403, '没有审核权限');
+          if (!moderationSettings(env).configured) reject(503, '请先配置 DeepSeek 密钥');
+          const id = Number(moderateRoute[1]);
+          if (!Number.isSafeInteger(id)) reject(400, '评论编号无效');
+          const run = crypto.randomUUID(), now = Math.floor(Date.now() / 1000);
+          const row = await env.DB.prepare(`UPDATE comments SET ai_run=?,ai_status='queued',ai_reason='',ai_checked_at=?
+            WHERE id=? AND state='pending' AND (ai_run IS NULL OR ai_checked_at<?) RETURNING id`)
+            .bind(run, now, id, now - 60).first();
+          if (!row) reject(409, '评论已处理或正在审核，请刷新列表');
+          const task = moderateComment(env, id, run, moderationFetch);
+          if (ctx?.waitUntil) ctx.waitUntil(task); else await task;
+          return reply({ ok: true }, 202);
         }
         const itemRoute = /^\/v1\/comments\/([1-9][0-9]*)$/.exec(url.pathname);
         if (itemRoute && ['DELETE', 'PATCH'].includes(request.method)) {
@@ -153,13 +178,13 @@ export function createWorker({ jwksFetch = fetch } = {}) {
           if (!row) reject(404, '评论不存在');
           if (request.method === 'DELETE') {
             if (!actor.admin && row.author_id !== actor.id) reject(403, '没有删除权限');
-            await env.DB.prepare("UPDATE comments SET state='deleted', body='', updated_at=? WHERE id=?").bind(Math.floor(Date.now() / 1000), id).run();
+            await env.DB.prepare("UPDATE comments SET state='deleted', body='', ai_run=NULL,ai_status='skipped',ai_reason='',ai_model='',updated_at=? WHERE id=?").bind(Math.floor(Date.now() / 1000), id).run();
           } else {
             if (!actor.admin) reject(403, '没有审核权限');
             const input = await jsonBody(request);
             if (!['published', 'hidden'].includes(input.state) || row.state === 'deleted') reject(400, '审核状态无效');
             const now = Math.floor(Date.now() / 1000);
-            await env.DB.prepare("UPDATE comments SET state=?,updated_at=?,published_at=CASE WHEN ?='published' THEN COALESCE(published_at,?) ELSE published_at END WHERE id=? AND state!='deleted'")
+            await env.DB.prepare("UPDATE comments SET state=?,updated_at=?,ai_run=NULL,ai_reason=CASE WHEN ai_status='queued' THEN '管理员已处理' ELSE ai_reason END,ai_status=CASE WHEN ai_status='queued' THEN 'manual' ELSE ai_status END,published_at=CASE WHEN ?='published' THEN COALESCE(published_at,?) ELSE published_at END WHERE id=? AND state!='deleted'")
               .bind(input.state, now, input.state, now, id).run();
           }
           return reply({ ok: true });

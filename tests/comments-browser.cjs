@@ -28,7 +28,7 @@ async function main() {
       return res.end(read(files[url.pathname]));
     }
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
-    res.end('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/account.css"><link rel="stylesheet" href="/comments.css"></head><body style="margin:16px"><main style="max-width:720px;margin:auto">' +
+    res.end('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/account.css"><link rel="stylesheet" href="/comments.css"></head><body style="margin:24px;font-family:Arial,\'Microsoft YaHei\',sans-serif;background:var(--account-surface)"><main id="article-container" style="max-width:880px;margin:auto">' +
       (url.pathname === '/comments-admin/' ? adminMarkup : publicMarkup) + '</main><script>' + authStub + '</script><script src="/nuo-comments.js"></script></body></html>');
   });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
@@ -46,13 +46,18 @@ async function main() {
       const actor = req.headers().authorization?.replace('Bearer ', '') || '';
       let status = 200, data;
       const map = item => ({ ...item, canDelete: actor === item.authorId || actor === 'user_admin' });
-      if (url.pathname === '/v1/me') data = { id: actor, admin: actor === 'user_admin' };
+      if (url.pathname === '/v1/me') data = { id: actor, admin: actor === 'user_admin', moderation: { configured: true, dailyLimit: 100 } };
+      else if (url.pathname.endsWith('/moderate') && req.method() === 'POST') {
+        comments.find(item => item.id === Number(url.pathname.split('/').at(-2))).moderation = { status: 'queued' };
+        data = { ok: true };
+      }
       else if (req.method() === 'POST') {
         const body = req.postDataJSON(); submissions.push(body);
         if (failPost) { status = 500; data = { error: '暂时提交失败，请重试' }; }
         else {
           const item = { id: comments.length + 1, thread: '/', parentId: body.parentId, authorId: actor,
-            author: { name: body.name, avatar: '' }, body: body.body, state: 'pending', createdAt: 1700000001 };
+            author: { name: body.name, avatar: '' }, body: body.body, state: 'pending', createdAt: 1700000001,
+            moderation: { status: 'review', reason: '需要结合上下文判断' } };
           comments.push(item); status = 201; data = { item: map(item) };
         }
       } else if (req.method() === 'PATCH') {
@@ -72,6 +77,7 @@ async function main() {
     check(await page.locator('.nuo-comment-header strong').textContent() === '<b>普通昵称</b>', 'nickname HTML remains literal text');
     check(await page.getByText('查看历史评论（Giscus / Twikoo）').count() === 1, 'both historical systems remain available');
     await input.fill('需要保留的草稿');
+    check(await page.locator('[data-comments-counter]').textContent() === '7 / 2000', 'character counter follows draft');
     await page.getByRole('button', { name: '发表评论', exact: true }).click();
     await page.getByText('暂时提交失败，请重试', { exact: true }).waitFor();
     check(await input.inputValue() === '需要保留的草稿', 'server failure preserves comment draft');
@@ -79,12 +85,12 @@ async function main() {
     failPost = false;
     await page.getByRole('button', { name: '回复', exact: true }).first().click();
     await page.getByRole('button', { name: '发表评论', exact: true }).click();
-    await page.getByText('已提交，审核通过后公开展示。', { exact: true }).waitFor();
+    await page.getByText('已提交，正在审核。通过后会自动显示。', { exact: true }).waitFor();
     check(submissions.at(-1).parentId === 1, 'reply submission carries parent ID');
     check(await input.inputValue() === '', 'successful submission clears only submitted draft');
     await input.fill('另一个账号不能看到这个草稿');
     await page.evaluate(() => switchAccount('user_bob'));
-    await page.getByText('已登录：user_bob', { exact: true }).waitFor();
+    await page.locator('[data-comments-identity]').filter({ hasText: 'user_bob' }).waitFor();
     check(await input.inputValue() === '', 'account switch clears prior account draft');
     await page.evaluate(() => document.dispatchEvent(new Event('pjax:send')));
     check(await page.evaluate(() => listeners.size) === 0, 'PJAX departure removes auth listener');
@@ -97,14 +103,36 @@ async function main() {
     check(await page.getByRole('button', { name: '发布', exact: true }).count() === 0, 'non-admin sees no moderation actions');
     await page.evaluate(() => switchAccount('user_admin'));
     await page.getByRole('button', { name: '发布', exact: true }).first().waitFor();
+    check(await page.getByText('需要结合上下文判断', { exact: true }).count() === 1, 'administrator sees AI review reason');
+    check(await page.getByRole('button', { name: 'AI 复审', exact: true }).count() === 1, 'administrator can request another AI review');
+    await page.getByRole('button', { name: '已发布', exact: true }).click();
+    await page.locator('[data-comment-id="1"]').waitFor();
+    check(await page.getByRole('button', { name: '已发布', exact: true }).getAttribute('aria-pressed') === 'true', 'review tabs switch queue state accessibly');
+    await page.getByRole('button', { name: '待审核', exact: true }).click();
+    await page.locator('[data-comment-id="2"]').waitFor();
+    if (process.env.COMMENTS_SCREENSHOTS) {
+      fs.mkdirSync(path.join(root, 'test-results'), { recursive: true });
+      await page.setViewportSize({ width: 1100, height: 800 });
+      await page.screenshot({ path: path.join(root, 'test-results/comments-redesign-admin.png'), fullPage: true });
+    }
     await page.getByRole('button', { name: '发布', exact: true }).first().click();
     await page.getByText('这个分类暂无评论。', { exact: true }).waitFor();
     check(comments[1].state === 'published', 'administrator publishes pending comment');
     await page.goto(base + '/?signedout=1');
-    await page.getByText('登录后可发表评论。', { exact: true }).waitFor();
+    await page.getByText('登录后加入讨论', { exact: true }).waitFor();
     check(await input.isDisabled(), 'anonymous readers log in before drafting');
     await page.getByRole('button', { name: '登录 / 注册', exact: true }).click();
     check(await page.evaluate(() => loginOptions.forceRedirectUrl === location.origin + location.pathname), 'login returns to current article');
+    if (process.env.COMMENTS_SCREENSHOTS) {
+      comments.splice(0); await page.goto(base);
+      await page.waitForFunction(() => !document.querySelector('[data-comments-body]').disabled);
+      await page.setViewportSize({ width: 1100, height: 800 });
+      await page.screenshot({ path: path.join(root, 'test-results/comments-redesign-desktop.png'), fullPage: true });
+      await page.setViewportSize({ width: 390, height: 844 });
+      await page.screenshot({ path: path.join(root, 'test-results/comments-redesign-mobile.png'), fullPage: true });
+      await page.evaluate(() => document.documentElement.dataset.theme = 'dark');
+      await page.screenshot({ path: path.join(root, 'test-results/comments-redesign-dark.png'), fullPage: true });
+    }
     check(errors.length === 0, 'comment UI has no uncaught browser errors');
     console.log(`Comments UI: ${checks} checks passed (local API and auth simulated).`);
   } finally { if (browser) await browser.close(); await new Promise(resolve => server.close(resolve)); }

@@ -1,0 +1,5 @@
+ALTER TABLE comments ADD COLUMN ai_status TEXT NOT NULL DEFAULT 'disabled';
+ALTER TABLE comments ADD COLUMN ai_reason TEXT NOT NULL DEFAULT '';
+ALTER TABLE comments ADD COLUMN ai_model TEXT NOT NULL DEFAULT '';
+ALTER TABLE comments ADD COLUMN ai_checked_at INTEGER;
+ALTER TABLE comments ADD COLUMN ai_run TEXT;
