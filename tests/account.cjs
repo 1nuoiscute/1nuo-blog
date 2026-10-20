@@ -27,7 +27,7 @@ const storageMenu = menu['收纳||fas fa-boxes'];
 check(!menu['探索'] && !menu['订阅||fas fa-rss'] && storageMenu['探索'].includes('/explore/') && storageMenu['订阅'].includes('/subscribe/'), 'explore and subscribe belong to the storage dropdown');
 check(!account.includes('欢迎来到') && !account.includes('nuo-account-note'), 'account page omits duplicate introduction and explainer');
 const routes = JSON.parse(read('vercel.json')).routes;
-check(routes.some(route => route.src === '/account(?:/.*)?' && route.headers['X-Robots-Tag'].includes('noindex')), 'account has a noindex response header');
+check(routes.some(route => route.headers?.['X-Robots-Tag']?.includes('noindex') && new RegExp(route.src).test('/account/')), 'account has a noindex response header');
 
 const mock = `
 window.fixture = { mounts: [], unmounts: [], listeners: new Set(), options: null };

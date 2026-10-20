@@ -92,6 +92,10 @@
     return loading;
   }
 
+  // Other first-party features reuse this instance and its verified session.
+  // Loading remains demand-driven: ordinary reading never starts Clerk here.
+  window.NuoAuth = { getClerk };
+
   function unmountWidget() {
     if (!mounted) return;
     const previous = mounted;

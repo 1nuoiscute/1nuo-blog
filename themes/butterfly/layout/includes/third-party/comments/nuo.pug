@@ -1,0 +1,17 @@
+section.nuo-comments(data-nuo-comments data-api=theme.nuo_comments.api aria-label='评论')
+  .nuo-comments-heading
+    h2 评论
+    a.nuo-comments-admin-link(href='/comments-admin/' hidden data-comments-admin-link) 管理评论
+  p.nuo-comments-status(data-comments-status role='status' aria-live='polite') 正在加载评论…
+  form.nuo-comments-form(data-comments-form)
+    p.nuo-comments-identity(data-comments-identity) 登录后可发表评论。
+    p.nuo-comments-reply(data-comments-reply hidden)
+    label(for='nuo-comment-body') 留下你的想法
+    textarea#nuo-comment-body(name='comment' rows='4' maxlength='2000' placeholder='聊聊你的想法，或补充一条信息。' required disabled data-comments-body)
+    .nuo-comments-actions
+      button(type='button' data-comments-login) 登录 / 注册
+      button(type='button' hidden data-comments-cancel) 取消回复
+      button(type='submit' disabled data-comments-submit) 发表评论
+    small 新评论审核后公开展示。
+  .nuo-comments-list(data-comments-list)
+  button.nuo-comments-more(type='button' hidden data-comments-more) 加载更多

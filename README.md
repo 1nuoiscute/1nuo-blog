@@ -83,6 +83,8 @@
 
 ### 账号功能
 
+评论接入同一 Clerk 账号：Cloudflare Workers 提供接口，D1 存储评论，新评论经审核后公开；管理员可访问 `/comments-admin/`。原 Giscus/Twikoo 在历史入口保留。部署、备份及验收边界见 [评论说明](docs/comments-setup.md)。
+
 导航「账号」指向 `/account/`，接入 Clerk 的注册/登录、个人资料和退出登录。需要先创建 Clerk 应用，并在 Vercel 设置 `CLERK_PUBLISHABLE_KEY` 后重新部署才会启用；未配置时显示「即将开放」。收藏、阅读进度和游戏存档仍保存在当前浏览器。配置步骤见 [Clerk 接入说明](docs/clerk-setup.md)。
 
 需要 Node.js 20 或更高版本：

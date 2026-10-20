@@ -8,7 +8,7 @@
       "headers": { "Location": "https://www.1nuo.me/$1" }
     },
     {
-      "src": "/account(?:/.*)?",
+      "src": "/(?:account|comments-admin)(?:/.*)?",
       "headers": { "X-Robots-Tag": "noindex, nofollow, noarchive" },
       "continue": true
     },

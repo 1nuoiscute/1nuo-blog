@@ -1,0 +1,21 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "1nuo-blog-comments",
+  "account_id": "8897cf6b71205c7c4376a86fc0577560",
+  "main": "src/index.mjs",
+  "compatibility_date": "2026-10-20",
+  "workers_dev": true,
+  "preview_urls": false,
+  "routes": [{ "pattern": "comments.1nuo.me", "custom_domain": true }],
+  "vars": {
+    "ALLOWED_ORIGINS": "https://www.1nuo.me",
+    "CLERK_ISSUER": "https://kind-mackerel-1226.clerk.accounts.dev",
+    "ADMIN_USER_IDS": "user_3KxZesaXpmCqcQZhcHSHFKtGYto"
+  },
+  "d1_databases": [{
+    "binding": "DB",
+    "database_name": "1nuo-blog-comments",
+    "database_id": "fcb9c640-640f-4ec5-8536-d3a4a6dee575",
+    "migrations_dir": "migrations"
+  }]
+}

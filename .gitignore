@@ -8,5 +8,8 @@ public/
 _multiconfig.yml
 tips.txt
 test-results/
+.wrangler/
+.dev.vars*
+.env*
 
 tips.txt

@@ -1,0 +1,14 @@
+{
+  "name": "1nuo-blog-comments",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "test": "node --test test/*.test.mjs",
+    "dev": "wrangler dev",
+    "deploy": "wrangler deploy",
+    "migrate": "wrangler d1 migrations apply DB --remote"
+  },
+  "dependencies": { "jose": "6.2.13" },
+  "devDependencies": { "wrangler": "4.151.3" },
+  "engines": { "node": ">=24" }
+}
