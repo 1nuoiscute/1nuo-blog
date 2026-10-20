@@ -8,6 +8,11 @@
       "headers": { "Location": "https://www.1nuo.me/$1" }
     },
     {
+      "src": "/account(?:/.*)?",
+      "headers": { "X-Robots-Tag": "noindex, nofollow, noarchive" },
+      "continue": true
+    },
+    {
       "src": "/rate/admin(?:/.*)?",
       "headers": { "X-Robots-Tag": "noindex, nofollow, noarchive" },
       "continue": true
