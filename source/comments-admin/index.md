@@ -14,9 +14,10 @@ search: false
 <div class="nuo-review-toolbar">
 <div class="nuo-review-tabs" role="group" aria-label="评论状态"><button type="button" data-comments-tab="pending" aria-pressed="true">待审核</button><button type="button" data-comments-tab="published" aria-pressed="false">已发布</button><button type="button" data-comments-tab="hidden" aria-pressed="false">已隐藏</button></div>
 <label class="nuo-comments-sr-only">查看状态 <select data-comments-filter><option value="pending">待审核</option><option value="published">已发布</option><option value="hidden">已隐藏</option></select></label>
-<button class="nuo-review-refresh" type="button" data-comments-refresh>刷新列表</button>
+<div class="nuo-review-actions"><button class="nuo-review-refresh" type="button" data-comments-refresh>刷新列表</button><button class="nuo-review-refresh" type="button" data-comments-diagnose>检查 AI 链路</button></div>
 </div>
 <p class="nuo-review-service" data-comments-service>正在检查自动审核…</p>
+<p class="nuo-review-service nuo-review-diagnosis" data-comments-diagnosis hidden></p>
 <p class="nuo-comments-status" data-comments-status role="status" aria-live="polite">正在验证管理员身份…</p>
 <button class="nuo-comments-login" type="button" data-comments-login>登录 / 注册</button>
   <div class="nuo-comments-list" data-comments-list></div>

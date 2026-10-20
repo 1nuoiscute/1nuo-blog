@@ -189,6 +189,73 @@ test('daily AI budget is persistent and missing credentials cause no external ca
   assert.equal((await f.request('/v1/comments/' + manual.id + '/moderate', { method: 'POST', auth })).status, 403);
 });
 
+test('every moderation failure states its cause in the admin queue, never the body or the key', async () => {
+  const cases = [
+    { reply: () => new Response('{"error":"leaked"}', { status: 401 }), expect: ['鉴权', '401'] },
+    { reply: () => new Response('leaked', { status: 402 }), expect: ['余额', '402'] },
+    { reply: () => new Response('leaked', { status: 429 }), expect: ['频繁', '429'] },
+    { reply: () => new Response('leaked', { status: 503 }), expect: ['繁忙', '503'] },
+    { reply: () => new Response('leaked', { status: 400 }), expect: ['参数', '400'] },
+    { reply: () => new Response('<html>challenge</html>', { status: 403 }), expect: ['拒绝', '403'] },
+    { reply: () => { throw new DOMException('Timeout', 'TimeoutError'); }, expect: ['超时'] },
+    { reply: () => { throw new TypeError('Unable to connect'); }, expect: ['无法连接'] },
+    { reply: () => new Response('not json', { status: 200 }), expect: ['JSON'] },
+    { reply: () => Response.json({ choices: [{ finish_reason: 'length', message: { content: '{}' } }] }), expect: ['截断'] },
+    { reply: () => decision({ decision: 'maybe', confidence: 0.9, reason: '格式' }), expect: ['格式'] }
+  ];
+  for (const item of cases) {
+    const f = fixture({ moderationFetch: async () => item.reply() }); f.env.DEEPSEEK_API_KEY = 'test-only';
+    await f.request('/v1/comments', { method: 'POST', auth: await token(), body: { thread, body: '待审核内容' } });
+    await f.settle();
+    const row = f.sql.prepare('SELECT * FROM comments').get();
+    assert.equal(row.ai_status, 'error');
+    for (const word of item.expect) assert(row.ai_reason.includes(word), `${row.ai_reason} 缺少 ${word}`);
+    assert(!row.ai_reason.includes('leaked')); assert(!row.ai_reason.includes('test-only'));
+  }
+  const f = fixture({ moderationFetch: async () => decision() }); f.env.DEEPSEEK_API_KEY = 'test-only\n';
+  await f.request('/v1/comments', { method: 'POST', auth: await token(), body: { thread, body: '待审核内容' } });
+  await f.settle();
+  assert(f.sql.prepare('SELECT ai_reason FROM comments').get().ai_reason.includes('空白字符'));
+});
+
+test('admin diagnostics separate reachability, key validity, model name and the full call', async () => {
+  const list = (ids = ['deepseek-flash', 'deepseek-v4-pro']) => Response.json({ object: 'list', data: ids.map(id => ({ id, object: 'model' })) });
+  const f = fixture(), admin = await token('user_admin');
+  assert.equal((await f.request('/v1/admin/diagnostics', { method: 'POST', auth: await token(), body: {} })).status, 403);
+  assert.deepEqual((await f.request('/v1/admin/diagnostics', { method: 'POST', auth: admin, body: {} })).data, {
+    configured: false, model: 'deepseek-flash', keyHasWhitespace: false });
+
+  const seen = [];
+  const g = fixture({ moderationFetch: async (url, init) => { seen.push({ url, init }); return url.endsWith('/models') ? list() : decision(); } });
+  g.env.DEEPSEEK_API_KEY = 'test-only';
+  const report = (await g.request('/v1/admin/diagnostics', { method: 'POST', auth: admin, body: { chat: true } })).data;
+  assert.equal(report.models.status, 200); assert.equal(report.models.hasModel, true);
+  assert.equal(report.chat.ok, true); assert.equal(report.chat.decision, 'approve');
+  assert.equal(seen[0].url, 'https://api.deepseek.com/models');
+  assert.equal(seen[0].init.headers.Authorization, 'Bearer test-only');
+  assert.equal(seen[1].url, 'https://api.deepseek.com/chat/completions');
+  assert(!JSON.stringify(report).includes('test-only'));
+
+  const h = fixture({ moderationFetch: async url => url.endsWith('/models') ? list(['deepseek-v4-pro']) : decision() });
+  h.env.DEEPSEEK_API_KEY = 'test-only';
+  const missing = (await h.request('/v1/admin/diagnostics', { method: 'POST', auth: admin, body: {} })).data;
+  assert.equal(missing.models.hasModel, false); assert.equal(missing.chat, undefined);
+  assert.deepEqual(missing.models.models, ['deepseek-v4-pro']);
+
+  const k = fixture({ moderationFetch: async () => new Response('leaked', { status: 401 }) });
+  k.env.DEEPSEEK_API_KEY = 'test-only';
+  const denied = (await k.request('/v1/admin/diagnostics', { method: 'POST', auth: admin, body: { chat: true } })).data;
+  assert(denied.models.error.includes('401')); assert.equal(denied.chat.ok, false);
+  assert(denied.chat.error.includes('401')); assert(!JSON.stringify(denied).includes('leaked'));
+
+  let calls = 0;
+  const w = fixture({ moderationFetch: async () => { calls++; return decision(); } });
+  w.env.DEEPSEEK_API_KEY = '  ';
+  const padded = (await w.request('/v1/admin/diagnostics', { method: 'POST', auth: admin, body: { chat: true } })).data;
+  assert.equal(padded.keyHasWhitespace, true); assert(padded.models.error.includes('空白字符'));
+  assert.equal(calls, 0);
+});
+
 test('late AI decisions cannot overwrite manual hide, publish or deletion; only admin can retry', async () => {
   for (const state of ['hidden', 'published', 'deleted']) {
     let release;

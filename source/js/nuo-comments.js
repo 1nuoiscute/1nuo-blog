@@ -28,6 +28,8 @@
     const submit = query('[data-comments-submit]');
     const more = query('[data-comments-more]');
     const filter = query('[data-comments-filter]');
+    const diagnose = query('[data-comments-diagnose]');
+    const diagnosis = query('[data-comments-diagnosis]');
     let clerk, me, next = null, parentId = null, unsubscribe, observer, started = false;
     let fetchVersion = 0, identityVersion = 0;
     const timers = new Set();
@@ -143,6 +145,34 @@
       if (actions.childNodes.length) card.append(actions);
       return card;
     }
+    // The queue now states why a call failed; this button repeats the same call on
+    // demand so the Worker side of the chain can be checked without posting a comment.
+    function diagnosisText(result) {
+      if (!result.configured) return 'Worker 没有绑定 DEEPSEEK_API_KEY，自动审核不会运行。';
+      const models = result.models || {};
+      const lines = ['模型：' + result.model];
+      if (result.keyHasWhitespace) lines.push('密钥含空白字符，请求头会非法，请在 Cloudflare 重新保存。');
+      lines.push(models.error
+        ? '密钥检查失败：' + models.error
+        : '密钥可用（HTTP ' + models.status + '，' + models.ms + ' ms），可用模型：' + (models.models.length ? models.models.join('、') : '未返回列表'));
+      if (!models.error && !models.hasModel) lines.push('当前模型 ' + result.model + ' 不在可用列表中。');
+      if (result.chat) lines.push(result.chat.ok
+        ? '完整调用成功（' + result.chat.ms + ' ms，判定 ' + result.chat.decision + '）。'
+        : '完整调用失败：' + result.chat.error);
+      return lines.join('\n');
+    }
+    async function runDiagnosis() {
+      if (!me?.admin) { message(new Error('请先用管理员账号登录。')); return; }
+      if (!diagnose || !diagnosis) return;
+      diagnose.disabled = true;
+      diagnosis.hidden = false;
+      diagnosis.textContent = '正在检查 DeepSeek 调用链路，会消耗一次调用…';
+      try {
+        diagnosis.textContent = diagnosisText(await request('/v1/admin/diagnostics', { method: 'POST', body: { chat: true } }));
+      } catch (error) {
+        diagnosis.textContent = error?.message || '检查失败，请稍后重试。';
+      } finally { if (!signal.aborted) diagnose.disabled = false; }
+    }
     function cancelReply() {
       parentId = null;
       query('[data-comments-reply-box]').hidden = true;
@@ -188,6 +218,7 @@
           ? (me.moderation?.configured ? 'DeepSeek 辅助审核已启用 · 每日最多 ' + me.moderation.dailyLimit + ' 次，不确定的评论保留在此。' : 'DeepSeek 尚未配置，当前使用人工审核。')
           : '仅管理员可查看审核队列。';
         const adminLink = query('[data-comments-admin-link]');
+        if (diagnose) diagnose.hidden = !me?.admin;
         if (adminLink) adminLink.hidden = !me?.admin;
         if (adminPage && !me?.admin) {
           list.replaceChildren();
@@ -264,6 +295,7 @@
       });
       query('[data-comments-refresh]').onclick = () => load();
     }
+    if (diagnose) diagnose.onclick = () => { runDiagnosis(); };
     if (adminPage || !('IntersectionObserver' in window)) start();
     else {
       observer = new IntersectionObserver(entries => {

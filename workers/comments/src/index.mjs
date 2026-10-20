@@ -1,5 +1,5 @@
 import { createRemoteJWKSet, customFetch, jwtVerify } from 'jose';
-import { moderateComment, moderationSettings } from './moderation.mjs';
+import { moderateComment, moderationSettings, probeProvider } from './moderation.mjs';
 import { ipLocation } from './location.mjs';
 
 class HttpError extends Error {
@@ -190,6 +190,12 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch } = {}
               .bind(input.state, now, input.state, now, id).run();
           }
           return reply({ ok: true });
+        }
+        if (request.method === 'POST' && url.pathname === '/v1/admin/diagnostics') {
+          const actor = await authenticate(request, env);
+          if (!actor.admin) reject(403, '没有审核权限');
+          const input = await jsonBody(request);
+          return reply(await probeProvider(env, moderationFetch, { chat: input.chat === true }));
         }
         if (request.method === 'GET' && url.pathname === '/v1/admin/comments') {
           const actor = await authenticate(request, env);

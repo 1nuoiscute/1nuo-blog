@@ -47,6 +47,9 @@ async function main() {
       let status = 200, data;
       const map = item => ({ ...item, canDelete: actor === item.authorId || actor === 'user_admin' });
       if (url.pathname === '/v1/me') data = { id: actor, admin: actor === 'user_admin', moderation: { configured: true, dailyLimit: 100 } };
+      else if (url.pathname === '/v1/admin/diagnostics') data = { configured: true, model: 'deepseek-flash', keyHasWhitespace: false,
+        models: { status: 200, ms: 120, models: ['deepseek-flash'], hasModel: true, error: '' },
+        chat: { ok: true, ms: 800, decision: 'approve', error: '' } };
       else if (url.pathname.endsWith('/moderate') && req.method() === 'POST') {
         comments.find(item => item.id === Number(url.pathname.split('/').at(-2))).moderation = { status: 'queued' };
         data = { ok: true };
@@ -102,10 +105,14 @@ async function main() {
     await page.goto(base + '/comments-admin/');
     await page.getByText('当前账号没有评论管理权限。', { exact: true }).waitFor();
     check(await page.getByRole('button', { name: '发布', exact: true }).count() === 0, 'non-admin sees no moderation actions');
+    check(await page.getByRole('button', { name: '检查 AI 链路', exact: true }).count() === 0, 'non-admin sees no AI chain check');
     await page.evaluate(() => switchAccount('user_admin'));
     await page.getByRole('button', { name: '发布', exact: true }).first().waitFor();
     check(await page.getByText('需要结合上下文判断', { exact: true }).count() === 1, 'administrator sees AI review reason');
     check(await page.getByRole('button', { name: 'AI 复审', exact: true }).count() === 1, 'administrator can request another AI review');
+    await page.getByRole('button', { name: '检查 AI 链路', exact: true }).click();
+    await page.getByText(/完整调用成功/).waitFor();
+    check((await page.locator('[data-comments-diagnosis]').textContent()).includes('deepseek-flash'), 'administrator can trace the Worker moderation chain');
     await page.getByRole('button', { name: '已发布', exact: true }).click();
     await page.locator('[data-comment-id="1"]').waitFor();
     check(await page.getByRole('button', { name: '已发布', exact: true }).getAttribute('aria-pressed') === 'true', 'review tabs switch queue state accessibly');

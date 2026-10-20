@@ -65,16 +65,19 @@
 .nuo-review-tabs button { border-color: transparent; background: transparent; color: var(--account-muted); }
 .nuo-review-tabs button[aria-pressed='true'] { background: var(--account-tint); color: var(--account-accent); font-weight: 600; }
 .nuo-review .nuo-review-refresh { border: 0; padding-right: 0; background: transparent; color: var(--account-muted); white-space: nowrap; }
+.nuo-review-actions { display: flex; align-items: center; gap: 14px; }
 .nuo-review-service, #article-container .nuo-review-service { margin: 12px 0; color: var(--account-muted); font-size: 11px; }
+.nuo-review .nuo-review-diagnosis, #article-container .nuo-review-diagnosis { padding-left: 10px; border-left: 2px solid var(--account-line); white-space: pre-line; }
 .nuo-review .nuo-comment { margin: 12px 0 0; padding: 18px 18px 16px 66px; border: 1px solid var(--account-line); border-radius: 12px; background: var(--account-surface); }
 .nuo-review .nuo-comment-header > .nuo-comment-avatar { top: 18px; left: 18px; }
 .nuo-review .nuo-comment-actions { justify-content: flex-end; }
 .nuo-review .nuo-comment-actions button { padding: 5px 10px; border: 1px solid var(--account-line); border-radius: 6px; }
 .nuo-review .nuo-comment-actions button:first-child { border-color: var(--account-accent); color: var(--account-accent); }
-.nuo-review .nuo-comment-actions button:last-child { margin-left: auto; }
 .nuo-comment-ai { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin: 12px 0; padding: 9px 12px; border-radius: 7px; background: var(--account-tint); color: var(--account-muted); font-size: 12px; }
 .nuo-comment-ai strong { color: var(--account-accent); font-size: 11px; font-weight: 600; }
 .nuo-comment-ai[data-ai-status='approved'] strong { color: #307359; }
+.nuo-comment-ai[data-ai-status='error'] strong { color: #a2402f; }
+[data-theme='dark'] .nuo-comment-ai[data-ai-status='error'] strong { color: #e2a08f; }
 [data-theme='dark'] .nuo-comment-ai[data-ai-status='approved'] strong { color: #8dceb1; }
 @media (max-width: 600px) {
   .nuo-comments { margin-top: 28px; }
