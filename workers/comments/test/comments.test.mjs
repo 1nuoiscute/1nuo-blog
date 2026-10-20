@@ -157,6 +157,7 @@ test('DeepSeek auto-publishes only a validated high-confidence approval; identit
   assert.deepEqual(JSON.parse(sent.messages[1].content), { comment: '文章很有帮助' });
   assert(!calls[0].init.body.includes('user_alice')); assert(!calls[0].init.body.includes('私有姓名'));
   assert.equal((await f.request('/v1/admin/comments?state=published', { auth: await token('user_admin') })).data.items[0].moderation.status, 'approved');
+  assert.equal((await f.request('/v1/admin/comments?state=published', { auth: await token('user_admin') })).data.items[0].moderation.confidence, 0.99);
   await f.request('/v1/comments', { method: 'POST', auth: await token('user_admin'), body: { thread, body: '管理员直发' } });
   await f.settle(); assert.equal(calls.length, 1);
 });
@@ -211,7 +212,7 @@ test('every moderation failure states its cause in the admin queue, never the bo
     await f.request('/v1/comments', { method: 'POST', auth: await token(), body: { thread, body: '待审核内容' } });
     await f.settle();
     const row = f.sql.prepare('SELECT * FROM comments').get();
-    assert.equal(row.ai_status, 'error');
+    assert.equal(row.ai_status, 'error'); assert.equal(row.ai_confidence, null);
     for (const word of item.expect) assert(row.ai_reason.includes(word), `${row.ai_reason} 缺少 ${word}`);
     assert(!row.ai_reason.includes('leaked')); assert(!row.ai_reason.includes('test-only'));
   }

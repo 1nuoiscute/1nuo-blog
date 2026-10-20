@@ -75,6 +75,7 @@
 .nuo-review .nuo-comment-actions button:first-child { border-color: var(--account-accent); color: var(--account-accent); }
 .nuo-comment-ai { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 10px; margin: 12px 0; padding: 9px 12px; border-radius: 7px; background: var(--account-tint); color: var(--account-muted); font-size: 12px; }
 .nuo-comment-ai strong { color: var(--account-accent); font-size: 11px; font-weight: 600; }
+.nuo-comment-ai .nuo-comment-confidence { color: var(--account-accent); font-size: 11px; }
 .nuo-comment-ai[data-ai-status='approved'] strong { color: #307359; }
 .nuo-comment-ai[data-ai-status='error'] strong { color: #a2402f; }
 [data-theme='dark'] .nuo-comment-ai[data-ai-status='error'] strong { color: #e2a08f; }

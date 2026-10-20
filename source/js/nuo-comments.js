@@ -105,6 +105,9 @@
         review.dataset.aiStatus = item.moderation.status;
         review.append(element('strong', labels[item.moderation.status] || '人工审核'));
         review.append(element('span', item.moderation.reason || (item.moderation.status === 'queued' ? '稍后刷新查看结果' : '由管理员处理')));
+        if (typeof item.moderation.confidence === 'number') {
+          review.append(element('span', '置信度 ' + Math.round(item.moderation.confidence * 100) + '%', 'nuo-comment-confidence'));
+        }
         card.append(review);
       }
       const actions = element('div', undefined, 'nuo-comment-actions');

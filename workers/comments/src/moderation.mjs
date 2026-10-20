@@ -100,6 +100,7 @@ export async function classifyComment(body, env, apiFetch = fetch) {
       !result.reason.trim() || result.reason.length > 120) throw failure('schema');
   return {
     approve: result.decision === 'approve' && result.confidence >= 0.95,
+    confidence: result.confidence,
     reason: result.reason.trim().replace(/[\x00-\x1f]/g, '').slice(0, 120)
   };
 }
@@ -110,7 +111,7 @@ export async function moderateComment(env, id, run, apiFetch = fetch) {
     const row = await env.DB.prepare("SELECT body FROM comments WHERE id=? AND state='pending' AND ai_run=?")
       .bind(id, run).first();
     if (!row) return;
-    let status = 'disabled', reason = '尚未配置 DeepSeek 密钥', approve = false;
+    let status = 'disabled', reason = '尚未配置 DeepSeek 密钥', approve = false, confidence = null;
     if (settings.configured) {
       const now = Math.floor(Date.now() / 1000), day = Math.floor(now / 86400);
       const budget = settings.dailyLimit > 0 && await env.DB.prepare(`INSERT INTO comment_limits(bucket,hits,expires_at) VALUES(?,1,?)
@@ -121,6 +122,7 @@ export async function moderateComment(env, id, run, apiFetch = fetch) {
         try {
           const result = await classifyComment(row.body, env, apiFetch);
           approve = result.approve; status = approve ? 'approved' : 'review'; reason = result.reason;
+          confidence = result.confidence;
         } catch (error) {
           status = 'error'; reason = failureReason(error);
           // One safe line for `wrangler tail`: code and status only, never the key or the body.
@@ -130,10 +132,10 @@ export async function moderateComment(env, id, run, apiFetch = fetch) {
     }
     const now = Math.floor(Date.now() / 1000);
     // A manual decision, deletion or newer run invalidates this run immediately.
-    await env.DB.prepare(`UPDATE comments SET state=?,ai_status=?,ai_reason=?,ai_model=?,ai_checked_at=?,ai_run=NULL,
+    await env.DB.prepare(`UPDATE comments SET state=?,ai_status=?,ai_reason=?,ai_model=?,ai_confidence=?,ai_checked_at=?,ai_run=NULL,
       updated_at=?,published_at=CASE WHEN ? THEN COALESCE(published_at,?) ELSE published_at END
       WHERE id=? AND state='pending' AND ai_run=?`)
-      .bind(approve ? 'published' : 'pending', status, reason, settings.model, now, now, approve ? 1 : 0, now, id, run).run();
+      .bind(approve ? 'published' : 'pending', status, reason, settings.model, confidence, now, now, approve ? 1 : 0, now, id, run).run();
   } catch { console.error('Comment moderation storage failed'); }
 }
 

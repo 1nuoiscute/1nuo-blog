@@ -55,7 +55,7 @@ function publicComment(row, actor) {
     state: row.state, createdAt: row.created_at,
     ipLocation: row.state === 'deleted' ? '' : row.ip_location || '',
     canDelete: !!actor && row.state !== 'deleted' && (actor.id === row.author_id || actor.admin),
-    ...(actor?.admin ? { moderation: { status: row.ai_status, reason: row.ai_reason, model: row.ai_model, checkedAt: row.ai_checked_at } } : {})
+    ...(actor?.admin ? { moderation: { status: row.ai_status, reason: row.ai_reason, model: row.ai_model, checkedAt: row.ai_checked_at, confidence: row.ai_confidence ?? null } } : {})
   };
 }
 
@@ -180,7 +180,7 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch } = {}
           if (!row) reject(404, '评论不存在');
           if (request.method === 'DELETE') {
             if (!actor.admin && row.author_id !== actor.id) reject(403, '没有删除权限');
-            await env.DB.prepare("UPDATE comments SET state='deleted', body='', ip_location='',ai_run=NULL,ai_status='skipped',ai_reason='',ai_model='',updated_at=? WHERE id=?").bind(Math.floor(Date.now() / 1000), id).run();
+            await env.DB.prepare("UPDATE comments SET state='deleted', body='', ip_location='',ai_run=NULL,ai_status='skipped',ai_reason='',ai_model='',ai_confidence=NULL,updated_at=? WHERE id=?").bind(Math.floor(Date.now() / 1000), id).run();
           } else {
             if (!actor.admin) reject(403, '没有审核权限');
             const input = await jsonBody(request);
