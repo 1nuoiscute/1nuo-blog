@@ -8,6 +8,7 @@ const path = require('node:path');
 const http = require('node:http');
 const { marked } = require('marked');
 const { buildConfig } = require('../scripts/clerk-config');
+const { buildLocale } = require('../scripts/clerk-localization');
 const root = path.resolve(__dirname, '..');
 const localBrowsers = path.join(root, 'node_modules/.cache/ms-playwright');
 if (!process.env.PLAYWRIGHT_BROWSERS_PATH && fs.existsSync(localBrowsers)) process.env.PLAYWRIGHT_BROWSERS_PATH = localBrowsers;
@@ -21,6 +22,10 @@ check(buildConfig({}).data.includes('"publishableKey":""'), 'unconfigured builds
 check(!buildConfig({ CLERK_SECRET_KEY: 'private-fixture' }).data.includes('private-fixture'), 'private environment values never enter public config');
 assert.throws(() => buildConfig({ CLERK_PUBLISHABLE_KEY: 'sk_test_fixture' })); checks++;
 check(read('themes/butterfly/_config.yml').includes('账号: /account/'), 'account has a theme navigation entry');
+const menu = require('js-yaml').load(read('themes/butterfly/_config.yml')).menu;
+const storageMenu = menu['收纳||fas fa-boxes'];
+check(!menu['探索'] && !menu['订阅||fas fa-rss'] && storageMenu['探索'].includes('/explore/') && storageMenu['订阅'].includes('/subscribe/'), 'explore and subscribe belong to the storage dropdown');
+check(!account.includes('欢迎来到') && !account.includes('nuo-account-note'), 'account page omits duplicate introduction and explainer');
 const routes = JSON.parse(read('vercel.json')).routes;
 check(routes.some(route => route.src === '/account(?:/.*)?' && route.headers['X-Robots-Tag'].includes('noindex')), 'account has a noindex response header');
 
@@ -44,15 +49,19 @@ window.fixtureSetSignedIn = value => { Clerk.isSignedIn = value; fixture.listene
 
 function html(isAccount) {
   return '<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><title>账号测试</title><link rel="stylesheet" href="/css/account.css"></head><body>' +
-    '<nav><a href="/account/">账号</a> <a href="/">首页</a></nav><main id="main">' + (isAccount ? account : '<h1>博客首页</h1>') + '</main>' +
+    '<nav><a href="/account/">账号</a> <a href="/">首页</a></nav><main id="main"><div id="page"><h1 class="page-title" hidden>测试页面</h1><div id="article-container">' + (isAccount ? account : '<h1>博客首页</h1>') + '</div></div></main>' +
     '<script src="/pjax.js"></script><script>window.pjax=new Pjax({elements:"a",selectors:["title","#main"],cacheBust:false});</script>' +
-    '<script defer src="/js/nuo-account.js"></script></body></html>';
+    '<script defer src="/js/nuo-account.js"></script><script defer src="/js/nuo-tools.js"></script></body></html>';
 }
 
 async function main() {
   const server = http.createServer((req, res) => {
     const pathname = new URL(req.url, 'http://localhost').pathname;
-    const files = { '/js/nuo-account.js': 'source/js/nuo-account.js', '/css/account.css': 'source/css/account.css' };
+    if (pathname === '/js/clerk-zh-cn.js') {
+      res.setHeader('Content-Type', 'application/javascript');
+      return res.end(buildLocale().data);
+    }
+    const files = { '/js/nuo-account.js': 'source/js/nuo-account.js', '/js/nuo-tools.js': 'source/js/nuo-tools.js', '/css/account.css': 'source/css/account.css' };
     if (files[pathname] || pathname === '/pjax.js') {
       res.setHeader('Content-Type', pathname.endsWith('.css') ? 'text/css' : 'application/javascript');
       return res.end(pathname === '/pjax.js' ? fs.readFileSync(require.resolve('pjax/pjax.min.js')) : read(files[pathname]));
@@ -98,11 +107,15 @@ async function main() {
     failSdk = false;
     await page.getByRole('button', { name: '重新加载' }).click();
     await page.locator('#fixture-login').waitFor();
+    check(await page.locator('.nuo-content-tools').count() === 0, 'account page does not get reading toolbar');
+    check(await status.textContent() === '', 'ready form has no duplicate login heading');
+    check(await page.evaluate(() => fixture.options.localization.userProfile.start.profileSection.title === '个人资料'), 'official account and security translations are shipped');
     check(await page.evaluate(() => fixture.props.routing === 'hash' && fixture.props.withSignUp), 'static routes support combined sign-in/sign-up and hash routing');
     check(await page.evaluate(() => fixture.options.ui.ClerkUI === window.__internal_ClerkUICtor), 'Core 3 UI bundle passed to Clerk.load');
     check(await page.evaluate(() => fixture.listeners.size === 1 && fixture.mounts.length === 1), 'immediate listener notification does not duplicate the component');
     await page.evaluate(() => fixtureSetSignedIn(true));
     await page.locator('#fixture-profile').waitFor();
+    check(await page.locator('[data-nuo-account]').getAttribute('data-account-view') === 'profile', 'signed-in layout switches to full profile width');
     check(await page.evaluate(() => fixture.unmounts.includes('signin')), 'sign-in form is cleaned up on authentication');
     await page.evaluate(() => { fixture.failSignout = true; });
     await page.getByRole('button', { name: '退出登录' }).click();

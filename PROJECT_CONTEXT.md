@@ -82,6 +82,8 @@ git push git@github.com:1nuoiscute/1nuo-blog.git master
 
 ## 已完成的工程修复
 
+- 2026-10-20 账号页重设计：移除文章工具栏、重复标题和欢迎说明，以 Clerk 作为页面主体；探索、订阅入口移入「收纳」，订阅页保留 Atom/RSS 入口。接入官方简体中文词条和博客主题色；收藏、进度、游戏与评论统一账号目前仅作可行性分析，未实施云端同步或评论迁移。
+
 - 2026-10-20：新增 Clerk 账号接入代码：导航「账号」与 `/account/` 页面，支持注册/登录、个人资料、退出以及 PJAX 清理。用户先要求只接代码，随后提供的 Dashboard 说明已指定一个现有 Clerk 应用，后续沿用该应用。仍需在 Vercel 配置 `CLERK_PUBLISHABLE_KEY`、正式域名/DNS 和真实登录验收。不包含跨设备数据同步或后台接口授权，详见 `docs/clerk-setup.md`。
 
 - `_config.yml` 的站点 URL 和 sitemap 已统一为 `https://www.1nuo.me`，与实际线上跳转方向一致。

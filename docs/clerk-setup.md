@@ -29,7 +29,7 @@
 
 - 收藏、阅读进度、游戏存档继续存在当前浏览器，尚未接入云端数据库或账号数据同步。
 - 这不是评测后台的授权系统；仅在前端隐藏后台按钮不能保护写入 API。未来如增加受保护接口，必须在服务端验证会话和操作权限。
-- 常用登录提示覆盖为中文；验证、账号安全等其余文案沿用 Clerk 默认，完整中文翻译可后续接入官方 localizations 包。
+- 使用固定版本 `@clerk/localizations` 的官方简体中文词条，构建为本地 `/js/clerk-zh-cn.js`；未翻译词条沿用 Clerk 默认。外观通过公开的 appearance 接口适配博客浅粉色、字体、深色模式，保留 Clerk 自带标识与开发模式提示。
 - 认证可用性取决于 Clerk、邮箱服务和访客网络；面向国内访客，正式启用前应实测邮件到达与服务连接。
 
 参考：[JavaScript Quickstart](https://clerk.com/docs/js-frontend/getting-started/quickstart)、[SignIn](https://clerk.com/docs/js-frontend/reference/components/authentication/sign-in)、[定价](https://clerk.com/pricing)。

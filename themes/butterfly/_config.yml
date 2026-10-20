@@ -20,15 +20,12 @@ nav:
 menu:
   主页: / || fas fa-home
   分类: /categories/ || fas fa-folder-open
-  探索: /explore/ || fas fa-compass
-  订阅||fas fa-rss:
-    订阅说明: /subscribe/ || fas fa-info-circle
-    Atom: /atom.xml || fas fa-rss
-    RSS 2.0: /rss.xml || fas fa-rss
   友链: /link/ || fas fa-link
   关于: /about/ || fas fa-heart
   账号: /account/ || fas fa-user
   收纳||fas fa-boxes:
+    探索: /explore/ || fas fa-compass
+    订阅: /subscribe/ || fas fa-rss
     笔记: /notes/ || fas fa-book
     碎碎念: /shuoshuo/ || fas fa-comment-dots
     随机漫游: /wander/ || fas fa-dice

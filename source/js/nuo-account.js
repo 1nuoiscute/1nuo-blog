@@ -45,6 +45,7 @@
     if (!/^pk_(test|live)_[A-Za-z0-9+/=-]+$/.test(key)) throw new Error('Invalid public config');
     const domain = atob(key.split('_')[2]).replace(/\$$/, '');
     if (!/^[a-z0-9]+(?:[.-][a-z0-9]+)+$/i.test(domain)) throw new Error('Invalid Clerk domain');
+    await loadScript('/js/clerk-zh-cn.js?v=4.23.0');
     await loadScript(`https://${domain}/npm/@clerk/ui@1/dist/ui.browser.js`);
     await loadScript(`https://${domain}/npm/@clerk/clerk-js@6/dist/clerk.browser.js`, key);
     clerk = window.Clerk;
@@ -53,19 +54,35 @@
       signInUrl: '/account/',
       signInFallbackRedirectUrl: '/account/',
       signUpFallbackRedirectUrl: '/account/',
-      // Clerk merges these common Chinese labels with its default translations.
       localization: {
-        locale: 'zh-CN',
-        formButtonPrimary: '继续',
-        formFieldLabel__emailAddress: '邮箱地址',
-        formFieldLabel__password: '密码',
-        formFieldLabel__username: '用户名',
-        dividerText: '或',
-        socialButtonsBlockButton: '使用 {{provider|titleize}} 继续',
-        signIn: { start: { title: '登录 1nuo', subtitle: '欢迎回来，继续逛逛数字花园', actionText: '还没有账号？', actionLink: '注册' } },
-        signUp: { start: { title: '注册 1nuo', subtitle: '创建你的账号', actionText: '已有账号？', actionLink: '登录' } }
+        ...window.__NUO_CLERK_ZH_CN__,
+        signIn: {
+          ...window.__NUO_CLERK_ZH_CN__.signIn,
+          start: {
+            ...window.__NUO_CLERK_ZH_CN__.signIn.start,
+            title: '登录 1nuo', titleCombined: '登录或注册',
+            subtitle: '使用邮箱或关联账号继续'
+          }
+        }
       },
-      appearance: { variables: { colorPrimary: '#ae4778', borderRadius: '0.75rem' } }
+      appearance: {
+        variables: {
+          colorPrimary: 'var(--account-accent)', colorPrimaryForeground: 'var(--account-surface)',
+          colorForeground: 'var(--account-ink)', colorMutedForeground: 'var(--account-muted)',
+          colorBackground: 'var(--account-surface)', colorInput: 'var(--account-surface)',
+          colorInputForeground: 'var(--account-ink)', colorMuted: 'var(--account-tint)',
+          colorBorder: 'var(--account-line)', colorRing: 'var(--account-accent)',
+          fontFamily: 'inherit', fontFamilyButtons: 'inherit', fontSize: '14px', borderRadius: '0.5625rem'
+        },
+        elements: {
+          rootBox: 'nuo-clerk-root', cardBox: 'nuo-clerk-box', card: 'nuo-clerk-card',
+          headerTitle: 'nuo-clerk-title', headerSubtitle: 'nuo-clerk-subtitle',
+          navbar: 'nuo-clerk-nav', navbarButton: 'nuo-clerk-nav-button',
+          pageScrollBox: 'nuo-clerk-main', footer: 'nuo-clerk-footer',
+          formFieldInput: 'nuo-clerk-input', formButtonPrimary: 'nuo-clerk-primary',
+          socialButtonsBlockButton: 'nuo-clerk-social'
+        }
+      }
     });
     return clerk;
   }
@@ -101,6 +118,7 @@
     const widget = page.querySelector('[data-account-widget]');
     retry.hidden = true;
     retry.onclick = boot;
+    page.dataset.accountView = 'loading';
     status.textContent = '正在准备账号服务…';
     try {
       const instance = await getClerk();
@@ -114,7 +132,8 @@
         const signedIn = !!instance.isSignedIn;
         if (mounted && mounted.node === widget && mounted.signedIn === signedIn) return;
         unmountWidget();
-        status.textContent = signedIn ? '已登录 · 在下方管理个人资料和账号安全。' : '注册 / 登录';
+        page.dataset.accountView = signedIn ? 'profile' : 'signin';
+        status.textContent = '';
         signout.hidden = !signedIn;
         if (signedIn) instance.mountUserProfile(widget, { routing: 'hash' });
         else instance.mountSignIn(widget, {

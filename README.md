@@ -67,13 +67,13 @@
 - `source/graph/`：内容地图页面
 - `themes/butterfly/`：主题及站点定制
 - `scripts/`：项目辅助脚本（含 `metadata-policy.js` 公开范围判断、`content-graph.js` 关系数据生成、`asset-version.js` 静态资源版本哈希）
-- 导航顺序：主页、分类、探索、订阅、友链、关于、收纳（笔记、碎碎念、随机漫游、书架、标签、内容地图、简报归档、评测、数据）
+- 导航顺序：主页、分类、友链、关于、账号、收纳（探索、订阅、笔记、碎碎念、随机漫游、书架、标签、内容地图、简报归档、评测、数据）
 - 样式与脚本的 `?v=` 由 `scripts/asset-version.js` 在构建时按文件内容哈希生成，避免改了 CSS 却因为缓存继续用旧样式
 
 ## 订阅与搜索引擎元数据
 
 - 订阅说明页：[`https://www.1nuo.me/subscribe/`](https://www.1nuo.me/subscribe/)，解释 RSS/Atom 是什么以及如何使用阅读器订阅。
-- Atom：`https://www.1nuo.me/atom.xml`；RSS 2.0：`https://www.1nuo.me/rss.xml`，导航「订阅」菜单中提供说明和两个订阅源入口。
+- Atom：`https://www.1nuo.me/atom.xml`；RSS 2.0：`https://www.1nuo.me/rss.xml`，从「收纳 → 订阅」进入说明页，可获取两个订阅源。
 - 订阅是**全文**输出（`feed.content: true`），最近 20 篇公开文章；隐藏、加密、私人及 `noindex` 内容不会进入订阅和 sitemap。
 - 公开文章提供 `BlogPosting` 结构化数据，首页提供 `WebSite`；普通页面不冒充文章。
 - 正式主域名为 `https://www.1nuo.me`，与当前线上非 www → www 的跳转方向一致。站点 URL、canonical、订阅和 sitemap 统一使用 www；Vercel 路由增加同方向永久重定向。平台级域名规则可能先返回现有的 307，最终状态码及路径、查询参数保留仍需上线后核验。
