@@ -3,6 +3,7 @@ import { moderateComment, moderationSettings, probeProvider } from './moderation
 import { ipLocation } from './location.mjs';
 import { accountData } from './account-data.mjs';
 import { discussions, checkDiscussion, discussionId } from './discussions.mjs';
+import { likeContent } from './likes.mjs';
 
 class HttpError extends Error {
   constructor(status, message) { super(message); this.status = status; }
@@ -55,6 +56,8 @@ function publicComment(row, actor) {
     author: { name: row.author_name, avatar: row.avatar_url },
     body: row.state === 'deleted' ? '' : row.body,
     state: row.state, createdAt: row.created_at,
+    floor: row.floor ?? null, parentFloor: row.parent_floor ?? null,
+    likes: row.state === 'published' ? Number(row.likes || 0) : 0, liked: row.state === 'published' && !!row.liked,
     ipLocation: row.state === 'deleted' ? '' : row.ip_location || '',
     canDelete: !!actor && row.state !== 'deleted' && (actor.id === row.author_id || actor.admin),
     ...(actor?.admin ? { moderation: { status: row.ai_status, reason: row.ai_reason, model: row.ai_model, checkedAt: row.ai_checked_at, confidence: row.ai_confidence ?? null } } : {})
@@ -106,6 +109,13 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch } = {}
           return new Response(null, { status: 204, headers });
         }
         const url = new URL(request.url);
+        const likeRoute = /^\/v1\/(discussions|comments)\/([a-f0-9-]+)\/like$/.exec(url.pathname);
+        if (likeRoute) {
+          const actor = await authenticate(request, env);
+          const id = likeRoute[1] === 'comments' ? Number(likeRoute[2]) : likeRoute[2];
+          if (likeRoute[1] === 'comments' && (!Number.isSafeInteger(id) || id < 1)) reject(400, '回复编号无效');
+          return reply(await likeContent({ request, env, actor, kind: likeRoute[1], id, reject }));
+        }
         if (/^\/v1\/(?:discussions(?:\/|$)|admin\/discussions$)/.test(url.pathname)) {
           const actor = await authenticate(request, env, request.method !== 'GET');
           const input = ['POST', 'PATCH'].includes(request.method) && !url.pathname.endsWith('/moderate') ? await jsonBody(request, 24000) : null;
@@ -129,15 +139,22 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch } = {}
           const thread = threadPath(url.searchParams.get('thread'));
           const actor = await authenticate(request, env, false);
           await checkDiscussion(env, thread, actor, reject);
-          const after = Number(url.searchParams.get('after') || 0);
-          if (!Number.isSafeInteger(after) || after < 0) reject(400, '分页参数无效');
-          const rows = await env.DB.prepare(`SELECT c.* FROM comments c WHERE c.thread=? AND c.id>?
+          const forum = !!discussionId(thread), cursor = url.searchParams.get('after') || (forum ? '0:0' : '0');
+          const parts = cursor.split(':').map(Number), after = parts[0];
+          if (!parts.every(value => Number.isSafeInteger(value) && value >= 0) || parts.length !== (forum ? 2 : 1)) reject(400, '分页参数无效');
+          const paging = forum ? '(COALESCE(c.floor,2147483647)>? OR (COALESCE(c.floor,2147483647)=? AND c.id>?))' : 'c.id>?';
+          const pagingArgs = forum ? [after, after, parts[1]] : [after];
+          const rows = await env.DB.prepare(`SELECT c.*,
+            (SELECT COUNT(*) FROM comment_likes l WHERE l.comment_id=c.id) AS likes,
+            EXISTS(SELECT 1 FROM comment_likes l WHERE l.comment_id=c.id AND l.user_id=?) AS liked,
+            (SELECT floor FROM comments p WHERE p.id=c.parent_id) AS parent_floor FROM comments c WHERE c.thread=? AND ${paging}
             AND (c.state='published' OR (c.state='deleted' AND c.published_at IS NOT NULL) OR (c.author_id=? AND c.state='pending'))
             AND (c.parent_id IS NULL OR EXISTS(SELECT 1 FROM comments p WHERE p.id=c.parent_id
               AND (p.state='published' OR (p.state='deleted' AND p.published_at IS NOT NULL) OR (p.author_id=? AND p.state='pending'))))
-            ORDER BY c.id ASC LIMIT 31`).bind(thread, after, actor?.id || '', actor?.id || '').all();
+            ORDER BY ${forum ? 'COALESCE(c.floor,2147483647),' : ''}c.id ASC LIMIT 31`).bind(actor?.id || '', thread, ...pagingArgs, actor?.id || '', actor?.id || '').all();
           const items = rows.results.slice(0, 30);
-          return reply({ items: items.map(row => publicComment(row, actor)), next: rows.results.length > 30 ? items.at(-1).id : null });
+          const last = items.at(-1);
+          return reply({ items: items.map(row => publicComment(row, actor)), next: rows.results.length > 30 ? (forum ? (last.floor ?? 2147483647) + ':' + last.id : last.id) : null });
         }
         if (request.method === 'POST' && url.pathname === '/v1/comments') {
           const actor = await authenticate(request, env);
@@ -168,7 +185,8 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch } = {}
             if (ctx?.waitUntil) ctx.waitUntil(task); else await task;
           }
           if (ctx?.waitUntil) ctx.waitUntil(env.DB.prepare('DELETE FROM comment_limits WHERE bucket IN (SELECT bucket FROM comment_limits WHERE expires_at<? LIMIT 100)').bind(now - 86400).run());
-          return reply({ item: publicComment(row, actor) }, 201);
+          const saved = row.state === 'published' ? await env.DB.prepare('SELECT * FROM comments WHERE id=?').bind(row.id).first() : row;
+          return reply({ item: publicComment(saved, actor) }, 201);
         }
         const moderateRoute = /^\/v1\/comments\/([1-9][0-9]*)\/moderate$/.exec(url.pathname);
         if (moderateRoute && request.method === 'POST') {

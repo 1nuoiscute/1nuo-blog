@@ -36,9 +36,11 @@
     const thread = host.dataset.thread || location.pathname;
 
     async function request(path, options = {}) {
+      const owner = clerk?.user?.id || null;
       const headers = { ...(options.body ? { 'Content-Type': 'application/json' } : {}) };
       if (clerk?.isSignedIn) {
         const token = await clerk.session.getToken();
+        if ((clerk?.user?.id || null) !== owner) throw new Error('账号已切换，请重试');
         if (token) headers.Authorization = 'Bearer ' + token;
       }
       const response = await fetch(api + path, {
@@ -46,6 +48,7 @@
         ...(options.body ? { body: JSON.stringify(options.body) } : {})
       });
       const data = await response.json().catch(() => ({ error: '评论服务暂时不可用，请稍后重试。' }));
+      if ((clerk?.user?.id || null) !== owner) throw new Error('账号已切换，请重试');
       if (!response.ok) throw new Error(data.error || '评论服务暂时不可用');
       return data;
     }
@@ -94,6 +97,7 @@
       header.append(element('strong', item.author.name));
       const date = element('time', new Date(item.createdAt * 1000).toLocaleString('zh-CN'));
       date.dateTime = new Date(item.createdAt * 1000).toISOString(); header.append(date);
+      if (host.dataset.thread && item.floor) header.append(element('span', item.floor + ' 楼', 'nuo-comment-floor'));
       if (item.state === 'pending') header.append(element('span', '待审核', 'nuo-comment-badge'));
       if (adminPage) {
         const threadLink = element('a', item.thread, 'nuo-comment-thread');
@@ -101,7 +105,7 @@
         header.append(threadLink);
       }
       card.append(header);
-      if (item.parentId) card.append(element('small', '回复 #' + item.parentId));
+      if (item.parentId) card.append(element('small', item.parentFloor ? '回复 ' + item.parentFloor + ' 楼' : '回复 #' + item.parentId));
       card.append(element('p', item.state === 'deleted' ? '这条评论已删除。' : item.body, 'nuo-comment-body'));
       if (adminPage && item.moderation) {
         const labels = { queued: 'AI 审核中', approved: 'AI 已放行', review: '需人工判断', error: 'AI 暂不可用', limited: '今日额度已用完', disabled: '人工审核', skipped: '免审核', manual: '已人工处理' };
@@ -115,12 +119,23 @@
         card.append(review);
       }
       const actions = element('div', undefined, 'nuo-comment-actions');
+      if (!adminPage && host.dataset.thread && item.state === 'published') {
+        const like = action('', async () => {
+          if (!clerk?.isSignedIn) { await login.onclick(); return; }
+          if (!me || me.id !== clerk.user.id) throw new Error('正在切换账号，请稍后再试');
+          const result = await request('/v1/comments/' + item.id + '/like', { method: item.liked ? 'DELETE' : 'POST' });
+          if (signal.aborted) return;
+          item.likes = result.likes; item.liked = result.liked; updateLike();
+        });
+        const updateLike = () => { like.textContent = (item.liked ? '♥ 已赞 ' : '♡ 赞 ') + (item.likes || 0); like.setAttribute('aria-pressed', String(!!item.liked)); };
+        like.dataset.commentLike = item.id; updateLike(); actions.append(like);
+      }
       if (!adminPage && clerk?.isSignedIn && !item.parentId && item.state === 'published') {
         actions.append(action('回复', () => {
           parentId = item.id;
           const notice = query('[data-comments-reply]');
           query('[data-comments-reply-box]').hidden = false;
-          notice.textContent = '正在回复 ' + item.author.name;
+          notice.textContent = '正在回复 ' + (host.dataset.thread && item.floor ? item.floor + ' 楼的 ' : '') + item.author.name;
           query('[data-comments-cancel]').hidden = false;
           input.focus();
         }));

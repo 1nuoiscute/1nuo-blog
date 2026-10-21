@@ -122,3 +122,64 @@ test('DeepSeek sees both title and body; approval publishes and a late result re
   const published = (await create(approved, alice)).data.item; await approved.flush();
   assert(seen); assert.equal((await approved.request('/v1/discussions/' + published.id)).status, 200);
 });
+
+test('post likes are per verified account, idempotent and visible in list and detail', async () => {
+  const f = fixture(), admin = await token('user_admin'), alice = await token(), bob = await token('user_bob');
+  const id = (await create(f, admin)).data.item.id, endpoint = '/v1/discussions/' + id + '/like';
+  assert.equal((await f.request(endpoint, { method: 'POST' })).status, 401);
+  for (let i = 0; i < 2; i++) assert.deepEqual((await f.request(endpoint, { auth: alice, method: 'POST', body: { user_id: 'user_bob' } })).data, { likes: 1, liked: true });
+  assert.deepEqual((await f.request(endpoint, { auth: bob, method: 'POST' })).data, { likes: 2, liked: true });
+  assert.equal((await f.request('/v1/discussions')).data.items[0].likes, 2);
+  assert.equal((await f.request('/v1/discussions')).data.items[0].liked, false);
+  assert.equal((await f.request('/v1/discussions/' + id, { auth: alice })).data.item.liked, true);
+  for (let i = 0; i < 2; i++) assert.deepEqual((await f.request(endpoint, { auth: bob, method: 'DELETE' })).data, { likes: 1, liked: false });
+  await patch(f, admin, id, { state: 'hidden' });
+  assert.equal((await f.request(endpoint, { auth: alice, method: 'POST' })).status, 404);
+});
+test('reply likes follow thread and parent visibility; reply counts exclude hidden subthreads', async () => {
+  const f = fixture(), admin = await token('user_admin'), alice = await token();
+  const id = (await create(f, admin)).data.item.id, thread = '/discuss/' + id;
+  const root = (await f.request('/v1/comments', { auth: admin, method: 'POST', body: { thread, body: '主回复' } })).data.item;
+  const child = (await f.request('/v1/comments', { auth: admin, method: 'POST', body: { thread, body: '楼内回复', parentId: root.id } })).data.item;
+  const endpoint = '/v1/comments/' + child.id + '/like';
+  assert.deepEqual((await f.request(endpoint, { auth: alice, method: 'POST' })).data, { likes: 1, liked: true });
+  const read = (await f.request('/v1/comments?thread=' + thread, { auth: alice })).data.items;
+  assert.equal(read[1].likes, 1); assert.equal(read[1].liked, true); assert.equal(read[1].parentFloor, 1);
+  await patch(f, admin, id, { locked: true });
+  assert.deepEqual((await f.request(endpoint, { auth: alice, method: 'DELETE' })).data, { likes: 0, liked: false });
+  await f.request('/v1/comments/' + root.id, { auth: admin, method: 'PATCH', body: { state: 'hidden' } });
+  assert.equal((await f.request(endpoint, { auth: alice, method: 'POST' })).status, 404);
+  assert.equal((await f.request('/v1/discussions')).data.items[0].replies, 0);
+  await patch(f, admin, id, { state: 'hidden' });
+  assert.equal((await f.request(endpoint, { auth: alice, method: 'DELETE' })).status, 404);
+});
+test('floors follow first publication and stay fixed through hiding, deletion and paginated reads', async () => {
+  const f = fixture(), admin = await token('user_admin'), alice = await token();
+  const id = (await create(f, admin)).data.item.id, thread = '/discuss/' + id;
+  const pending = (await f.request('/v1/comments', { auth: alice, method: 'POST', body: { thread, body: '先提交后审核' } })).data.item;
+  assert.equal(pending.floor, null);
+  const first = (await f.request('/v1/comments', { auth: admin, method: 'POST', body: { thread, body: '先发布' } })).data.item;
+  assert.equal(first.floor, 1);
+  await f.request('/v1/comments/' + pending.id, { auth: admin, method: 'PATCH', body: { state: 'published' } });
+  let rows = (await f.request('/v1/comments?thread=' + thread)).data.items;
+  assert.deepEqual(rows.map(r => r.floor), [1, 2]); assert.equal(rows[0].id, first.id);
+  await f.request('/v1/comments/' + first.id, { auth: admin, method: 'DELETE' });
+  await f.request('/v1/comments/' + pending.id, { auth: admin, method: 'PATCH', body: { state: 'hidden' } });
+  await f.request('/v1/comments/' + pending.id, { auth: admin, method: 'PATCH', body: { state: 'published' } });
+  for (let i = 0; i < 31; i++) f.sql.prepare("INSERT INTO comments(thread,author_id,author_name,body,state,created_at,updated_at,published_at) VALUES(?,'user_admin','作者','回复','published',1,1,1)").run(thread);
+  const page1 = (await f.request('/v1/comments?thread=' + thread)).data;
+  const page2 = (await f.request('/v1/comments?thread=' + thread + '&after=' + page1.next)).data;
+  rows = [...page1.items, ...page2.items];
+  assert.equal(rows.length, 33); assert.deepEqual(rows.map(r => r.floor), Array.from({ length: 33 }, (_, i) => i + 1));
+  assert.equal(rows[0].state, 'deleted'); assert.equal(page2.next, null);
+  assert.equal((await f.request('/v1/comments?thread=' + thread + '&after=bad')).status, 400);
+});
+test('floor migration numbers historical published replies and preserves pending slots for later publication', () => {
+  const sql = new DatabaseSync(':memory:'), dir = new URL('../migrations/', import.meta.url);
+  for (const file of readdirSync(dir).filter(n => n.endsWith('.sql') && n < '0007').sort()) sql.exec(readFileSync(new URL(file, dir), 'utf8'));
+  sql.exec("INSERT INTO comments(thread,author_id,author_name,body,state,created_at,updated_at,published_at) VALUES('/old','user_a','读者','','deleted',1,1,1),('/old','user_a','读者','待审核','pending',1,1,NULL),('/old','user_a','读者','已发布','published',1,1,1),('/other','user_a','读者','另一帖','published',1,1,1)");
+  sql.exec(readFileSync(new URL('0007_likes_floors.sql', dir), 'utf8'));
+  assert.deepEqual(sql.prepare('SELECT floor FROM comments ORDER BY id').all().map(r => r.floor), [1, null, 2, 1]);
+  sql.exec("UPDATE comments SET state='published',published_at=1 WHERE id=2");
+  assert.equal(sql.prepare('SELECT floor FROM comments WHERE id=2').get().floor, 3);
+});

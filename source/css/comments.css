@@ -43,11 +43,13 @@
 .nuo-comment[data-parent-id] .nuo-comment-avatar { width: 28px; height: 28px; }
 .nuo-comment-header strong { font-weight: 600; font-size: 13px; }
 .nuo-comment-header time { color: var(--account-muted); font-size: 11px; }
+.nuo-comment-floor { margin-left: auto; color: var(--account-muted); font-size: 11px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .nuo-comment-badge { padding: 0 6px; border-radius: 4px; background: var(--account-tint); color: var(--account-accent); font-size: 10px; }
 .nuo-comments p.nuo-comment-body, #article-container .nuo-comments p.nuo-comment-body { max-width: 72ch; margin: 8px 0 10px; padding: 0; color: var(--account-ink); font-size: 14px; line-height: 1.85; white-space: pre-wrap; }
 .nuo-comment > small { color: var(--account-muted); font-size: 11px; }
 .nuo-comment-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
 .nuo-comment-actions button { padding: 2px 0; border: 0; border-radius: 2px; color: var(--account-muted); background: transparent; font-size: 11px; }
+.nuo-comment-actions [data-comment-like][aria-pressed=true] { color: var(--account-accent); }
 .nuo-comment-location { color: var(--account-muted); font-size: 11px; }
 .nuo-comment-thread { display: block; width: 100%; margin-top: 6px; color: var(--account-muted); font-size: 11px; }
 .nuo-comments-more { display: block; margin: 20px auto 0 !important; }

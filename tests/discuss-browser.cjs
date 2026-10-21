@@ -25,15 +25,21 @@ async function main() {
   const base = 'http://127.0.0.1:' + server.address().port, posts = new Map(), replies = [], writes = [], errors = [];
   const id = '22222222-2222-4222-8222-222222222222', now = Math.floor(Date.now() / 1000);
   posts.set(id, { id, title: '最近在做什么有意思的小项目？', body: '分享一下你的发现。\n\n**周末计划**\n- 写点代码\n- 出门走走', category: 'chat', state: 'published', author: { name: 'Nuo Nuo', avatar: '' }, owner: 'user_admin', version: 1, pinned: true, locked: false, createdAt: now, updatedAt: now, activeAt: now, replies: 0 });
-  let browser, failPost = false;
+  let browser, failPost = false, failLike = false; const likes = new Map();
+  const likeSet = key => { if (!likes.has(key)) likes.set(key, new Set()); return likes.get(key); };
   try {
     browser = await chromium.launch({ headless: true }); const context = await browser.newContext();
     await context.route('https://comments.1nuo.me/**', async route => {
       const req = route.request(), url = new URL(req.url()), user = req.headers().authorization?.replace('Bearer ', '') || '', method = req.method();
       let status = 200, data; const input = req.postData() ? req.postDataJSON() : null, isAdmin = user === 'user_admin';
-      const output = p => { const { owner, ...item } = p; return { ...item, excerpt: p.body.slice(0, 150), canEdit: owner === user, canDelete: owner === user || isAdmin }; };
+      const output = p => { const { owner, ...item } = p, votes = likeSet('discussions/' + p.id); return { ...item, likes: votes.size, liked: votes.has(user), replies: replies.filter(r => r.thread === '/discuss/' + p.id).length, excerpt: p.body.slice(0, 150), canEdit: owner === user, canDelete: owner === user || isAdmin }; };
       if (url.pathname === '/v1/library') data = { items: [] };
       else if (url.pathname === '/v1/me') data = { id: user, admin: isAdmin };
+      else if (url.pathname.endsWith('/like')) {
+        const key = url.pathname.slice(4, -5), votes = likeSet(key);
+        if (failLike) { status = 503; data = { error: '点赞暂时失败' }; }
+        else { if (method === 'POST') votes.add(user); else votes.delete(user); data = { likes: votes.size, liked: votes.has(user) }; }
+      }
       else if (url.pathname === '/v1/discussions' && method === 'POST') {
         writes.push({ user, ...input });
         if (failPost) { status = 503; data = { error: '测试网络中断' }; }
@@ -48,8 +54,8 @@ async function main() {
         else if (method === 'DELETE') { posts.delete(item.id); data = { ok: true }; }
         else data = { item: output(item), admin: isAdmin };
       } else if (url.pathname === '/v1/comments') {
-        if (method === 'POST') { writes.push({ user, ...input }); const item = { ...input, id: replies.length + 1, state: 'published', author: { name: user, avatar: '' }, createdAt: now, canDelete: true }; replies.push(item); data = { item }; }
-        else data = { items: replies.filter(r => r.thread === url.searchParams.get('thread')), next: null };
+        if (method === 'POST') { writes.push({ user, ...input }); const item = { ...input, id: replies.length + 1, floor: replies.length + 1, state: 'published', author: { name: user, avatar: '' }, createdAt: now, canDelete: true }; replies.push(item); data = { item }; }
+        else data = { items: replies.filter(r => r.thread === url.searchParams.get('thread')).map(r => ({ ...r, likes: likeSet('comments/' + r.id).size, liked: likeSet('comments/' + r.id).has(user) })), next: null };
       } else { status = 404; data = { error: 'unexpected route' }; }
       await route.fulfill({ status, contentType: 'application/json', body: JSON.stringify(data) });
     });
@@ -63,7 +69,26 @@ async function main() {
     check((await p.locator('.nd-prose strong').textContent()) === '周末计划', 'topic body renders Markdown from safe DOM nodes');
     await p.locator('[data-comments-body]').fill('这个想法不错'); await p.getByRole('button', { name: '发表回复', exact: true }).click(); await p.locator('.nuo-comment-body').waitFor();
     check(writes.at(-1).thread === '/discuss/' + id, 'replies belong to the selected discussion rather than the list page');
+    await p.locator('[data-comments-body]').fill('再聊一句'); await p.getByRole('button', { name: '发表回复', exact: true }).click();
+    await p.waitForFunction(() => document.querySelectorAll('.nuo-comment-floor').length === 2);
+    check((await p.locator('.nuo-comment-floor').allTextContents()).join(',') === '1 楼,2 楼', 'published replies display their floor numbers');
+    failLike = true; await p.locator('[data-post-like]').click(); await p.locator('[data-discuss-status]').filter({ hasText: '点赞暂时失败' }).waitFor();
+    check(await p.locator('[data-post-like]').getAttribute('aria-pressed') === 'false', 'failed like keeps the prior state and can be retried');
+    failLike = false; await p.locator('[data-post-like]').click(); await p.waitForFunction(() => document.querySelector('[data-post-like]').getAttribute('aria-pressed') === 'true');
+    check((await p.locator('[data-post-like]').textContent()).includes('1'), 'post like updates its count');
+    await p.locator('[data-post-like]').click(); await p.waitForFunction(() => document.querySelector('[data-post-like]').getAttribute('aria-pressed') === 'false');
+    check((await p.locator('[data-post-like]').textContent()).includes('0'), 'post like can be cancelled');
+    await p.locator('[data-post-like]').click(); await p.waitForFunction(() => document.querySelector('[data-post-like]').getAttribute('aria-pressed') === 'true');
+    await p.locator('[data-comment-like="1"]').click(); await p.waitForFunction(() => document.querySelector('[data-comment-like="1"]').getAttribute('aria-pressed') === 'true');
+    check((await p.locator('[data-comment-like="1"]').textContent()).includes('1'), 'reply has its own account like button');
+    await p.reload(); await p.locator('[data-comment-like="1"][aria-pressed=true]').waitFor();
+    check(await p.locator('[data-post-like]').getAttribute('aria-pressed') === 'true', 'post and reply like state survives a reload');
+    await p.setViewportSize({ width: 390, height: 844 });
+    check(await p.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'reply floors and like controls fit the mobile viewport');
+    await p.screenshot({ path: path.join(root, 'test-results/discuss-replies-mobile.png'), fullPage: true });
+    await p.setViewportSize({ width: 1280, height: 900 });
     await p.locator('.nd-back').click(); await p.locator('.nd-row').waitFor();
+    check(await p.locator('[data-metric=likes] strong').textContent() === '1' && await p.locator('[data-metric=replies] strong').textContent() === '2', 'topic list shows both like and reply totals');
     await p.locator('[data-discuss-new]').click(); await p.locator('#nd-title').fill('我的新讨论'); await p.locator('#nd-body').fill('**测试粗体**\n\n[危险链接](javascript:alert(1))\n<script>window.injected=true</script>');
     await p.locator('[data-discuss-preview]').click();
     check(await p.locator('.nd-preview strong').textContent() === '测试粗体' && await p.locator('.nd-preview a').count() === 0 && await p.evaluate(() => !window.injected), 'preview keeps HTML literal and rejects executable links');

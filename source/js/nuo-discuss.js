@@ -103,7 +103,12 @@
       const excerpt = String(item.excerpt || '').replace(/\[([^\]]+)\]\([^)]+\)/g, '$1').replace(/^[#>\-*]+\s*/gm, '').replace(/[*`]/g, '').replace(/\s+/g, ' ');
       main.append(link(item.title, item.id, 'nd-title'), el('p', excerpt, 'nd-excerpt'));
       meta.append(el('span', labels[item.category]), el('span', item.author.name), date(item.activeAt)); badges(item, meta); main.append(meta);
-      const count = el('div', undefined, 'nd-replies'); count.append(el('strong', item.replies), el('span', '回复')); article.append(count); return article;
+      const counts = el('div', undefined, 'nd-metrics');
+      for (const [value, label, key] of [[item.likes || 0, '赞', 'likes'], [item.replies, '回复', 'replies']]) {
+        const count = el('div', undefined, 'nd-replies'); count.dataset.metric = key; count.setAttribute('aria-label', value + ' 个' + label);
+        count.append(el('strong', value), el('span', label)); counts.append(count);
+      }
+      article.append(counts); return article;
     }
     function detail(item) {
       const article = el('article', undefined, 'nd-detail'); article.dataset.discussionId = item.id;
@@ -116,6 +121,18 @@
       if (item.state !== 'published') article.append(el('div', item.state === 'pending' ? '正在审核，发布后大家就能看到这篇讨论。' : '这篇讨论已被隐藏，可以编辑后重新提交。', 'nd-review'));
       if (item.moderation && item.state === 'pending') article.append(el('div', item.moderation.reason || '等待审核结果', 'nd-review'));
       const actions = el('div', undefined, 'nd-post-actions');
+      if (item.state === 'published') {
+        const like = button('', async () => {
+          if (!user) { await cloud.login(); return; }
+          const owner = user.id;
+          const result = await cloud.request('/v1/discussions/' + item.id + '/like', { method: item.liked ? 'DELETE' : 'POST' });
+          if (signal.aborted || owner !== user?.id) return;
+          item.likes = result.likes; item.liked = result.liked; updateLike();
+        }, 'nd-like');
+        like.dataset.postLike = '';
+        const updateLike = () => { like.textContent = (item.liked ? '♥ 已赞 ' : '♡ 点赞 ') + (item.likes || 0); like.setAttribute('aria-pressed', String(!!item.liked)); };
+        updateLike(); actions.append(like);
+      }
       if (item.canEdit) actions.append(button('编辑', () => openEditor(item)));
       if (item.canDelete) actions.append(button('删除', async () => { if (!confirm('删除这篇讨论及其公开回复？')) return; await cloud.request('/v1/discussions/' + item.id, { method: 'DELETE' }); navigate(); }));
       if (me?.admin) {

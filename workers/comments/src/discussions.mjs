@@ -16,12 +16,15 @@ export async function checkDiscussion(env, thread, actor, reject, writing = fals
   if (writing && (row.state !== 'published' || row.locked)) reject(409, row.locked ? '这篇讨论已关闭回复' : '帖子发布后可以回复');
 }
 const detailRoute = new RegExp('^/v1/discussions/(' + ID + ')(/moderate)?$');
-const summary = `SELECT d.*, (SELECT COUNT(*) FROM comments c WHERE c.thread='/discuss/'||d.id AND c.state='published') AS replies,
-  MAX(COALESCE(d.published_at,d.created_at),COALESCE((SELECT MAX(c.created_at) FROM comments c WHERE c.thread='/discuss/'||d.id AND c.state='published'),0)) AS active_at FROM discussions d`;
+const visibleReply = "c.state='published' AND (c.parent_id IS NULL OR EXISTS(SELECT 1 FROM comments p WHERE p.id=c.parent_id AND (p.state='published' OR (p.state='deleted' AND p.published_at IS NOT NULL))))";
+const summary = `SELECT d.*, (SELECT COUNT(*) FROM comments c WHERE c.thread='/discuss/'||d.id AND ${visibleReply}) AS replies,
+  (SELECT COUNT(*) FROM discussion_likes l WHERE l.discussion_id=d.id) AS likes,
+  EXISTS(SELECT 1 FROM discussion_likes l WHERE l.discussion_id=d.id AND l.user_id=?) AS liked,
+  MAX(COALESCE(d.published_at,d.created_at),COALESCE((SELECT MAX(c.created_at) FROM comments c WHERE c.thread='/discuss/'||d.id AND ${visibleReply}),0)) AS active_at FROM discussions d`;
 function view(row, actor, full = false) {
   return { id: row.id, title: row.title, category: row.category, state: row.state,
     author: { name: row.author_name, avatar: row.avatar_url }, createdAt: row.created_at, updatedAt: row.updated_at,
-    pinned: !!row.pinned, locked: !!row.locked, version: row.version, replies: Number(row.replies || 0), activeAt: row.active_at || row.created_at,
+    pinned: !!row.pinned, locked: !!row.locked, version: row.version, replies: Number(row.replies || 0), likes: Number(row.likes || 0), liked: !!row.liked, activeAt: row.active_at || row.created_at,
     canEdit: actor?.id === row.author_id, canDelete: !!actor && (actor.admin || actor.id === row.author_id),
     ...(full ? { body: row.body, ipLocation: row.ip_location } : { excerpt: row.body.slice(0, 150) }),
     ...(actor?.admin ? { moderation: { status: row.ai_status, reason: row.ai_reason, confidence: row.ai_confidence } } : {}) };
@@ -43,7 +46,7 @@ export async function discussions({ request, url, env, actor, input, ctx, modera
     if (ctx?.waitUntil) ctx.waitUntil(task);
     return task;
   };
-  const select = async id => env.DB.prepare(summary + ' WHERE d.id=?').bind(id).first();
+  const select = async id => env.DB.prepare(summary + ' WHERE d.id=?').bind(actor?.id || '', id).first();
   const adminList = url.pathname === '/v1/admin/discussions';
   if ((url.pathname === '/v1/discussions' || adminList) && method === 'GET') {
     const mine = url.searchParams.get('mine') === '1';
@@ -60,7 +63,7 @@ export async function discussions({ request, url, env, actor, input, ctx, modera
     const offset = Number(url.searchParams.get('offset') || 0);
     if (!Number.isSafeInteger(offset) || offset < 0 || offset > 10000) reject(400, '分页参数无效');
     const rows = await env.DB.prepare(summary + ' WHERE ' + where.join(' AND ') +
-      ' ORDER BY d.pinned DESC,' + (sort === 'new' ? 'd.created_at' : 'active_at') + ' DESC,d.id DESC LIMIT 21 OFFSET ?').bind(...args, offset).all();
+      ' ORDER BY d.pinned DESC,' + (sort === 'new' ? 'd.created_at' : 'active_at') + ' DESC,d.id DESC LIMIT 21 OFFSET ?').bind(actor?.id || '', ...args, offset).all();
     return { items: rows.results.slice(0, 20).map(row => view(row, actor)), next: rows.results.length > 20 ? offset + 20 : null };
   }
   if (url.pathname === '/v1/discussions' && method === 'POST') {

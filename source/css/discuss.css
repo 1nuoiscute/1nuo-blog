@@ -21,7 +21,7 @@
 .nd-views select, .nd-admin-filters select { background: var(--account-surface); border: 1px solid var(--account-line); border-radius: 6px; padding: 6px; }
 .nd-admin-filters { display: flex; justify-content: space-between; align-items: center; padding: 16px 0 0; }
 #article-container .nd-status { font-size: 13px; color: var(--account-muted); margin: 16px 0; white-space: pre-wrap; }
-.nd-row { display: grid; grid-template-columns: 40px minmax(0,1fr) 56px; gap: 16px; padding: 25px 0; border-bottom: 1px solid var(--account-line); align-items: start; }
+.nd-row { display: grid; grid-template-columns: 40px minmax(0,1fr) 110px; gap: 16px; padding: 25px 0; border-bottom: 1px solid var(--account-line); align-items: start; }
 .nd-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--account-tint); color: var(--account-accent); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; font-weight: 600; }
 #article-container .nd-avatar img { width: 100%; height: 100%; margin: 0; object-fit: cover; }
 #article-container .nd-title { display: block; margin: 0 0 6px; font-size: 18px; line-height: 1.55; color: var(--account-ink); text-decoration: none; font-weight: 600; overflow-wrap: anywhere; }
@@ -30,6 +30,7 @@
 .nd-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 14px; line-height: 1.8; }
 .nd-badge { color: var(--account-accent); font-size: 11px; background: var(--account-tint); border-radius: 4px; padding: 1px 6px; }
 .nd-replies { text-align: center; color: var(--account-muted); font-size: 11px; padding-top: 2px; }
+.nd-metrics { display: flex; justify-content: flex-end; gap: 22px; font-variant-numeric: tabular-nums; }
 .nd-replies strong { display: block; font-size: 20px; font-weight: 500; color: var(--account-ink); }
 .nd-empty { padding: 58px 20px; text-align: center; color: var(--account-muted); }
 #article-container .nd-empty h2 { font-size: 20px; font-weight: 500; margin: 0 0 8px; color: var(--account-ink); }
@@ -62,6 +63,8 @@
 .nd-prose blockquote { border-left: 3px solid var(--account-line); margin: 16px 0; padding: 4px 18px; color: var(--account-muted); }
 .nd-post-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 24px 0; color: var(--account-muted); font-size: 12px; }
 .nd-post-actions button:hover { color: var(--account-accent); background: var(--account-tint); }
+.nd-post-actions .nd-like { border: 1px solid var(--account-line); padding: 6px 12px; margin-right: 12px; }
+.nd-post-actions .nd-like[aria-pressed=true] { color: var(--account-accent); background: var(--account-tint); border-color: var(--account-accent); }
 .nd-review { background: var(--account-tint); color: var(--account-muted); padding: 12px 16px; font-size: 13px; border-radius: 8px; margin: 18px 0; }
 .nd-detail .nuo-comments { margin-top: 16px; }
 .nd-locked .nuo-comments-form { display: none; }
@@ -77,7 +80,8 @@
   .nd-categories { justify-content: space-between; }
   .nd-categories button { padding: 7px 8px; font-size: 13px; }
   .nd-views { justify-content: flex-end; }
-  .nd-row { grid-template-columns: 30px minmax(0,1fr) 34px; gap: 10px; padding: 21px 0; }
+  .nd-row { grid-template-columns: 30px minmax(0,1fr) 68px; gap: 10px; padding: 21px 0; }
+  .nd-metrics { gap: 14px; }
   .nd-row .nd-avatar { width: 30px; height: 30px; font-size: 12px; }
   #article-container .nd-title { font-size: 16px; }
   .nd-meta { gap: 4px 9px; font-size: 11px; }
