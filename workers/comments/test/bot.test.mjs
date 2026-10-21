@@ -107,6 +107,18 @@ test('persisted jobs recover from provider failure and expired worker leases thr
   g.sql.exec("UPDATE bot_jobs SET status='running',attempts=1,run_id='old',lease_until=0"); g.env.BOT_ENABLED = 'true'; await g.cron(); await g.flush();
   assert.equal((await replies(g, other)).items.length, 1); assert.equal(g.calls.length, 1);
 });
+
+test('a newly submitted invitation wakes its own job ahead of unrelated backlog', async () => {
+  const f = fixture({ enabled: false });
+  const older = (await post(f)).data.item.id; await f.flush();
+  const current = (await post(f, { inviteBot: false })).data.item.id; await f.flush();
+  f.env.BOT_ENABLED = 'true';
+  const sent = await comment(f, current, 'user_admin', '@DeepSeek 有没有其他类似的理论'); await f.flush();
+  assert.equal(f.calls.length, 1);
+  assert.equal(f.sql.prepare('SELECT status FROM bot_jobs WHERE id=?').get('comment:' + sent.data.item.id).status, 'done');
+  assert.equal(f.sql.prepare('SELECT status FROM bot_jobs WHERE id=?').get('post:' + older).status, 'queued');
+  await f.cron(); await f.flush(); assert.equal(f.calls.length, 2);
+});
 test('closing or hiding a post during generation prevents a late AI reply from being published', async () => {
   let release;
   const f = fixture({ generate: async () => { await new Promise(resolve => { release = resolve; }); return Response.json({ choices: [{ finish_reason: 'stop', message: { content: '延迟的回答' } }] }); } });

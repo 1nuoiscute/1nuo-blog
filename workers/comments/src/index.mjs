@@ -101,8 +101,8 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch, botFe
       ctx.waitUntil(processBotJobs(env, botFetch, moderationFetch, 3));
     },
     async fetch(request, env, ctx) {
-      const wake = () => processBotJobs(env, botFetch, moderationFetch);
-      const wakeLater = async () => { const task = wake(); if (ctx?.waitUntil) ctx.waitUntil(task); else await task; };
+      const wake = job => processBotJobs(env, botFetch, moderationFetch, 1, job ?? null);
+      const wakeLater = async job => { const task = wake(job); if (ctx?.waitUntil) ctx.waitUntil(task); else await task; };
       const origin = request.headers.get('origin');
       const headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store',
         'X-Content-Type-Options': 'nosniff', 'Vary': 'Origin' });
@@ -129,7 +129,7 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch, botFe
           if (retryRate.hits > 3) reject(429, '重试太频繁，请稍后再试');
           const row = await env.DB.prepare("UPDATE bot_jobs SET status='queued',available_at=?,last_error='' WHERE id=? AND status IN ('error','limited') AND attempts<3 RETURNING id").bind(Math.floor(Date.now() / 1000), id).first();
           if (!row) reject(409, '任务已处理或正在回复，请刷新查看');
-          await wakeLater(); return reply({ ok: true });
+          await wakeLater(id); return reply({ ok: true });
         }
         const likeRoute = /^\/v1\/(discussions|comments)\/([a-f0-9-]+)\/like$/.exec(url.pathname);
         if (likeRoute) {
@@ -141,8 +141,8 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch, botFe
         if (/^\/v1\/(?:discussions(?:\/|$)|admin\/discussions$)/.test(url.pathname)) {
           const actor = await authenticate(request, env, request.method !== 'GET');
           const input = ['POST', 'PATCH'].includes(request.method) && !url.pathname.endsWith('/moderate') ? await jsonBody(request, 24000) : null;
-          const data = await discussions({ request, url, env, actor, input, ctx, moderationFetch, safeAvatar, limit, reject, afterWrite: wake });
-          if (request.method !== 'GET') await wakeLater();
+          const data = await discussions({ request, url, env, actor, input, ctx, moderationFetch, safeAvatar, limit, reject, afterWrite: () => wake() });
+          if (request.method !== 'GET') await wakeLater(data.item?.id ? 'post:' + data.item.id : null);
           return reply(data);
         }
         if (['/v1/library', '/v1/leaderboard/2048'].includes(url.pathname)) {
@@ -214,10 +214,10 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch, botFe
               actor.admin ? 'skipped' : run ? 'queued' : 'disabled', run, run ? now : null, ipLocation(request.cf), replyTo, Number(botRequested), discussionId(thread), discussionId(thread)).first();
           if (!row) reject(409, '这篇讨论已关闭回复，请刷新页面');
           if (run) {
-            const task = moderateComment(env, row.id, run, moderationFetch).then(wake);
+            const task = moderateComment(env, row.id, run, moderationFetch).then(() => wake('comment:' + row.id));
             if (ctx?.waitUntil) ctx.waitUntil(task); else await task;
           }
-          if (!run) await wakeLater();
+          if (!run) await wakeLater('comment:' + row.id);
           if (ctx?.waitUntil) ctx.waitUntil(env.DB.prepare('DELETE FROM comment_limits WHERE bucket IN (SELECT bucket FROM comment_limits WHERE expires_at<? LIMIT 100)').bind(now - 86400).run());
           const saved = row.state === 'published' ? await env.DB.prepare('SELECT * FROM comments WHERE id=?').bind(row.id).first() : row;
           return reply({ item: publicComment(saved, actor) }, 201);
@@ -234,7 +234,7 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch, botFe
             WHERE id=? AND state='pending' AND (ai_run IS NULL OR ai_checked_at<?) RETURNING id`)
             .bind(run, now, id, now - 60).first();
           if (!row) reject(409, '评论已处理或正在审核，请刷新列表');
-          const task = moderateComment(env, id, run, moderationFetch).then(wake);
+          const task = moderateComment(env, id, run, moderationFetch).then(() => wake('comment:' + id));
           if (ctx?.waitUntil) ctx.waitUntil(task); else await task;
           return reply({ ok: true }, 202);
         }
@@ -257,7 +257,7 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch, botFe
             await env.DB.prepare("UPDATE comments SET state=?,updated_at=?,ai_run=NULL,ai_reason=CASE WHEN ai_status='queued' THEN '管理员已处理' ELSE ai_reason END,ai_status=CASE WHEN ai_status='queued' THEN 'manual' ELSE ai_status END,published_at=CASE WHEN ?='published' THEN COALESCE(published_at,?) ELSE published_at END WHERE id=? AND state!='deleted'")
               .bind(input.state, now, input.state, now, id).run();
           }
-          await wakeLater();
+          await wakeLater('comment:' + id);
           return reply({ ok: true });
         }
         if (request.method === 'POST' && url.pathname === '/v1/admin/diagnostics') {

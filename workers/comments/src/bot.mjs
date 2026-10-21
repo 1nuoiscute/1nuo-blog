@@ -87,10 +87,10 @@ async function runJob(env, job, apiFetch, reviewFetch) {
     console.error('Dafeiyu job failed');
   }
 }
-export async function processBotJobs(env, apiFetch = fetch, reviewFetch = fetch, maximum = 1) {
+export async function processBotJobs(env, apiFetch = fetch, reviewFetch = fetch, maximum = 1, requestedJob = null) {
   if (!botSettings(env).enabled) return;
   const now = nowSeconds();
   await env.DB.prepare("UPDATE bot_jobs SET status='error',run_id=NULL,last_error='大肥鱼暂时无法回复，请稍后再聊',updated_at=? WHERE status='running' AND lease_until<? AND attempts>=3").bind(now, now).run();
-  const rows = await env.DB.prepare(`SELECT * FROM bot_jobs WHERE attempts<3 AND ((status IN ('queued','error') AND available_at<=?) OR (status='running' AND lease_until<?)) ORDER BY created_at,id LIMIT ?`).bind(now, now, maximum).all();
+  const rows = await env.DB.prepare(`SELECT * FROM bot_jobs WHERE attempts<3 AND ((status IN ('queued','error') AND available_at<=?) OR (status='running' AND lease_until<?)) ORDER BY CASE WHEN id=? THEN 0 ELSE 1 END,created_at,id LIMIT ?`).bind(now, now, requestedJob, maximum).all();
   for (const job of rows.results) await runJob(env, job, apiFetch, reviewFetch);
 }
