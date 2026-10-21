@@ -6,6 +6,12 @@
 .nuo-comments-heading h2, #article-container .nuo-comments-heading h2 { display: flex; align-items: center; gap: 10px; margin: 0; padding: 0; color: var(--account-ink); font-size: 21px; font-weight: 650; line-height: 1.4; }
 #article-container .nuo-comments-heading h2::before { display: none; }
 .nuo-comments-count { color: var(--account-muted); font-size: 13px; font-weight: 400; }
+.nuo-comments-assistant { display: flex; align-items: center; gap: 10px; margin-bottom: 18px; padding: 12px 14px; border-radius: 10px; background: var(--account-tint); }
+.nuo-comments-assistant > img { flex-shrink: 0; width: 28px; height: 28px; margin: 0 !important; border-radius: 50%; }
+.nuo-comments-assistant > div { display: grid; gap: 2px; flex: 1; min-width: 0; }
+.nuo-comments-assistant strong { font-size: 12px; }
+.nuo-comments-assistant span { color: var(--account-muted); font-size: 11px; }
+.nuo-comments .nuo-comments-assistant button { flex-shrink: 0; color: var(--account-accent); }
 .nuo-comments a.nuo-comments-admin-link { color: var(--account-muted); font-size: 12px; text-decoration: none; border: 0; }
 .nuo-comments a:hover { color: var(--account-accent); }
 .nuo-comments .nuo-comments-form { margin: 0 0 20px; padding: 0; border: 1px solid var(--account-line); border-radius: 16px; background: var(--account-surface); overflow: hidden; transition: border-color .15s; }

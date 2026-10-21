@@ -6,6 +6,7 @@ const pug = require('pug');
 const yaml = require('js-yaml');
 const { SaxesParser } = require('saxes');
 const { isPublicMetadata, safeJsonLd, register } = require('../scripts/site-metadata');
+const { articleRoutes } = require('../scripts/ai-articles');
 const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 let checks = 0;
@@ -119,6 +120,10 @@ check(!config.robotstxt.disallow.some(p => '/rate/admin/'.startsWith(p)), 'robot
 check(config.sitemap.tags === false && config.sitemap.categories === false, 'no private-only taxonomy advertised');
 
 // Run after the authorized deployment/CI build, not against stale public artifacts.
+const aiSources = articleRoutes({ posts: [{path:'public/index.html',title:'公开文章',content:'<p>正文</p><script>secret()</script>'}, ...protectedFields.map((field,i)=>({path:'private-'+i+'/index.html',title:'私密',content:'SECRET',...field}))], pages:[{path:'notes/test/index.html',source:'notes/test/index.md',title:'笔记',content:'<p>笔记正文</p>'},{path:'account/index.html',source:'account/index.md',content:'UTILITY'}] });
+check(aiSources.length===2,'AI source generator includes public posts and notes only');
+check(aiSources.every(route=>/^ai\/articles\/[a-f0-9]{64}\.json$/.test(route.path)),'AI sources use canonical thread hashes');
+check(!JSON.stringify(aiSources).includes('SECRET') && !JSON.stringify(aiSources).includes('secret()'),'AI sources omit private content and scripts');
 if (process.argv.includes('--artifacts')) {
   const publicDir = path.join(root, config.public_dir || 'public');
   const homeHtml = fs.readFileSync(path.join(publicDir, 'index.html'), 'utf8');

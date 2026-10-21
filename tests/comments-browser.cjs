@@ -22,14 +22,15 @@ function check(value, message) { assert(value, message); checks++; console.log('
 async function main() {
   const server = http.createServer((req, res) => {
     const url = new URL(req.url, 'http://localhost');
-    const files = { '/nuo-comments.js': 'source/js/nuo-comments.js', '/comments.css': 'source/css/comments.css', '/account.css': 'source/css/account.css' };
+    if(url.pathname==='/images/dafeiyu.png') { res.setHeader('Content-Type','image/png'); return res.end(fs.readFileSync(path.join(root,'source/images/dafeiyu.png'))); }
+    const files = { '/nuo-comments.js': 'source/js/nuo-comments.js', '/nuo-markdown.js': 'source/js/nuo-markdown.js', '/comments.css': 'source/css/comments.css', '/account.css': 'source/css/account.css' };
     if (files[url.pathname]) {
       res.setHeader('Content-Type', url.pathname.endsWith('.css') ? 'text/css' : 'application/javascript');
       return res.end(read(files[url.pathname]));
     }
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.end('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><link rel="stylesheet" href="/account.css"><link rel="stylesheet" href="/comments.css"></head><body style="margin:24px;font-family:Arial,\'Microsoft YaHei\',sans-serif;background:var(--account-surface)"><main id="article-container" style="max-width:880px;margin:auto">' +
-      (url.pathname === '/comments-admin/' ? adminMarkup : publicMarkup) + '</main><script>' + authStub + '</script><script src="/nuo-comments.js"></script></body></html>');
+      (url.pathname === '/comments-admin/' ? adminMarkup : '<article class="post-content" id="article-body">公开的文章正文</article>' + publicMarkup) + '</main><script>' + authStub + '</script><script src="/nuo-markdown.js"></script><script src="/nuo-comments.js"></script></body></html>');
   });
   await new Promise(resolve => server.listen(0, '127.0.0.1', resolve));
   const base = 'http://127.0.0.1:' + server.address().port;
@@ -39,7 +40,7 @@ async function main() {
     const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
     let failPost = true;
     let failDiagnosis = false;
-    const submissions = [];
+    const submissions = [], summaryRequests = [];
     const comments = [{ id: 1, thread: '/', parentId: null, authorId: 'user_admin',
       author: { name: '<b>普通昵称</b>', avatar: '' }, body: '<img src=x onerror=alert(1)>', state: 'published', createdAt: 1700000000, ipLocation: '四川' }];
     await context.route('https://comments.example.test/**', async route => {
@@ -55,14 +56,22 @@ async function main() {
         comments.find(item => item.id === Number(url.pathname.split('/').at(-2))).moderation = { status: 'queued' };
         data = { ok: true };
       }
+      else if (url.pathname === '/v1/article-summary' && req.method() === 'POST') {
+        summaryRequests.push(req.postDataJSON());
+        if (!comments.some(item => item.author.bot)) comments.push({id:comments.length+1,thread:'/',parentId:null,authorId:'bot:dafeiyu',author:{name:'大肥鱼',avatar:'',bot:true},body:'**本文重点**\n\n- 第一项总结\n- 读者关注的问题',state:'published',createdAt:1700000010});
+        data={ok:true};
+      }
       else if (req.method() === 'POST') {
         const body = req.postDataJSON(); submissions.push(body);
         if (failPost) { status = 500; data = { error: '暂时提交失败，请重试' }; }
         else {
-          const item = { id: comments.length + 1, thread: '/', parentId: body.parentId, authorId: actor,
+          const isBotReply=comments.find(item=>item.id===body.replyTo)?.author.bot;
+          const item = { id: comments.length + 1, thread: '/', parentId: body.parentId, replyTo:body.replyTo, authorId: actor,
             author: { name: body.name, avatar: '' }, body: body.body, state: 'pending', createdAt: 1700000001,
             moderation: { status: 'review', reason: '需要结合上下文判断' } };
+          if(isBotReply) item.state='published';
           comments.push(item); status = 201; data = { item: map(item) };
+          if(isBotReply) comments.push({id:comments.length+1,thread:'/',parentId:body.parentId,replyTo:item.id,authorId:'bot:dafeiyu',author:{name:'大肥鱼',avatar:'',bot:true},body:'沿着本文继续解释。',state:'published',createdAt:1700000011});
         }
       } else if (req.method() === 'PATCH') {
         comments.find(item => item.id === Number(url.pathname.split('/').at(-1))).state = req.postDataJSON().state;
@@ -144,6 +153,19 @@ async function main() {
     check(await input.isDisabled(), 'anonymous readers log in before drafting');
     await page.getByRole('button', { name: '登录 / 注册', exact: true }).click();
     check(await page.evaluate(() => loginOptions.forceRedirectUrl === location.origin + location.pathname + location.search), 'login returns to current article and preserves its query');
+    await page.getByRole('button',{name:'总结本文与评论',exact:true}).click();
+    check(summaryRequests.length===0,'article summary requires login before requesting AI');
+    await page.evaluate(()=>switchAccount('user_alice')); await page.locator('[data-comments-identity]').filter({hasText:'user_alice'}).waitFor();
+    await page.getByRole('button',{name:'总结本文与评论',exact:true}).click(); await page.locator('.nuo-comment-ai-badge').waitFor();
+    check(summaryRequests[0].thread==='/' && Object.keys(summaryRequests[0]).length===1,'summary requests only the article path, never a client-provided article body');
+    check(await page.locator('.nuo-comment-body ul li').count()===2 && await page.locator('.nuo-comment-body strong').textContent()==='本文重点','article AI summary renders Markdown');
+    const botId=comments.find(item=>item.author.bot).id;
+    await page.locator('[data-comment-id="'+botId+'"]').getByRole('button',{name:'继续聊',exact:true}).click(); await input.fill('解释一下第二点'); await page.getByRole('button',{name:'发表评论',exact:true}).click();
+    await page.getByText('沿着本文继续解释。',{exact:true}).waitFor();
+    check(submissions.at(-1).replyTo===botId && submissions.at(-1).parentId===botId,'article follow-up targets the AI and continues its branch');
+    await page.setViewportSize({width:360,height:844});
+    check(await page.evaluate(()=>document.documentElement.scrollWidth<=innerWidth),'article summary and continued conversation fit mobile');
+    if(process.env.COMMENTS_SCREENSHOTS) { fs.mkdirSync(path.join(root,'test-results'),{recursive:true}); await page.locator('[data-nuo-comments]').screenshot({path:path.join(root,'test-results/article-ai-mobile.png')}); }
     if (process.env.COMMENTS_SCREENSHOTS) {
       comments.splice(0); await page.goto(base);
       await page.waitForFunction(() => !document.querySelector('[data-comments-body]').disabled);

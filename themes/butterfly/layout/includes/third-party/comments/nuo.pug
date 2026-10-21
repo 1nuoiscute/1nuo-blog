@@ -3,6 +3,12 @@ section.nuo-comments(data-nuo-comments data-api=theme.nuo_comments.api aria-labe
     h2 评论
       span.nuo-comments-count(data-comments-count)
     a.nuo-comments-admin-link(href='/comments-admin/' hidden data-comments-admin-link) 管理评论
+  .nuo-comments-assistant(data-comments-assistant hidden)
+    img(src='/images/dafeiyu.png' width='28' height='28' alt='')
+    div
+      strong 大肥鱼
+      span 读一遍本文与公开评论，帮你理清重点。
+    button(type='button' data-comments-summary) 总结本文与评论
   form.nuo-comments-form(data-comments-form)
     .nuo-composer-top
       .nuo-comments-person

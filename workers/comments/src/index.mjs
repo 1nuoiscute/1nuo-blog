@@ -4,8 +4,9 @@ import { ipLocation } from './location.mjs';
 import { accountData } from './account-data.mjs';
 import { discussions, checkDiscussion, discussionId } from './discussions.mjs';
 import { likeContent } from './likes.mjs';
-import { BOT, botJobs, processBotJobs } from './bot.mjs';
+import { BOT, botJobs, botSettings, processBotJobs } from './bot.mjs';
 import { checkContent } from './content-policy.mjs';
+import { digest, loadArticle, rememberArticle } from './articles.mjs';
 
 class HttpError extends Error {
   constructor(status, message) { super(message); this.status = status; }
@@ -67,7 +68,7 @@ function publicComment(row, actor) {
   };
 }
 
-export function createWorker({ jwksFetch = fetch, moderationFetch = fetch, botFetch = fetch } = {}) {
+export function createWorker({ jwksFetch = fetch, moderationFetch = fetch, botFetch = fetch, articleFetch = fetch } = {}) {
   const keysets = new Map();
   async function authenticate(request, env, required = true) {
     const authorization = request.headers.get('authorization');
@@ -98,10 +99,10 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch, botFe
 
   return {
     async scheduled(event, env, ctx) {
-      ctx.waitUntil(processBotJobs(env, botFetch, moderationFetch, 3));
+      ctx.waitUntil(processBotJobs(env, botFetch, moderationFetch, 3, null, articleFetch));
     },
     async fetch(request, env, ctx) {
-      const wake = job => processBotJobs(env, botFetch, moderationFetch, 1, job ?? null);
+      const wake = job => processBotJobs(env, botFetch, moderationFetch, 1, job ?? null, articleFetch);
       const wakeLater = async job => { const task = wake(job); if (ctx?.waitUntil) ctx.waitUntil(task); else await task; };
       const origin = request.headers.get('origin');
       const headers = new Headers({ 'Content-Type': 'application/json; charset=utf-8', 'Cache-Control': 'no-store',
@@ -117,13 +118,28 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch, botFe
           return new Response(null, { status: 204, headers });
         }
         const url = new URL(request.url);
-        const retryRoute = /^\/v1\/bot-jobs\/(post:[a-f0-9-]{36}|comment:[1-9][0-9]*)\/retry$/.exec(url.pathname);
+        if (url.pathname === '/v1/article-summary' && request.method === 'POST') {
+          const actor = await authenticate(request, env), input = await jsonBody(request), thread = threadPath(input.thread);
+          if (!botSettings(env).enabled) reject(503, '大肥鱼暂未开放');
+          if (discussionId(thread) !== null) reject(400, '请在文章评论区使用总结');
+          await limit(env, actor.id, Math.floor(Date.now() / 1000));
+          let article;
+          try { article = await loadArticle(thread, articleFetch); } catch { reject(404, '暂时读不到这篇公开文章，请稍后重试'); }
+          await rememberArticle(env, article);
+          const recent = await env.DB.prepare("SELECT c.id,c.updated_at FROM comments c WHERE c.thread=? AND c.state='published' AND c.author_kind='human' AND (c.parent_id IS NULL OR EXISTS(SELECT 1 FROM comments p WHERE p.id=c.parent_id AND (p.state='published' OR (p.state='deleted' AND p.published_at IS NOT NULL)))) ORDER BY c.id DESC LIMIT 30").bind(thread).all();
+          const id = 'article:' + await digest(thread + '\n' + article.hash + '\n' + JSON.stringify(recent.results)), now = Math.floor(Date.now() / 1000);
+          await env.DB.prepare('INSERT OR IGNORE INTO bot_jobs(id,thread,requester_id,available_at,created_at,updated_at) VALUES(?,?,?,?,?,?)').bind(id, thread, actor.id, now, now, now).run();
+          await wakeLater(id);
+          return reply({ ok: true, job: { id } }, 202);
+        }
+        const retryRoute = /^\/v1\/bot-jobs\/(post:[a-f0-9-]{36}|comment:[1-9][0-9]*|article:[a-f0-9]{64})\/retry$/.exec(url.pathname);
         if (retryRoute && request.method === 'POST') {
           const actor = await authenticate(request, env), id = retryRoute[1];
           const job = await env.DB.prepare('SELECT * FROM bot_jobs WHERE id=?').bind(id).first();
           if (!job) reject(404, '回复任务不存在');
           if (!actor.admin && actor.id !== job.requester_id) reject(403, '只能重试自己的对话');
-          await checkDiscussion(env, '/discuss/' + job.discussion_id, actor, reject, true);
+          if (job.discussion_id) await checkDiscussion(env, job.thread, actor, reject, true);
+          else { try { await rememberArticle(env, await loadArticle(job.thread, articleFetch)); } catch { reject(404, '暂时读不到这篇公开文章'); } }
           const retrySlot = Math.floor(Date.now() / 60000);
           const retryRate = await env.DB.prepare('INSERT INTO comment_limits(bucket,hits,expires_at) VALUES(?,1,?) ON CONFLICT(bucket) DO UPDATE SET hits=hits+1 RETURNING hits').bind('bot-retry:' + actor.id + ':' + retrySlot, (retrySlot + 1) * 60).first();
           if (retryRate.hits > 3) reject(429, '重试太频繁，请稍后再试');
@@ -179,7 +195,7 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch, botFe
           const items = rows.results.slice(0, 30);
           const last = items.at(-1);
           return reply({ items: items.map(row => publicComment(row, actor)), next: rows.results.length > 30 ? (forum ? (last.floor ?? 2147483647) + ':' + last.id : last.id) : null,
-            ...(forum ? { bot: await botJobs(env, discussionId(thread), actor) } : {}) });
+            bot: await botJobs(env, thread, actor) });
         }
         if (request.method === 'POST' && url.pathname === '/v1/comments') {
           const actor = await authenticate(request, env);
@@ -190,13 +206,13 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch, botFe
           if (!body || body.length > 2000 || /[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(body)) reject(400, '评论请填写 1–2000 个字符');
           checkContent(body, reject);
           let parentId = input.parentId ?? null, replyTo = null, botRequested = false;
-          if (discussionId(thread) && input.replyTo !== undefined && input.replyTo !== null) {
+          if (input.replyTo !== undefined && input.replyTo !== null) {
             if (!Number.isSafeInteger(input.replyTo) || input.replyTo < 1) reject(400, '回复对象无效');
             const target = await env.DB.prepare("SELECT * FROM comments WHERE id=? AND thread=? AND state='published'").bind(input.replyTo, thread).first();
             if (!target) reject(400, '回复对象不存在或尚未发布');
             replyTo = target.id; parentId = target.parent_id || target.id; botRequested = target.author_kind === 'bot';
           }
-          botRequested = !!discussionId(thread) && (botRequested || /@(DeepSeek|大肥鱼)(?=$|\s|[，。！？,.!?：:])/i.test(body));
+          botRequested = botRequested || /@(DeepSeek|大肥鱼)(?=$|\s|[，。！？,.!?：:])/i.test(body);
           if (parentId !== null) {
             if (!Number.isSafeInteger(parentId) || parentId < 1) reject(400, '回复对象无效');
             const parent = await env.DB.prepare('SELECT * FROM comments WHERE id=? AND thread=? AND parent_id IS NULL').bind(parentId, thread).first();
@@ -207,6 +223,10 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch, botFe
           const name = typeof input.name === 'string' ? input.name.trim().slice(0, 40) : '';
           const now = Math.floor(Date.now() / 1000);
           await limit(env, actor.id, now);
+          if (botRequested && !discussionId(thread)) {
+            if (!botSettings(env).enabled) reject(503, '大肥鱼暂未开放');
+            try { await rememberArticle(env, await loadArticle(thread, articleFetch)); } catch { reject(404, '暂时读不到这篇公开文章，请稍后重试'); }
+          }
           const run = !actor.admin && moderationSettings(env).configured ? crypto.randomUUID() : null;
           const row = await env.DB.prepare(`INSERT INTO comments(thread,parent_id,author_id,author_name,avatar_url,body,state,created_at,updated_at,published_at,ai_status,ai_run,ai_checked_at,ip_location,reply_to,bot_requested)
             SELECT ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? WHERE ? IS NULL OR EXISTS(SELECT 1 FROM discussions WHERE id=? AND state='published' AND locked=0) RETURNING *`).bind(thread, parentId, actor.id, name || '读者 ' + actor.id.slice(-6),

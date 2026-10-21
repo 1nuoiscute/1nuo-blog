@@ -30,12 +30,15 @@
     const filter = query('[data-comments-filter]');
     const diagnose = query('[data-comments-diagnose]');
     const diagnosis = query('[data-comments-diagnosis]');
+    const summary = query('[data-comments-summary]');
     let clerk, me, next = null, parentId = null, replyTo = null, unsubscribe, observer, started = false, botTimer, botPolls = 0;
     let fetchVersion = 0, identityVersion = 0, loadedItems = [];
     const timers = new Set();
     const thread = host.dataset.thread || location.pathname;
-    const botPanel = host.dataset.thread ? element('div', undefined, 'nuo-bot-status') : null;
+    const botPanel = !adminPage ? element('div', undefined, 'nuo-bot-status') : null;
     if (botPanel) { botPanel.setAttribute('role', 'status'); botPanel.hidden = true; status.before(botPanel); }
+    const articlePage = !host.dataset.thread && (!!document.querySelector('article.post-content') || (location.pathname.startsWith('/notes/') && !!document.querySelector('#article-container')));
+    if (query('[data-comments-assistant]')) query('[data-comments-assistant]').hidden = !articlePage;
 
     async function request(path, options = {}) {
       const owner = clerk?.user?.id || null;
@@ -113,8 +116,9 @@
         const label = element('small'), target = element('a', item.parentFloor ? '回复 ' + item.parentFloor + ' 楼' : '回复 #' + (item.replyTo || item.parentId));
         target.href = '#nuo-comment-' + (item.replyTo || item.parentId); label.append(target); card.append(label);
       }
-      const body = element(host.dataset.thread ? 'div' : 'p', undefined, 'nuo-comment-body');
-      if (host.dataset.thread && item.state !== 'deleted' && window.NuoMarkdown) window.NuoMarkdown(body, item.body);
+      const rich = !!host.dataset.thread || item.author.bot;
+      const body = element(rich ? 'div' : 'p', undefined, 'nuo-comment-body');
+      if (rich && item.state !== 'deleted' && window.NuoMarkdown) window.NuoMarkdown(body, item.body);
       else body.textContent = item.state === 'deleted' ? '这条评论已删除。' : item.body;
       card.append(body);
       if (adminPage && item.moderation) {
@@ -140,9 +144,9 @@
         const updateLike = () => { like.textContent = (item.liked ? '♥ 已赞 ' : '♡ 赞 ') + (item.likes || 0); like.setAttribute('aria-pressed', String(!!item.liked)); };
         like.dataset.commentLike = item.id; updateLike(); actions.append(like);
       }
-      if (!adminPage && clerk?.isSignedIn && (!item.parentId || host.dataset.thread) && item.state === 'published') {
+      if (!adminPage && clerk?.isSignedIn && item.state === 'published') {
         actions.append(action(item.author.bot ? '继续聊' : '回复', () => {
-          parentId = item.parentId || item.id; replyTo = host.dataset.thread ? item.id : null;
+          parentId = item.parentId || item.id; replyTo = item.id;
           const notice = query('[data-comments-reply]');
           query('[data-comments-reply-box]').hidden = false;
           notice.textContent = '正在回复 ' + (host.dataset.thread && item.floor ? item.floor + ' 楼的 ' : '') + item.author.name;
@@ -212,7 +216,7 @@
     }
     function drawList() {
       list.replaceChildren();
-      if (!host.dataset.thread || adminPage) { loadedItems.forEach(item => list.append(draw(item))); return; }
+      if (adminPage) { loadedItems.forEach(item => list.append(draw(item))); return; }
       const byId = new Map(loadedItems.map(item => [item.id, item])), children = new Map(), visited = new Set();
       loadedItems.forEach(item => {
         const target = item.replyTo || item.parentId;
@@ -324,6 +328,16 @@
           signUpForceRedirectUrl: location.origin + location.pathname + location.search });
       } catch (error) { message(error); }
       finally { login.disabled = false; }
+    };
+    if (summary) summary.onclick = async () => {
+      if (!clerk?.isSignedIn) { await login.onclick(); return; }
+      summary.disabled = true;
+      try {
+        await request('/v1/article-summary', { method: 'POST', body: { thread } });
+        botPolls = 0; await load();
+        botPanel?.scrollIntoView({ block: 'nearest' });
+      } catch (error) { message(error); }
+      finally { if (!signal.aborted) summary.disabled = false; }
     };
     if (form) {
       input.addEventListener('input', counter, { signal });
