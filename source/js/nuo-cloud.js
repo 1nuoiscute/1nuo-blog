@@ -47,6 +47,7 @@
     let changed = false;
     for (const item of items || []) {
       if (!valid(item)) continue;
+      cache.clock = Math.max(cache.clock, item.changedAt);
       const key = recordKey(item);
       if (newer(item, cache.records[key])) { cache.records[key] = item; changed = true; }
     }

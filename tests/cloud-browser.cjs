@@ -70,9 +70,14 @@ async function main() {
     check(await b.locator('[data-library-section="saved"] a').textContent() === '测试文章', 'second device loads the account bookmark');
     await b.getByRole('button', { name: '移除', exact: true }).click(); await b.evaluate(() => NuoCloud.sync()); await a.evaluate(() => NuoCloud.sync());
     check(await a.locator('[data-action="bookmark"]').textContent() === '♡ 收藏', 'bookmark removal reaches another device');
+    // Finish the live article's progress recorder before injecting a test position.
+    await a.goto(base + '/favorites/'); await a.evaluate(() => NuoCloud.ready());
     await a.evaluate(() => { NuoCloud.write('nuo:reading:v1', { '/article': { title: '测试文章', kind: '文章', progress: .6, read: true } }); return NuoCloud.sync(); });
     await b.evaluate(() => NuoCloud.sync());
     check(await b.evaluate(() => NuoCloud.read('nuo:reading:v1', {})['/article'].progress) === .6, 'second device loads reading position');
+    // A previously observed remote clock may be slightly ahead of this device.
+    bucket('user_alice').get('read\t/article').changedAt = Date.now() + 1000;
+    await b.evaluate(() => NuoCloud.sync());
     await b.evaluate(() => { const state = NuoCloud.read('nuo:reading:v1', {}); state['/article'].read = false; NuoCloud.write('nuo:reading:v1', state); return NuoCloud.sync(); });
     await a.evaluate(() => { const state = NuoCloud.read('nuo:reading:v1', {}); state['/article'].progress = .8; NuoCloud.write('nuo:reading:v1', state); return NuoCloud.sync(); });
     check(await a.evaluate(() => NuoCloud.read('nuo:reading:v1', {})['/article'].read) === false, 'progress updates do not overwrite a remote unread change');
