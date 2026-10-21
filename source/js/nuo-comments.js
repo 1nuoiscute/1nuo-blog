@@ -33,7 +33,7 @@
     let clerk, me, next = null, parentId = null, unsubscribe, observer, started = false;
     let fetchVersion = 0, identityVersion = 0;
     const timers = new Set();
-    const thread = location.pathname;
+    const thread = host.dataset.thread || location.pathname;
 
     async function request(path, options = {}) {
       const headers = { ...(options.body ? { 'Content-Type': 'application/json' } : {}) };
@@ -95,7 +95,11 @@
       const date = element('time', new Date(item.createdAt * 1000).toLocaleString('zh-CN'));
       date.dateTime = new Date(item.createdAt * 1000).toISOString(); header.append(date);
       if (item.state === 'pending') header.append(element('span', '待审核', 'nuo-comment-badge'));
-      if (adminPage) header.append(element('span', item.thread, 'nuo-comment-thread'));
+      if (adminPage) {
+        const threadLink = element('a', item.thread, 'nuo-comment-thread');
+        threadLink.href = /^\/discuss\/[a-f0-9-]{36}$/.test(item.thread) ? '/discuss/?id=' + item.thread.split('/').pop() : item.thread;
+        header.append(threadLink);
+      }
       card.append(header);
       if (item.parentId) card.append(element('small', '回复 #' + item.parentId));
       card.append(element('p', item.state === 'deleted' ? '这条评论已删除。' : item.body, 'nuo-comment-body'));
@@ -196,7 +200,7 @@
         if (more) more.hidden = !next;
         const count = query('[data-comments-count]');
         if (count) { count.textContent = list.childNodes.length + (next ? '+' : ''); count.setAttribute('aria-label', '已加载 ' + list.childNodes.length + ' 条评论'); }
-        status.textContent = list.childNodes.length ? '' : (adminPage ? '这个分类暂无评论。' : '还没有评论，来聊聊吧。');
+        status.textContent = list.childNodes.length ? '' : (adminPage ? '这个分类暂无评论。' : host.dataset.thread ? '还没有回复，来接着聊聊吧。' : '还没有评论，来聊聊吧。');
       } catch (error) { message(error); }
     }
     async function refreshIdentity() {
@@ -259,8 +263,8 @@
       try {
         clerk = await window.NuoAuth.getClerk();
         if (!clerk) throw new Error('账号服务尚未开放');
-        await clerk.openSignIn({ withSignUp: true, forceRedirectUrl: location.origin + location.pathname,
-          signUpForceRedirectUrl: location.origin + location.pathname });
+        await clerk.openSignIn({ withSignUp: true, forceRedirectUrl: location.origin + location.pathname + location.search,
+          signUpForceRedirectUrl: location.origin + location.pathname + location.search });
       } catch (error) { message(error); }
       finally { login.disabled = false; }
     };
@@ -310,6 +314,7 @@
   }
   document.addEventListener('pjax:send', () => { if (dispose) dispose(); dispose = null; });
   document.addEventListener('pjax:complete', boot);
+  document.addEventListener('nuo:comments-mount', boot);
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', boot);
   else boot();
 })();

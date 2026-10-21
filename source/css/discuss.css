@@ -1,0 +1,86 @@
+/* An open notebook, with the site's rose as the active ink. */
+.type-discuss #content-inner { max-width: 1120px; padding: 42px 24px 64px; }
+.type-discuss #page { width: 100%; padding: 0; background: transparent; box-shadow: none; }
+.nuo-discuss { max-width: 960px; margin: auto; color: var(--account-ink); }
+.nuo-discuss *, .nuo-discuss *::before, .nuo-discuss *::after { box-sizing: border-box; }
+.nuo-discuss [hidden] { display: none !important; }
+.nuo-discuss :is(button,select,input,textarea) { font: inherit; color: inherit; }
+.nuo-discuss button { cursor: pointer; border: 0; background: transparent; padding: 8px 12px; border-radius: 8px; line-height: 1.5; }
+.nuo-discuss button:disabled { opacity: .5; cursor: wait; }
+.nuo-discuss :is(button,a,select,input,textarea):focus-visible { outline: 2px solid var(--account-accent); outline-offset: 3px; }
+#article-container .nuo-discuss :is(h1,h2,h3,p) { margin-top: 0; }
+#article-container .nd-heading h1 { padding: 0; margin: 0; font-size: 32px; line-height: 1.4; letter-spacing: .02em; color: var(--account-ink); }
+.nd-heading { display: flex; align-items: center; justify-content: space-between; gap: 24px; margin-bottom: 32px; }
+#article-container .nd-heading p { margin: 8px 0 0; color: var(--account-muted); font-size: 14px; }
+.nuo-discuss .nd-primary { background: #ae4778; color: #fff; padding: 11px 19px; flex-shrink: 0; font-weight: 600; }
+.nd-toolbar { display: flex; gap: 12px; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--account-line); padding-bottom: 13px; }
+.nd-categories, .nd-views { display: flex; align-items: center; gap: 3px; flex-wrap: wrap; }
+.nd-categories button { font-weight: 600; }
+.nd-categories button[aria-pressed=true], .nd-views button[aria-pressed=true], .nd-editor-tabs button[aria-pressed=true] { color: var(--account-accent); background: var(--account-tint); }
+.nd-views, .nd-meta, .nd-admin-filters { font-size: 12px; color: var(--account-muted); }
+.nd-views select, .nd-admin-filters select { background: var(--account-surface); border: 1px solid var(--account-line); border-radius: 6px; padding: 6px; }
+.nd-admin-filters { display: flex; justify-content: space-between; align-items: center; padding: 16px 0 0; }
+#article-container .nd-status { font-size: 13px; color: var(--account-muted); margin: 16px 0; white-space: pre-wrap; }
+.nd-row { display: grid; grid-template-columns: 40px minmax(0,1fr) 56px; gap: 16px; padding: 25px 0; border-bottom: 1px solid var(--account-line); align-items: start; }
+.nd-avatar { width: 38px; height: 38px; border-radius: 50%; background: var(--account-tint); color: var(--account-accent); display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; font-weight: 600; }
+#article-container .nd-avatar img { width: 100%; height: 100%; margin: 0; object-fit: cover; }
+#article-container .nd-title { display: block; margin: 0 0 6px; font-size: 18px; line-height: 1.55; color: var(--account-ink); text-decoration: none; font-weight: 600; overflow-wrap: anywhere; }
+.nd-title:hover { color: var(--account-accent) !important; }
+#article-container .nd-excerpt { margin: 0 0 10px; font-size: 13px; line-height: 1.8; color: var(--account-muted); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.nd-meta { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 14px; line-height: 1.8; }
+.nd-badge { color: var(--account-accent); font-size: 11px; background: var(--account-tint); border-radius: 4px; padding: 1px 6px; }
+.nd-replies { text-align: center; color: var(--account-muted); font-size: 11px; padding-top: 2px; }
+.nd-replies strong { display: block; font-size: 20px; font-weight: 500; color: var(--account-ink); }
+.nd-empty { padding: 58px 20px; text-align: center; color: var(--account-muted); }
+#article-container .nd-empty h2 { font-size: 20px; font-weight: 500; margin: 0 0 8px; color: var(--account-ink); }
+#article-container .nd-empty p { margin-bottom: 18px; font-size: 14px; }
+.nd-more { display: block; margin: 24px auto; border: 1px solid var(--account-line) !important; }
+.nd-editor { margin-top: 28px; padding: 28px; border: 1px solid var(--account-line); border-radius: 14px; background: var(--account-surface); }
+.nd-editor-heading { display: flex; align-items: center; justify-content: space-between; margin-bottom: 20px; }
+#article-container .nd-editor-heading h2 { margin: 0; font-size: 20px; }
+.nd-editor-heading button, .nd-editor-tabs { color: var(--account-muted); font-size: 13px; }
+.nd-editor label:not(.nd-sr) { display: block; font-size: 13px; font-weight: 600; margin: 14px 0 8px; }
+.nd-editor :is(input,textarea,select) { display: block; width: 100%; border: 1px solid var(--account-line); border-radius: 7px; background: var(--account-surface); padding: 10px 12px; line-height: 1.8; }
+.nd-editor select { width: auto; min-width: 150px; }
+.nd-editor textarea { resize: vertical; min-height: 220px; }
+.nd-editor-tabs { display: flex; align-items: center; gap: 8px; margin: 22px 0 10px; }
+.nd-editor-tabs span { margin-left: auto; font-size: 11px; }
+.nd-editor-bottom { display: flex; align-items: center; justify-content: flex-end; flex-wrap: wrap; gap: 12px; margin-top: 16px; font-size: 12px; color: var(--account-muted); }
+.nd-editor-bottom [data-discuss-draft] { margin-right: auto; }
+.nd-preview { min-height: 220px; padding: 10px 0; }
+.nd-detail { padding-top: 14px; }
+.nd-back { display: inline-block; margin-bottom: 24px; font-size: 13px; color: var(--account-muted); }
+#article-container .nd-detail h2.nd-post-title { padding: 0; font-size: clamp(24px,4vw,32px); line-height: 1.5; margin: 14px 0 20px; overflow-wrap: anywhere; }
+.nd-author { display: flex; align-items: center; gap: 12px; margin-bottom: 28px; }
+.nd-author strong { display: block; font-size: 14px; font-weight: 600; }
+.nd-prose { font-size: 15px; line-height: 1.95; overflow-wrap: anywhere; }
+#article-container .nd-prose p { margin: 0 0 1.2em; white-space: pre-wrap; }
+#article-container .nd-prose :is(h3,h4,h5) { margin: 1.3em 0 .6em; line-height: 1.5; }
+.nd-prose pre { padding: 16px; overflow: auto; background: var(--account-tint); border-radius: 8px; white-space: pre; }
+.nd-prose code { background: var(--account-tint); padding: 2px 4px; }
+.nd-prose pre code { padding: 0; }
+.nd-prose blockquote { border-left: 3px solid var(--account-line); margin: 16px 0; padding: 4px 18px; color: var(--account-muted); }
+.nd-post-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; padding: 24px 0; color: var(--account-muted); font-size: 12px; }
+.nd-post-actions button:hover { color: var(--account-accent); background: var(--account-tint); }
+.nd-review { background: var(--account-tint); color: var(--account-muted); padding: 12px 16px; font-size: 13px; border-radius: 8px; margin: 18px 0; }
+.nd-detail .nuo-comments { margin-top: 16px; }
+.nd-locked .nuo-comments-form { display: none; }
+.nd-sr { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+[data-theme=dark] .nuo-discuss { color-scheme: dark; }
+@media(max-width: 640px) {
+  .type-discuss #content-inner { padding: 28px 18px 48px; }
+  .nd-heading { gap: 12px; align-items: flex-start; margin-bottom: 24px; }
+  #article-container .nd-heading h1 { font-size: 28px; }
+  #article-container .nd-heading p { font-size: 12px; max-width: 220px; }
+  .nuo-discuss .nd-heading .nd-primary { font-size: 12px; padding: 10px 12px; margin-top: 4px; }
+  .nd-toolbar { flex-direction: column; align-items: stretch; gap: 10px; }
+  .nd-categories { justify-content: space-between; }
+  .nd-categories button { padding: 7px 8px; font-size: 13px; }
+  .nd-views { justify-content: flex-end; }
+  .nd-row { grid-template-columns: 30px minmax(0,1fr) 34px; gap: 10px; padding: 21px 0; }
+  .nd-row .nd-avatar { width: 30px; height: 30px; font-size: 12px; }
+  #article-container .nd-title { font-size: 16px; }
+  .nd-meta { gap: 4px 9px; font-size: 11px; }
+  .nd-editor { padding: 20px 16px; }
+  .nd-editor-bottom [data-discuss-draft] { flex-basis: 100%; }
+}

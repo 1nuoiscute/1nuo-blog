@@ -143,7 +143,7 @@ async function main() {
     await page.getByText('登录后加入讨论', { exact: true }).waitFor();
     check(await input.isDisabled(), 'anonymous readers log in before drafting');
     await page.getByRole('button', { name: '登录 / 注册', exact: true }).click();
-    check(await page.evaluate(() => loginOptions.forceRedirectUrl === location.origin + location.pathname), 'login returns to current article');
+    check(await page.evaluate(() => loginOptions.forceRedirectUrl === location.origin + location.pathname + location.search), 'login returns to current article and preserves its query');
     if (process.env.COMMENTS_SCREENSHOTS) {
       comments.splice(0); await page.goto(base);
       await page.waitForFunction(() => !document.querySelector('[data-comments-body]').disabled);

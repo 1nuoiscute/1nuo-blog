@@ -184,7 +184,7 @@
   async function login() {
     clerk = await window.NuoAuth.getClerk();
     if (!clerk) throw new Error('账号服务尚未开放');
-    return clerk.openSignIn({ withSignUp: true, forceRedirectUrl: location.origin + location.pathname, signUpForceRedirectUrl: location.origin + location.pathname });
+    return clerk.openSignIn({ withSignUp: true, forceRedirectUrl: location.origin + location.pathname + location.search, signUpForceRedirectUrl: location.origin + location.pathname + location.search });
   }
   function renderControls() {
     const text = !user ? (detail || '未登录，记录保存在此设备。登录后可跨设备同步。') :

@@ -112,10 +112,12 @@ export async function classifyComment(body, env, apiFetch = fetch) {
   };
 }
 
-export async function moderateComment(env, id, run, apiFetch = fetch) {
+export async function moderateComment(env, id, run, apiFetch = fetch, resource = 'comments') {
+  const table = resource === 'discussions' ? 'discussions' : 'comments';
+  const text = table === 'discussions' ? "title || char(10) || body AS body" : 'body';
   const settings = moderationSettings(env);
   try {
-    const row = await env.DB.prepare("SELECT body FROM comments WHERE id=? AND state='pending' AND ai_run=?")
+    const row = await env.DB.prepare(`SELECT ${text} FROM ${table} WHERE id=? AND state='pending' AND ai_run=?`)
       .bind(id, run).first();
     if (!row) return;
     let status = 'disabled', reason = '尚未配置 DeepSeek 密钥', approve = false, confidence = null;
@@ -139,7 +141,7 @@ export async function moderateComment(env, id, run, apiFetch = fetch) {
     }
     const now = Math.floor(Date.now() / 1000);
     // A manual decision, deletion or newer run invalidates this run immediately.
-    await env.DB.prepare(`UPDATE comments SET state=?,ai_status=?,ai_reason=?,ai_model=?,ai_confidence=?,ai_checked_at=?,ai_run=NULL,
+    await env.DB.prepare(`UPDATE ${table} SET state=?,ai_status=?,ai_reason=?,ai_model=?,ai_confidence=?,ai_checked_at=?,ai_run=NULL,
       updated_at=?,published_at=CASE WHEN ? THEN COALESCE(published_at,?) ELSE published_at END
       WHERE id=? AND state='pending' AND ai_run=?`)
       .bind(approve ? 'published' : 'pending', status, reason, settings.model, confidence, now, now, approve ? 1 : 0, now, id, run).run();

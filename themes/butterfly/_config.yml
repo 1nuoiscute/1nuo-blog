@@ -22,6 +22,7 @@ menu:
   分类: /categories/ || fas fa-folder-open
   友链: /link/ || fas fa-link
   关于: /about/ || fas fa-heart
+  讨论: /discuss/ || fas fa-comments
   账号: /account/ || fas fa-user
   收纳||fas fa-boxes:
     探索: /explore/ || fas fa-compass
@@ -1088,6 +1089,7 @@ inject:
   head:
     - <link rel="stylesheet" href="/css/custom.css?v=__NUO_ASSET_V__">
     - <link rel="stylesheet" href="/css/account.css?v=__NUO_ASSET_V__">
+    - <link rel="stylesheet" href="/css/discuss.css?v=__NUO_ASSET_V__">
     - <link rel="stylesheet" href="/css/comments.css?v=__NUO_ASSET_V__">
     - <script defer src="https://cloud.umami.is/script.js" data-website-id="6bbc26e5-009c-4364-8b91-b12efdda7794"></script>
   bottom:
@@ -1098,6 +1100,7 @@ inject:
     - <script defer src="/js/nuo-account.js?v=__NUO_ASSET_V__"></script>
     - <script defer src="/js/nuo-cloud.js?v=__NUO_ASSET_V__"></script>
     - <script defer src="/js/nuo-comments.js?v=__NUO_ASSET_V__"></script>
+    - <script defer src="/js/nuo-discuss.js?v=__NUO_ASSET_V__"></script>
     - <script defer src="/js/content-graph.js?v=__NUO_ASSET_V__"></script>
     - <script>document.querySelectorAll('#menus a[href^="http"]').forEach(function(a){a.target="_blank";a.rel="noopener"})</script>
 

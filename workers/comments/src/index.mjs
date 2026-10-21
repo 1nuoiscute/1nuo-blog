@@ -2,6 +2,7 @@ import { createRemoteJWKSet, customFetch, jwtVerify } from 'jose';
 import { moderateComment, moderationSettings, probeProvider } from './moderation.mjs';
 import { ipLocation } from './location.mjs';
 import { accountData } from './account-data.mjs';
+import { discussions, checkDiscussion, discussionId } from './discussions.mjs';
 
 class HttpError extends Error {
   constructor(status, message) { super(message); this.status = status; }
@@ -19,9 +20,9 @@ export function threadPath(value) {
   return normalized === '/' ? '/' : normalized.replace(/\/$/, '');
 }
 
-async function jsonBody(request) {
+async function jsonBody(request, maximum = 10000) {
   if (!request.headers.get('content-type')?.startsWith('application/json')) reject(415, '请提交 JSON');
-  if (Number(request.headers.get('content-length')) > 10000) reject(413, '内容过长');
+  if (Number(request.headers.get('content-length')) > maximum) reject(413, '内容过长');
   const reader = request.body?.getReader();
   if (!reader) reject(400, '请求内容为空');
   const chunks = []; let length = 0;
@@ -29,7 +30,7 @@ async function jsonBody(request) {
     const next = await reader.read();
     if (next.done) break;
     length += next.value.byteLength;
-    if (length > 10000) { await reader.cancel(); reject(413, '内容过长'); }
+    if (length > maximum) { await reader.cancel(); reject(413, '内容过长'); }
     chunks.push(next.value);
   }
   const bytes = new Uint8Array(length); let offset = 0;
@@ -105,6 +106,11 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch } = {}
           return new Response(null, { status: 204, headers });
         }
         const url = new URL(request.url);
+        if (/^\/v1\/(?:discussions(?:\/|$)|admin\/discussions$)/.test(url.pathname)) {
+          const actor = await authenticate(request, env, request.method !== 'GET');
+          const input = ['POST', 'PATCH'].includes(request.method) && !url.pathname.endsWith('/moderate') ? await jsonBody(request, 24000) : null;
+          return reply(await discussions({ request, url, env, actor, input, ctx, moderationFetch, safeAvatar, limit, reject }));
+        }
         if (['/v1/library', '/v1/leaderboard/2048'].includes(url.pathname)) {
           const actor = await authenticate(request, env, !(url.pathname === '/v1/leaderboard/2048' && request.method === 'GET'));
           const input = request.method === 'POST' ? await jsonBody(request) : null;
@@ -122,6 +128,7 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch } = {}
         if (request.method === 'GET' && url.pathname === '/v1/comments') {
           const thread = threadPath(url.searchParams.get('thread'));
           const actor = await authenticate(request, env, false);
+          await checkDiscussion(env, thread, actor, reject);
           const after = Number(url.searchParams.get('after') || 0);
           if (!Number.isSafeInteger(after) || after < 0) reject(400, '分页参数无效');
           const rows = await env.DB.prepare(`SELECT c.* FROM comments c WHERE c.thread=? AND c.id>?
@@ -136,6 +143,7 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch } = {}
           const actor = await authenticate(request, env);
           const input = await jsonBody(request);
           const thread = threadPath(input.thread);
+          await checkDiscussion(env, thread, actor, reject, true);
           const body = typeof input.body === 'string' ? input.body.trim() : '';
           if (!body || body.length > 2000 || /[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(body)) reject(400, '评论请填写 1–2000 个字符');
           const parentId = input.parentId ?? null;
@@ -151,9 +159,10 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch } = {}
           await limit(env, actor.id, now);
           const run = !actor.admin && moderationSettings(env).configured ? crypto.randomUUID() : null;
           const row = await env.DB.prepare(`INSERT INTO comments(thread,parent_id,author_id,author_name,avatar_url,body,state,created_at,updated_at,published_at,ai_status,ai_run,ai_checked_at,ip_location)
-            VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?) RETURNING *`).bind(thread, parentId, actor.id, name || '读者 ' + actor.id.slice(-6),
+            SELECT ?,?,?,?,?,?,?,?,?,?,?,?,?,? WHERE ? IS NULL OR EXISTS(SELECT 1 FROM discussions WHERE id=? AND state='published' AND locked=0) RETURNING *`).bind(thread, parentId, actor.id, name || '读者 ' + actor.id.slice(-6),
               safeAvatar(input.avatar), body, actor.admin ? 'published' : 'pending', now, now, actor.admin ? now : null,
-              actor.admin ? 'skipped' : run ? 'queued' : 'disabled', run, run ? now : null, ipLocation(request.cf)).first();
+              actor.admin ? 'skipped' : run ? 'queued' : 'disabled', run, run ? now : null, ipLocation(request.cf), discussionId(thread), discussionId(thread)).first();
+          if (!row) reject(409, '这篇讨论已关闭回复，请刷新页面');
           if (run) {
             const task = moderateComment(env, row.id, run, moderationFetch);
             if (ctx?.waitUntil) ctx.waitUntil(task); else await task;

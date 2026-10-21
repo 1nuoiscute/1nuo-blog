@@ -46,6 +46,9 @@ jobs:
       - name: Validate account data sync
         run: npm run test:cloud
         timeout-minutes: 3
+      - name: Validate discussions
+        run: npm run test:discuss
+        timeout-minutes: 3
       - name: Upload browser diagnostics
         if: failure()
         uses: actions/upload-artifact@v4
