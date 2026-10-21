@@ -20,6 +20,13 @@ function parseXml(xml) {
   parser.write(xml).close();
   checks++;
 }
+function feedTitles(xml) {
+  const parser=new SaxesParser({xmlns:true}),stack=[],titles=[];let collecting=false,text='';
+  parser.on('opentag',tag=>{stack.push(tag.local);if(tag.local==='title'&&['entry','item'].includes(stack[stack.length-2])){collecting=true;text='';}});
+  parser.on('text',value=>{if(collecting)text+=value;});parser.on('cdata',value=>{if(collecting)text+=value;});
+  parser.on('closetag',tag=>{if(tag.local==='title'&&collecting){titles.push(text);collecting=false;}stack.pop();});
+  parser.on('error',error=>{throw error;});parser.write(xml).close();return titles;
+}
 function locs(xml) { return [...xml.matchAll(/<loc>(.*?)<\/loc>/g)].map(m => m[1]); }
 const protectedFields = [
   { password: 'secret' }, { private: true }, { hidden: true }, { hide: true },
@@ -127,6 +134,8 @@ check(aiSources.every(route=>/^ai\/articles\/[a-f0-9]{64}\.json$/.test(route.pat
 check(!JSON.stringify(aiSources).includes('SECRET') && !JSON.stringify(aiSources).includes('secret()'),'AI sources omit private content and scripts');
 const peopleCatalog=JSON.parse(communityCatalog({posts:[{path:'public/index.html',title:'公开文章'},{path:'secret/index.html',title:'SECRET',password:'secret'}],pages:[{path:'notes/math/index.html',title:'笔记'},{path:'people/index.html',title:'个人主页',noindex:true},{path:'rate/admin/index.html',title:'ADMIN'}]}).data);
 check(peopleCatalog.items.length===2&&!JSON.stringify(peopleCatalog).includes('SECRET')&&!JSON.stringify(peopleCatalog).includes('ADMIN'),'community catalog exposes only canonical public content');
+check(JSON.stringify(feedTitles('<feed><entry><title>更新公告</title><content>介绍个人主页功能</content></entry></feed>'))===JSON.stringify(['更新公告']),'feed privacy checks inspect entry titles rather than incidental body mentions');
+check(JSON.stringify(feedTitles('<rss><channel><title>博客</title><item><title><![CDATA[私人文章]]></title></item></channel></rss>'))===JSON.stringify(['私人文章']),'RSS privacy checks retain CDATA entry titles');
 if (process.argv.includes('--artifacts')) {
   const publicDir = path.join(root, config.public_dir || 'public');
   const homeHtml = fs.readFileSync(path.join(publicDir, 'index.html'), 'utf8');
@@ -141,6 +150,7 @@ if (process.argv.includes('--artifacts')) {
   const admin = fs.readFileSync(path.join(publicDir, 'rate/admin/index.html'), 'utf8');
   check(/name="robots" content="noindex, nofollow, noarchive"/.test(admin), 'artifact admin noindex present');
   const allXml = ['sitemap.xml', 'atom.xml', 'rss.xml'].map(file => fs.readFileSync(path.join(publicDir, file), 'utf8')).join('\n');
+  const advertisedTitles=['atom.xml','rss.xml'].flatMap(file=>feedTitles(fs.readFileSync(path.join(publicDir,file),'utf8')));
   function walk(dir) { return fs.readdirSync(dir, { withFileTypes: true }).flatMap(e => e.isDirectory() ? walk(path.join(dir, e.name)) : [path.join(dir, e.name)]); }
   for (const file of walk(path.join(root, 'source'))) {
     if (!file.endsWith('.md')) continue;
@@ -149,7 +159,7 @@ if (process.argv.includes('--artifacts')) {
     if (!frontmatter) continue;
     const data = yaml.load(frontmatter[1]) || {};
     if (isPublicMetadata(data)) continue;
-    if (data.title) check(!allXml.includes(data.title), `artifact protected title absent: ${path.basename(file)}`);
+    if (data.title) check(!advertisedTitles.includes(data.title), `artifact protected entry title absent: ${path.relative(path.join(root, 'source'), file)}`);
     const sourcePath = path.relative(path.join(root, 'source'), file).replace(/\\/g, '/');
     if (!sourcePath.startsWith('_')) {
       // Hexo pages preserve their source basename (foo.md -> foo.html).
