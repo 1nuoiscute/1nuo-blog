@@ -45,6 +45,10 @@
 .nuo-comment-header time { color: var(--account-muted); font-size: 11px; }
 .nuo-comment-floor { margin-left: auto; color: var(--account-muted); font-size: 11px; font-variant-numeric: tabular-nums; white-space: nowrap; }
 .nuo-comment-badge { padding: 0 6px; border-radius: 4px; background: var(--account-tint); color: var(--account-accent); font-size: 10px; }
+.nuo-comment-ai-badge { padding: 0 6px; background: var(--account-tint); color: var(--account-accent); font-size: 10px; border: 1px solid var(--account-line); border-radius: 4px; }
+.nuo-bot-status { padding: 12px 16px; margin: 14px 0; border-radius: 8px; background: var(--account-tint); color: var(--account-muted); font-size: 12px; }
+.nuo-bot-status > div { display: flex; gap: 12px; align-items: center; justify-content: space-between; }
+.nuo-bot-status button { flex-shrink: 0; }
 .nuo-comments p.nuo-comment-body, #article-container .nuo-comments p.nuo-comment-body { max-width: 72ch; margin: 8px 0 10px; padding: 0; color: var(--account-ink); font-size: 14px; line-height: 1.85; white-space: pre-wrap; }
 .nuo-comment > small { color: var(--account-muted); font-size: 11px; }
 .nuo-comment-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }

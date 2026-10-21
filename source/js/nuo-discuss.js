@@ -69,7 +69,7 @@
     const draftKey = () => 'nuo:discuss:draft:v1:' + user?.id + ':' + shownDraft;
     function saveDraft() {
       if (!user || editor.hidden) return;
-      try { localStorage.setItem(draftKey(), JSON.stringify({ title: title.value, body: body.value, category: category.value, requestId, version: editing?.version })); q('[data-discuss-draft]').textContent = '草稿已保存在此设备'; }
+      try { localStorage.setItem(draftKey(), JSON.stringify({ title: title.value, body: body.value, category: category.value, inviteBot: form.elements.inviteBot.checked, requestId, version: editing?.version })); q('[data-discuss-draft]').textContent = '草稿已保存在此设备'; }
       catch { q('[data-discuss-draft]').textContent = '草稿未保存，请保持页面打开'; }
     }
     function preview(on) {
@@ -83,6 +83,7 @@
       saveDraft(); editing = item ? { ...item } : null; shownDraft = item?.id || 'new';
       let draft; try { draft = JSON.parse(localStorage.getItem(draftKey()) || 'null'); } catch { /* new draft */ }
       title.value = draft?.title ?? item?.title ?? ''; body.value = draft?.body ?? item?.body ?? ''; category.value = draft?.category || item?.category || selected || 'chat';
+      form.elements.inviteBot.checked = draft?.inviteBot ?? item?.inviteBot ?? true;
       if (editing && draft?.version) editing.version = draft.version;
       requestId = draft?.requestId || crypto.randomUUID();
       editor.hidden = false; q('#nd-editor-title').textContent = item ? '编辑讨论' : '发起讨论'; submit.textContent = item ? '保存修改' : '发布讨论';
@@ -145,6 +146,7 @@
       if (item.state === 'published') {
         const template = document.getElementById('nd-comments-template');
         const comments = template.content.cloneNode(true); comments.querySelector('[data-nuo-comments]').dataset.thread = '/discuss/' + item.id;
+        comments.querySelector('[data-nuo-comments]').dataset.botEnabled = String(item.inviteBot !== false);
         if (item.locked) { article.classList.add('nd-locked'); article.append(el('p', '这篇讨论已关闭回复。', 'nd-review')); }
         article.append(comments);
       }
@@ -185,15 +187,15 @@
     form.addEventListener('input', () => { if (!editing) requestId = crypto.randomUUID(); q('[data-discuss-count]').textContent = body.value.length + ' / 6000'; saveDraft(); }, { signal });
     form.onsubmit = async e => {
       e.preventDefault(); if (!user || submit.disabled) return;
-      const owner = user.id, epoch = identityEpoch, draft = draftKey(), item = editing, snapshot = { title: title.value.trim(), body: body.value.trim(), category: category.value, requestId, version: item?.version, name: user.name, avatar: user.avatar };
-      saveDraft(); submit.disabled = true; [title, body, category].forEach(n => { n.disabled = true; }); formStatus.textContent = '正在提交…';
+      const owner = user.id, epoch = identityEpoch, draft = draftKey(), item = editing, snapshot = { title: title.value.trim(), body: body.value.trim(), category: category.value, inviteBot: form.elements.inviteBot.checked, requestId, version: item?.version, name: user.name, avatar: user.avatar };
+      saveDraft(); submit.disabled = true; [title, body, category, form.elements.inviteBot].forEach(n => { n.disabled = true; }); formStatus.textContent = '正在提交…';
       try {
         const data = await cloud.request('/v1/discussions' + (item ? '/' + item.id : ''), { method: item ? 'PATCH' : 'POST', body: snapshot });
         if (signal.aborted || epoch !== identityEpoch || owner !== user?.id) return;
         try { localStorage.removeItem(draft); } catch { /* optional cache */ }
         editor.hidden = true; navigate(data.item.id); status.textContent = data.item.state === 'published' ? '讨论已发布。' : '已提交，正在审核。';
       } catch (error) { if (!signal.aborted && epoch === identityEpoch) formStatus.textContent = error.message + '，草稿已保留。'; }
-      finally { if (!signal.aborted) { submit.disabled = false; [title, body, category].forEach(n => { n.disabled = false; }); } }
+      finally { if (!signal.aborted) { submit.disabled = false; [title, body, category, form.elements.inviteBot].forEach(n => { n.disabled = false; }); } }
     };
     host.querySelectorAll('[data-category]').forEach(b => { b.onclick = () => { selected = b.dataset.category; host.querySelectorAll('[data-category]').forEach(n => n.setAttribute('aria-pressed', String(n === b))); load(); }; });
     q('[data-discuss-sort]').onchange = () => load(); q('[data-discuss-state]').onchange = () => load(); q('[data-discuss-more]').onclick = () => load(true);

@@ -46,7 +46,7 @@ test('publishing, category filters and admin permissions work with stable pagina
   await patch(f, admin, id, { state: 'published', pinned: true });
   assert.equal((await f.request('/v1/discussions?category=question')).data.items[0].id, id);
   assert.equal((await f.request('/v1/discussions?category=chat')).data.items.length, 0);
-  for (let i = 0; i < 22; i++) f.sql.prepare("INSERT INTO discussions SELECT ?,author_id,author_name,avatar_url,?,body,category,'published',0,0,1,?,created_at,updated_at,published_at,ip_location,ai_status,ai_reason,ai_model,ai_confidence,ai_checked_at,ai_run FROM discussions WHERE id=?").run(crypto.randomUUID(), '额外讨论' + i, crypto.randomUUID(), id);
+  for (let i = 0; i < 22; i++) f.sql.prepare("INSERT INTO discussions SELECT ?,author_id,author_name,avatar_url,?,body,category,'published',0,0,1,?,created_at,updated_at,published_at,ip_location,ai_status,ai_reason,ai_model,ai_confidence,ai_checked_at,ai_run,bot_enabled FROM discussions WHERE id=?").run(crypto.randomUUID(), '额外讨论' + i, crypto.randomUUID(), id);
   const first = (await f.request('/v1/discussions?sort=new')).data;
   assert.equal(first.items.length, 20); assert.equal(first.items[0].id, id); assert.equal(first.next, 20);
   const second = (await f.request('/v1/discussions?sort=new&offset=20')).data;

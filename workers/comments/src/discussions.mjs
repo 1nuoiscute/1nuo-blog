@@ -1,5 +1,6 @@
 import { moderateComment, moderationSettings } from './moderation.mjs';
 import { ipLocation } from './location.mjs';
+import { checkContent } from './content-policy.mjs';
 
 const ID = '[a-f0-9]{8}-[a-f0-9]{4}-4[a-f0-9]{3}-[89ab][a-f0-9]{3}-[a-f0-9]{12}';
 const categories = ['chat', 'question', 'feedback'];
@@ -25,6 +26,7 @@ function view(row, actor, full = false) {
   return { id: row.id, title: row.title, category: row.category, state: row.state,
     author: { name: row.author_name, avatar: row.avatar_url }, createdAt: row.created_at, updatedAt: row.updated_at,
     pinned: !!row.pinned, locked: !!row.locked, version: row.version, replies: Number(row.replies || 0), likes: Number(row.likes || 0), liked: !!row.liked, activeAt: row.active_at || row.created_at,
+    inviteBot: !!row.bot_enabled,
     canEdit: actor?.id === row.author_id, canDelete: !!actor && (actor.admin || actor.id === row.author_id),
     ...(full ? { body: row.body, ipLocation: row.ip_location } : { excerpt: row.body.slice(0, 150) }),
     ...(actor?.admin ? { moderation: { status: row.ai_status, reason: row.ai_reason, confidence: row.ai_confidence } } : {}) };
@@ -35,14 +37,16 @@ function content(input, reject) {
   if (!title || title.length > 100 || /[\x00-\x1f]/.test(title)) reject(400, '标题请填写 1–100 个字符');
   if (!body || body.length > 6000 || /[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(body)) reject(400, '正文请填写 1–6000 个字符');
   if (!categories.includes(input.category)) reject(400, '请选择讨论分类');
+  checkContent(title + '\n' + body, reject);
+  if (input.inviteBot !== undefined && typeof input.inviteBot !== 'boolean') reject(400, '请选择是否邀请大肥鱼');
   return { title, body, category: input.category };
 }
 
-export async function discussions({ request, url, env, actor, input, ctx, moderationFetch, safeAvatar, limit, reject }) {
+export async function discussions({ request, url, env, actor, input, ctx, moderationFetch, safeAvatar, limit, reject, afterWrite = async () => {} }) {
   const now = Math.floor(Date.now() / 1000), method = request.method;
   const schedule = (id, run) => {
     if (!run) return;
-    const task = moderateComment(env, id, run, moderationFetch, 'discussions');
+    const task = moderateComment(env, id, run, moderationFetch, 'discussions').then(afterWrite);
     if (ctx?.waitUntil) ctx.waitUntil(task);
     return task;
   };
@@ -77,10 +81,10 @@ export async function discussions({ request, url, env, actor, input, ctx, modera
     }
     await limit(env, actor.id, now);
     const id = crypto.randomUUID(), run = !actor.admin && moderationSettings(env).configured ? crypto.randomUUID() : null;
-    await env.DB.prepare(`INSERT INTO discussions(id,author_id,author_name,avatar_url,title,body,category,state,request_id,created_at,updated_at,published_at,ip_location,ai_status,ai_run,ai_checked_at)
-      VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(author_id,request_id) DO NOTHING`).bind(id, actor.id,
+    await env.DB.prepare(`INSERT INTO discussions(id,author_id,author_name,avatar_url,title,body,category,state,request_id,created_at,updated_at,published_at,ip_location,ai_status,ai_run,ai_checked_at,bot_enabled)
+      VALUES(?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?) ON CONFLICT(author_id,request_id) DO NOTHING`).bind(id, actor.id,
       typeof input.name === 'string' ? input.name.trim().slice(0, 40) || '读者' : '读者', safeAvatar(input.avatar), data.title, data.body, data.category,
-      actor.admin ? 'published' : 'pending', input.requestId, now, now, actor.admin ? now : null, ipLocation(request.cf), actor.admin ? 'skipped' : run ? 'queued' : 'disabled', run, run ? now : null).run();
+      actor.admin ? 'published' : 'pending', input.requestId, now, now, actor.admin ? now : null, ipLocation(request.cf), actor.admin ? 'skipped' : run ? 'queued' : 'disabled', run, run ? now : null, input.inviteBot === false ? 0 : 1).run();
     const saved = await env.DB.prepare('SELECT id FROM discussions WHERE author_id=? AND request_id=?').bind(actor.id, input.requestId).first();
     if (saved.id === id) { const task = schedule(id, run); if (!ctx?.waitUntil) await task; }
     return { item: view(await select(saved.id), actor, true) };
@@ -107,6 +111,7 @@ export async function discussions({ request, url, env, actor, input, ctx, modera
   if (method === 'PATCH' && !match[2]) {
     if (Object.keys(input).some(key => ['state', 'pinned', 'locked'].includes(key))) {
       if (!actor.admin) reject(403, '没有管理权限');
+      if (input.state === 'published') checkContent(row.title + '\n' + row.body, reject);
       if (Object.keys(input).some(key => !['state', 'pinned', 'locked'].includes(key)) ||
           (input.state !== undefined && !['published', 'hidden'].includes(input.state)) ||
           ['pinned', 'locked'].some(key => input[key] !== undefined && typeof input[key] !== 'boolean')) reject(400, '管理操作无效');
@@ -120,9 +125,9 @@ export async function discussions({ request, url, env, actor, input, ctx, modera
       if (!Number.isSafeInteger(input.version) || input.version !== row.version) reject(409, '帖子已更新，请刷新后再编辑');
       await limit(env, actor.id, now);
       const run = !actor.admin && moderationSettings(env).configured ? crypto.randomUUID() : null;
-      const updated = await env.DB.prepare(`UPDATE discussions SET title=?,body=?,category=?,state=?,version=version+1,updated_at=?,ai_run=?,ai_status=?,ai_reason='',ai_confidence=NULL,ai_checked_at=?
+      const updated = await env.DB.prepare(`UPDATE discussions SET title=?,body=?,category=?,state=?,version=version+1,updated_at=?,ai_run=?,ai_status=?,ai_reason='',ai_confidence=NULL,ai_checked_at=?,bot_enabled=?
         WHERE id=? AND version=? AND state!='deleted' RETURNING id`).bind(data.title, data.body, data.category, actor.admin ? 'published' : 'pending', now, run,
-          actor.admin ? 'skipped' : run ? 'queued' : 'disabled', run ? now : null, id, input.version).first();
+          actor.admin ? 'skipped' : run ? 'queued' : 'disabled', run ? now : null, input.inviteBot === undefined ? row.bot_enabled : Number(input.inviteBot), id, input.version).first();
       if (!updated) reject(409, '帖子已更新，请刷新后再编辑');
       const task = schedule(id, run); if (!ctx?.waitUntil) await task;
     }

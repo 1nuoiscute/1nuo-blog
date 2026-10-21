@@ -22,6 +22,7 @@ top_img: false
       <label for="nd-category">分类</label><select id="nd-category" name="category"><option value="chat">随便聊聊</option><option value="question">问题交流</option><option value="feedback">网站反馈</option></select>
       <div class="nd-editor-tabs"><button type="button" data-discuss-write aria-pressed="true">写正文</button><button type="button" data-discuss-preview aria-pressed="false">预览</button><span>支持 Markdown</span></div>
       <label class="nd-sr" for="nd-body">正文</label><textarea id="nd-body" name="body" rows="10" maxlength="6000" placeholder="展开说说你的想法…" required></textarea><div class="nd-prose nd-preview" data-discuss-preview-body hidden></div>
+      <label class="nd-bot-invite"><input type="checkbox" name="inviteBot" checked><img src="/images/dafeiyu.png" alt="" width="28" height="28">邀请大肥鱼回复 <span>AI</span></label>
       <div class="nd-editor-bottom"><span data-discuss-draft>草稿保存在此设备</span><span data-discuss-count>0 / 6000</span><button class="nd-primary" type="submit" data-discuss-submit>发布讨论</button></div><p class="nd-status" data-discuss-form-status role="status" aria-live="polite"></p>
     </form>
   </section><noscript>请启用 JavaScript 后浏览和参与讨论。</noscript>

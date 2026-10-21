@@ -30,10 +30,12 @@
     const filter = query('[data-comments-filter]');
     const diagnose = query('[data-comments-diagnose]');
     const diagnosis = query('[data-comments-diagnosis]');
-    let clerk, me, next = null, parentId = null, unsubscribe, observer, started = false;
+    let clerk, me, next = null, parentId = null, replyTo = null, unsubscribe, observer, started = false, botTimer, botPolls = 0;
     let fetchVersion = 0, identityVersion = 0;
     const timers = new Set();
     const thread = host.dataset.thread || location.pathname;
+    const botPanel = host.dataset.thread ? element('div', undefined, 'nuo-bot-status') : null;
+    if (botPanel) { botPanel.setAttribute('role', 'status'); botPanel.hidden = true; status.before(botPanel); }
 
     async function request(path, options = {}) {
       const owner = clerk?.user?.id || null;
@@ -95,6 +97,7 @@
       const header = element('div', undefined, 'nuo-comment-header');
       header.append(avatar(item.author.name, item.author.avatar));
       header.append(element('strong', item.author.name));
+      if (item.author.bot) header.append(element('span', 'AI', 'nuo-comment-ai-badge'));
       const date = element('time', new Date(item.createdAt * 1000).toLocaleString('zh-CN'));
       date.dateTime = new Date(item.createdAt * 1000).toISOString(); header.append(date);
       if (host.dataset.thread && item.floor) header.append(element('span', item.floor + ' 楼', 'nuo-comment-floor'));
@@ -108,7 +111,7 @@
       if (item.parentId) card.append(element('small', item.parentFloor ? '回复 ' + item.parentFloor + ' 楼' : '回复 #' + item.parentId));
       card.append(element('p', item.state === 'deleted' ? '这条评论已删除。' : item.body, 'nuo-comment-body'));
       if (adminPage && item.moderation) {
-        const labels = { queued: 'AI 审核中', approved: 'AI 已放行', review: '需人工判断', error: 'AI 暂不可用', limited: '今日额度已用完', disabled: '人工审核', skipped: '免审核', manual: '已人工处理' };
+        const labels = { queued: 'AI 审核中', approved: 'AI 已放行', blocked: '屏蔽词拦截', review: '需人工判断', error: 'AI 暂不可用', limited: '今日额度已用完', disabled: '人工审核', skipped: '免审核', manual: '已人工处理' };
         const review = element('div', undefined, 'nuo-comment-ai');
         review.dataset.aiStatus = item.moderation.status;
         review.append(element('strong', labels[item.moderation.status] || '人工审核'));
@@ -130,9 +133,9 @@
         const updateLike = () => { like.textContent = (item.liked ? '♥ 已赞 ' : '♡ 赞 ') + (item.likes || 0); like.setAttribute('aria-pressed', String(!!item.liked)); };
         like.dataset.commentLike = item.id; updateLike(); actions.append(like);
       }
-      if (!adminPage && clerk?.isSignedIn && !item.parentId && item.state === 'published') {
-        actions.append(action('回复', () => {
-          parentId = item.id;
+      if (!adminPage && clerk?.isSignedIn && (!item.parentId || host.dataset.thread) && item.state === 'published') {
+        actions.append(action(item.author.bot && host.dataset.botEnabled !== 'false' ? '继续聊' : '回复', () => {
+          parentId = item.parentId || item.id; replyTo = host.dataset.thread ? item.id : null;
           const notice = query('[data-comments-reply]');
           query('[data-comments-reply-box]').hidden = false;
           notice.textContent = '正在回复 ' + (host.dataset.thread && item.floor ? item.floor + ' 楼的 ' : '') + item.author.name;
@@ -196,7 +199,7 @@
       } finally { if (!signal.aborted) diagnose.disabled = false; }
     }
     function cancelReply() {
-      parentId = null;
+      parentId = replyTo = null;
       query('[data-comments-reply-box]').hidden = true;
       query('[data-comments-cancel]').hidden = true;
     }
@@ -216,6 +219,17 @@
         const count = query('[data-comments-count]');
         if (count) { count.textContent = list.childNodes.length + (next ? '+' : ''); count.setAttribute('aria-label', '已加载 ' + list.childNodes.length + ' 条评论'); }
         status.textContent = list.childNodes.length ? '' : (adminPage ? '这个分类暂无评论。' : host.dataset.thread ? '还没有回复，来接着聊聊吧。' : '还没有评论，来聊聊吧。');
+        if (botPanel) {
+          clearTimeout(botTimer); botPanel.replaceChildren();
+          const jobs = (data.bot || []).filter(job => ['queued', 'running', 'error', 'limited', 'review'].includes(job.status) || (job.status === 'cancelled' && job.message));
+          botPanel.hidden = !jobs.length;
+          jobs.forEach(job => {
+            const line = element('div'); line.append(element('span', ['queued','running'].includes(job.status) ? '大肥鱼正在想，回复会自动出现在这里…' : job.status === 'review' ? '大肥鱼的回复正在审核。' : job.message));
+            if (job.canRetry) line.append(action('重试', async () => { await request('/v1/bot-jobs/' + job.id + '/retry', { method: 'POST' }); botPolls = 0; await load(); }));
+            botPanel.append(line);
+          });
+          if (jobs.some(job => ['queued','running','review'].includes(job.status)) && botPolls++ < 36) botTimer = setTimeout(() => load(), 5000);
+        }
       } catch (error) { message(error); }
     }
     async function refreshIdentity() {
@@ -267,6 +281,7 @@
             // Never carry a draft from one signed-in account to another.
             if (input) { input.value = ''; counter(); }
             cancelPolling();
+            clearTimeout(botTimer); botPolls = 0;
             refreshIdentity();
           });
         }
@@ -295,11 +310,12 @@
         submit.disabled = true;
         try {
           await request('/v1/comments', { method: 'POST', body: {
-            thread, parentId, body, name: clerk.user.fullName || clerk.user.username || '读者', avatar: clerk.user.imageUrl || ''
+            thread, parentId, replyTo, body, name: clerk.user.fullName || clerk.user.username || '读者', avatar: clerk.user.imageUrl || ''
           } });
           if (signal.aborted || me?.id !== authorId) return;
           if (input.value.trim() === body) { input.value = ''; counter(); }
           cancelReply();
+          botPolls = 0;
           await load();
           status.textContent = me.admin ? '评论已发布。' : '已提交，正在审核。通过后会自动显示。';
           if (!me.admin) pollReview();
@@ -325,7 +341,7 @@
       }, { rootMargin: '200px' });
       observer.observe(host);
     }
-    dispose = () => { controller.abort(); observer?.disconnect(); unsubscribe?.(); cancelPolling(); };
+    dispose = () => { controller.abort(); observer?.disconnect(); unsubscribe?.(); cancelPolling(); clearTimeout(botTimer); };
   }
   document.addEventListener('pjax:send', () => { if (dispose) dispose(); dispose = null; });
   document.addEventListener('pjax:complete', boot);

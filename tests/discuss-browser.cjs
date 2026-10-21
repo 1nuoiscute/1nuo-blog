@@ -15,6 +15,7 @@ async function main() {
     const url = new URL(req.url, 'http://localhost');
     if (url.pathname === '/js/nuo-account.js') { res.setHeader('Content-Type', 'application/javascript'); return res.end(auth); }
     if (url.pathname === '/pjax.js') { res.setHeader('Content-Type', 'application/javascript'); return res.end(read('node_modules/pjax/pjax.js')); }
+    if (url.pathname === '/images/dafeiyu.png') { res.setHeader('Content-Type', 'image/png'); return res.end(fs.readFileSync(path.join(root, 'source/images/dafeiyu.png'))); }
     if (/^\/(js|css)\//.test(url.pathname)) { res.setHeader('Content-Type', url.pathname.endsWith('.css') ? 'text/css' : 'application/javascript'); return res.end(read('source' + url.pathname)); }
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     res.end('<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>讨论</title><link rel="stylesheet" href="/css/account.css"><link rel="stylesheet" href="/css/comments.css"><link rel="stylesheet" href="/css/discuss.css"><style>body{font-family:Arial,"Microsoft YaHei",sans-serif;margin:0;background:#f8f9fa}html[data-theme=dark] body{background:#161618}#main{max-width:1120px;margin:auto;padding:30px 24px}button,select,input,textarea{font-size:14px}a{color:#ae4778}button{cursor:pointer}</style></head><body class="type-discuss">' +
@@ -25,16 +26,18 @@ async function main() {
   const base = 'http://127.0.0.1:' + server.address().port, posts = new Map(), replies = [], writes = [], errors = [];
   const id = '22222222-2222-4222-8222-222222222222', now = Math.floor(Date.now() / 1000);
   posts.set(id, { id, title: '最近在做什么有意思的小项目？', body: '分享一下你的发现。\n\n**周末计划**\n- 写点代码\n- 出门走走', category: 'chat', state: 'published', author: { name: 'Nuo Nuo', avatar: '' }, owner: 'user_admin', version: 1, pinned: true, locked: false, createdAt: now, updatedAt: now, activeAt: now, replies: 0 });
-  let browser, failPost = false, failLike = false; const likes = new Map();
+  let browser, failPost = false, failLike = false, botWork = []; const likes = new Map();
   const likeSet = key => { if (!likes.has(key)) likes.set(key, new Set()); return likes.get(key); };
   try {
     browser = await chromium.launch({ headless: true }); const context = await browser.newContext();
+    await context.route('https://www.1nuo.me/images/dafeiyu.png', route => route.fulfill({ contentType: 'image/png', body: fs.readFileSync(path.join(root, 'source/images/dafeiyu.png')) }));
     await context.route('https://comments.1nuo.me/**', async route => {
       const req = route.request(), url = new URL(req.url()), user = req.headers().authorization?.replace('Bearer ', '') || '', method = req.method();
       let status = 200, data; const input = req.postData() ? req.postDataJSON() : null, isAdmin = user === 'user_admin';
       const output = p => { const { owner, ...item } = p, votes = likeSet('discussions/' + p.id); return { ...item, likes: votes.size, liked: votes.has(user), replies: replies.filter(r => r.thread === '/discuss/' + p.id).length, excerpt: p.body.slice(0, 150), canEdit: owner === user, canDelete: owner === user || isAdmin }; };
       if (url.pathname === '/v1/library') data = { items: [] };
       else if (url.pathname === '/v1/me') data = { id: user, admin: isAdmin };
+      else if (url.pathname.startsWith('/v1/bot-jobs/')) { botWork = []; data = { ok: true }; }
       else if (url.pathname.endsWith('/like')) {
         const key = url.pathname.slice(4, -5), votes = likeSet(key);
         if (failLike) { status = 503; data = { error: '点赞暂时失败' }; }
@@ -54,8 +57,12 @@ async function main() {
         else if (method === 'DELETE') { posts.delete(item.id); data = { ok: true }; }
         else data = { item: output(item), admin: isAdmin };
       } else if (url.pathname === '/v1/comments') {
-        if (method === 'POST') { writes.push({ user, ...input }); const item = { ...input, id: replies.length + 1, floor: replies.length + 1, state: 'published', author: { name: user, avatar: '' }, createdAt: now, canDelete: true }; replies.push(item); data = { item }; }
-        else data = { items: replies.filter(r => r.thread === url.searchParams.get('thread')).map(r => ({ ...r, likes: likeSet('comments/' + r.id).size, liked: likeSet('comments/' + r.id).has(user) })), next: null };
+        if (method === 'POST') {
+          writes.push({ user, ...input }); const item = { ...input, id: replies.length + 1, floor: replies.length + 1, state: 'published', author: { name: user, avatar: '' }, createdAt: now, canDelete: true }; replies.push(item); data = { item };
+          const target = replies.find(r => r.id === input.replyTo);
+          if (target?.author.bot) replies.push({ id: replies.length + 1, floor: replies.length + 1, thread: item.thread, parentId: target.parentId || target.id, replyTo: item.id, body: '接着你刚才的问题聊。', state: 'published', author: { name: '大肥鱼', avatar: 'https://www.1nuo.me/images/dafeiyu.png', bot: true }, createdAt: now });
+        }
+        else data = { items: replies.filter(r => r.thread === url.searchParams.get('thread')).map(r => ({ ...r, likes: likeSet('comments/' + r.id).size, liked: likeSet('comments/' + r.id).has(user) })), next: null, bot: botWork };
       } else { status = 404; data = { error: 'unexpected route' }; }
       await route.fulfill({ status, contentType: 'application/json', body: JSON.stringify(data) });
     });
@@ -89,11 +96,26 @@ async function main() {
     await p.setViewportSize({ width: 1280, height: 900 });
     await p.locator('.nd-back').click(); await p.locator('.nd-row').waitFor();
     check(await p.locator('[data-metric=likes] strong').textContent() === '1' && await p.locator('[data-metric=replies] strong').textContent() === '2', 'topic list shows both like and reply totals');
-    await p.locator('[data-discuss-new]').click(); await p.locator('#nd-title').fill('我的新讨论'); await p.locator('#nd-body').fill('**测试粗体**\n\n[危险链接](javascript:alert(1))\n<script>window.injected=true</script>');
+    replies.push({ id: 3, floor: 3, thread: '/discuss/' + id, body: '大肥鱼也来聊两句。', author: { name: '大肥鱼', avatar: 'https://www.1nuo.me/images/dafeiyu.png', bot: true }, state: 'published', createdAt: now });
+    await p.locator('.nd-title').click(); await p.locator('[data-comment-id="3"] .nuo-comment-ai-badge').waitFor();
+    await p.locator('[data-comment-id="3"]').scrollIntoViewIfNeeded(); await p.waitForFunction(() => document.querySelector('[data-comment-id="3"] img')?.naturalWidth > 0);
+    check(await p.locator('[data-comment-id="3"] strong').textContent() === '大肥鱼', 'AI reply has the chosen name, avatar and AI badge');
+    await p.locator('[data-comment-id="3"]').getByRole('button', { name: '继续聊', exact: true }).click();
+    await p.locator('[data-comments-body]').fill('你能展开说说吗？'); await p.getByRole('button', { name: '发表回复', exact: true }).click();
+    await p.locator('[data-comment-id="5"]').waitFor();
+    check(writes.at(-1).replyTo === 3 && await p.locator('[data-comment-id="5"] .nuo-comment-ai-badge').count() === 1, 'continue chatting targets the AI message and renders a new AI reply');
+    botWork = [{ id: 'comment:4', status: 'running' }]; await p.reload(); await p.locator('.nuo-bot-status').filter({ hasText: '大肥鱼正在想' }).waitFor();
+    botWork = [{ id: 'comment:4', status: 'error', message: '暂时没连上', canRetry: true }]; await p.reload(); await p.locator('.nuo-bot-status').getByRole('button', { name: '重试' }).click(); await p.locator('.nuo-bot-status').waitFor({ state: 'hidden' });
+    check(await p.locator('.nuo-bot-status').isHidden(), 'bot generation status and retry fit into the reply flow');
+    await p.setViewportSize({ width: 390, height: 844 }); await p.screenshot({ path: path.join(root, 'test-results/dafeiyu-chat-mobile.png'), fullPage: true }); await p.setViewportSize({ width: 1280, height: 900 });
+    await p.locator('.nd-back').click(); await p.locator('[data-discuss-new]').click();
+    check(await p.locator('[name=inviteBot]').isChecked(), 'new posts invite the AI by default');
+    await p.locator('[name=inviteBot]').uncheck(); await p.locator('#nd-title').fill('我的新讨论'); await p.locator('#nd-body').fill('**测试粗体**\n\n[危险链接](javascript:alert(1))\n<script>window.injected=true</script>');
     await p.locator('[data-discuss-preview]').click();
     check(await p.locator('.nd-preview strong').textContent() === '测试粗体' && await p.locator('.nd-preview a').count() === 0 && await p.evaluate(() => !window.injected), 'preview keeps HTML literal and rejects executable links');
     await p.reload(); await p.locator('[data-discuss-new]').click();
     check(await p.locator('#nd-title').inputValue() === '我的新讨论', 'draft survives a page reload');
+    check(!(await p.locator('[name=inviteBot]').isChecked()), 'the author can opt out and the draft remembers that choice');
     await p.evaluate(() => switchAccount('user_bob')); await p.waitForFunction(() => NuoCloud.state().user?.id === 'user_bob'); await p.locator('[data-discuss-new]').click();
     check(await p.locator('#nd-title').inputValue() === '', 'account switching isolates local drafts');
     await p.evaluate(() => switchAccount('user_alice')); await p.waitForFunction(() => NuoCloud.state().user?.id === 'user_alice'); await p.locator('[data-discuss-new]').click();

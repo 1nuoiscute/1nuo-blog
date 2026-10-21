@@ -6,13 +6,18 @@
   "compatibility_date": "2026-10-20",
   "workers_dev": true,
   "preview_urls": false,
+  "triggers": { "crons": ["* * * * *"] },
   "routes": [{ "pattern": "comments.1nuo.me", "custom_domain": true }],
   "vars": {
     "ALLOWED_ORIGINS": "https://www.1nuo.me",
     "CLERK_ISSUER": "https://kind-mackerel-1226.clerk.accounts.dev",
     "ADMIN_USER_IDS": "user_3KxZesaXpmCqcQZhcHSHFKtGYto",
     "DEEPSEEK_MODEL": "deepseek-flash",
-    "AI_DAILY_LIMIT": "100"
+    "AI_DAILY_LIMIT": "100",
+    "BOT_ENABLED": "true",
+    "BOT_MODEL": "deepseek-flash",
+    "BOT_DAILY_LIMIT": "100",
+    "BOT_USER_DAILY_LIMIT": "20"
   },
   "d1_databases": [{
     "binding": "DB",
