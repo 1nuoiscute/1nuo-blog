@@ -28,6 +28,9 @@ async function main() {
       return route.abort();
     });
     let submissions = [], failSubmit = true;
+    await context.route('https://comments.1nuo.me/v1/leaderboard/2048', route => route.fulfill({ contentType: 'application/json', body: JSON.stringify({
+      items: [{ name: '<b>literal</b>', score: 123, achievedAt: 0 }], personalBest: null
+    }) }));
     await context.route('https://status.1nuo.me/leaderboard', route => {
       if (route.request().method() === 'POST') {
         submissions.push(route.request().postDataJSON());
@@ -90,17 +93,10 @@ async function main() {
     await page.locator('#continue-game').click();
     check(!await page.locator('#go').evaluate(el => el.classList.contains('show')), '2048 continues without repeating win dialog');
     await page.evaluate(() => { g.o = true; g.over('结束', '测试'); });
-    await page.locator('#lb-input').fill('test');
-    await page.locator('#lb-form button').click();
-    await page.getByText('提交失败，请重试。', { exact: true }).waitFor();
-    check(await page.locator('#lb-input').inputValue() === 'test', 'HTTP 500 preserves nickname and permits retry');
-    check(submissions[0].maxTile === 2048 && submissions[0].score === 5000, 'maxTile and score are distinct values');
-    failSubmit = false;
-    await page.locator('#lb-form button').click();
-    await page.getByText('已提交', { exact: true }).waitFor();
-    check(await page.locator('#lb-form button').isDisabled(), 'successful score cannot be submitted twice');
+    check(await page.locator('#lb-input').count() === 0, 'account leaderboard does not accept an unrelated nickname');
+    check(await page.locator('#lb-form button').textContent() === '登录 / 注册', 'anonymous score submission requires an account');
     await page.evaluate(() => { g.restart(); g.s = 8; g.o = true; g.over('结束', '第二局'); });
-    check(await page.locator('#lb-input').count() === 1, 'second game has exactly one nickname input');
+    check(await page.locator('#lb-form').count() === 1, 'second game has exactly one account submission form');
 
     await go('/explore/scl90-app/');
     await page.locator('#startBtn').click();

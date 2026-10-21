@@ -202,7 +202,11 @@ window.addEventListener('resize',function(){if(g&&!g.o){g.r()}});
 <div class="lb" id="lb">
   <div class="lb-h" onclick="var n=document.getElementById('lb-body');n.style.display=n.style.display==='none'?'block':'none'">🏆 排行榜 <span id="lb-toggle">展开</span></div>
   <div id="lb-body" style="display:none">
+    <p id="lb-identity" style="font-size:12px;color:#78716c;margin:8px 0">正在连接账号…</p>
+    <button id="lb-login" class="btn" type="button">登录 / 注册</button>
+    <p id="lb-personal" style="font-size:12px;margin:8px 0"></p>
     <div id="lb-list">加载中...</div>
+    <details id="lb-history" style="font-size:12px;margin-top:16px"><summary>历史匿名榜</summary><div id="lb-history-list"></div></details>
   </div>
 </div>
 
@@ -220,59 +224,9 @@ window.addEventListener('resize',function(){if(g&&!g.o){g.r()}});
 .lb-date{font-size:11px;color:#a8a29e;min-width:55px;text-align:right}
 </style>
 
-<script>
-// The leaderboard is untrusted remote data; render all fields as text.
-function loadLeaderboard(){
-  var list=document.getElementById('lb-list');
-  list.textContent='加载中…';
-  return fetch('https://status.1nuo.me/leaderboard').then(function(response){
-    if(!response.ok) throw new Error('加载失败');
-    return response.json();
-  }).then(function(data){
-    if(!Array.isArray(data)) throw new Error('无效排行榜');
-    list.replaceChildren();
-    if(!data.length){list.textContent='暂无记录，来玩一局吧';return;}
-    data.slice(0,100).forEach(function(item,i){
-      if(!item || typeof item.name!=='string' || !Number.isFinite(item.score)) return;
-      var row=document.createElement('div');row.className='lb-item';
-      var fields=[['lb-rank','#'+(i+1)],['lb-name',item.name],['lb-score',String(item.score)],['lb-date',typeof item.date==='string'?item.date.slice(5):'']];
-      fields.forEach(function(field){var span=document.createElement('span');span.className=field[0];span.textContent=field[1];row.appendChild(span);});
-      list.appendChild(row);
-    });
-  }).catch(function(){list.textContent='排行榜加载失败。';var retry=document.createElement('button');retry.textContent='重试';retry.onclick=loadLeaderboard;list.appendChild(retry);});
-}
-loadLeaderboard();
-
-function setupLeaderboard(){
-  if(!g || g.leaderboardReady)return;
-  g.leaderboardReady=true;
-  var original=g.over;
-  g.over=function(t,m){
-    original.call(this,t,m);
-    document.getElementById('lb-form')?.remove();
-    if(this.s<=0)return;
-    var form=document.createElement('form');form.id='lb-form';
-    form.style.cssText='margin-top:12px;display:flex;flex-wrap:wrap;gap:6px;justify-content:center';
-    var input=document.createElement('input');input.id='lb-input';input.placeholder='输入昵称';input.maxLength=8;input.setAttribute('aria-label','排行榜昵称');
-    var button=document.createElement('button');button.type='submit';button.className='btn';button.textContent='提交分数';
-    var status=document.createElement('p');status.setAttribute('role','status');
-    var score=this.s,maxTile=Math.max(...this.g.flat().map(function(tile){return tile?tile.v:0;}));
-    form.append(input,button,status);
-    form.addEventListener('submit',function(event){
-      event.preventDefault();if(button.disabled)return;button.disabled=true;status.textContent='提交中…';
-      fetch('https://status.1nuo.me/leaderboard',{
-        method:'POST',headers:{'Content-Type':'application/json'},
-        body:JSON.stringify({name:input.value.trim()||'匿名',score:score,maxTile:maxTile})
-      }).then(function(response){
-        if(!response.ok)throw new Error('提交失败');
-        status.textContent='已提交';return loadLeaderboard();
-      }).catch(function(){status.textContent='提交失败，请重试。';button.disabled=false;});
-    });
-    document.getElementById('go').appendChild(form);
-  };
-}
-setupLeaderboard();
-</script>
+<script src="/js/nuo-account.js"></script>
+<script src="/js/nuo-cloud.js"></script>
+<script src="/js/nuo-leaderboard.js"></script>
 
 </body>
 </html>

@@ -12,6 +12,7 @@
     "test:tools": "node --check source/js/nuo-tools.js",
     "test:account": "node --check source/js/nuo-account.js && node tests/account.cjs",
     "test:comments": "node --check source/js/nuo-comments.js && node tests/comments-browser.cjs",
+    "test:cloud": "node --check source/js/nuo-cloud.js && node --check source/js/nuo-leaderboard.js && node tests/cloud-browser.cjs",
     "test:regression": "node tests/regression.cjs && node tests/explore-reliability.cjs && node tests/new-features.cjs",
     "test:metadata": "node tests/site-metadata.cjs --artifacts",
     "test:browser": "node tests/run-browser.cjs"

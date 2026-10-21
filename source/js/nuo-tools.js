@@ -23,6 +23,8 @@
   ];
 
   function readStorage(key, fallback) {
+    if (window.NuoCloud && window.NuoCloud.handles(key)) return window.NuoCloud.read(key, fallback);
+    if (window.NuoCloud && key === HISTORY_KEY) key = window.NuoCloud.storageKey(key);
     try {
       var value = JSON.parse(localStorage.getItem(key) || 'null');
       return value && typeof value === 'object' ? value : fallback;
@@ -32,6 +34,8 @@
   }
 
   function writeStorage(key, value) {
+    if (window.NuoCloud && window.NuoCloud.handles(key)) { window.NuoCloud.write(key, value); return; }
+    if (window.NuoCloud && key === HISTORY_KEY) key = window.NuoCloud.storageKey(key);
     try { localStorage.setItem(key, JSON.stringify(value)); } catch (error) { /* private mode */ }
   }
 
@@ -564,13 +568,19 @@
     }
   }
 
+  var bootGeneration = 0;
   function boot() {
-    window.setTimeout(function () { initContentTools(); renderReadingList(); }, 0);
+    var version = ++bootGeneration;
+    var ready = window.NuoCloud ? window.NuoCloud.ready() : Promise.resolve();
+    ready.then(function () { window.setTimeout(function () { if (version === bootGeneration) { initContentTools(); renderReadingList(); } }, 0); });
   }
 
   window.NuoTools = { wander: wander, refresh: boot };
   document.addEventListener('DOMContentLoaded', boot);
   document.addEventListener('pjax:complete', boot);
+  document.addEventListener('nuo:library-change', function () { updateButtonState(); renderReadingList(); });
+  document.addEventListener('nuo:account-before-change', cleanupReading);
+  document.addEventListener('nuo:account-change', boot);
   document.addEventListener('keydown', function (event) {
     if (event.key !== 'Escape') return;
     if (!document.body.classList.contains('nuo-reading-mode')) return;
@@ -579,6 +589,7 @@
     setReadingMode({ enabled: false });
   });
   document.addEventListener('pjax:send', function () {
+    bootGeneration++;
     cleanupReading(); currentInfo = null;
     if (closeShareModal) closeShareModal();
   });

@@ -1096,6 +1096,7 @@ inject:
     - <script defer src="/js/timing.js"></script>
     - <script defer src="/js/nuo-tools.js?v=__NUO_ASSET_V__"></script>
     - <script defer src="/js/nuo-account.js?v=__NUO_ASSET_V__"></script>
+    - <script defer src="/js/nuo-cloud.js?v=__NUO_ASSET_V__"></script>
     - <script defer src="/js/nuo-comments.js?v=__NUO_ASSET_V__"></script>
     - <script defer src="/js/content-graph.js?v=__NUO_ASSET_V__"></script>
     - <script>document.querySelectorAll('#menus a[href^="http"]').forEach(function(a){a.target="_blank";a.rel="noopener"})</script>

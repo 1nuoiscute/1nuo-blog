@@ -1,6 +1,7 @@
 import { createRemoteJWKSet, customFetch, jwtVerify } from 'jose';
 import { moderateComment, moderationSettings, probeProvider } from './moderation.mjs';
 import { ipLocation } from './location.mjs';
+import { accountData } from './account-data.mjs';
 
 class HttpError extends Error {
   constructor(status, message) { super(message); this.status = status; }
@@ -104,6 +105,11 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch } = {}
           return new Response(null, { status: 204, headers });
         }
         const url = new URL(request.url);
+        if (['/v1/library', '/v1/leaderboard/2048'].includes(url.pathname)) {
+          const actor = await authenticate(request, env, !(url.pathname === '/v1/leaderboard/2048' && request.method === 'GET'));
+          const input = request.method === 'POST' ? await jsonBody(request) : null;
+          return reply(await accountData({ request, url, env, actor, input, normalizePath: threadPath, safeAvatar, reject }));
+        }
         if (request.method === 'GET' && url.pathname === '/health') {
           await env.DB.prepare('SELECT id FROM comments LIMIT 1').all();
           return reply({ ok: true, service: '1nuo-comments', authConfigured: !!env.CLERK_ISSUER,
