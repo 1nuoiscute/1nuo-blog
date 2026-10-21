@@ -38,6 +38,7 @@ async function main() {
     browser = await chromium.launch({ headless: true });
     const context = await browser.newContext({ viewport: { width: 390, height: 844 } });
     let failPost = true;
+    let failDiagnosis = false;
     const submissions = [];
     const comments = [{ id: 1, thread: '/', parentId: null, authorId: 'user_admin',
       author: { name: '<b>普通昵称</b>', avatar: '' }, body: '<img src=x onerror=alert(1)>', state: 'published', createdAt: 1700000000, ipLocation: '四川' }];
@@ -48,7 +49,7 @@ async function main() {
       const map = item => ({ ...item, canDelete: actor === item.authorId || actor === 'user_admin' });
       if (url.pathname === '/v1/me') data = { id: actor, admin: actor === 'user_admin', moderation: { configured: true, dailyLimit: 100 } };
       else if (url.pathname === '/v1/admin/diagnostics') data = { configured: true, model: 'deepseek-flash', keyHasWhitespace: false,
-        models: { status: 200, ms: 120, models: ['deepseek-flash'], hasModel: true, error: '' },
+        models: { status: 200, ms: 120, models: failDiagnosis ? [] : ['deepseek-flash'], hasModel: !failDiagnosis, error: failDiagnosis ? '返回的模型列表格式无效，请稍后重试' : '' },
         chat: { ok: true, ms: 800, decision: 'approve', error: '' } };
       else if (url.pathname.endsWith('/moderate') && req.method() === 'POST') {
         comments.find(item => item.id === Number(url.pathname.split('/').at(-2))).moderation = { status: 'queued' };
@@ -113,6 +114,18 @@ async function main() {
     await page.getByRole('button', { name: '检查 AI 链路', exact: true }).click();
     await page.getByText(/完整调用成功/).waitFor();
     check((await page.locator('[data-comments-diagnosis]').textContent()).includes('deepseek-flash'), 'administrator can trace the Worker moderation chain');
+    failDiagnosis = true;
+    await page.getByRole('button', { name: '检查 AI 链路', exact: true }).click();
+    await page.getByText(/密钥检查失败：返回的模型列表格式无效/).waitFor();
+    check(!(await page.locator('[data-comments-diagnosis]').textContent()).includes('密钥可用'), 'invalid model response never claims the key is usable');
+    for (const width of [360, 390]) {
+      await page.setViewportSize({ width, height: 844 });
+      check(await page.locator('.nuo-review-tabs button').evaluateAll(buttons => buttons.every(button => {
+        const range = document.createRange(); range.selectNodeContents(button);
+        return range.getClientRects().length === 1;
+      })), 'review state labels stay on one line at ' + width + 'px');
+      check(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'review toolbar fits ' + width + 'px viewport');
+    }
     await page.getByRole('button', { name: '已发布', exact: true }).click();
     await page.locator('[data-comment-id="1"]').waitFor();
     check(await page.getByRole('button', { name: '已发布', exact: true }).getAttribute('aria-pressed') === 'true', 'review tabs switch queue state accessibly');

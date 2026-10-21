@@ -82,6 +82,8 @@ git push git@github.com:1nuoiscute/1nuo-blog.git master
 
 ## 已完成的工程修复
 
+- 2026-10-21：修正响应正文超时被误报为 JSON 错误、模型自检仅凭 HTTP 200 误报成功的问题；手机评论后台的筛选与操作按钮分行排列，避免按钮文字被挤断。
+
 - 2026-10-20：定位并修掉评论自动审核 100% 失败的根因：Cloudflare Workers 不接受 `redirect:'error'`，workerd 在发出请求前就抛 `TypeError`，被当时的代码记成「Worker 无法连接接口」，看起来像出口被墙；已改为 `redirect:'manual'` 并对 3xx 显式判失败。同时让失败原因可辨：分类错误码、明确的中文理由、管理员「检查 AI 链路」自检（`/v1/admin/diagnostics`）。临时探针 Worker 已实测 Cloudflare 到 `api.deepseek.com` 的 GET 与 POST 均在 200 ms 内到达（伪造密钥返回 401），13 项单测通过，Worker 与前端均已重新部署。
 
 - 2026-10-20：评论列表底部去除与历史入口重复的分隔线；新增评论记录发布时的 IP 属地，使用 Cloudflare 提供的省级/国家标签，不保存完整 IP 或精确位置。旧评论保持空白，读取与审核不改写属地。

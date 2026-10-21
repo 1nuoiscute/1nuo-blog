@@ -30,6 +30,8 @@
 
 管理页「检查 AI 链路」调用 `POST /v1/admin/diagnostics`（仅管理员）。它先用 `GET https://api.deepseek.com/models` 检查 Worker 出口可达、密钥有效、当前 `DEEPSEEK_MODEL` 是否在可用列表中，这一步不消耗 token；随后用与审核完全相同的参数发送一条固定测试留言，确认完整调用（消耗一次调用，不计入每日上限）。健康接口的 `autoModerationConfigured` 只证明绑定存在，不能证明密钥有效，也不能证明 Cloudflare 出口能连上接口。
 
+读取响应正文时超时或取消，也按「请求超时」处理。模型自检必须收到有效 JSON 和结构正确的模型列表，不能仅凭 HTTP 200 判为密钥可用；空列表表示暂无可用模型。手机管理页把状态筛选与操作按钮分为两行，避免按钮中文字断行。
+
 ### redirect: 'error' 在 Workers 里不可用（2026-10-20 根因）
 
 排查确认：审核请求固定写成 `redirect: 'error'`，而 Cloudflare Workers 只接受 `follow` 或 `manual`。workerd 会在发出任何网络请求之前直接抛 `TypeError: Invalid redirect value, must be one of "follow" or "manual" ("error" won't be implemented since it does not make sense at the edge)`，因此审核 100% 失败，且被记成「Worker 无法连接接口」，看起来像出口被墙。Node、Python、curl 都接受 `redirect: 'error'`，所以用电脑直连永远测不出这个问题，模拟 fetch 的单元测试也测不出。

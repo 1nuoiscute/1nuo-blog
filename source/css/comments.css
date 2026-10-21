@@ -60,9 +60,9 @@
 .nuo-review-intro { display: flex; justify-content: space-between; align-items: baseline; flex-wrap: wrap; gap: 8px; }
 .nuo-review-intro p, #article-container .nuo-review-intro p { margin: 0 0 20px; color: var(--account-muted); font-size: 13px; }
 .nuo-review-intro a { font-size: 12px; }
-.nuo-review-toolbar { display: flex; justify-content: space-between; gap: 12px; align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--account-line); }
-.nuo-review-tabs { display: flex; gap: 4px; }
-.nuo-review-tabs button { border-color: transparent; background: transparent; color: var(--account-muted); }
+.nuo-review-toolbar { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 12px; align-items: center; padding-bottom: 12px; border-bottom: 1px solid var(--account-line); }
+.nuo-review-tabs { display: flex; flex-shrink: 0; gap: 4px; }
+.nuo-review-tabs button { border-color: transparent; background: transparent; color: var(--account-muted); white-space: nowrap; }
 .nuo-review-tabs button[aria-pressed='true'] { background: var(--account-tint); color: var(--account-accent); font-weight: 600; }
 .nuo-review .nuo-review-refresh { border: 0; padding-right: 0; background: transparent; color: var(--account-muted); white-space: nowrap; }
 .nuo-review-actions { display: flex; align-items: center; gap: 14px; }
@@ -81,6 +81,9 @@
 [data-theme='dark'] .nuo-comment-ai[data-ai-status='error'] strong { color: #e2a08f; }
 [data-theme='dark'] .nuo-comment-ai[data-ai-status='approved'] strong { color: #8dceb1; }
 @media (max-width: 600px) {
+  .nuo-review-tabs, .nuo-review-actions { width: 100%; }
+  .nuo-review-tabs button { flex: 1; }
+  .nuo-review-actions { justify-content: flex-end; }
   .nuo-comments { margin-top: 28px; }
   .nuo-composer-top { padding: 15px 16px 0; }
   .nuo-comments textarea { width: calc(100% - 32px); margin: 14px 16px 0; min-height: 96px; font-size: 16px; }

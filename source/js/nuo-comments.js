@@ -157,7 +157,7 @@
       if (result.keyHasWhitespace) lines.push('密钥含空白字符，请求头会非法，请在 Cloudflare 重新保存。');
       lines.push(models.error
         ? '密钥检查失败：' + models.error
-        : '密钥可用（HTTP ' + models.status + '，' + models.ms + ' ms），可用模型：' + (models.models.length ? models.models.join('、') : '未返回列表'));
+        : '密钥可用（HTTP ' + models.status + '，' + models.ms + ' ms），可用模型：' + (models.models.length ? models.models.join('、') : '暂无可用模型'));
       if (!models.error && !models.hasModel) lines.push('当前模型 ' + result.model + ' 不在可用列表中。');
       if (result.chat) lines.push(result.chat.ok
         ? '完整调用成功（' + result.chat.ms + ' ms，判定 ' + result.chat.decision + '）。'

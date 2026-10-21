@@ -21,6 +21,7 @@ const FAILURES = {
   rejected: '接口拒绝了请求参数，请检查模型名',
   network: 'Worker 无法连接接口，请检查出口网络',
   payload: '返回内容不是有效 JSON',
+  models: '返回的模型列表格式无效，请稍后重试',
   incomplete: '返回被截断或没有内容',
   schema: '判定格式不符合约定',
   provider: '接口返回异常',
@@ -68,6 +69,11 @@ export function failureReason(error) {
 
 const timedOut = error => error?.name === 'TimeoutError' || error?.name === 'AbortError';
 
+async function providerJson(response) {
+  try { return await response.json(); }
+  catch (error) { throw failure(timedOut(error) ? 'timeout' : 'payload'); }
+}
+
 export async function classifyComment(body, env, apiFetch = fetch) {
   const key = env.DEEPSEEK_API_KEY;
   // A secret pasted with a trailing newline makes the Authorization header itself invalid.
@@ -90,8 +96,7 @@ export async function classifyComment(body, env, apiFetch = fetch) {
   }
   if (response.status >= 300 && response.status < 400) throw failure('redirect', response.status);
   if (!response.ok) throw failure(statusCode(response.status), response.status);
-  let payload;
-  try { payload = await response.json(); } catch { throw failure('payload'); }
+  const payload = await providerJson(response);
   const choice = payload?.choices?.[0];
   if (choice?.finish_reason !== 'stop' || typeof choice.message?.content !== 'string') throw failure('incomplete');
   let result;
@@ -160,14 +165,15 @@ export async function probeProvider(env, apiFetch = fetch, { chat = false } = {}
     models.status = response.status; models.ms = Date.now() - started;
     if (response.status >= 300 && response.status < 400) models.error = failureText('redirect', response.status);
     else if (response.ok) {
-      const payload = await response.json().catch(() => null);
-      models.models = Array.isArray(payload?.data)
-        ? payload.data.map(item => item?.id).filter(id => typeof id === 'string').slice(0, 20) : [];
-      models.hasModel = models.models.includes(settings.model);
+      const payload = await providerJson(response);
+      if (!Array.isArray(payload?.data) || payload.data.some(item => typeof item?.id !== 'string' || !item.id.trim())) throw failure('models');
+      const ids = payload.data.map(item => item.id);
+      models.models = ids.slice(0, 20);
+      models.hasModel = ids.includes(settings.model);
     } else models.error = failureText(statusCode(response.status), response.status);
   } catch (error) {
     models.ms = Date.now() - started;
-    models.error = failureText(timedOut(error) ? 'timeout' : 'network');
+    models.error = failureText(error?.name === 'ModerationError' ? error.code : timedOut(error) ? 'timeout' : 'network');
   }
   if (!chat) return result;
   const chatStarted = Date.now();

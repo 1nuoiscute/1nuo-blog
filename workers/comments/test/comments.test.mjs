@@ -213,6 +213,8 @@ test('every moderation failure states its cause in the admin queue, never the bo
     { reply: () => new Response(null, { status: 302, headers: { Location: 'https://api.deepseek.com/elsewhere' } }), expect: ['重定向', '302'] },
     { reply: () => new Response('<html>challenge</html>', { status: 403 }), expect: ['拒绝', '403'] },
     { reply: () => { throw new DOMException('Timeout', 'TimeoutError'); }, expect: ['超时'] },
+    { reply: () => new Response(new ReadableStream({ start(controller) { controller.error(new DOMException('Timeout', 'TimeoutError')); } })), expect: ['超时'] },
+    { reply: () => new Response(new ReadableStream({ start(controller) { controller.error(new DOMException('Aborted', 'AbortError')); } })), expect: ['超时'] },
     { reply: () => { throw new TypeError('Unable to connect'); }, expect: ['无法连接'] },
     { reply: () => new Response('not json', { status: 200 }), expect: ['JSON'] },
     { reply: () => Response.json({ choices: [{ finish_reason: 'length', message: { content: '{}' } }] }), expect: ['截断'] },
@@ -269,6 +271,31 @@ test('admin diagnostics separate reachability, key validity, model name and the 
   const padded = (await w.request('/v1/admin/diagnostics', { method: 'POST', auth: admin, body: { chat: true } })).data;
   assert.equal(padded.keyHasWhitespace, true); assert(padded.models.error.includes('空白字符'));
   assert.equal(calls, 0);
+});
+
+test('diagnostics reject invalid model lists and keep response-body timeouts distinct', async () => {
+  const auth = await token('user_admin');
+  const cases = [
+    { reply: () => new Response('<html>challenge</html>', { status: 200 }), text: 'JSON' },
+    { reply: () => Response.json({ object: 'list' }), text: '模型列表格式' },
+    { reply: () => Response.json({ data: [null] }), text: '模型列表格式' },
+    { reply: () => Response.json({ data: [{ id: '' }] }), text: '模型列表格式' },
+    { reply: () => new Response(new ReadableStream({ start(controller) { controller.error(new DOMException('Timeout', 'TimeoutError')); } })), text: '超时' }
+  ];
+  for (const item of cases) {
+    const f = fixture({ moderationFetch: async () => item.reply() }); f.env.DEEPSEEK_API_KEY = 'test-only';
+    const report = (await f.request('/v1/admin/diagnostics', { method: 'POST', auth, body: {} })).data;
+    assert.equal(report.models.status, 200);
+    assert(report.models.error.includes(item.text), report.models.error);
+    assert.deepEqual(report.models.models, []); assert.equal(report.models.hasModel, false);
+  }
+  for (const ids of [[], [...Array.from({ length: 20 }, (_, i) => 'other-' + i), 'deepseek-flash']]) {
+    const f = fixture({ moderationFetch: async () => Response.json({ data: ids.map(id => ({ id })) }) });
+    f.env.DEEPSEEK_API_KEY = 'test-only';
+    const report = (await f.request('/v1/admin/diagnostics', { method: 'POST', auth, body: {} })).data;
+    assert.equal(report.models.error, ''); assert.equal(report.models.hasModel, ids.includes('deepseek-flash'));
+    assert(report.models.models.length <= 20);
+  }
 });
 
 test('late AI decisions cannot overwrite manual hide, publish or deletion; only admin can retry', async () => {
