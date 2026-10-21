@@ -20,8 +20,8 @@ nav:
 menu:
   主页: / || fas fa-home
   分类: /categories/ || fas fa-folder-open
-  友链: /link/ || fas fa-link
   开往: https://www.travellings.cn/go.html || fas fa-subway
+  友链: /link/ || fas fa-link
   关于: /about/ || fas fa-heart
   讨论: /discuss/ || fas fa-comments
   账号: /account/ || fas fa-user
