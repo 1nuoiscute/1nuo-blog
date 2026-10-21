@@ -31,7 +31,7 @@
     const diagnose = query('[data-comments-diagnose]');
     const diagnosis = query('[data-comments-diagnosis]');
     let clerk, me, next = null, parentId = null, replyTo = null, unsubscribe, observer, started = false, botTimer, botPolls = 0;
-    let fetchVersion = 0, identityVersion = 0;
+    let fetchVersion = 0, identityVersion = 0, loadedItems = [];
     const timers = new Set();
     const thread = host.dataset.thread || location.pathname;
     const botPanel = host.dataset.thread ? element('div', undefined, 'nuo-bot-status') : null;
@@ -93,6 +93,7 @@
     function draw(item) {
       const card = element('article', undefined, 'nuo-comment');
       card.dataset.commentId = item.id;
+      card.id = 'nuo-comment-' + item.id;
       if (item.parentId) card.dataset.parentId = item.parentId;
       const header = element('div', undefined, 'nuo-comment-header');
       header.append(avatar(item.author.name, item.author.avatar));
@@ -108,8 +109,14 @@
         header.append(threadLink);
       }
       card.append(header);
-      if (item.parentId) card.append(element('small', item.parentFloor ? '回复 ' + item.parentFloor + ' 楼' : '回复 #' + item.parentId));
-      card.append(element('p', item.state === 'deleted' ? '这条评论已删除。' : item.body, 'nuo-comment-body'));
+      if (item.parentId) {
+        const label = element('small'), target = element('a', item.parentFloor ? '回复 ' + item.parentFloor + ' 楼' : '回复 #' + (item.replyTo || item.parentId));
+        target.href = '#nuo-comment-' + (item.replyTo || item.parentId); label.append(target); card.append(label);
+      }
+      const body = element(host.dataset.thread ? 'div' : 'p', undefined, 'nuo-comment-body');
+      if (host.dataset.thread && item.state !== 'deleted' && window.NuoMarkdown) window.NuoMarkdown(body, item.body);
+      else body.textContent = item.state === 'deleted' ? '这条评论已删除。' : item.body;
+      card.append(body);
       if (adminPage && item.moderation) {
         const labels = { queued: 'AI 审核中', approved: 'AI 已放行', blocked: '屏蔽词拦截', review: '需人工判断', error: 'AI 暂不可用', limited: '今日额度已用完', disabled: '人工审核', skipped: '免审核', manual: '已人工处理' };
         const review = element('div', undefined, 'nuo-comment-ai');
@@ -203,6 +210,26 @@
       query('[data-comments-reply-box]').hidden = true;
       query('[data-comments-cancel]').hidden = true;
     }
+    function drawList() {
+      list.replaceChildren();
+      if (!host.dataset.thread || adminPage) { loadedItems.forEach(item => list.append(draw(item))); return; }
+      const byId = new Map(loadedItems.map(item => [item.id, item])), children = new Map(), visited = new Set();
+      loadedItems.forEach(item => {
+        const target = item.replyTo || item.parentId;
+        if (target && target !== item.id && byId.has(target)) {
+          if (!children.has(target)) children.set(target, []);
+          children.get(target).push(item);
+        }
+      });
+      const visit = (item, depth) => {
+        if (visited.has(item.id)) return;
+        visited.add(item.id);
+        const card = draw(item); card.dataset.replyDepth = Math.min(depth, 2); list.append(card);
+        (children.get(item.id) || []).forEach(child => visit(child, depth + 1));
+      };
+      loadedItems.filter(item => !byId.has(item.replyTo || item.parentId)).forEach(item => visit(item, 0));
+      loadedItems.forEach(item => visit(item, 0));
+    }
     async function load(append = false) {
       const version = ++fetchVersion;
       try {
@@ -212,8 +239,8 @@
           : '/v1/comments?thread=' + encodeURIComponent(thread) + (append && next ? '&after=' + next : '');
         const data = await request(endpoint);
         if (signal.aborted || version !== fetchVersion) return;
-        if (!append) list.replaceChildren();
-        data.items.forEach(item => list.append(draw(item)));
+        loadedItems = append ? [...new Map([...loadedItems, ...data.items].map(item => [item.id, item])).values()] : data.items;
+        drawList();
         next = data.next;
         if (more) more.hidden = !next;
         const count = query('[data-comments-count]');

@@ -36,13 +36,14 @@
       if (/^```/.test(line)) { flush(); if (code) { node.append(el('pre')); node.lastChild.append(el('code', code.join('\n'))); code = null; } else code = []; continue; }
       if (code) { code.push(line); continue; }
       if (!line.trim()) { flush(); continue; }
-      const heading = /^(#{1,3})\s+(.+)$/.exec(line), quote = /^>\s?(.*)$/.exec(line), bullet = /^[-*]\s+(.+)$/.exec(line);
+      const heading = /^(#{1,3})\s+(.+)$/.exec(line), quote = /^>\s?(.*)$/.exec(line), bullet = /^\s*(?:[-*+]\s+|\d+[.)]\s+)(.+)$/.exec(line);
       if (heading || quote) { flush(); const n = el(heading ? 'h' + (heading[1].length + 2) : 'blockquote'); inline(n, heading ? heading[2] : quote[1]); node.append(n); }
-      else if (bullet) { if (!list) { flush(); list = el('ul'); node.append(list); } const li = el('li'); inline(li, bullet[1]); list.append(li); }
+      else if (bullet) { const tag = /^\s*\d/.test(line) ? 'ol' : 'ul'; if (!list || list.localName !== tag) { flush(); list = el(tag); node.append(list); } const li = el('li'); inline(li, bullet[1]); list.append(li); }
       else { if (list) flush(); paragraph.push(line); }
     }
     flush(); if (code) { const pre = el('pre'); pre.append(el('code', code.join('\n'))); node.append(pre); }
   }
+  window.NuoMarkdown = markdown;
   function avatar(author) {
     const n = el('span', (author.name || '读').slice(0, 1), 'nd-avatar'); n.setAttribute('aria-hidden', 'true');
     try {

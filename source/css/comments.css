@@ -38,6 +38,9 @@
 .nuo-comment { position: relative; padding: 22px 0 20px 48px; border-bottom: 1px solid var(--account-line); overflow-wrap: anywhere; min-width: 0; }
 [data-nuo-comments] .nuo-comment:last-child { border-bottom: 0; }
 .nuo-comment[data-parent-id] { margin-left: 48px; padding-left: 40px; }
+.nuo-comment[data-reply-depth='0'] { margin-left: 0; padding-left: 48px; }
+.nuo-comment[data-reply-depth='2'] { margin-left: 80px; }
+.nuo-comment:target { background: var(--account-tint); }
 .nuo-comment-header { display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline; }
 .nuo-comment-header > .nuo-comment-avatar { position: absolute; top: 22px; left: 0; }
 .nuo-comment[data-parent-id] .nuo-comment-avatar { width: 28px; height: 28px; }
@@ -50,6 +53,18 @@
 .nuo-bot-status > div { display: flex; gap: 12px; align-items: center; justify-content: space-between; }
 .nuo-bot-status button { flex-shrink: 0; }
 .nuo-comments p.nuo-comment-body, #article-container .nuo-comments p.nuo-comment-body { max-width: 72ch; margin: 8px 0 10px; padding: 0; color: var(--account-ink); font-size: 14px; line-height: 1.85; white-space: pre-wrap; }
+.nuo-comments div.nuo-comment-body { max-width: 72ch; margin: 8px 0 10px; color: var(--account-ink); line-height: 1.85; }
+.nuo-comments div.nuo-comment-body :is(p,ul,ol,blockquote,pre,h3,h4,h5), #article-container .nuo-comments div.nuo-comment-body :is(p,ul,ol,blockquote,pre,h3,h4,h5) { margin: 0 0 12px; font-size: inherit; line-height: inherit; }
+.nuo-comments div.nuo-comment-body p { white-space: pre-wrap; }
+.nuo-comments div.nuo-comment-body :is(ul,ol) { padding-left: 1.5em; }
+.nuo-comments div.nuo-comment-body ul { list-style: disc; }
+.nuo-comments div.nuo-comment-body ol { list-style: decimal; }
+.nuo-comments div.nuo-comment-body li { margin: 3px 0; }
+.nuo-comments div.nuo-comment-body pre { max-width: 100%; padding: 10px 12px; overflow-x: auto; background: var(--account-tint); border-radius: 6px; }
+.nuo-comments div.nuo-comment-body code { overflow-wrap: anywhere; }
+.nuo-comments div.nuo-comment-body pre code { white-space: pre; }
+.nuo-comments div.nuo-comment-body blockquote { padding-left: 12px; border-left: 2px solid var(--account-line); color: var(--account-muted); }
+.nuo-comments div.nuo-comment-body > :last-child { margin-bottom: 0 !important; }
 .nuo-comment > small { color: var(--account-muted); font-size: 11px; }
 .nuo-comment-actions { display: flex; flex-wrap: wrap; align-items: center; gap: 14px; }
 .nuo-comment-actions button { padding: 2px 0; border: 0; border-radius: 2px; color: var(--account-muted); background: transparent; font-size: 11px; }
@@ -97,6 +112,8 @@
   .nuo-comments-send { gap: 10px; }
   .nuo-comments .nuo-comments-reply { margin-right: 16px; margin-left: 16px; }
   .nuo-comment[data-parent-id] { margin-left: 20px; }
+  .nuo-comment[data-reply-depth='0'] { margin-left: 0; }
+  .nuo-comment[data-reply-depth='2'] { margin-left: 32px; }
   .nuo-review .nuo-comment { padding-left: 56px; padding-right: 12px; }
   .nuo-review .nuo-comment-header > .nuo-comment-avatar { left: 12px; width: 30px; height: 30px; }
   .nuo-comments-review-note { flex-basis: 100%; }
