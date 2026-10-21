@@ -31,6 +31,7 @@ function fixture({ enabled = true, generate, review, through = '9999' } = {}) {
 const post = (f, input = {}, user) => f.request('/v1/discussions', user, 'POST', { title: '聊聊今天的项目', body: '我做了一个小工具', category: 'chat', requestId: crypto.randomUUID(), ...input });
 const replies = async (f, id, user = null) => (await f.request('/v1/comments?thread=/discuss/' + id, user)).data;
 const comment = (f, id, user, body, input = {}) => f.request('/v1/comments', user, 'POST', { thread: '/discuss/' + id, body, ...input });
+function legacyPost(f, enabled=0) { const id=crypto.randomUUID(); f.sql.prepare("INSERT INTO discussions(id,author_id,author_name,title,body,category,state,request_id,created_at,updated_at,published_at,bot_enabled) VALUES(?,'user_admin','站主','旧帖子','正文','chat','published',?,1,1,1,?)").run(id,id,enabled); return id; }
 
 test('a new invited post gets one short bot reply with server-owned identity, avatar, floor and likes', async () => {
   const f = fixture();
@@ -89,17 +90,18 @@ test('explicit invitations work with automatic first replies disabled, including
   await comment(f, id, 'user_bob', '@大肥鱼 你觉得呢'); await f.flush(); assert.equal(f.calls.length, 3);
   assert.equal(f.sql.prepare('SELECT bot_enabled FROM discussions WHERE id=?').get(id).bot_enabled, 0);
   assert.equal(f.sql.prepare("SELECT COUNT(*) n FROM bot_jobs WHERE id LIKE 'post:%'").get().n, 0);
-  const g = fixture({ enabled: false, through: '0009' }), oldId = (await post(g, { inviteBot: false })).data.item.id; await g.flush();
+  const g = fixture({ enabled: false, through: '0009' }), oldId = legacyPost(g);
   g.sql.exec('DROP TRIGGER bot_comment_insert');
-  const old = await comment(g, oldId, 'user_admin', '@DeepSeek 这条先前没有排队'); await g.flush();
+  const old = g.sql.prepare("INSERT INTO comments(thread,author_id,author_name,body,state,created_at,updated_at,published_at,bot_requested) VALUES(?,'user_admin','站主','@DeepSeek 这条先前没有排队','published',1,1,1,1)").run('/discuss/'+oldId);
   g.sql.exec('CREATE TRIGGER bot_comment_insert AFTER INSERT ON comments BEGIN SELECT 1; END');
   const migration = readFileSync(new URL('../migrations/0009_explicit_bot_invites.sql', import.meta.url), 'utf8');
   g.sql.exec(migration); g.sql.exec(migration);
   assert.equal(g.sql.prepare('SELECT COUNT(*) n FROM bot_jobs').get().n, 1);
   g.sql.exec(readFileSync(new URL('../migrations/0010_article_bot.sql', import.meta.url), 'utf8'));
+  g.sql.exec(readFileSync(new URL('../migrations/0011_community.sql', import.meta.url), 'utf8'));
   g.env.BOT_ENABLED = 'true'; await g.cron(); await g.flush();
   const recovered = (await replies(g, oldId)).items.find(c => c.author.bot);
-  assert.equal(recovered.replyTo, old.data.item.id); assert.equal(g.calls.length, 1);
+  assert.equal(recovered.replyTo, Number(old.lastInsertRowid)); assert.equal(g.calls.length, 1);
 });
 test('persisted jobs recover from provider failure and expired worker leases through the scheduler', async () => {
   let attempts = 0;
@@ -202,9 +204,10 @@ test('article AI requires login and public source and retains input/output moder
 });
 
 test('article migration preserves prior jobs, usage and foreign keys', async () => {
-  const f=fixture({enabled:false,through:'0009'}), id=(await post(f)).data.item.id; await f.flush();
+  const f=fixture({enabled:false,through:'0009'}), id=legacyPost(f,1);
   f.sql.prepare("INSERT INTO bot_calls VALUES('used',?,'user_admin',1,1)").run('post:'+id);
   f.sql.exec(readFileSync(new URL('../migrations/0010_article_bot.sql',import.meta.url),'utf8'));
+  f.sql.exec(readFileSync(new URL('../migrations/0011_community.sql',import.meta.url),'utf8'));
   assert.equal(f.sql.prepare('SELECT thread FROM bot_jobs').get().thread,'/discuss/'+id);
   assert.equal(f.sql.prepare('SELECT COUNT(*) n FROM bot_calls').get().n,1);
   assert.equal(f.sql.prepare('PRAGMA foreign_key_check').all().length,0);

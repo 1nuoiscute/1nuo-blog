@@ -1,0 +1,69 @@
+.type-community #content-inner {max-width:1080px;padding:42px 24px 64px;min-height:calc(100svh - 230px)}
+.type-community #page {width:100%;padding:0;box-shadow:none;background:transparent}
+.nuo-community {color:var(--account-ink);font:inherit;line-height:1.75;text-align:left}
+.nuo-community,.nuo-community * {box-sizing:border-box}
+.nuo-community [hidden],.nc-account-links[hidden] {display:none!important}
+.nuo-community :is(h1,h2,h3,p),#article-container .nuo-community :is(h1,h2,h3,p) {padding:0;color:inherit}
+.nc-heading {display:flex;gap:24px;align-items:center;justify-content:space-between;margin:0 0 28px}
+.nuo-community .nc-heading h1,#article-container .nuo-community .nc-heading h1 {font-size:30px;font-weight:650;line-height:1.35;margin:0 0 8px}
+.nuo-community .nc-heading p,#article-container .nuo-community .nc-heading p {margin:0;color:var(--account-muted);font-size:13px}
+.nc-heading nav {display:flex;gap:18px;flex-shrink:0;font-size:12px}
+.nuo-community a,.nc-account-links a {color:var(--account-accent);text-decoration:none;overflow-wrap:anywhere}
+.nuo-community a:hover {text-decoration:underline}
+.nuo-community button,.nuo-community input,.nuo-community textarea {font:inherit}
+.nuo-community button {cursor:pointer;padding:8px 14px;border:1px solid var(--account-line);border-radius:8px;background:var(--account-surface);color:var(--account-ink);font-size:12px;line-height:1.5}
+.nuo-community button:hover:enabled {border-color:var(--account-accent);color:var(--account-accent)}
+.nuo-community button:disabled {opacity:.5;cursor:default}
+.nuo-community :is(button,a,input,textarea):focus-visible {outline:2px solid var(--account-accent);outline-offset:3px}
+.nuo-community .nc-primary {background:var(--account-accent);color:var(--account-surface);border-color:var(--account-accent)}
+.nuo-community .nc-primary:hover:enabled {color:var(--account-surface);filter:brightness(.95)}
+.nc-tabs {display:flex;gap:5px;flex-wrap:wrap;margin:0 0 6px;padding-bottom:14px;border-bottom:1px solid var(--account-line)}
+.nc-tabs button {border-color:transparent;background:transparent;color:var(--account-muted);white-space:nowrap}
+.nc-tabs button[aria-pressed=true] {color:var(--account-accent);background:var(--account-tint);font-weight:600}
+.nuo-community .nc-status,#article-container .nuo-community .nc-status {font-size:13px;color:var(--account-muted);margin:18px 0}
+.nc-status:empty {display:none}
+.nc-row {padding:22px 0;border-bottom:1px solid var(--account-line);min-width:0}
+.nc-row:last-child {border-bottom:0}
+.nuo-community .nc-row h2,#article-container .nuo-community .nc-row h2 {margin:0 0 8px;font-size:17px;line-height:1.5;font-weight:600}
+.nc-row h2::before,.nc-heading h1::before {display:none!important}
+.nuo-community .nc-row p,#article-container .nuo-community .nc-row p {max-width:72ch;white-space:pre-wrap;overflow-wrap:anywhere;font-size:13px;margin:8px 0;color:var(--account-muted)}
+.nc-meta {display:flex;flex-wrap:wrap;gap:8px 14px;align-items:center;font-size:11px;color:var(--account-muted)}
+.nc-row-actions {display:flex;gap:10px;align-items:center;margin-top:12px;flex-wrap:wrap}
+.nc-unread {color:var(--account-accent);background:var(--account-tint);padding:1px 8px;border-radius:12px;font-weight:600}
+.nc-more {display:block;margin:20px auto}
+.nc-empty {padding:42px 0}
+.nuo-community .nc-empty h2,#article-container .nuo-community .nc-empty h2 {font-size:20px;margin:0 0 8px}
+.nuo-community .nc-empty p,#article-container .nuo-community .nc-empty p {margin:0 0 16px;font-size:13px;color:var(--account-muted)}
+.nc-profile-top {padding:28px;background:var(--account-tint);border-radius:14px;margin-bottom:24px;display:flex;gap:20px;align-items:flex-start}
+.nc-avatar {width:72px;height:72px;flex-shrink:0;border-radius:50%;display:flex;align-items:center;justify-content:center;background:var(--account-surface);color:var(--account-accent);font-size:28px;overflow:hidden}
+.nc-avatar img {display:block;width:100%;height:100%;object-fit:cover;margin:0!important}
+.nc-profile-copy {min-width:0;flex:1}
+.nuo-community .nc-profile-copy h1,#article-container .nuo-community .nc-profile-copy h1 {font-size:27px;line-height:1.4;margin:0 0 8px;overflow-wrap:anywhere}
+.nuo-community .nc-profile-copy p,#article-container .nuo-community .nc-profile-copy p {font-size:14px;max-width:68ch;white-space:pre-wrap;overflow-wrap:anywhere;margin:0 0 14px}
+.nc-badges {display:flex;flex-wrap:wrap;gap:8px;margin:16px 0 24px}
+.nc-badge {padding:5px 10px;border:1px solid var(--account-line);border-radius:16px;font-size:12px;color:var(--account-accent)}
+.nc-editor {display:grid;grid-template-columns:minmax(0,1fr) minmax(250px,.8fr);gap:36px}
+.nc-editor label.nc-field {display:grid;gap:7px;margin-bottom:18px;font-size:13px;font-weight:600}
+.nc-editor :is(input[type=text],textarea) {width:100%;min-width:0;border:1px solid var(--account-line);border-radius:8px;padding:10px 12px;background:var(--account-surface);color:var(--account-ink);font-size:14px;font-weight:400;line-height:1.7}
+.nc-editor textarea {resize:vertical;min-height:115px}
+.nc-check {display:flex;gap:10px;align-items:flex-start;margin:14px 0;font-size:13px;cursor:pointer;font-weight:400}
+.nc-check input {accent-color:var(--account-accent);width:16px;height:16px;flex-shrink:0;margin-top:4px}
+.nuo-community .nc-help,#article-container .nuo-community .nc-help {font-size:12px;color:var(--account-muted);margin:8px 0 20px}
+.nc-book-options {max-height:440px;overflow-y:auto;padding:0 10px 0 0}
+.nc-book-options .nc-check {padding:10px 0;border-bottom:1px solid var(--account-line);margin:0;overflow-wrap:anywhere}
+.nuo-community .nc-editor h2,#article-container .nuo-community .nc-editor h2 {font-size:18px;margin:0 0 8px}
+.nc-editor-actions {display:flex;gap:12px;flex-wrap:wrap;align-items:center;margin-top:22px;font-size:12px}
+.nc-account-links {display:flex;gap:20px;flex-wrap:wrap;margin:0 0 20px;padding:12px 0;border-bottom:1px solid var(--account-line);font-size:13px}
+.nuo-comments-heading {flex-wrap:wrap}
+.nuo-comments-heading .nc-follow {margin-left:auto;color:var(--account-accent);white-space:nowrap}
+@media(max-width:600px) {
+ .type-community #content-inner {padding:28px 16px 40px}
+ .nc-heading {gap:16px;align-items:flex-start;flex-direction:column}
+ .nc-heading nav {gap:20px}
+ .nuo-community .nc-heading h1,#article-container .nuo-community .nc-heading h1 {font-size:26px}
+ .nc-tabs {gap:2px}.nc-tabs button {padding:7px 10px}
+ .nc-editor {grid-template-columns:minmax(0,1fr);gap:28px}
+ .nc-profile-top {padding:20px 16px;gap:14px}.nc-avatar {width:54px;height:54px;font-size:22px}
+ .nuo-community .nc-profile-copy h1,#article-container .nuo-community .nc-profile-copy h1 {font-size:23px}
+ .nc-book-options {max-height:300px}
+}

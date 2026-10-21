@@ -32,7 +32,7 @@
     const diagnosis = query('[data-comments-diagnosis]');
     const summary = query('[data-comments-summary]');
     let clerk, me, next = null, parentId = null, replyTo = null, unsubscribe, observer, started = false, botTimer, botPolls = 0;
-    let fetchVersion = 0, identityVersion = 0, loadedItems = [];
+    let fetchVersion = 0, identityVersion = 0, loadedItems = [], jumpPages=0, jumped='';
     const timers = new Set();
     const thread = host.dataset.thread || location.pathname;
     const botPanel = !adminPage ? element('div', undefined, 'nuo-bot-status') : null;
@@ -100,7 +100,8 @@
       if (item.parentId) card.dataset.parentId = item.parentId;
       const header = element('div', undefined, 'nuo-comment-header');
       header.append(avatar(item.author.name, item.author.avatar));
-      header.append(element('strong', item.author.name));
+      const authorName = element('strong', item.author.name);
+      if(item.author.profileId && /^[a-f0-9-]{36}$/.test(item.author.profileId)) {const a=element('a');a.href='/people/?id='+item.author.profileId;a.append(authorName);header.append(a);} else header.append(authorName);
       if (item.author.bot) header.append(element('span', 'AI', 'nuo-comment-ai-badge'));
       const date = element('time', new Date(item.createdAt * 1000).toLocaleString('zh-CN'));
       date.dateTime = new Date(item.createdAt * 1000).toISOString(); header.append(date);
@@ -236,6 +237,7 @@
     }
     async function load(append = false) {
       const version = ++fetchVersion;
+      if(!append)jumpPages=0;
       try {
         if (adminPage && !me?.admin) return;
         const endpoint = adminPage
@@ -245,6 +247,7 @@
         if (signal.aborted || version !== fetchVersion) return;
         loadedItems = append ? [...new Map([...loadedItems, ...data.items].map(item => [item.id, item])).values()] : data.items;
         drawList();
+        if(!adminPage)window.NuoCommunity?.markRead(thread,Math.max(0,...loadedItems.filter(item=>item.state==='published').map(item=>item.floor||0)));
         next = data.next;
         if (more) more.hidden = !next;
         const count = query('[data-comments-count]');
@@ -260,6 +263,12 @@
             botPanel.append(line);
           });
           if (jobs.some(job => ['queued','running','review'].includes(job.status)) && botPolls++ < 36) botTimer = setTimeout(() => load(), 5000);
+        }
+        const destination=/^#nuo-comment-([1-9][0-9]*)$/.exec(location.hash);
+        if(destination) {
+          const target=Array.from(list.children).find(node=>node.dataset.commentId===destination[1]);
+          if(target){if(jumped!==destination[1]){jumped=destination[1];target.scrollIntoView({block:'center'});}}
+          else if(next&&jumpPages++<100)await load(true);
         }
       } catch (error) { message(error); }
     }

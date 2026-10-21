@@ -436,7 +436,7 @@
     var existing = document.querySelector('.nuo-content-tools');
     if (existing) existing.remove();
     // Pages that are apps rather than reading material do not need the toolbar.
-    if (!currentInfo || ['/wander', '/favorites', '/graph', '/account', '/comments-admin', '/discuss'].indexOf(currentInfo.path) >= 0) {
+    if (!currentInfo || ['/wander', '/favorites', '/graph', '/account', '/comments-admin', '/discuss', '/activity', '/people'].indexOf(currentInfo.path) >= 0) {
       applyReadingMode(false);
       return;
     }

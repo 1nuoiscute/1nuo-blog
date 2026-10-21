@@ -139,6 +139,7 @@
         page.dataset.accountView = signedIn ? 'profile' : 'signin';
         status.textContent = '';
         signout.hidden = !signedIn;
+        const community = page.querySelector('[data-account-community]'); if (community) community.hidden = !signedIn;
         if (signedIn) instance.mountUserProfile(widget, { routing: 'hash' });
         else instance.mountSignIn(widget, {
           routing: 'hash', withSignUp: true,

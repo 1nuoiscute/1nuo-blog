@@ -7,6 +7,7 @@ import { likeContent } from './likes.mjs';
 import { BOT, botJobs, botSettings, processBotJobs } from './bot.mjs';
 import { checkContent } from './content-policy.mjs';
 import { digest, loadArticle, rememberArticle } from './articles.mjs';
+import { community, rememberAIThread } from './community.mjs';
 
 class HttpError extends Error {
   constructor(status, message) { super(message); this.status = status; }
@@ -56,7 +57,7 @@ function safeAvatar(value) {
 function publicComment(row, actor) {
   return {
     id: row.id, thread: row.thread, parentId: row.parent_id,
-    author: row.author_kind === 'bot' ? { name: BOT.name, avatar: BOT.avatar, bot: true } : { name: row.author_name, avatar: row.avatar_url, bot: false },
+    author: row.author_kind === 'bot' ? { name: BOT.name, avatar: BOT.avatar, bot: true } : { name: row.author_name, avatar: row.avatar_url, bot: false, ...(row.profile_id ? {profileId:row.profile_id} : {}) },
     replyTo: row.reply_to ?? null,
     body: row.state === 'deleted' ? '' : row.body,
     state: row.state, createdAt: row.created_at,
@@ -68,7 +69,7 @@ function publicComment(row, actor) {
   };
 }
 
-export function createWorker({ jwksFetch = fetch, moderationFetch = fetch, botFetch = fetch, articleFetch = fetch } = {}) {
+export function createWorker({ jwksFetch = fetch, moderationFetch = fetch, botFetch = fetch, articleFetch = fetch, sourceFetch = fetch } = {}) {
   const keysets = new Map();
   async function authenticate(request, env, required = true) {
     const authorization = request.headers.get('authorization');
@@ -118,6 +119,12 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch, botFe
           return new Response(null, { status: 204, headers });
         }
         const url = new URL(request.url);
+        if (url.pathname.startsWith('/v1/community/')) {
+          const publicProfile = /^\/v1\/community\/profiles\/[a-f0-9-]{36}$/.test(url.pathname) && request.method === 'GET';
+          const actor = await authenticate(request, env, !publicProfile);
+          const input = ['POST','DELETE'].includes(request.method) ? await jsonBody(request, 28000) : null;
+          return reply(await community({request,url,env,actor,input,normalizePath:threadPath,safeAvatar,reject,sourceFetch}));
+        }
         if (url.pathname === '/v1/article-summary' && request.method === 'POST') {
           const actor = await authenticate(request, env), input = await jsonBody(request), thread = threadPath(input.thread);
           if (!botSettings(env).enabled) reject(503, '大肥鱼暂未开放');
@@ -129,6 +136,7 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch, botFe
           const recent = await env.DB.prepare("SELECT c.id,c.updated_at FROM comments c WHERE c.thread=? AND c.state='published' AND c.author_kind='human' AND (c.parent_id IS NULL OR EXISTS(SELECT 1 FROM comments p WHERE p.id=c.parent_id AND (p.state='published' OR (p.state='deleted' AND p.published_at IS NOT NULL)))) ORDER BY c.id DESC LIMIT 30").bind(thread).all();
           const id = 'article:' + await digest(thread + '\n' + article.hash + '\n' + JSON.stringify(recent.results)), now = Math.floor(Date.now() / 1000);
           await env.DB.prepare('INSERT OR IGNORE INTO bot_jobs(id,thread,requester_id,available_at,created_at,updated_at) VALUES(?,?,?,?,?,?)').bind(id, thread, actor.id, now, now, now).run();
+          await rememberAIThread(env, actor.id, thread);
           await wakeLater(id);
           return reply({ ok: true, job: { id } }, 202);
         }
@@ -184,7 +192,7 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch, botFe
           if (!parts.every(value => Number.isSafeInteger(value) && value >= 0) || parts.length !== (forum ? 2 : 1)) reject(400, '分页参数无效');
           const paging = forum ? '(COALESCE(c.floor,2147483647)>? OR (COALESCE(c.floor,2147483647)=? AND c.id>?))' : 'c.id>?';
           const pagingArgs = forum ? [after, after, parts[1]] : [after];
-          const rows = await env.DB.prepare(`SELECT c.*,
+          const rows = await env.DB.prepare(`SELECT c.*,(SELECT public_id FROM community_profiles p WHERE p.user_id=c.author_id AND p.enabled=1) profile_id,
             (SELECT COUNT(*) FROM comment_likes l WHERE l.comment_id=c.id) AS likes,
             EXISTS(SELECT 1 FROM comment_likes l WHERE l.comment_id=c.id AND l.user_id=?) AS liked,
             (SELECT floor FROM comments p WHERE p.id=COALESCE(c.reply_to,c.parent_id)) AS parent_floor FROM comments c WHERE c.thread=? AND ${paging}

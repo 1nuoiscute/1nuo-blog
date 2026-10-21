@@ -18,13 +18,13 @@ export async function checkDiscussion(env, thread, actor, reject, writing = fals
 }
 const detailRoute = new RegExp('^/v1/discussions/(' + ID + ')(/moderate)?$');
 const visibleReply = "c.state='published' AND (c.parent_id IS NULL OR EXISTS(SELECT 1 FROM comments p WHERE p.id=c.parent_id AND (p.state='published' OR (p.state='deleted' AND p.published_at IS NOT NULL))))";
-const summary = `SELECT d.*, (SELECT COUNT(*) FROM comments c WHERE c.thread='/discuss/'||d.id AND ${visibleReply}) AS replies,
+const summary = `SELECT d.*,(SELECT public_id FROM community_profiles p WHERE p.user_id=d.author_id AND p.enabled=1) profile_id, (SELECT COUNT(*) FROM comments c WHERE c.thread='/discuss/'||d.id AND ${visibleReply}) AS replies,
   (SELECT COUNT(*) FROM discussion_likes l WHERE l.discussion_id=d.id) AS likes,
   EXISTS(SELECT 1 FROM discussion_likes l WHERE l.discussion_id=d.id AND l.user_id=?) AS liked,
   MAX(COALESCE(d.published_at,d.created_at),COALESCE((SELECT MAX(c.created_at) FROM comments c WHERE c.thread='/discuss/'||d.id AND ${visibleReply}),0)) AS active_at FROM discussions d`;
 function view(row, actor, full = false) {
   return { id: row.id, title: row.title, category: row.category, state: row.state,
-    author: { name: row.author_name, avatar: row.avatar_url }, createdAt: row.created_at, updatedAt: row.updated_at,
+    author: { name: row.author_name, avatar: row.avatar_url, ...(row.profile_id ? {profileId:row.profile_id} : {}) }, createdAt: row.created_at, updatedAt: row.updated_at,
     pinned: !!row.pinned, locked: !!row.locked, version: row.version, replies: Number(row.replies || 0), likes: Number(row.likes || 0), liked: !!row.liked, activeAt: row.active_at || row.created_at,
     inviteBot: !!row.bot_enabled,
     canEdit: actor?.id === row.author_id, canDelete: !!actor && (actor.admin || actor.id === row.author_id),

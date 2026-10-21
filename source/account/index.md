@@ -11,6 +11,7 @@ search: false
 ---
 
 <div class="nuo-account" data-nuo-account data-account-view="loading" aria-label="账号">
+  <nav class="nc-account-links" data-account-community hidden aria-label="我的空间"><a href="/activity/">我的交流</a><a href="/activity/?tab=following">关注更新</a><a href="/people/">个人主页</a><a href="/favorites/">我的书架</a></nav>
   <p data-account-status role="status" aria-live="polite">正在准备账号服务…</p>
   <div data-account-widget></div>
   <button class="nuo-account-button" data-account-retry type="button" hidden>重新加载</button>

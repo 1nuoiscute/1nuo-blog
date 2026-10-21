@@ -49,6 +49,15 @@ jobs:
       - name: Validate discussions
         run: npm run test:discuss
         timeout-minutes: 3
+      - name: Set up community integration runtime
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+      - name: Install community API test dependencies
+        run: npm ci --prefix workers/comments --omit=dev
+      - name: Validate profiles, activity and follows
+        run: node tests/community-browser.cjs
+        timeout-minutes: 3
       - name: Upload browser diagnostics
         if: failure()
         uses: actions/upload-artifact@v4

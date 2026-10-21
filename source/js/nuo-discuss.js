@@ -81,7 +81,7 @@
       const meta = el('div', undefined, 'nd-meta'); meta.append(el('span', labels[item.category])); badges(item, meta); article.append(meta, el('h2', item.title, 'nd-post-title'));
       const author = el('div', undefined, 'nd-author'), info = el('div'), times = el('div', undefined, 'nd-meta');
       times.append(date(item.createdAt)); if (item.updatedAt > item.createdAt) times.append(el('span', '已编辑')); if (item.ipLocation) times.append(el('span', 'IP 属地：' + item.ipLocation));
-      info.append(el('strong', item.author.name), times); author.append(avatar(item.author), info); article.append(author);
+      const authorName=el('strong',item.author.name);if(item.author.profileId&&/^[a-f0-9-]{36}$/.test(item.author.profileId)){const a=el('a');a.href='/people/?id='+item.author.profileId;a.append(authorName);info.append(a);}else info.append(authorName);info.append(times); author.append(avatar(item.author), info); article.append(author);
       const prose = el('div', undefined, 'nd-prose'); markdown(prose, item.body); article.append(prose);
       if (item.state !== 'published') article.append(el('div', item.state === 'pending' ? '正在审核，发布后大家就能看到这篇讨论。' : '这篇讨论已被隐藏，可以编辑后重新提交。', 'nd-review'));
       if (item.moderation && item.state === 'pending') article.append(el('div', item.moderation.reason || '等待审核结果', 'nd-review'));

@@ -7,6 +7,7 @@ const yaml = require('js-yaml');
 const { SaxesParser } = require('saxes');
 const { isPublicMetadata, safeJsonLd, register } = require('../scripts/site-metadata');
 const { articleRoutes } = require('../scripts/ai-articles');
+const { communityCatalog } = require('../scripts/community-catalog');
 const root = path.resolve(__dirname, '..');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
 let checks = 0;
@@ -124,6 +125,8 @@ const aiSources = articleRoutes({ posts: [{path:'public/index.html',title:'公�
 check(aiSources.length===2,'AI source generator includes public posts and notes only');
 check(aiSources.every(route=>/^ai\/articles\/[a-f0-9]{64}\.json$/.test(route.path)),'AI sources use canonical thread hashes');
 check(!JSON.stringify(aiSources).includes('SECRET') && !JSON.stringify(aiSources).includes('secret()'),'AI sources omit private content and scripts');
+const peopleCatalog=JSON.parse(communityCatalog({posts:[{path:'public/index.html',title:'公开文章'},{path:'secret/index.html',title:'SECRET',password:'secret'}],pages:[{path:'notes/math/index.html',title:'笔记'},{path:'people/index.html',title:'个人主页',noindex:true},{path:'rate/admin/index.html',title:'ADMIN'}]}).data);
+check(peopleCatalog.items.length===2&&!JSON.stringify(peopleCatalog).includes('SECRET')&&!JSON.stringify(peopleCatalog).includes('ADMIN'),'community catalog exposes only canonical public content');
 if (process.argv.includes('--artifacts')) {
   const publicDir = path.join(root, config.public_dir || 'public');
   const homeHtml = fs.readFileSync(path.join(publicDir, 'index.html'), 'utf8');
