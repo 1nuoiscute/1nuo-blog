@@ -74,6 +74,29 @@ test('concurrent background wakes deduplicate jobs and atomically enforce global
   await post(f, {}, 'user_cara'); await f.flush(); assert.equal(f.calls.length, 2);
   assert.equal(f.sql.prepare('SELECT COUNT(*) n FROM bot_calls').get().n, 2);
 });
+
+test('explicit invitations work with automatic first replies disabled, including recovered invitations', async () => {
+  const f = fixture(), id = (await post(f, { inviteBot: false })).data.item.id; await f.flush();
+  assert.equal(f.calls.length, 0);
+  await comment(f, id, 'user_admin', '@DeepSeek 来说两句吧'); await f.flush();
+  assert.equal(f.calls.length, 1);
+  const first = (await replies(f, id)).items.find(c => c.author.bot);
+  await comment(f, id, 'user_alice', '继续聊聊', { replyTo: first.id }); await f.flush();
+  assert.equal(f.calls.length, 2);
+  await comment(f, id, 'user_bob', '@大肥鱼 你觉得呢'); await f.flush(); assert.equal(f.calls.length, 3);
+  assert.equal(f.sql.prepare('SELECT bot_enabled FROM discussions WHERE id=?').get(id).bot_enabled, 0);
+  assert.equal(f.sql.prepare("SELECT COUNT(*) n FROM bot_jobs WHERE id LIKE 'post:%'").get().n, 0);
+  const g = fixture({ enabled: false }), oldId = (await post(g, { inviteBot: false })).data.item.id; await g.flush();
+  g.sql.exec('DROP TRIGGER bot_comment_insert');
+  const old = await comment(g, oldId, 'user_admin', '@DeepSeek 这条先前没有排队'); await g.flush();
+  g.sql.exec('CREATE TRIGGER bot_comment_insert AFTER INSERT ON comments BEGIN SELECT 1; END');
+  const migration = readFileSync(new URL('../migrations/0009_explicit_bot_invites.sql', import.meta.url), 'utf8');
+  g.sql.exec(migration); g.sql.exec(migration);
+  assert.equal(g.sql.prepare('SELECT COUNT(*) n FROM bot_jobs').get().n, 1);
+  g.env.BOT_ENABLED = 'true'; await g.cron(); await g.flush();
+  const recovered = (await replies(g, oldId)).items.find(c => c.author.bot);
+  assert.equal(recovered.replyTo, old.data.item.id); assert.equal(g.calls.length, 1);
+});
 test('persisted jobs recover from provider failure and expired worker leases through the scheduler', async () => {
   let attempts = 0;
   const f = fixture({ generate: async () => { if (++attempts === 1) throw Error('offline'); return Response.json({ choices: [{ finish_reason: 'stop', message: { content: '恢复后接着聊。' } }] }); } });

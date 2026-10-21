@@ -134,7 +134,7 @@
         like.dataset.commentLike = item.id; updateLike(); actions.append(like);
       }
       if (!adminPage && clerk?.isSignedIn && (!item.parentId || host.dataset.thread) && item.state === 'published') {
-        actions.append(action(item.author.bot && host.dataset.botEnabled !== 'false' ? '继续聊' : '回复', () => {
+        actions.append(action(item.author.bot ? '继续聊' : '回复', () => {
           parentId = item.parentId || item.id; replyTo = host.dataset.thread ? item.id : null;
           const notice = query('[data-comments-reply]');
           query('[data-comments-reply-box]').hidden = false;

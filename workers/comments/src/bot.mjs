@@ -55,7 +55,7 @@ async function runJob(env, job, apiFetch, reviewFetch) {
   if (!reservation[0].meta.changes) return;
   if (!reservation[1].meta.changes) { await env.DB.prepare("UPDATE bot_jobs SET status='limited',run_id=NULL,attempts=attempts-1,last_error='今日聊天额度已用完，明天可以再试',updated_at=? WHERE id=? AND run_id=?").bind(now, job.id, run).run(); return; }
   try {
-    const post = await env.DB.prepare("SELECT * FROM discussions WHERE id=? AND state='published' AND locked=0 AND bot_enabled=1").bind(job.discussion_id).first();
+    const post = await env.DB.prepare("SELECT * FROM discussions WHERE id=? AND state='published' AND locked=0 AND (bot_enabled=1 OR ? IS NOT NULL)").bind(job.discussion_id, job.trigger_comment_id).first();
     const context = post && await contextFor(env, job, post);
     if (!context) { await env.DB.prepare("UPDATE bot_jobs SET status='cancelled',run_id=NULL,updated_at=? WHERE id=? AND run_id=?").bind(nowSeconds(), job.id, run).run(); return; }
     const result = await generate(context.messages, env, apiFetch);
@@ -72,12 +72,12 @@ async function runJob(env, job, apiFetch, reviewFetch) {
     await env.DB.batch([
       env.DB.prepare(`INSERT INTO comments(thread,parent_id,reply_to,author_id,author_name,avatar_url,body,state,created_at,updated_at,published_at,author_kind,bot_job_id,ai_status,ai_reason,ai_model,ai_confidence,ai_checked_at)
         SELECT ?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,? WHERE EXISTS(SELECT 1 FROM bot_jobs WHERE id=? AND run_id=? AND status='running')
-        AND EXISTS(SELECT 1 FROM discussions WHERE id=? AND state='published' AND locked=0 AND bot_enabled=1 AND title=? AND body=?)
+        AND EXISTS(SELECT 1 FROM discussions WHERE id=? AND state='published' AND locked=0 AND (bot_enabled=1 OR ? IS NOT NULL) AND title=? AND body=?)
         AND (? IS NULL OR EXISTS(SELECT 1 FROM comments WHERE id=? AND state='published' AND author_kind='human'))
         AND (? IS NULL OR EXISTS(SELECT 1 FROM comments WHERE id=? AND state='published')) ON CONFLICT DO NOTHING`)
         .bind('/discuss/' + post.id, context.parent, job.trigger_comment_id, BOT.id, BOT.name, BOT.avatar, result.body, verdict.approve ? 'published' : 'pending', finished, finished,
           verdict.approve ? finished : null, 'bot', job.id, aiStatus, verdict.reason, settings.model, verdict.confidence, finished, job.id, run,
-          post.id, post.title, post.body, job.trigger_comment_id, job.trigger_comment_id, context.parent, context.parent),
+          post.id, job.trigger_comment_id, post.title, post.body, job.trigger_comment_id, job.trigger_comment_id, context.parent, context.parent),
       env.DB.prepare(`UPDATE bot_jobs SET status=CASE WHEN EXISTS(SELECT 1 FROM comments WHERE bot_job_id=?) THEN 'done' ELSE 'cancelled' END,
         result_comment_id=(SELECT id FROM comments WHERE bot_job_id=?),run_id=NULL,lease_until=0,last_error='',input_tokens=?,output_tokens=?,updated_at=? WHERE id=? AND run_id=?`)
         .bind(job.id, job.id, result.input, result.output, finished, job.id, run)

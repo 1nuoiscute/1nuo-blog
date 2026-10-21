@@ -146,7 +146,6 @@
       if (item.state === 'published') {
         const template = document.getElementById('nd-comments-template');
         const comments = template.content.cloneNode(true); comments.querySelector('[data-nuo-comments]').dataset.thread = '/discuss/' + item.id;
-        comments.querySelector('[data-nuo-comments]').dataset.botEnabled = String(item.inviteBot !== false);
         if (item.locked) { article.classList.add('nd-locked'); article.append(el('p', '这篇讨论已关闭回复。', 'nd-review')); }
         article.append(comments);
       }
