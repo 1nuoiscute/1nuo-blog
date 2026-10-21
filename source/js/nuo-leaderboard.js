@@ -3,8 +3,28 @@
   let cloud = window.NuoCloud;
   try { if (window.parent !== window && window.parent.NuoCloud) cloud = window.parent.NuoCloud; } catch { /* foreign embedding keeps its own session */ }
   let snapshot = null, previousUser = null, blocked = false, version = 0;
+  const HANDOFF = 'nuo:2048:login-handoff:v1';
   const list = document.getElementById('lb-list'), identity = document.getElementById('lb-identity');
   function text(tag, value, className) { const node = document.createElement(tag); node.textContent = value; if (className) node.className = className; return node; }
+  function clearHandoff() { try { sessionStorage.removeItem(HANDOFF); } catch { /* private mode */ } }
+  function rememberRound() {
+    if (blocked || typeof g === 'undefined' || !g) return;
+    try { sessionStorage.setItem(HANDOFF, JSON.stringify({ time: Date.now(), owner: previousUser, score: g.s, won: g.w, over: g.o,
+      ended: document.getElementById('go').classList.contains('show'), board: g.g.map(row => row.map(tile => tile ? tile.v : 0)) })); } catch { /* private mode */ }
+  }
+  function restoreRound(over) {
+    let saved; try { saved = JSON.parse(sessionStorage.getItem(HANDOFF) || 'null'); } catch { return; }
+    clearHandoff();
+    if (!saved || !Number.isFinite(saved.time) || Date.now() - saved.time > 1800000 || !Number.isSafeInteger(saved.score) || saved.score < 0 ||
+      (saved.owner && saved.owner !== cloud.state().user?.id) || !Array.isArray(saved.board) || saved.board.length !== 4 ||
+      !saved.board.every(row => Array.isArray(row) && row.length === 4 && row.every(value => Number.isSafeInteger(value) && value >= 0 && value <= 131072 && (value === 0 || (value >= 2 && (value & (value - 1)) === 0))))) return;
+    g.g = saved.board.map(row => row.map(value => value ? { v: value, i: g.n++ } : 0));
+    g.s = saved.score; g.w = !!saved.won; g.o = !!saved.over;
+    if (saved.ended && saved.score > 0) {
+      snapshot = { score: saved.score, maxTile: Math.max(...saved.board.flat()), owner: saved.owner };
+      over.call(g, '上一局成绩', '得分：' + saved.score); renderSubmission();
+    }
+  }
   function draw(items, host) {
     host.replaceChildren();
     if (!items.length) { host.textContent = '暂无记录，来玩一局吧'; return; }
@@ -49,7 +69,7 @@
     form.append(status, button); document.getElementById('go').append(form);
     form.onsubmit = async event => {
       event.preventDefault(); if (button.disabled) return;
-      if (!user) { try { await cloud.login(); } catch (error) { status.textContent = error.message; } return; }
+      if (!user) { rememberRound(); try { await cloud.login(); } catch (error) { status.textContent = error.message; } return; }
       if (cloud.state().user?.id !== user.id) return;
       button.disabled = true; status.textContent = '提交中…';
       try {
@@ -57,7 +77,7 @@
           score: snapshot.score, maxTile: snapshot.maxTile, name: user.name, avatar: user.avatar
         } });
         if (cloud.state().user?.id !== user.id) return;
-        status.textContent = '已保存，个人最佳 ' + result.personalBest.score; await loadLeaderboard();
+        clearHandoff(); status.textContent = '已保存，个人最佳 ' + result.personalBest.score; await loadLeaderboard();
       } catch (error) { if (cloud.state().user?.id === user.id) { status.textContent = '提交失败，请重试。'; button.disabled = false; } }
     };
   }
@@ -71,13 +91,14 @@
       snapshot = { score: this.s, maxTile: Math.max(...this.g.flat().map(tile => tile ? tile.v : 0)), owner: previousUser };
       renderSubmission();
     };
-    g.restart = function () { snapshot = null; blocked = false; previousUser = cloud.state().user?.id || null; restart.call(this); };
+    g.restart = function () { clearHandoff(); snapshot = null; blocked = false; previousUser = cloud.state().user?.id || null; restart.call(this); };
     g.save = function () {
       if (this.s <= this.b) return;
       this.b = this.s;
       try { localStorage.setItem(previousUser ? 'nuo:2048-best:' + previousUser : 'gb', String(this.b)); } catch { /* private mode */ }
     };
     try { g.b = Number(localStorage.getItem(previousUser ? 'nuo:2048-best:' + previousUser : 'gb')) || 0; } catch { g.b = 0; }
+    restoreRound(over);
     g.r();
   };
   const unsubscribe = cloud.subscribe(state => {
@@ -93,7 +114,7 @@
     }
     identity.textContent = state.user ? '当前账号：' + state.user.name + '。每个账号保留最佳成绩。' : '未登录也能玩，登录后可提交账号榜单。';
   });
-  document.getElementById('lb-login').onclick = () => cloud.login().catch(error => { identity.textContent = error.message; });
+  document.getElementById('lb-login').onclick = () => { rememberRound(); cloud.login().catch(error => { identity.textContent = error.message; }); };
   const unsubscribeLogin = cloud.subscribe(state => { document.getElementById('lb-login').hidden = !!state.user; });
   window.addEventListener('pagehide', event => { if (!event.persisted) { unsubscribe(); unsubscribeLogin(); } });
   window.addEventListener('pageshow', event => { if (event.persisted) loadLeaderboard(); });

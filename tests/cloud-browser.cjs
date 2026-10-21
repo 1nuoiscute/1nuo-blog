@@ -1,7 +1,8 @@
 'use strict';
 const fs = require('node:fs'), path = require('node:path'), http = require('node:http'), assert = require('node:assert/strict');
 const root = path.resolve(__dirname, '..');
-if (!process.env.PLAYWRIGHT_BROWSERS_PATH) process.env.PLAYWRIGHT_BROWSERS_PATH = path.join(root, 'node_modules/.cache/ms-playwright');
+const localBrowsers = path.join(root, 'node_modules/.cache/ms-playwright');
+if (!process.env.PLAYWRIGHT_BROWSERS_PATH && fs.existsSync(localBrowsers)) process.env.PLAYWRIGHT_BROWSERS_PATH = localBrowsers;
 const { chromium } = require('playwright');
 const { marked } = require('marked');
 const read = file => fs.readFileSync(path.join(root, file), 'utf8');
@@ -16,6 +17,7 @@ async function main() {
     const url = new URL(req.url, 'http://localhost');
     res.setHeader('Content-Type', 'text/html; charset=utf-8');
     if (url.pathname === '/js/nuo-account.js') { res.setHeader('Content-Type', 'application/javascript'); return res.end(auth); }
+    if (url.pathname === '/css/account.css') { res.setHeader('Content-Type', 'text/css'); return res.end(read('source/css/account.css')); }
     if (url.pathname.startsWith('/js/')) { res.setHeader('Content-Type', 'application/javascript'); return res.end(read('source' + url.pathname)); }
     if (url.pathname === '/game/') return res.end(read('source/explore/game2048-app/index.html'));
     const library = marked.parse(read('source/favorites/index.md').replace(/^---[\s\S]*?---\s*/, ''));
@@ -125,6 +127,15 @@ async function main() {
     check(await frame.evaluate(() => window.NuoCloud === parent.NuoCloud), 'embedded game reuses the parent account session and sync client');
     await frame.waitForFunction(() => Number(document.getElementById('best').textContent) >= 64);
     check(await frame.locator('#best').textContent() === '64', 'account personal best also populates the game score display');
+    await a.goto(base + '/game/'); await a.evaluate(() => NuoCloud.ready());
+    await a.evaluate(() => switchAccount(null)); await a.waitForFunction(() => !NuoCloud.state().user);
+    await a.evaluate(() => { g.restart(); g.s = 256; g.g[0][0] = { v: 32, i: 100 }; g.o = true; g.over('结束', '访客一局'); });
+    await a.locator('#lb-form button').click(); await a.waitForFunction(() => window.loginOpened);
+    await a.evaluate(() => localStorage.setItem('test:actor', 'user_bob'));
+    await a.reload(); await a.evaluate(() => NuoCloud.ready()); await a.locator('#lb-form').waitFor();
+    check(await a.evaluate(() => g.s === 256 && g.g[0][0].v === 32), 'login redirect preserves the guest round and score');
+    await a.locator('#lb-form button').click(); await a.getByText('已保存，个人最佳 256', { exact: true }).waitFor();
+    check(scorePosts.at(-1).score === 256 && scorePosts.at(-1).user === 'user_bob', 'guest round can be explicitly submitted after login');
     check(errors.length === 0, 'account data features have no uncaught browser errors');
     console.log(`Account data: ${checks} checks passed (two devices, simulated auth/API).`);
   } finally { if (browser) await browser.close(); await new Promise(resolve => server.close(resolve)); }
