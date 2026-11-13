@@ -80,6 +80,14 @@ top_img: https://img.1nuo.me/img/categoriesbanner.webp
 
 <div class="tab-content" id="tab-games" style="display:none">
   <div class="card-list">
+    <a class="card-item" href="/explore/word-meeting/">
+      <div class="card-icon">✉</div>
+      <div class="card-body">
+        <div class="card-title">词意同遇</div>
+        <div class="card-desc">两个人一轮轮联想，直到想到同一个词</div>
+      </div>
+      <div class="card-arrow">→</div>
+    </a>
     <a class="card-item" href="/explore/game2048/">
       <div class="card-icon">🔢</div>
       <div class="card-body">

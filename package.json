@@ -16,7 +16,8 @@
     "test:discuss": "node --check source/js/nuo-discuss.js && node tests/discuss-browser.cjs",
     "test:regression": "node tests/regression.cjs && node tests/explore-reliability.cjs && node tests/new-features.cjs",
     "test:metadata": "node tests/site-metadata.cjs --artifacts",
-    "test:browser": "node tests/run-browser.cjs"
+    "test:browser": "node tests/run-browser.cjs",
+    "test:word-meeting": "node --check source/js/word-meeting.js && node tests/word-meeting-browser.cjs"
   },
   "hexo": {
     "version": "8.1.1"

@@ -8,6 +8,7 @@ import { BOT, botJobs, botSettings, processBotJobs } from './bot.mjs';
 import { checkContent } from './content-policy.mjs';
 import { digest, loadArticle, rememberArticle } from './articles.mjs';
 import { community, rememberAIThread } from './community.mjs';
+import { wordMeeting } from './word-meeting.mjs';
 
 class HttpError extends Error {
   constructor(status, message) { super(message); this.status = status; }
@@ -119,6 +120,10 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch, botFe
           return new Response(null, { status: 204, headers });
         }
         const url = new URL(request.url);
+        if (url.pathname === '/v1/word-meeting/rooms' || url.pathname.startsWith('/v1/word-meeting/rooms/')) {
+          const input = request.method === 'POST' ? await jsonBody(request, 1500) : null;
+          return reply(await wordMeeting({ request, url, env, input, reject }));
+        }
         if (url.pathname.startsWith('/v1/community/')) {
           const publicProfile = /^\/v1\/community\/profiles\/[a-f0-9-]{36}$/.test(url.pathname) && request.method === 'GET';
           const actor = await authenticate(request, env, !publicProfile);
@@ -305,7 +310,7 @@ export function createWorker({ jwksFetch = fetch, moderationFetch = fetch, botFe
         reject(404, '接口不存在');
       } catch (error) {
         if (!(error instanceof HttpError)) console.error('Comments request failed', error?.name || 'Error');
-        return reply({ error: error instanceof HttpError ? error.message : '评论服务暂时不可用' }, error instanceof HttpError ? error.status : 500);
+        return reply({ error: error instanceof HttpError ? error.message : request.url.includes('/v1/word-meeting/') ? '暂时无法联机，请稍后重试或选择同屏轮流玩' : '评论服务暂时不可用' }, error instanceof HttpError ? error.status : 500);
       }
     }
   };

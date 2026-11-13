@@ -58,6 +58,9 @@ jobs:
       - name: Validate profiles, activity and follows
         run: node tests/community-browser.cjs
         timeout-minutes: 3
+      - name: Validate word meeting rooms and game UI
+        run: npm run test:word-meeting
+        timeout-minutes: 3
       - name: Upload browser diagnostics
         if: failure()
         uses: actions/upload-artifact@v4
